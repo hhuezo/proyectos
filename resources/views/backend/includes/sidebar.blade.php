@@ -25,6 +25,14 @@
 
                 </li>
 
+                <li class="collapsed">
+                    <a class="m-link {{ Request::segment(2) == 'hr-dashboard' || Request::segment(2) == 'project-dashboard' ? 'active' : '' }}"
+                        href="{{ url('load_unidades') }}">
+                        <i class="icofont-home fs-5"></i> <span>Unidades</span> </a>
+                    <!-- Menu: Sub menu ul -->
+
+                </li>
+
 
                 @if (auth()->user()->rol_id == 1)
                     <li class="collapsed">

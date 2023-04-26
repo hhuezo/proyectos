@@ -14,6 +14,7 @@ use App\TmpDsbSemanaActividadActual;
 use App\TmpDsbDato;
 use App\TmpDsbActividadDiaria;
 use App\TmpTotDsbActividadFinalizadaUsuarioSemana;
+use App\Unidad;
 use App\ViewTiempoUsuarios;
 use App\VWTiempoDiarioUsuariosDetalle;
 use DB;
@@ -39,7 +40,8 @@ class HomeController extends Controller
     public function index()
     {
         if (auth()->user()->rol_id == 6 && !session('id_unidad')) {
-            return view('unidades');
+            $unidades = Unidad::where('id', '>', 0)->where('id', '<>', 8)->get();
+            return view('unidades', compact('unidades'));
         }
         //auth()->user()->rol_id==2
         //$unidadId=\Auth::user()->unidadId();
@@ -535,6 +537,18 @@ class HomeController extends Controller
             ]
         ); //listado
 
+    }
+
+    public function unidad($id)
+    {
+        session(['id_unidad' => $id]);
+        return redirect('/home');
+    }
+
+    public function load_unidades()
+    {
+        $unidades = Unidad::where('id', '>', 0)->where('id', '<>', 8)->get();
+        return view('unidades', compact('unidades'));
     }
 
 
