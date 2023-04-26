@@ -42,6 +42,20 @@
 
                         </ul>
                     </li>
+
+                    <li class="collapsed">
+                        <a class="m-link {{ Request::segment(2) == 'project' ? 'active' : '' }}"
+                            data-bs-toggle="collapse" data-bs-target="#project-Components3" href="#">
+                            <i class="icofont-user"></i><span>Catalogo</span> <span
+                                class="arrow icofont-dotted-down ms-auto text-end fs-5"></span></a>
+                        <!-- Menu: Sub menu ul -->
+                        <ul class="sub-menu {{ Request::segment(2) == 'project' ? 'collapsed show' : 'collapse' }}"
+                            id="project-Components3">
+                            <li><a class="ms-link {{ Request::segment(3) == 'index' ? 'active' : '' }}"
+                                    href="{{ url('unidad') }}"><span>Unidad</span></a></li>
+
+                        </ul>
+                    </li>
                 @endif
 
                 @if (auth()->user()->rol_id == 1 || auth()->user()->rol_id == 4)
@@ -93,8 +107,7 @@
                         class=" {{ Request::is('admin/auth/user') || Request::is('admin/auth/role') || Request::is('admin/auth/role/create') ? '' : ' collapsed' }}">
                         <a class="m-link {{ Request::is('admin/auth/user') || Request::is('admin/auth/role') || Request::is('admin/auth/role/create') ? 'collapse show active' : '' }}{{ Request::is('admin/auth/role') ? 'collapse show active' : '' }}"
                             data-bs-toggle="collapse" data-bs-target="#access" href="#"><i class="fa fa-lock"></i>
-                            <span>ISO</span> <span
-                                class="arrow icofont-dotted-down ms-auto text-end fs-5"></span></a>
+                            <span>ISO</span> <span class="arrow icofont-dotted-down ms-auto text-end fs-5"></span></a>
 
                         <!-- Menu: Sub menu ul -->
                         <ul class="sub-menu collapse {{ Request::is('admin/auth/user') || Request::is('admin/auth/role') || Request::is('admin/auth/role/create') ? 'show' : '' }}"
@@ -261,8 +274,8 @@
                 <li><a class="m-link " href="{{ route('admin.dashboard') }}"><i
                             class="icofont-ui-home"></i><span>Home</span></a></li>
                 <li class="collapsed">
-                    <a class="m-link" data-bs-toggle="collapse" data-bs-target="#menu-Authentication" href="#"><i
-                            class="icofont-ui-lock"></i> <span>Authentication</span> <span
+                    <a class="m-link" data-bs-toggle="collapse" data-bs-target="#menu-Authentication"
+                        href="#"><i class="icofont-ui-lock"></i> <span>Authentication</span> <span
                             class="arrow icofont-dotted-down ms-auto text-end fs-5"></span></a>
                     <!-- Menu: Sub menu ul -->
                     <ul class="sub-menu collapse" id="menu-Authentication">
@@ -270,7 +283,8 @@
                                     in</span></a></li>
                         <li><a class="ms-link" href="{{ route('admin.authentication.signup') }}"><span>Sign
                                     up</span></a></li>
-                        <li><a class="ms-link" href="{{ route('admin.authentication.password-reset') }}"><span>Password
+                        <li><a class="ms-link"
+                                href="{{ route('admin.authentication.password-reset') }}"><span>Password
                                     reset</span></a></li>
                         <li><a class="ms-link"
                                 href="{{ route('admin.authentication.two-step-authentication') }}"><span>2-Step

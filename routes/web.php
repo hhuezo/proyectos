@@ -37,6 +37,8 @@ Route::resource('actividades_coordinador', 'produccion\ActividadCoordinadorContr
 Route::get('iso/matriz_riesgo2022', 'produccion\IsoMatrizController@iso2022');
 Route::get('iso/matriz_riesgo', 'produccion\IsoMatrizController@index');
 
+//catalogos
+Route::resource('unidad', 'catalogo\UnidadController');
 
 
 
