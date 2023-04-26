@@ -20,7 +20,10 @@
                         <div
                             class="card-header py-3 no-bg bg-transparent d-flex align-items-center px-0 justify-content-between border-bottom flex-wrap">
                             <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12" style="text-align: left;">
-                                <h5 class="fw-bold mb-0">Proyectos finalizados</h5>
+                                <h5 class="fw-bold mb-0">PROYECTOS FINALIZADOS
+                                    @if (auth()->user()->rol_id == 6)
+                                    DE {{ $unidad->nombre }}<br>
+                                 @endif</h5>
                             </div>
                             <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
                                 <input type="text" class="form-control" placeholder="Buscar" wire:model="busqueda">

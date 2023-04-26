@@ -5,15 +5,27 @@ namespace App\Http\Livewire;
 use Livewire\Component;
 use App\Estado;
 use App\Proyecto;
+use App\Unidad;
 
 class ProyectoFinalizado extends Component
 {
     public $id_proyecto = 0, $estado_id = 2, $nombre, $descripcion, $busqueda;
-    public $proyectos;
+    public $proyectos, $id_unidad;
+
+
+    public function mount()
+    {
+        if (session('id_unidad')) {
+            $this->id_unidad = session('id_unidad');
+        }
+        else{
+            $this->id_unidad = auth()->user()->unidad_id;
+        }
+    }
     public function render()
     {
         $estados =  Estado::where('id', '<>', 7)->where('id', '>', 1)->get();
-
+        $unidad = Unidad::findOrFail($this->id_unidad);
         if (strlen($this->busqueda) > 0) {
             $this->proyectos = Proyecto::join('estados', 'proyectos.estado_id', '=', 'estados.id')
                 ->select(
@@ -28,7 +40,7 @@ class ProyectoFinalizado extends Component
                     'proyectos.estado_id'
                 )
                 ->where('proyectos.nombre', 'LIKE', '%' . $this->busqueda . '%')
-                ->where('proyectos.unidad_id', '=', auth()->user()->unidadId())
+                ->where('proyectos.unidad_id', '=', $this->id_unidad)
                 ->where('proyectos.finalizado','=',1)
                 ->orderBy('proyectos.id', 'desc')
                 ->get();
@@ -47,7 +59,7 @@ class ProyectoFinalizado extends Component
                 'proyectos.finalizado',
                 'proyectos.estado_id'
             )
-            ->where('proyectos.unidad_id', '=', auth()->user()->unidadId())
+            ->where('proyectos.unidad_id', '=', $this->id_unidad)
             ->where('proyectos.finalizado','=',1)
             ->orderBy('proyectos.id', 'desc')
             ->get();
@@ -55,7 +67,7 @@ class ProyectoFinalizado extends Component
         }
 
 
-        return view('livewire.proyecto-finalizado');
+        return view('livewire.proyecto-finalizado', compact('unidad'));
     }
 
 
