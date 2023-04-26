@@ -64,7 +64,7 @@
                                 <td style="text-align: left">{{ $usuario->email }}</td>
                                 <td>
                                     @if ($usuario->rol_id)
-                                        {{ $usuario->rol->name }}
+                                        {{ $usuario->rol->nombre }}
                                     @endif
                                 </td>
                                 <td>
@@ -196,7 +196,7 @@
                         <select wire:model.defer="rol_id" class="form-select">
                             <option value="">Seleccione</option>
                             @foreach ($roles as $obj)
-                                <option value="{{ $obj->id }}">{{ $obj->name }}</option>
+                                <option value="{{ $obj->id }}">{{ $obj->nombre }}</option>
                             @endforeach
                         </select>
                     </div>
