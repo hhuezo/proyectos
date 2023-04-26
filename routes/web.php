@@ -39,6 +39,8 @@ Route::get('iso/matriz_riesgo', 'produccion\IsoMatrizController@index');
 
 //catalogos
 Route::resource('unidad', 'catalogo\UnidadController');
+Route::resource('estado', 'catalogo\EstadoController');
+Route::resource('categoria', 'catalogo\CategoriaController');
 
 
 

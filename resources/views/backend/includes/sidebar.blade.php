@@ -53,7 +53,10 @@
                             id="project-Components3">
                             <li><a class="ms-link {{ Request::segment(3) == 'index' ? 'active' : '' }}"
                                     href="{{ url('unidad') }}"><span>Unidad</span></a></li>
-
+                            <li><a class="ms-link {{ Request::segment(3) == 'index' ? 'active' : '' }}"
+                                    href="{{ url('estado') }}"><span>Estado</span></a></li>
+                            <li><a class="ms-link {{ Request::segment(3) == 'index' ? 'active' : '' }}"
+                                    href="{{ url('categoria') }}"><span>Categorias</span></a></li>
                         </ul>
                     </li>
                 @endif
