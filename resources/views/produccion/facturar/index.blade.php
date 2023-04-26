@@ -14,7 +14,7 @@
                     <div class="card-header py-3 no-bg bg-transparent d-flex px-0  border-bottom flex-wrap">
                         <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12" style="text-align: left;">
                             <h5 class="fw-bold mb-0">
-                                Usuarios
+                                Actividades facturar ({{ date('Y') }})
                             </h5>
                         </div>
                         <div class="col-lg-5 col-md-5 col-sm-12 col-xs-12">
@@ -29,29 +29,24 @@
             <div class="row taskboard g-3 py-xxl-4">
 
 
-                <table id="example" class="table table-striped table-bordered" style="width:100%">
+                <table id="example2" class="table table-striped table-bordered" style="width:100%">
                     <thead>
                         <tr>
-                            <th>Id</th>
-                            <th>Nombre</th>
-                            <th>Usuario</th>
-                            <th>Opciones</th>
+                            <th>Mes</th>
+                            <th>Reporte</th>
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach ($usuarios as $usuario)
-                        <tr>
-                            <td style="text-align: center"> <a style="color:black; font-weight:bold"
-                                    href="{{ url('/admin/coordinador/' . $usuario->id . '/edit') }}">
-                                   {{ $usuario->id }}
-                                </a></td>
-                            <td>{{ $usuario->name }}</td>
-                            <td>{{ $usuario->user_name }}</td>
-                            <td style="text-align: center">
-                                <a href="{{url('actividades_coordinador')}}/{{$usuario->id}}"> <i class="icofont-search-2 fa-2x"></i></a>
-                            </td>
-                        </tr>
-                        @endforeach
+                        @for ($i = 1; $i < 13; $i++)
+                            <tr>
+                                <td>{{ $meses[$i] }}</td>
+                                <td style="text-align: center">
+                                    <a href="{{ url('facturar') }}/{{ $i }}/{{ date('Y') }}" target="_blank">
+                                        <i class="icofont-ui-file fa-2x"></i></a>
+                                </td>
+                            </tr>
+                        @endfor
+
 
                     </tbody>
 

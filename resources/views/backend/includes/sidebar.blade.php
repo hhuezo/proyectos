@@ -118,6 +118,17 @@
                         <i class="icofont-ticket"></i><span>Actividades finalizadas</span></a>
                 </li>
                 @endif
+
+
+                @if (auth()->user()->rol_id == 1)
+                <li class="collapsed">
+                    <a class="m-link {{ Request::segment(2) == 'project' ? 'active' : '' }}"
+                        href="{{ url('facturar') }}">
+                        <i class="icofont-ticket"></i><span>Facturar</span></a>
+                </li>
+
+                @endif
+
                 @if (auth()->user()->rol_id == 2)
                     <li class="collapsed">
                         <a class="m-link {{ Request::segment(2) == 'project' ? 'active' : '' }}"
