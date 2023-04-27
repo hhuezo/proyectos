@@ -32,20 +32,12 @@ class HomeController extends Controller
         $this->middleware('auth');
     }
 
-    /**
-     * Show the application dashboard.
-     *
-     * @return \Illuminate\Contracts\Support\Renderable
-     */
     public function index()
     {
         if (auth()->user()->rol_id == 6 && !session('id_unidad')) {
             $unidades = Unidad::where('id', '>', 0)->where('id', '<>', 8)->get();
             return view('unidades', compact('unidades'));
         }
-        //auth()->user()->rol_id==2
-        //$unidadId=\Auth::user()->unidadId();
-        // $dsb_proyectos_estatus = DB::select("call spActualizarProyectosEstatus('" . auth()->user()->unidadId() . "')");
 
 
         if (auth()->user()->rol_id == 1) {
@@ -77,14 +69,6 @@ class HomeController extends Controller
                 ->distinct()
                 ->get();
         }
-
-        //dd($dsb_proyectos);
-
-        //dd($proyectos_destacados_id);
-
-
-
-
 
 
         $dsb_actividades_finalizadas = DB::select("call dashboardActividadesFinalizadas('" . auth()->user()->unidadId() . "')");
@@ -552,76 +536,5 @@ class HomeController extends Controller
     }
 
 
-    public function  consolidado_mensual(Request $request)
-    {
-        $fecha_actual = Carbon::now()->addMonths(-1);
-        $fecha_inicial = $fecha_actual->format('Y-m-d') . ' 00:00:00';
-        $fecha_final = Carbon::now()->format('Y-m-d') . ' 23:59:00';
 
-        $sql =  "SELECT PROYECTO,descripcion, `id usuario` as IdUsuario , Usuario , ifnull(`Tiempo Percibido Minutos`,0) TMP_INGRESADO,
-        ifnull(`Tiempo sistema Minutos`,0) TMP_SISTEMA, DATE_FORMAT(`Fecha Movimiento`,'%d/%m/%Y') AS FechaMovimiento
-        FROM `VWTiempoDiarioUsuariosDetalle` WHERE `Fecha Movimiento` BETWEEN ? AND  ? and Usuario = ? and PROYECTO = ?
-
-        order by `Fecha Movimiento`";
-
-        $data_consolidado_proyectos = DB::select($sql, array($fecha_inicial, $fecha_final, $request->get('Usuario'), $request->get('Proyecto')));
-
-?>
-        <h5 class="modal-title" id="exampleModalLabel"> Proyecto: <?php echo $request->get('Proyecto'); ?><br>
-            Usuario: <?php echo $request->get('Usuario'); ?></h5>
-        <table class="table">
-            <thead>
-                <tr>
-                    <th scope="col">Fecha</th>
-                    <th scope="col">Detalle</th>
-                    <th scope="col">Tiempo (MINUTOS)</th>
-                </tr>
-            </thead>
-            <tbody>
-
-                <?php
-                $total = 0;
-                foreach ($data_consolidado_proyectos as $obj) {
-
-                    if ($request->get('Usuario') != 'MVALLE_ID' && $obj->TMP_INGRESADO > 0) {
-                ?>
-                        <tr>
-                            <td><?php echo $obj->FechaMovimiento ?></td>
-                            <td><?php echo $obj->descripcion ?></td>
-                            <td><?php echo $obj->TMP_INGRESADO ?></td>
-                        </tr>
-
-                    <?php
-                    } else if ($obj->TMP_SISTEMA > 0) {
-                    ?>
-                        <tr>
-                            <td><?php echo $obj->FechaMovimiento ?></td>
-                            <td><?php echo $obj->descripcion ?></td>
-                            <td><?php echo $obj->TMP_SISTEMA ?></td>
-                        </tr>
-
-                <?php
-                    }
-
-                    $total += $obj->TMP_INGRESADO;
-                }
-
-
-
-                ?>
-
-
-
-
-            </tbody>
-
-            <tr>
-                <td colspan="2"><strong>TOTAL</strong></td>
-                <td><strong><?php echo $total ?></strong></td>
-            </tr>
-        </table>
-
-<?php
-        //return $data_consolidado_proyectos;
-    }
 }

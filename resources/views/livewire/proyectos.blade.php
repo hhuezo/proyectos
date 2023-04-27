@@ -1,6 +1,6 @@
 <div style="text-align: center">
     <style>
-        .dd-item:hover {
+        .dd-handle:hover {
             transform: scale(1.05);
             box-shadow: 0 10px 20px rgba(0, 0, 0, .12), 0 4px 8px rgba(0, 0, 0, .06);
         }
@@ -82,53 +82,9 @@
 
 
 
-    <div id="edit_proyecto" wire:ignore.self tabindex="-1" class="modal fade" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered modal-md modal-dialog-scrollable">
-            <div class="modal-content">
-                <div class="modal-header col">
-                    <h5 class="modal-title  fw-bold" id="createprojectlLabel">Modificar proyecto</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-
-                <div class="modal-body">
-                    @if (count($errors) > 0)
-                        <div class="alert alert-danger">
-                            <ul>
-                                @foreach ($errors->all() as $error)
-                                    <li>{{ $error }}</li>
-                                @endforeach
-                            </ul>
-                        </div>
-                    @endif
-                    <div class="mb-3">
-                        <input type="hidden" wire:model.defer="id_proyecto">
-                        <label class="form-label">Estado</label>
-                        <select class="form-select" wire:model.defer="estado_id"
-                            aria-label="Default select Project Category">
-                            @foreach ($estados as $obj)
-                                <option value="{{ $obj->id }}">{{ $obj->nombre }}</option>
-                            @endforeach
-                        </select>
-                    </div>
-
-                    <div class="mb-3">
-                        <label class="form-label">Nombre</label>
-                        <input type="text" wire:model.defer="nombre" name="nombre" class="form-control">
-                    </div>
 
 
-                    <div class="mb-3">
-                        <label for="exampleFormControlTextarea786" class="form-label">Descripción</label>
-                        <textarea class="form-control" wire:model.defer="descripcion" rows="3"></textarea>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                    <button class="btn btn-primary" wire:click="update()">Guardar</button>
-                </div>
-            </div>
-        </div>
-    </div>
+
 
     <div class="py-12">
 
@@ -169,10 +125,10 @@
                                     <ol class="dd-list">
                                         @foreach ($proyectos as $proyecto)
                                             @if ($proyecto->estado_id == $estado->id)
-                                                <div class="dd-handle">
+                                                <div class="dd-handle" wire:click="actividad_show({{ $proyecto->id }})">
                                                     <div
                                                         class="task-info d-flex align-items-center justify-content-between">
-                                                        <h6
+                                                        <!--<h6
                                                             class="bg-lightgreen py-1 px-2 rounded-1 d-inline-block fw-bold small-14 mb-0">
                                                             <i class="icofont-ui-edit fa-lg"
                                                                 wire:click="edit({{ $proyecto->id }})"
@@ -183,9 +139,8 @@
                                                         </h6>
                                                         <span>
                                                             <h6><strong>{{ $proyecto->id }}</strong></h6>
-                                                        </span>
+                                                        </span>-->
                                                     </div>
-
                                                     <p class="py-2 mb-0"> <strong>{{ $proyecto->nombre }}</strong></p>
                                                     <p class="py-2 mb-0">{{ $proyecto->descripcion }}</p>
                                                     <div class="tikit-info row g-3 align-items-center">
@@ -230,11 +185,11 @@
                                                             </div>
                                                         </div>
                                                         <div class="col-sm text-end">
-                                                            <div class="bg-lightgreen py-1 px-2 rounded-1 d-inline-block fw-bold small-14 mb-0"
+                                                            <!--<div class="bg-lightgreen py-1 px-2 rounded-1 d-inline-block fw-bold small-14 mb-0"
                                                                 wire:click="actividad_show({{ $proyecto->id }})">
                                                                 <strong><i class="icofont-eye fa-lg"></i>
                                                                     Actividades</strong>
-                                                            </div>
+                                                            </div>-->
 
                                                         </div>
                                                     </div>

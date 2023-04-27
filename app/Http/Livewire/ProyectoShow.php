@@ -7,13 +7,13 @@ use App\CategoriaTicket;
 use App\Estado;
 use App\PrioridadTicket;
 use App\User;
-use App\Proyecto as ProyectoModel;
+use App\Proyecto;
 use Livewire\Component;
 use Carbon\Carbon;
 
 class ProyectoShow extends Component
 {
-    public $id_proyecto = 0, $id_actividad, $numero_ticket = 0, $ponderacion, $descripcion,
+    public $id_proyecto = 0, $id_actividad, $numero_ticket = 0, $ponderacion, $descripcion, $nombre,
         $fecha_inicio, $categoria_id, $estado_id, $prioridad_id, $fecha_fin, $forma = "NO APLICA", $users_id, $tipo = 1, $busqueda;
 
     public $count = 0;
@@ -27,29 +27,33 @@ class ProyectoShow extends Component
     }
     public function render()
     {
-        $proyecto = ProyectoModel::join('estados', 'proyectos.estado_id', '=', 'estados.id')
-        ->select('proyectos.id as id', 'proyectos.nombre', 'proyectos.avance as avance_temp',
-        'proyectos.estado_id',
-        
-        \DB::raw('(select ifnull(sum((act.porcentaje/100) * act.ponderacion),0) from actividades act
-        where act.proyecto_id = proyectos.id and act.estado_id <> 7) as avance'))
-        ->where('proyectos.id', '=', $this->id_proyecto)
-        ->first();
-        $estados =  Estado::whereNotIn('id',[6,7])->get();
+        $proyecto = Proyecto::join('estados', 'proyectos.estado_id', '=', 'estados.id')
+            ->select(
+                'proyectos.id as id',
+                'proyectos.nombre',
+                'proyectos.avance as avance_temp',
+                'proyectos.estado_id',
+
+                \DB::raw('(select ifnull(sum((act.porcentaje/100) * act.ponderacion),0) from actividades act
+        where act.proyecto_id = proyectos.id and act.estado_id <> 7) as avance')
+            )
+            ->where('proyectos.id', '=', $this->id_proyecto)
+            ->first();
+        $estados =  Estado::whereNotIn('id', [6, 7])->get();
         $categorias = CategoriaTicket::get();
         $prioridades = PrioridadTicket::get();
         $usuarios = User::where('id', '>', 1)->get();
-        $ponderacion_total =  Actividad::where('proyecto_id','=',$this->id_proyecto)->where('estado_id','<>',7)->sum('ponderacion');
+        $ponderacion_total =  Actividad::where('proyecto_id', '=', $this->id_proyecto)->where('estado_id', '<>', 7)->sum('ponderacion');
 
-     
 
-        $colors = ["","planned_task","review_task","progress_task","completed_task"];
+
+        $colors = ["", "planned_task", "review_task", "progress_task", "completed_task"];
         if (strlen($this->busqueda) > 0) {
             $actividades = Actividad::where('descripcion', 'like', '%' . $this->busqueda . '%')->where('proyecto_id', '=', $this->id_proyecto)->orderBy('id', 'desc')->get();
         } else {
             $actividades = Actividad::where('proyecto_id', '=', $this->id_proyecto)->orderBy('id', 'desc')->get();
         }
-        return view('livewire.proyecto-show',compact('proyecto', 'actividades', 'estados', 'categorias', 'prioridades', 'usuarios','colors','ponderacion_total'));
+        return view('livewire.proyecto-show', compact('proyecto', 'actividades', 'estados', 'categorias', 'prioridades', 'usuarios', 'colors', 'ponderacion_total'));
     }
 
 
@@ -186,5 +190,39 @@ class ProyectoShow extends Component
         $actividad->update();
 
         $this->dispatchBrowserEvent('close-modal-edit');
+    }
+
+    public function edit_proyecto($id)
+    {
+        $proyecto =  Proyecto::findOrFail($id);
+        $this->id_proyecto = $proyecto->id;
+        $this->nombre = $proyecto->nombre;
+        $this->descripcion = $proyecto->descripcion;
+        $this->estado_id = $proyecto->estado_id;
+    }
+
+
+    public function update_proyecto()
+    {
+        $messages = [
+            'estado_id.required' => 'El estado es requerido',
+            'nombre.required' => 'El nombre es requerido',
+            'descripcion.required' => 'La descripcion es requerida',
+        ];
+
+        $validateData = $this->validate([
+            'estado_id' => 'required',
+            'nombre' => 'required',
+            'descripcion' => 'required',
+        ], $messages);
+
+        $proyecto = Proyecto::findOrFail($this->id_proyecto);
+        $proyecto->nombre = $this->nombre;
+        $proyecto->descripcion = $this->descripcion;
+        $proyecto->estado_id = $this->estado_id;
+        $proyecto->update();
+        $this->resetInput();
+
+        $this->dispatchBrowserEvent('close-modal-proyecto');
     }
 }

@@ -461,7 +461,7 @@
                             <div class="mb-3">
                                 <label class="form-label">Porcentaje diario</label>
                                 <input type="number" wire:model.defer="porcentaje_diario"
-                                    wire:change="calculo_porcentaje()" step="0.01" class="form-control">
+                                    wire:keydown="calculo_porcentaje()" step="0.01" class="form-control">
                             </div>
                         </div>
 
