@@ -2,18 +2,18 @@
 
 namespace App\Http\Livewire;
 
-use App\CategoriaTicket;
+use App\PrioridadTicket;
 use Livewire\Component;
 
-class Categorias extends Component
+class Prioridades extends Component
 {
-    public $id_categoria, $codigo, $nombre, $unidad_id, $busqueda;
+    public $id_prioridad, $nombre, $color, $busqueda;
 
 
     public function render()
     {
-        $categorias = CategoriaTicket::where('nombre', 'LIKE', '%' . $this->busqueda . '%')->get();
-        return view('livewire.categorias',compact('categorias'));
+        $prioridades = PrioridadTicket::where('nombre', 'LIKE', '%' . $this->busqueda . '%')->get();
+        return view('livewire.prioridades',compact('prioridades'));
     }
 
     public function create()
@@ -33,10 +33,9 @@ class Categorias extends Component
             'nombre' => 'required',
         ], $messages);
 
-        CategoriaTicket::create([
-            'codigo' => $this->codigo,
+        PrioridadTicket::create([
             'nombre' => $this->nombre,
-            'unidad_id' => $this->unidad_id
+            'color' => $this->color,
         ]);
 
 
@@ -47,12 +46,11 @@ class Categorias extends Component
 
     public function edit($id)
     {
-        $categoria = CategoriaTicket::findOrFail($id);
+        $prioridad = PrioridadTicket::findOrFail($id);
 
-        $this->id_categoria =  $categoria->id;
-        $this->codigo =  $categoria->codigo;
-        $this->nombre =  $categoria->nombre;
-        $this->unidad_id =  $categoria->unidad_id;
+        $this->id_prioridad =  $prioridad->id;
+        $this->nombre =  $prioridad->nombre;
+        $this->color =  $prioridad->color;
 
     }
 
@@ -65,11 +63,12 @@ class Categorias extends Component
             'nombre' => 'required',
         ], $messages);
 
-        $categoria = CategoriaTicket::findOrFail($this->id_categoria);
-        $categoria->codigo = $this->codigo;
-        $categoria->nombre = $this->nombre;
-        $categoria->unidad_id = $this->unidad_id;
-        $categoria->update();
+
+        $prioridad = PrioridadTicket::findOrFail($this->id_prioridad);
+        $prioridad->nombre = $this->nombre;
+        $prioridad->color = $this->color;
+        $prioridad->update();
+
 
         $this->dispatchBrowserEvent('close-modal-edit');
         $this->dispatchBrowserEvent('success-alert-edit');

@@ -27,6 +27,7 @@ Route::get('/', 'TestController@welcome')->name('welcome');
 Route::get('/home', 'HomeController@index')->name('home');
 
 Route::resource('usuario', 'produccion\UsuarioController');
+Route::resource('rol', 'produccion\RolController');
 
 Route::resource('proyecto', 'produccion\ProyectoController');
 Route::resource('proyecto_finalizado', 'produccion\ProyectoFinalizadoController');
@@ -41,7 +42,7 @@ Route::get('iso/matriz_riesgo', 'produccion\IsoMatrizController@index');
 Route::resource('unidad', 'catalogo\UnidadController');
 Route::resource('estado', 'catalogo\EstadoController');
 Route::resource('categoria', 'catalogo\CategoriaController');
-
+Route::resource('prioridad', 'catalogo\PrioridadController');
 
 
 
