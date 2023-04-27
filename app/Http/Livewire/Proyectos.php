@@ -5,14 +5,28 @@ namespace App\Http\Livewire;
 use Livewire\Component;
 use App\Estado;
 use App\Proyecto;
+use App\Unidad;
 
 class Proyectos extends Component
 {
     public $id_proyecto = 0, $estado_id = 2, $nombre, $descripcion, $busqueda;
-    public $proyectos;
+    public $proyectos, $id_unidad;
+
+
+    public function mount()
+    {
+        if (session('id_unidad')) {
+            $this->id_unidad = session('id_unidad');
+        }
+        else{
+            $this->id_unidad = auth()->user()->unidad_id;
+        }
+    }
+
     public function render()
     {
         $estados =  Estado::where('id', '<>', 7)->where('id', '>', 1)->get();
+        $unidad = Unidad::findOrFail($this->id_unidad);
 
         if (strlen($this->busqueda) > 0) {
             $this->proyectos = Proyecto::join('estados', 'proyectos.estado_id', '=', 'estados.id')
@@ -27,13 +41,13 @@ class Proyectos extends Component
                     'proyectos.finalizado',
                     'proyectos.estado_id'
                 )
-                ->where('proyectos.nombre', 'LIKE', '%' . $this->busqueda . '%')
-                ->orWhere('proyectos.id', 'LIKE', '%' . $this->busqueda . '%')
-                ->where('proyectos.unidad_id', '=', auth()->user()->unidadId())
+                ->where('proyectos.unidad_id', '=', $this->id_unidad)
                 ->where('proyectos.finalizado','=',0)
                 ->where('proyectos.estado_id', '<>', 7)
                 ->where('proyectos.estado_id', '>', 1)
                 ->where('proyectos.id', '<>', 28)
+                ->where('proyectos.nombre', 'LIKE', '%' . $this->busqueda . '%')
+                ->orWhere('proyectos.id', 'LIKE', '%' . $this->busqueda . '%')
                 ->orderBy('proyectos.id', 'desc')
                 ->get();
         }
@@ -51,12 +65,11 @@ class Proyectos extends Component
                 'proyectos.finalizado',
                 'proyectos.estado_id'
             )
-            ->where('proyectos.unidad_id', '=', auth()->user()->unidadId())
+            ->where('proyectos.unidad_id', '=', $this->id_unidad)
             ->where('proyectos.finalizado','=',0)
             ->where('proyectos.estado_id', '<>', 7)
             ->where('proyectos.estado_id', '>', 1)
             ->where('proyectos.id', '<>', 28)
-            ->orWhere('proyectos.id', 'LIKE', '%' . $this->busqueda . '%')
             ->orderBy('proyectos.id', 'desc')
             ->get();
 
@@ -64,7 +77,7 @@ class Proyectos extends Component
 
         $colors = ["","planned_task","review_task","progress_task","completed_task","completed_task","planned_task"];
 
-        return view('livewire.proyectos', compact('estados','colors'));
+        return view('livewire.proyectos', compact('estados','colors','unidad'));
     }
 
 
@@ -93,8 +106,6 @@ class Proyectos extends Component
             'nombre' => 'required',
             'descripcion' => 'required',
         ],$messages);
-
-        //Proyecto::create($validateData);
 
         $proyecto = new Proyecto();
         $proyecto->estado_id = $this->estado_id;

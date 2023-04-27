@@ -12,42 +12,46 @@
                 </div>
                 <div class="card-body">
                     <div class="row g-2 row-deck">
+                        @foreach ($unidades as $unidad)
+                        <a href="{{url('home')}}/{{$unidad->id}}">
                         <div class="col-md-6 col-sm-6">
-                            <div class="card">
-                                <div class="card-body ">
-                                    <i class="icofont-checked fs-3"></i>
-                                    <h6 class="mt-3 mb-0 fw-bold small-14">Attendance</h6>
-                                    <span class="text-muted">400</span>
+                                <div class="card">
+                                    <div class="card-body ">
+                                        <i class="icofont-checked fs-3"></i>
+                                        <h6 class="mt-3 mb-0 fw-bold small-14">{{$unidad->nombre}}</h6>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="col-md-6 col-sm-6">
-                            <div class="card">
-                                <div class="card-body ">
-                                    <i class="icofont-stopwatch fs-3"></i>
-                                    <h6 class="mt-3 mb-0 fw-bold small-14">Late Coming</h6>
-                                    <span class="text-muted">17</span>
+                        </a>
+                        @endforeach
+
+                        <!--<div class="col-md-6 col-sm-6">
+                                <div class="card">
+                                    <div class="card-body ">
+                                        <i class="icofont-stopwatch fs-3"></i>
+                                        <h6 class="mt-3 mb-0 fw-bold small-14">Late Coming</h6>
+                                        <span class="text-muted">17</span>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="col-md-6 col-sm-6">
-                            <div class="card">
-                                <div class="card-body ">
-                                    <i class="icofont-ban fs-3"></i>
-                                    <h6 class="mt-3 mb-0 fw-bold small-14">Absent</h6>
-                                    <span class="text-muted">06</span>
+                            <div class="col-md-6 col-sm-6">
+                                <div class="card">
+                                    <div class="card-body ">
+                                        <i class="icofont-ban fs-3"></i>
+                                        <h6 class="mt-3 mb-0 fw-bold small-14">Absent</h6>
+                                        <span class="text-muted">06</span>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="col-md-6 col-sm-6">
-                            <div class="card">
-                                <div class="card-body ">
-                                    <i class="icofont-beach-bed fs-3"></i>
-                                    <h6 class="mt-3 mb-0 fw-bold small-14">Leave Apply</h6>
-                                    <span class="text-muted">14</span>
+                            <div class="col-md-6 col-sm-6">
+                                <div class="card">
+                                    <div class="card-body ">
+                                        <i class="icofont-beach-bed fs-3"></i>
+                                        <h6 class="mt-3 mb-0 fw-bold small-14">Leave Apply</h6>
+                                        <span class="text-muted">14</span>
+                                    </div>
                                 </div>
-                            </div>
-                        </div>
+                            </div>-->
                     </div>
                 </div>
             </div>

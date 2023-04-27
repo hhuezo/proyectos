@@ -25,6 +25,14 @@
 
                 </li>
 
+                <li class="collapsed">
+                    <a class="m-link {{ Request::segment(2) == 'hr-dashboard' || Request::segment(2) == 'project-dashboard' ? 'active' : '' }}"
+                        href="{{ url('load_unidades') }}">
+                        <i class="icofont-home fs-5"></i> <span>Unidades</span> </a>
+                    <!-- Menu: Sub menu ul -->
+
+                </li>
+
 
                 @if (auth()->user()->rol_id == 1)
                     <li class="collapsed">
@@ -81,6 +89,28 @@
                     </li>
                 @endif
 
+
+                @if (auth()->user()->rol_id == 6 && session('id_unidad'))
+                <li class="collapsed">
+                    <a class="m-link {{ Request::segment(2) == 'project' ? 'active' : '' }}"
+                        data-bs-toggle="collapse" data-bs-target="#project-Components" href="#">
+                        <i class="icofont-briefcase"></i><span>Proyectos</span> <span
+                            class="arrow icofont-dotted-down ms-auto text-end fs-5"></span></a>
+                    <!-- Menu: Sub menu ul -->
+                    <ul class="sub-menu {{ Request::segment(2) == 'project' ? 'collapsed show' : 'collapse' }}"
+                        id="project-Components">
+                        <li><a class="ms-link {{ Request::segment(3) == 'index' ? 'active' : '' }}"
+                                href="{{ url('proyecto') }}"><span>Proyectos</span></a></li>
+                        <li><a class="ms-link {{ Request::segment(3) == 'tasks' ? 'active' : '' }}"
+                                href="{{ url('proyecto_finalizado') }}"><span>Finalizados </span></a></li>
+
+                    </ul>
+                </li>
+            @endif
+
+
+
+                @if (auth()->user()->rol_id != 6)
                 <li class="collapsed">
                     <a class="m-link {{ Request::segment(2) == 'project' ? 'active' : '' }}"
                         href="{{ url('actividades') }}">
@@ -92,6 +122,18 @@
                         href="{{ url('actividades_finalizadas') }}">
                         <i class="icofont-ticket"></i><span>Actividades finalizadas</span></a>
                 </li>
+                @endif
+
+
+                @if (auth()->user()->rol_id == 1)
+                <li class="collapsed">
+                    <a class="m-link {{ Request::segment(2) == 'project' ? 'active' : '' }}"
+                        href="{{ url('facturar') }}">
+                        <i class="icofont-ticket"></i><span>Facturar</span></a>
+                </li>
+
+                @endif
+
                 @if (auth()->user()->rol_id == 2)
                     <li class="collapsed">
                         <a class="m-link {{ Request::segment(2) == 'project' ? 'active' : '' }}"

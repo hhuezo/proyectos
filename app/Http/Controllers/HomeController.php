@@ -14,6 +14,7 @@ use App\TmpDsbSemanaActividadActual;
 use App\TmpDsbDato;
 use App\TmpDsbActividadDiaria;
 use App\TmpTotDsbActividadFinalizadaUsuarioSemana;
+use App\Unidad;
 use App\ViewTiempoUsuarios;
 use App\VWTiempoDiarioUsuariosDetalle;
 use DB;
@@ -31,19 +32,12 @@ class HomeController extends Controller
         $this->middleware('auth');
     }
 
-    /**
-     * Show the application dashboard.
-     *
-     * @return \Illuminate\Contracts\Support\Renderable
-     */
     public function index()
     {
         if (auth()->user()->rol_id == 6 && !session('id_unidad')) {
-            return view('unidades');
+            $unidades = Unidad::where('id', '>', 0)->where('id', '<>', 8)->get();
+            return view('unidades', compact('unidades'));
         }
-        //auth()->user()->rol_id==2
-        //$unidadId=\Auth::user()->unidadId();
-        // $dsb_proyectos_estatus = DB::select("call spActualizarProyectosEstatus('" . auth()->user()->unidadId() . "')");
 
 
         if (auth()->user()->rol_id == 1) {
@@ -76,14 +70,6 @@ class HomeController extends Controller
                 ->get();
         }
 
-        //dd($dsb_proyectos);
-
-        //dd($proyectos_destacados_id);
-
-
-
-
-
 
         $dsb_actividades_finalizadas = DB::select("call dashboardActividadesFinalizadas('" . auth()->user()->unidadId() . "')");
 
@@ -92,11 +78,13 @@ class HomeController extends Controller
         $usuarios = $dsb_tot_actividades_finalizadas->pluck('user_name');
         $numero_actividades = $dsb_tot_actividades_finalizadas->pluck('numero_actividades');
 
-        $data_users_end = array();
+        $data_users_end_label = array();
+        $data_users_end_value = array();
 
         for ($i = 0; $i < count($usuarios); $i++) {
-            $array_user_end = array("name" => $usuarios[$i], "y" => $numero_actividades[$i], "color" => "#4670C0");
-            array_push($data_users_end, $array_user_end);
+            //$array_user_end = array("name" => $usuarios[$i], "y" => $numero_actividades[$i], "color" => "#4670C0");
+            array_push($data_users_end_label, $usuarios[$i]);
+            array_push($data_users_end_value, $numero_actividades[$i]);
         }
 
 
@@ -237,30 +225,7 @@ class HomeController extends Controller
         }
 
 
-        //dd($nombre_codigo_3);
 
-
-
-
-
-
-        //dd($data_users_dev);
-
-        //dd($data_users);
-
-        //extract($dsb_actividades);
-
-        //$data = response()->json($data, 200, []);
-
-
-        //actividades semanales proyecto 9
-
-
-
-        //dd($data_semana_9);
-
-
-        //$dsb_obtener_datos = DB::select('call dashboardObtenerDatos()');
         $dsb_obtener_datos = DB::select("call dashboardObtenerDatos('" . auth()->user()->unidadId() . "')");
 
         //dd($dsb_obtener_datos);
@@ -288,44 +253,19 @@ class HomeController extends Controller
 
 
 
+        //$data_actividades_diarias = array();
 
-        $data_actividades_diarias = array();
+        $actividades_finalizadas_label = array();
+        $actividades_finalizadas_value = array();
 
         for ($i = 0; $i < count($dias); $i++) {
-            $array_actividades_diarias = array("name" => $dias[$i], "y" => $numero_actividades[$i], "color" => "#4670C0");
-            array_push($data_actividades_diarias, $numero_actividades[$i]);
+            //$array_actividades_diarias = array("name" => $dias[$i], "y" => $numero_actividades[$i], "color" => "#4670C0");
+            array_push($actividades_finalizadas_label, $dias[$i]);
+            array_push($actividades_finalizadas_value, $numero_actividades[$i]);
         }
 
-        $numero_actividades_ok = array();
-        for ($i = $valMin; $i <= $valMax; $i++) {
+        //dd($actividades_finalizadas_label,$actividades_finalizadas_value );
 
-            //echo "i= ".$i."\n";
-
-            // $key = array_search($i, $dias); // $key = 2;
-
-            // echo "key= ".$key."\n";
-
-            //echo "dias ".$dias[$i]." = ".$numero_actividades[$i]."\n";
-
-            // if ($numero_actividades[$i]>0){
-            //     array_push($numero_actividades_ok, $numero_actividades[$i]);
-            // }else{
-            //     array_push($numero_actividades_ok, 0);
-            // }
-
-        }
-
-
-
-        $data_actividades_diarias = [1, 0, 13, 32, 14, 0, 0, 0, 0, 22, 20];
-
-        //$data_actividades_diarias = [1,13,32,14,22,20];
-
-        //$data_actividades_diarias = [34, 44, 54, 21, 12, 43, 33, 23, 66, 66, 58];
-
-
-
-        //dd($data_actividades_diarias);
 
         //$dsb_estado_proyectos = DB::select('call dashboardEstadoProyectos()');
         $dsb_estado_proyectos = DB::select("call dashboardEstadoProyectos('" . auth()->user()->unidadId() . "')");
@@ -338,14 +278,8 @@ class HomeController extends Controller
         $numero_proyectos_creados = DB::table('tmp_dsb_proyectos_estados')->get()->first()->numero_proyectos_creados;
 
 
-        $data_estado_proyectos = array(
-            //array("name"=>"Asignado","y"=>(float) $numero_proyectos_asignados,"color"=>"#4670C0"),
-            //array("name"=>"En Pausa","y"=>(float) $numero_proyectos_pausa,"color"=>"#CC1C9C"),
-            array("name" => "En Desarrollo", "y" => (float) $numero_proyectos_desarrollo, "color" => "#5E72E4"),
-            array("name" => "En Certificacion", "y" => (float) $numero_proyectos_certificacion, "color" => "#2DCE89"),
-            array("name" => "En Pausa", "y" => (float) $numero_proyectos_pausa, "color" => "#11CDEF"),
-        );
-
+        $data_estado_proyectos_label = ["En Desarrollo (" . $numero_proyectos_desarrollo . ")", "En Certificacion (" . $numero_proyectos_certificacion . ")", "En Pausa (" . $numero_proyectos_pausa . ")"];
+        $data_estado_proyectos_value = [$numero_proyectos_desarrollo, $numero_proyectos_certificacion, $numero_proyectos_pausa];
 
         //$dsb_proyectos_desa_tiempo = DB::select('call dashboardTiempoProyectosDesarrollo()');
         $dsb_proyectos_desa_tiempo = DB::select("call dashboardTiempoProyectosDesarrollo('" . auth()->user()->unidadId() . "')");
@@ -493,7 +427,9 @@ class HomeController extends Controller
             'home',
             [
                 'proyectos' => $proyectos,
-                'data_users_end' => $data_users_end,
+                //'data_users_end' => $data_users_end,
+                'data_users_end_label' => $data_users_end_label,
+                'data_users_end_value' => $data_users_end_value,
                 'data_users_dev' => $data_users_dev,
 
                 'numero_tickets_anterior' => $numero_tickets_anterior,
@@ -503,8 +439,18 @@ class HomeController extends Controller
                 'numero_proyectos_certificacion' => $numero_proyectos_certificacion,
                 'numero_proyectos_pausa' => $numero_proyectos_pausa,
 
-                'data_actividades_diarias' => $data_actividades_diarias,
-                'data_estado_proyectos' => $data_estado_proyectos,
+                //  $actividades_finalizadas_label = array();
+                // $actividades_finalizadas_value = array();
+
+                'actividades_finalizadas_label' => $actividades_finalizadas_label,
+                'actividades_finalizadas_value' => $actividades_finalizadas_value,
+                'data_estado_proyectos_label' => $data_estado_proyectos_label,
+                'data_estado_proyectos_value' => $data_estado_proyectos_value,
+
+                // $data_estado_proyectos_label = ["En Desarrollo","En Certificacion","En Pausa"];
+                //$data_estado_proyectos_value = [$numero_proyectos_desarrollo,$numero_proyectos_certificacion,$numero_proyectos_pausa];
+
+
                 'proyectos_avance' => $proyectos_avance,
                 'data_meses_end' => $data_meses_end,
                 'data_proyectos_tiempo' => $data_proyectos_tiempo,
@@ -537,77 +483,15 @@ class HomeController extends Controller
 
     }
 
-
-    public function  consolidado_mensual(Request $request)
+    public function unidad($id)
     {
-        $fecha_actual = Carbon::now()->addMonths(-1);
-        $fecha_inicial = $fecha_actual->format('Y-m-d') . ' 00:00:00';
-        $fecha_final = Carbon::now()->format('Y-m-d') . ' 23:59:00';
+        session(['id_unidad' => $id]);
+        return redirect('/home');
+    }
 
-        $sql =  "SELECT PROYECTO,descripcion, `id usuario` as IdUsuario , Usuario , ifnull(`Tiempo Percibido Minutos`,0) TMP_INGRESADO,
-        ifnull(`Tiempo sistema Minutos`,0) TMP_SISTEMA, DATE_FORMAT(`Fecha Movimiento`,'%d/%m/%Y') AS FechaMovimiento
-        FROM `VWTiempoDiarioUsuariosDetalle` WHERE `Fecha Movimiento` BETWEEN ? AND  ? and Usuario = ? and PROYECTO = ?
-
-        order by `Fecha Movimiento`";
-
-        $data_consolidado_proyectos = DB::select($sql, array($fecha_inicial, $fecha_final, $request->get('Usuario'), $request->get('Proyecto')));
-
-?>
-        <h5 class="modal-title" id="exampleModalLabel"> Proyecto: <?php echo $request->get('Proyecto'); ?><br>
-            Usuario: <?php echo $request->get('Usuario'); ?></h5>
-        <table class="table">
-            <thead>
-                <tr>
-                    <th scope="col">Fecha</th>
-                    <th scope="col">Detalle</th>
-                    <th scope="col">Tiempo (MINUTOS)</th>
-                </tr>
-            </thead>
-            <tbody>
-
-                <?php
-                $total = 0;
-                foreach ($data_consolidado_proyectos as $obj) {
-
-                    if ($request->get('Usuario') != 'MVALLE_ID' && $obj->TMP_INGRESADO > 0) {
-                ?>
-                        <tr>
-                            <td><?php echo $obj->FechaMovimiento ?></td>
-                            <td><?php echo $obj->descripcion ?></td>
-                            <td><?php echo $obj->TMP_INGRESADO ?></td>
-                        </tr>
-
-                    <?php
-                    } else if ($obj->TMP_SISTEMA > 0) {
-                    ?>
-                        <tr>
-                            <td><?php echo $obj->FechaMovimiento ?></td>
-                            <td><?php echo $obj->descripcion ?></td>
-                            <td><?php echo $obj->TMP_SISTEMA ?></td>
-                        </tr>
-
-                <?php
-                    }
-
-                    $total += $obj->TMP_INGRESADO;
-                }
-
-
-
-                ?>
-
-
-
-
-            </tbody>
-
-            <tr>
-                <td colspan="2"><strong>TOTAL</strong></td>
-                <td><strong><?php echo $total ?></strong></td>
-            </tr>
-        </table>
-
-<?php
-        //return $data_consolidado_proyectos;
+    public function load_unidades()
+    {
+        $unidades = Unidad::where('id', '>', 0)->where('id', '<>', 8)->get();
+        return view('unidades', compact('unidades'));
     }
 }

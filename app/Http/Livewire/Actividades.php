@@ -120,6 +120,7 @@ class Actividades extends Component
             'prioridad_id' => $this->prioridad_id,
             'fecha_fin' => $this->fecha_fin,
             'forma' => $this->forma,
+            'porcentaje' => 0,
             'users_id' => auth()->user()->id,
             'fecha_asignacion' => $time->toDateTimeString(),
         ]);

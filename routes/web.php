@@ -25,6 +25,9 @@ Auth::routes();
 
 Route::get('/', 'TestController@welcome')->name('welcome');
 Route::get('/home', 'HomeController@index')->name('home');
+Route::get('/home/{id}', 'HomeController@unidad')->name('unidad');
+Route::get('/load_unidades', 'HomeController@load_unidades')->name('load_unidades');
+
 
 Route::resource('usuario', 'produccion\UsuarioController');
 Route::resource('rol', 'produccion\RolController');
@@ -34,6 +37,8 @@ Route::resource('proyecto_finalizado', 'produccion\ProyectoFinalizadoController'
 Route::resource('actividades', 'produccion\ActividadController');
 Route::resource('actividades_finalizadas', 'produccion\ActividadFinalizadaController');
 Route::resource('actividades_coordinador', 'produccion\ActividadCoordinadorController');
+Route::resource('facturar', 'produccion\FacturarController');
+Route::get('facturar/{mes}/{anio}', 'produccion\FacturarController@facturar');
 
 Route::get('iso/matriz_riesgo2022', 'produccion\IsoMatrizController@iso2022');
 Route::get('iso/matriz_riesgo', 'produccion\IsoMatrizController@index');
