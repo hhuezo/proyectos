@@ -13,6 +13,246 @@
 
 
 
+    <div class="body d-flex py-3">
+        <div class="container-xxl">
+            <div class="row clearfix g-3">
+                <div class="col-xl-12 col-lg-12 col-md-12 flex-column">
+                    <div class="row g-3">
+                        <div class="col-md-12 col-lg-3 col-xl-3 col-xxl-3">
+
+                            <div class="card ">
+
+                                <div class="card-body">
+
+                                    <div class="d-flex align-items-center">
+                                        <div class="avatar lg  rounded-1 no-thumbnail bg-lightyellow color-defult"><i
+                                                class="bi bi-journal-check fs-4"></i></div>
+                                        <div class="flex-fill ms-4">
+                                            <div class="">
+                                                SEMANA PASADA
+                                            </div>
+                                            <h5 class="mb-0 ">{{ $numero_tickets_anterior }}</h5>
+                                        </div>
+                                        <a href="#" title="view-members"
+                                            class="btn btn-link text-decoration-none  rounded-1"><i
+                                                class="icofont-hand-drawn-right fs-2 "></i></a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-12 col-lg-3 col-xl-3 col-xxl-3">
+                            <div class="card ">
+                                <div class="card-body">
+                                    <div class="d-flex align-items-center">
+                                        <div class="avatar lg  rounded-1 no-thumbnail bg-lightblue color-defult"><i
+                                                class="bi bi-list-check fs-4"></i></div>
+                                        <div class="flex-fill ms-4">
+                                            <div class="">
+                                                SEMANA ACTUAL
+                                            </div>
+                                            <h5 class="mb-0 ">{{ $numero_tickets_actual }}</h5>
+                                        </div>
+                                        <a href="#" title="space-used"
+                                            class="btn btn-link text-decoration-none  rounded-1"><i
+                                                class="icofont-hand-drawn-right fs-2 "></i></a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-12 col-lg-3 col-xl-3 col-xxl-3">
+                            <div class="card ">
+                                <div class="card-body">
+                                    <div class="d-flex align-items-center">
+
+                                        @if ($numero_incremento_prod == 0)
+                                            <div class="avatar lg  rounded-1 no-thumbnail bg-warning color-defult"><i
+                                                    class="bi bi-clipboard-data fs-4"></i></div>
+                                        @endif
+
+                                        @if ($numero_incremento_prod < 0)
+                                            <div class="avatar lg  rounded-1 no-thumbnail bg-danger color-red"><i
+                                                    class="bi bi-clipboard-data fs-4"></i></div>
+                                        @endif
+
+                                        @if ($numero_incremento_prod > 0)
+                                            <div class="avatar lg  rounded-1 no-thumbnail bg-success color-defult"><i
+                                                    class="bi bi-clipboard-data fs-4"></i></div>
+                                        @endif
+
+                                        <div class="flex-fill ms-4">
+                                            <h5 class="mb-0 ">
+
+                                                <div class="col mr-2">
+                                                    @if ($numero_incremento_prod > 0)
+                                                        <h5 class="mb-0 ">
+                                                            INCREMENTO PRODUCCION</h5>
+                                                    @endif
+
+                                                    @if ($numero_incremento_prod < 0)
+                                                        <h5 class="mb-0 ">
+                                                            DECREMENTO PRODUCCION</h5>
+                                                    @endif
+
+                                                    @if ($numero_incremento_prod == 0)
+                                                        <h5 class="mb-0 ">
+                                                            INICIANDO ACTIVIDADES</h5>
+                                                    @endif
+
+                                                </div>
+
+                                            </h5>
+                                        </div>
+                                        <a href="#" title="renewal-date"
+                                            class="btn btn-link text-decoration-none  rounded-1"><i
+                                                class="icofont-hand-drawn-right fs-2 "></i></a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-12 col-lg-3 col-xl-3 col-xxl-3">
+                            <div class="card ">
+                                <div class="card-body">
+                                    <div class="d-flex align-items-center">
+
+
+                                        <div class="avatar lg  rounded-1 no-thumbnail bg-success color-defult"><i
+                                                class="bi bi-list fs-4"></i></div>
+
+
+                                        <div class="flex-fill ms-4">
+                                            <h5 class="mb-0 ">
+
+                                                <div class="col mr-2">
+                                                    <h5 class="mb-0 ">
+                                                        {{ $numero_proyectos_desarrollo }} PROYECTOS EN DESARROLLO
+                                                    </h5>
+                                                </div>
+
+                                            </h5>
+                                        </div>
+                                        <a href="#" title="renewal-date"
+                                            class="btn btn-link text-decoration-none  rounded-1"><i
+                                                class="icofont-hand-drawn-right fs-2 "></i></a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+
+
+            </div>
+        </div>
+    </div>
+
+    <div class="body d-flex g-3">
+        <div class="row">
+            <div class="col-md-12 col-lg-6 col-xl-6 col-xxl-6">
+                <div class="card">
+                    <div class="card-header py-3">
+                        <h6 class="mb-0 fw-bold ">Avance de Proyectos</h6>
+                    </div>
+                    <div class="card-body">
+                        @foreach ($proyectos_avance as $proyecto_avance)
+                            <div class="progress-count mb-4">
+                                <div class="d-flex justify-content-between align-items-center mb-1">
+                                    <h6 class="mb-0 fw-bold d-flex align-items-center">{{ $proyecto_avance->nombre }}</h6>
+                                    <span class="small text-muted"><strong>{{ $proyecto_avance->tiempo }}
+                                            dias</strong></span>
+                                </div>
+                                <div class="progress" style="height: 10px;">
+                                    @if ($proyecto_avance->avance < 50)
+                                        <div class="progress-bar light-danger-bg " role="progressbar"
+                                            style="width: {{ $proyecto_avance->avance }}%"
+                                            aria-valuenow="{{ $proyecto_avance->avance }}" aria-valuemin="0"
+                                            aria-valuemax="100"></div>
+                                    @elseif ($proyecto_avance->avance < 70)
+                                        <div class="progress-bar bg-lightyellow" role="progressbar"
+                                            style="width: {{ $proyecto_avance->avance }}%"
+                                            aria-valuenow="{{ $proyecto_avance->avance }}" aria-valuemin="0"
+                                            aria-valuemax="100"></div>
+                                    @else
+                                        <div class="progress-bar success-bg" role="progressbar"
+                                            style="width: {{ $proyecto_avance->avance }}%"
+                                            aria-valuenow="{{ $proyecto_avance->avance }}" aria-valuemin="0"
+                                            aria-valuemax="100"></div>
+                                    @endif
+
+                                </div>
+                                <div class="d-flex justify-content-between align-items-center mb-1">
+                                    <h6 class="mb-0 fw-bold d-flex align-items-center"></h6>
+                                    <span
+                                        class="small text-muted float-right"><strong>{{ $proyecto_avance->avance }}%</strong></span>
+                                </div>
+                            </div>
+                        @endforeach
+
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-12 col-lg-6 col-xl-6 col-xxl-6">
+                <div class="col-xxl-12 col-xl-12 col-lg-12 col-md-12">
+                    <div class="card">
+                        <div class="card-header py-3">
+                            <h6 class="mb-0 fw-bold ">Actividades finalizadas por día</h6>
+                        </div>
+                        <div class="card-body">
+                            <canvas id="char_actividades_finalizadas"></canvas>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xxl-6 col-xl-6 col-lg-6 col-md-12">
+                    <div class="card">
+                        <div class="card-header py-3 d-flex justify-content-between bg-transparent border-bottom-0">
+                            <h6 class="mb-0 fw-bold ">Estado de proyectos</h6>
+                        </div>
+                        <canvas id="char_estado_proyectos"></canvas>
+                    </div>
+                </div>
+
+                <div class="col-xxl-12 col-xl-12 col-lg-12 col-md-12">
+                    <div class="card">
+                        <div class="card-header py-3 d-flex justify-content-between bg-transparent border-bottom-0">
+                            <h6 class="mb-0 fw-bold ">Actividades finalizadas por analista</h6>
+                        </div>
+                        <canvas id="char_actividades_finalizadas_analista"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     <!-- Body: Body -->
     <div class="body d-flex py-3">
         <div class="container-xxl">
@@ -20,101 +260,6 @@
                 <div class="col-xl-8 col-lg-12 col-md-12 flex-column">
                     <div class="row g-3">
 
-
-                        <div class="row g-3 mb-3 row-deck">
-
-                            <div class="col-md-12 col-lg-4 col-xl-4 col-xxl-4">
-
-                                <div class="card ">
-
-                                    <div class="card-body">
-
-                                        <div class="d-flex align-items-center">
-                                            <div class="avatar lg  rounded-1 no-thumbnail bg-lightyellow color-defult"><i
-                                                    class="bi bi-journal-check fs-4"></i></div>
-                                            <div class="flex-fill ms-4">
-                                                <div class="">
-                                                    SEMANA PASADA
-                                                </div>
-                                                <h5 class="mb-0 ">{{ $numero_tickets_anterior }}</h5>
-                                            </div>
-                                            <a href="#" title="view-members"
-                                                class="btn btn-link text-decoration-none  rounded-1"><i
-                                                    class="icofont-hand-drawn-right fs-2 "></i></a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-12 col-lg-4 col-xl-4 col-xxl-4">
-                                <div class="card ">
-                                    <div class="card-body">
-                                        <div class="d-flex align-items-center">
-                                            <div class="avatar lg  rounded-1 no-thumbnail bg-lightblue color-defult"><i
-                                                    class="bi bi-list-check fs-4"></i></div>
-                                            <div class="flex-fill ms-4">
-                                                <div class="">
-                                                    SEMANA ACTUAL
-                                                </div>
-                                                <h5 class="mb-0 ">{{ $numero_tickets_actual }}</h5>
-                                            </div>
-                                            <a href="#" title="space-used"
-                                                class="btn btn-link text-decoration-none  rounded-1"><i
-                                                    class="icofont-hand-drawn-right fs-2 "></i></a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-12 col-lg-4 col-xl-4 col-xxl-4">
-                                <div class="card ">
-                                    <div class="card-body">
-                                        <div class="d-flex align-items-center">
-
-                                            @if ($numero_incremento_prod == 0)
-                                                <div class="avatar lg  rounded-1 no-thumbnail bg-warning color-defult"><i
-                                                        class="bi bi-clipboard-data fs-4"></i></div>
-                                            @endif
-
-                                            @if ($numero_incremento_prod < 0)
-                                                <div class="avatar lg  rounded-1 no-thumbnail bg-danger color-red"><i
-                                                        class="bi bi-clipboard-data fs-4"></i></div>
-                                            @endif
-
-                                            @if ($numero_incremento_prod > 0)
-                                                <div class="avatar lg  rounded-1 no-thumbnail bg-success color-defult"><i
-                                                        class="bi bi-clipboard-data fs-4"></i></div>
-                                            @endif
-
-                                            <div class="flex-fill ms-4">
-                                                <h5 class="mb-0 ">
-
-                                                    <div class="col mr-2">
-                                                        @if ($numero_incremento_prod > 0)
-                                                            <h5 class="mb-0 ">
-                                                                INCREMENTO PRODUCCION</h5>
-                                                        @endif
-
-                                                        @if ($numero_incremento_prod < 0)
-                                                            <h5 class="mb-0 ">
-                                                                DECREMENTO PRODUCCION</h5>
-                                                        @endif
-
-                                                        @if ($numero_incremento_prod == 0)
-                                                            <h5 class="mb-0 ">
-                                                                INICIANDO ACTIVIDADES</h5>
-                                                        @endif
-
-                                                    </div>
-
-                                                </h5>
-                                            </div>
-                                            <a href="#" title="renewal-date"
-                                                class="btn btn-link text-decoration-none  rounded-1"><i
-                                                    class="icofont-hand-drawn-right fs-2 "></i></a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div><!-- Row End -->
 
 
                         <div class="col-md-12">
@@ -125,7 +270,8 @@
 
                         <div class="col-md-6">
                             <div class="card">
-                                <div class="card-header py-3 d-flex justify-content-between bg-transparent border-bottom-0">
+                                <div
+                                    class="card-header py-3 d-flex justify-content-between bg-transparent border-bottom-0">
                                     <h6 class="mb-0 fw-bold ">Proyectos</h6>
                                 </div>
 
@@ -136,7 +282,8 @@
                                                 <div class="card-body ">
                                                     <i class="icofont-checked fs-3"></i>
                                                     <h6 class="mt-3 mb-0 fw-bold small-14">En Desarrollo</h6>
-                                                    <span style="font-size:large">{{ $numero_proyectos_desarrollo }}</span>
+                                                    <span
+                                                        style="font-size:large">{{ $numero_proyectos_desarrollo }}</span>
                                                 </div>
                                             </div>
                                         </div>
@@ -183,7 +330,8 @@
                             </div> --}}
                             <div class="card">
                                 <br>
-                                <div class="card-header py-3 d-flex justify-content-between bg-transparent border-bottom-0">
+                                <div
+                                    class="card-header py-3 d-flex justify-content-between bg-transparent border-bottom-0">
                                     <h6 class="mb-0 fw-bold ">Total Proyectos</h6>
                                     <h4 class="mb-0 fw-bold ">
                                         {{ $numero_proyectos_desarrollo + $numero_proyectos_certificacion + $numero_proyectos_pausa }}
@@ -199,7 +347,8 @@
 
                         <div class="col-md-12">
                             <div class="card">
-                                <div class="card-header py-3 d-flex justify-content-between bg-transparent border-bottom-0">
+                                <div
+                                    class="card-header py-3 d-flex justify-content-between bg-transparent border-bottom-0">
                                     <h6 class="mb-0 fw-bold "></h6>
                                 </div>
                                 <div class="card-body">
@@ -333,23 +482,7 @@
                 </div>
                 <div class="col-xl-4 col-lg-12 col-md-12">
                     <div class="row g-3 row-deck">
-                        <div class="col-md-6 col-lg-6 col-xl-12">
-                            <div class="card bg-primary">
-                                <div class="card-body row">
-                                    <div class="col">
-                                        <span
-                                            class="avatar lg bg-white rounded-circle text-center d-flex align-items-center justify-content-center"><i
-                                                class="icofont-file-text fs-5"></i></span>
-                                        <h1 class="mt-3 mb-0 fw-bold text-white">{{ $numero_proyectos_desarrollo }}</h1>
-                                        <span class="text-white">Proyectos en desarrollo</span>
-                                    </div>
-                                    <div class="col">
-                                        <img class="img-fluid" src="{{ url('/') . '/images/interview.svg' }}"
-                                            alt="interview">
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+
                         <div class="col-md-6 col-lg-6 col-xl-12  flex-column">
                             <div class="card mb-3">
                                 <div class="card-body">
@@ -588,526 +721,71 @@
     <script src="{{ asset('js/template.js') }}"></script>
     <script src="{{ asset('js/page/hr.js') }}"></script>
 
-    {{-- <script src="{{ asset('js/dayjs.min.js') }}"></script> --}}
 
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-    {{-- <script src="{{ asset('code/highcharts.js') }}"></script>
-    <script src="{{ asset('code/modules/exporting.js') }}"></script>
-    <script src="{{ asset('code/modules/export-data.js') }}"></script>
-    <script src="{{ asset('code/modules/accessibility.js') }}"></script>
+    <script>
+        const ctx = document.getElementById('char_actividades_finalizadas');
 
-    <script src="{{ asset('js/highcharts.js') }}"></script> --}}
-
-    <script language="JavaScript">
-        // Employees Data
-        $(document).ready(function() {
-
-            mostrarEstadoProyectos();
-
+        new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: @json($actividades_finalizadas_label),
+                datasets: [{
+                    label: '',
+                    data: @json($actividades_finalizadas_value),
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
         });
 
-        function mostrarEstadoProyectos() {
-            alert('hi');
+        const ctx2 = document.getElementById('char_estado_proyectos');
+        new Chart(ctx2, {
+            type: 'doughnut',
+            data: {
+                labels: @json($data_estado_proyectos_label),
+                datasets: [{
+                    label: '',
+                    data: @json($data_estado_proyectos_value),
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
         });
-        }
 
+        const ctx3 = document.getElementById('char_actividades_finalizadas_analista');
 
-        // Highcharts.chart('container_estado_proyectos', {
-        //     legend: {
-        //         layout: 'vertical',
-        //         align: 'right',
-        //         verticalAlign: 'middle',
-        //         labelFormatter: function() {
-        //             return this.y + '<br>';
-        //         }
-        //     },
-        //     title: {
-        //         text: 'Estado de Proyectos'
-        //     },
-        //     series: [{
-        //         type: 'pie',
-        //         size: '80%',
-        //         innerSize: '60%',
-        //         showInLegend: true,
-        //         dataLabels: {
-        //             enabled: false
-        //         },
-        //         data: @json($data_estado_proyectos)
-        //         // data: [{
-        //         //   'name': 'Avance',
-        //         //   'y': 95,
-        //         //   'color': '#138999'
-        //         // }, {
-        //         //   'name': 'Falta',
-        //         //   'y': 5,
-        //         //   'color': '#6dd3ed'
-        //         // }]
-        //     }]
-        // });
-
-        // // Create the chart
-        // Highcharts.chart('container_actividades_finalizadas', {
-        //     chart: {
-        //         type: 'spline'
-        //     },
-        //     title: {
-        //         text: 'Actividades Finalizadas por día'
-        //     },
-        //     subtitle: {
-        //         text: ''
-        //     },
-        //     accessibility: {
-        //         announceNewData: {
-        //             enabled: true
-        //         }
-        //     },
-        //     xAxis: {
-        //         type: 'category'
-        //     },
-        //     yAxis: {
-        //         title: {
-        //             text: 'Total de actividades resueltas'
-        //         }
-
-        //     },
-        //     legend: {
-        //         enabled: false
-        //     },
-        //     plotOptions: {
-        //         series: {
-        //             borderWidth: 0,
-        //             dataLabels: {
-        //                 enabled: true,
-
-        //             }
-        //         }
-        //     },
-
-
-        //     series: [{
-        //         name: "Numero de actividades resueltas",
-        //         colorByPoint: true,
-        //         data: @json($data_actividades_diarias),
-        //     }],
-
-        // });
-
-        // // Create the chart
-        // Highcharts.chart('container_user_dev', {
-        //     chart: {
-        //         type: 'column'
-        //     },
-        //     title: {
-        //         text: 'Actividades Asignadas por Analista'
-        //     },
-        //     subtitle: {
-        //         text: 'Numero de actividades Asignadas por Analista'
-        //     },
-        //     accessibility: {
-        //         announceNewData: {
-        //             enabled: true
-        //         }
-        //     },
-        //     xAxis: {
-        //         type: 'category'
-        //     },
-        //     yAxis: {
-        //         title: {
-        //             text: 'Total de actividades asignadas'
-        //         }
-
-        //     },
-        //     legend: {
-        //         enabled: false
-        //     },
-        //     plotOptions: {
-        //         series: {
-        //             borderWidth: 0,
-        //             dataLabels: {
-        //                 enabled: true,
-
-        //             }
-        //         }
-        //     },
-
-
-
-        //     series: [{
-        //         name: "Numero de actividades en desarrollo",
-        //         colorByPoint: true,
-        //         data: @json($data_users_dev),
-
-        //     }],
-
-        // });
-
-        // // Create the chart
-        // Highcharts.chart('container_users_week_end', {
-        //     chart: {
-        //         type: 'column'
-        //     },
-        //     title: {
-        //         text: 'Actividades Finalizadas por Analista '
-        //     },
-        //     subtitle: {
-        //         text: 'Numero de actividades resueltas por Analista (Ultimos 15 dias)'
-        //     },
-        //     accessibility: {
-        //         announceNewData: {
-        //             enabled: true
-        //         }
-        //     },
-        //     xAxis: {
-        //         type: 'category'
-        //     },
-        //     yAxis: {
-        //         title: {
-        //             text: 'Total de actividades resueltas'
-        //         }
-
-        //     },
-        //     legend: {
-        //         enabled: false
-        //     },
-        //     plotOptions: {
-        //         series: {
-        //             borderWidth: 0,
-        //             dataLabels: {
-        //                 enabled: true,
-
-        //             }
-        //         }
-        //     },
-
-
-        //     series: [{
-        //         name: "Numero de actividades resueltas",
-        //         colorByPoint: true,
-        //         data: @json($data_users_week_end),
-        //     }],
-
-        // });
-
-        // // Create the chart
-        // Highcharts.chart('container_users_end', {
-        //     chart: {
-        //         type: 'column'
-        //     },
-        //     title: {
-        //         text: 'Actividades Finalizadas por Analista'
-        //     },
-        //     subtitle: {
-        //         text: 'Numero de actividades Finalizadas por Analista'
-        //     },
-        //     accessibility: {
-        //         announceNewData: {
-        //             enabled: true
-        //         }
-        //     },
-        //     xAxis: {
-        //         type: 'category'
-        //     },
-        //     yAxis: {
-        //         title: {
-        //             text: 'Total de actividades finalizadas'
-        //         }
-
-        //     },
-        //     legend: {
-        //         enabled: false
-        //     },
-        //     plotOptions: {
-        //         series: {
-        //             borderWidth: 0,
-        //             dataLabels: {
-        //                 enabled: true,
-
-        //             }
-        //         }
-        //     },
-
-
-
-        //     series: [{
-        //         name: "Numero de actividades finalizadas",
-        //         colorByPoint: true,
-        //         data: @json($data_users_end),
-        //     }],
-        //     drilldown: {
-
-        //     }
-        // });
-
-        // // Create the chart
-        // Highcharts.chart('container_horas_meses_end', {
-        //     chart: {
-        //         type: 'column'
-        //     },
-        //     title: {
-        //         text: 'Bolson Horas Operatoria Diaria'
-        //     },
-        //     subtitle: {
-        //         text: 'Numero de horas operatoria diaria'
-        //     },
-        //     accessibility: {
-        //         announceNewData: {
-        //             enabled: true
-        //         }
-        //     },
-        //     xAxis: {
-        //         type: 'category'
-        //     },
-        //     yAxis: {
-        //         title: {
-        //             text: 'Total de actividades resueltas'
-        //         }
-
-        //     },
-        //     legend: {
-        //         enabled: false
-        //     },
-        //     plotOptions: {
-        //         series: {
-        //             borderWidth: 0,
-        //             dataLabels: {
-        //                 enabled: true,
-
-        //             }
-        //         }
-        //     },
-
-
-        //     series: [{
-        //         name: "Numero de actividades resueltas",
-        //         colorByPoint: true,
-        //         data: @json($data_horas_meses_end),
-        //     }],
-
-        // });
-
-        // // Create the chart
-        // Highcharts.chart('container_meses_end', {
-        //     chart: {
-        //         type: 'spline'
-        //     },
-        //     title: {
-        //         text: 'Actividades Finalizadas por Mes'
-        //     },
-        //     subtitle: {
-        //         text: 'Numero de actividades resueltas por Mes'
-        //     },
-        //     accessibility: {
-        //         announceNewData: {
-        //             enabled: true
-        //         }
-        //     },
-        //     xAxis: {
-        //         type: 'category'
-        //     },
-        //     yAxis: {
-        //         title: {
-        //             text: 'Total de actividades resueltas'
-        //         }
-
-        //     },
-        //     legend: {
-        //         enabled: false
-        //     },
-        //     plotOptions: {
-        //         series: {
-        //             borderWidth: 0,
-        //             dataLabels: {
-        //                 enabled: true,
-
-        //             }
-        //         }
-        //     },
-
-
-        //     series: [{
-        //         name: "Numero de actividades resueltas",
-        //         colorByPoint: true,
-        //         data: @json($data_meses_end),
-        //     }],
-        //     drilldown: {
-
-        //     }
-        // });
-
-        // Highcharts.chart('container_errores_tecnicos_2021', {
-        //     chart: {
-        //         type: 'areaspline'
-        //     },
-        //     title: {
-        //         text: 'INDICE DE ERROR SOBRE TOTAL DE PROGRAMAS CREADOS Y MODIFICADOS 2021'
-        //     },
-        //     legend: {
-        //         layout: 'vertical',
-        //         align: 'left',
-        //         verticalAlign: 'top',
-        //         x: 150,
-        //         y: 100,
-        //         floating: true,
-        //         borderWidth: 1,
-        //         backgroundColor: Highcharts.defaultOptions.legend.backgroundColor || '#FFFFFF'
-        //     },
-        //     xAxis: {
-        //         categories: [
-        //             'ENERO',
-        //             'FEBRERO',
-        //             'MARZO',
-        //             'ABRIL',
-        //             'MAYO',
-        //             'JUNIO',
-        //             'JULIO',
-        //             'AGOSTO',
-        //             'SEPTIEMBRE',
-        //             'OCTUBRE',
-        //             'NOVIEMBRE',
-        //             'DICIEMBRE'
-        //         ],
-
-        //     },
-        //     yAxis: {
-        //         title: {
-        //             text: ''
-        //         }
-        //     },
-        //     tooltip: {
-        //         shared: true,
-        //         valueSuffix: ' %'
-        //     },
-        //     credits: {
-        //         enabled: false
-        //     },
-        //     plotOptions: {
-        //         areaspline: {
-        //             fillOpacity: 0.1
-        //         }
-        //     },
-        //     series: [{
-        //         name: 'LINEA DE DEFECTOS',
-        //         data: [3.45, 4.65, 7.32, 1.04, 0.00, 0.00, 0.00, 2.70, 0.00, 4.54, 1.75, 0.00]
-        //     }, {
-        //         name: 'LINEA ESTANDAR ESTABLECIDO',
-        //         data: [5.00, 5.00, 5.00, 5.00, 5.00, 5.00, 5.00, 5.00, 5.00, 5.00, 5.00, 5.00]
-        //     }]
-        // });
-
-        // Highcharts.chart('container_errores_tecnicos_2022', {
-        //     chart: {
-        //         type: 'areaspline'
-        //     },
-        //     title: {
-        //         text: 'INDICE DE ERROR SOBRE TOTAL DE PROGRAMAS CREADOS Y MODIFICADOS 2022'
-        //     },
-        //     legend: {
-        //         layout: 'vertical',
-        //         align: 'left',
-        //         verticalAlign: 'top',
-        //         x: 150,
-        //         y: 100,
-        //         floating: true,
-        //         borderWidth: 1,
-        //         backgroundColor: Highcharts.defaultOptions.legend.backgroundColor || '#FFFFFF'
-        //     },
-        //     xAxis: {
-        //         categories: [
-        //             'ENERO',
-        //             'FEBRERO',
-        //             'MARZO',
-        //             'ABRIL',
-        //             'MAYO',
-        //             'JUNIO',
-        //             'JULIO',
-        //             'AGOSTO',
-        //             'SEPTIEMBRE',
-        //             'OCTUBRE',
-        //             'NOVIEMBRE',
-        //             'DICIEMBRE'
-        //         ],
-
-        //     },
-        //     yAxis: {
-        //         title: {
-        //             text: ''
-        //         }
-        //     },
-        //     tooltip: {
-        //         shared: true,
-        //         valueSuffix: ' %'
-        //     },
-        //     credits: {
-        //         enabled: false
-        //     },
-        //     plotOptions: {
-        //         areaspline: {
-        //             fillOpacity: 0.1
-        //         }
-        //     },
-        //     series: [{
-        //         name: 'LINEA DE DEFECTOS',
-        //         data: [1.47, 0.72, 0.64, 1.23, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00]
-        //     }, {
-        //         name: 'LINEA ESTANDAR ESTABLECIDO',
-        //         data: [5.00, 5.00, 5.00, 5.00, 5.00, 5.00, 5.00, 5.00, 5.00, 5.00, 5.00, 5.00]
-        //     }]
-        // });
-
-        // Highcharts.chart('container_category', {
-
-        //     chart: {
-        //         type: 'column'
-        //     },
-        //     title: {
-        //         text: 'Actividades por Categoria Finalizadas por Mes'
-        //     },
-        //     subtitle: {
-        //         text: ''
-        //     },
-        //     xAxis: {
-        //         categories: [<?php echo $data_categorias; ?>],
-        //         crosshair: true
-        //     },
-        //     yAxis: {
-        //         min: 0,
-        //         title: {
-        //             text: 'total de actividades resueltas'
-        //         }
-        //     },
-        //     tooltip: {
-        //         headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
-        //         pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
-        //             '<td style="padding:0"><b>{point.y:.1f} </b></td></tr>',
-        //         footerFormat: '</table>',
-        //         shared: true,
-        //         useHTML: true
-        //     },
-        //     plotOptions: {
-        //         column: {
-        //             pointPadding: 0.2,
-        //             borderWidth: 0
-        //         }
-        //     },
-        //     series: [{
-        //             name: '<?php echo $nombre_codigo_3; ?>',
-        //             url: '<?php echo $url_codigo_3; ?>',
-        //             data: @json($array_cantidad_codigo_3)
-        //         },
-        //         {
-        //             name: '<?php echo $nombre_codigo_8; ?>',
-        //             url: '<?php echo $url_codigo_8; ?>',
-        //             data: @json($array_cantidad_codigo_8)
-        //         },
-        //         {
-        //             name: '<?php echo $nombre_codigo_9; ?>',
-        //             url: '<?php echo $url_codigo_9; ?>',
-        //             data: @json($array_cantidad_codigo_9)
-        //         },
-
-        //     ],
-
-        // });
+        new Chart(ctx3, {
+            type: 'bar',
+            data: {
+                labels: @json($data_users_end_label),
+                datasets: [{
+                    label: '',
+                    data: @json($data_users_end_value),
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
     </script>
 
 @endsection

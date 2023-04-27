@@ -15,7 +15,6 @@ class ProyectoController extends Controller
     }
     public function index()
     {
-
         return view('produccion.proyecto.index');
     }
 
