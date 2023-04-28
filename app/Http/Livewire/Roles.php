@@ -2,18 +2,18 @@
 
 namespace App\Http\Livewire;
 
-use App\CategoriaTicket;
+use App\Rol;
 use Livewire\Component;
 
-class Categorias extends Component
+class Roles extends Component
 {
-    public $id_categoria, $codigo, $nombre, $unidad_id, $busqueda;
+    public $id_rol, $nombre, $busqueda;
 
 
     public function render()
     {
-        $categorias = CategoriaTicket::where('nombre', 'LIKE', '%' . $this->busqueda . '%')->get();
-        return view('livewire.categorias',compact('categorias'));
+        $roles = Rol::where('nombre', 'LIKE', '%' . $this->busqueda . '%')->get();
+        return view('livewire.roles',compact('roles'));
     }
 
     public function create()
@@ -33,10 +33,8 @@ class Categorias extends Component
             'nombre' => 'required',
         ], $messages);
 
-        CategoriaTicket::create([
-            'codigo' => $this->codigo,
+        Rol::create([
             'nombre' => $this->nombre,
-            'unidad_id' => $this->unidad_id
         ]);
 
 
@@ -47,12 +45,10 @@ class Categorias extends Component
 
     public function edit($id)
     {
-        $categoria = CategoriaTicket::findOrFail($id);
+        $rol = Rol::findOrFail($id);
 
-        $this->id_categoria =  $categoria->id;
-        $this->codigo =  $categoria->codigo;
-        $this->nombre =  $categoria->nombre;
-        $this->unidad_id =  $categoria->unidad_id;
+        $this->id_rol =  $rol->id;
+        $this->nombre =  $rol->nombre;
 
     }
 
@@ -65,11 +61,11 @@ class Categorias extends Component
             'nombre' => 'required',
         ], $messages);
 
-        $categoria = CategoriaTicket::findOrFail($this->id_categoria);
-        $categoria->codigo = $this->codigo;
-        $categoria->nombre = $this->nombre;
-        $categoria->unidad_id = $this->unidad_id;
-        $categoria->update();
+
+        $rol = Rol::findOrFail($this->id_rol);
+        $rol->nombre = $this->nombre;
+        $rol->update();
+
 
         $this->dispatchBrowserEvent('close-modal-edit');
         $this->dispatchBrowserEvent('success-alert-edit');

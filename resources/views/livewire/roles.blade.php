@@ -14,7 +14,7 @@
                     <div class="card-header py-3 no-bg bg-transparent d-flex px-0  border-bottom flex-wrap">
                         <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12" style="text-align: left;">
                             <h5 class="fw-bold mb-0">
-                                Categorias
+                                Roles
                             </h5>
 
                         </div>
@@ -37,20 +37,20 @@
                 <table id="patient-table" class="table table-hover align-middle mb-0" style="width: 100%;">
                     <thead>
                         <tr>
-                            <th>Codigo</th>
-                            <th>Categoria</th>
+                            <th>Id</th>
+                            <th>Rol</th>
                             <th>Opciones</th>
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach ($categorias as $categoria)
+                        @foreach ($roles as $rol)
                             <tr>
-                                <td>{{ $categoria->codigo }}</td>
-                                <td>{{ $categoria->nombre }}</td>
+                                <td>{{ $rol->id }}</td>
+                                <td>{{ $rol->nombre }}</td>
                                 <td>
                                     <button type="button" class="btn btn-success"><i class="icofont-edit  fa-lg"
-                                            data-bs-toggle="modal" wire:click="edit({{ $categoria->id }})"
-                                            data-bs-target="#edit_categoria"></i></button>
+                                            data-bs-toggle="modal" wire:click="edit({{ $rol->id }})"
+                                            data-bs-target="#edit_rol"></i></button>
                                 </td>
                             </tr>
                         @endforeach
@@ -70,11 +70,11 @@
 
 
 
-        <div id="create_categoria" wire:ignore.self class="modal fade" aria-hidden="true">
+        <div id="create_rol" wire:ignore.self class="modal fade" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered modal-lg modal-dialog-scrollable">
                 <div class="modal-content">
                     <div class="modal-header col">
-                        <h5 class="modal-title  fw-bold" id="createprojectlLabel"> Nueva categoria</h5>
+                        <h5 class="modal-title  fw-bold" id="createprojectlLabel"> Nuevo rol</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
 
@@ -88,26 +88,13 @@
                                 </ul>
                             </div>
                         @endif
-
-
                         <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                             <div class="mb-3">
-                                <label class="form-label">Codigo</label>
-                                <input type="text" wire:model.defer="codigo" class="form-control">
-                            </div>
-
-                        </div>
-
-                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                            <div class="mb-3">
-                                <label class="form-label">Categoria</label>
+                                <label class="form-label">Rol</label>
                                 <input type="text" wire:model.defer="nombre" class="form-control">
-
                             </div>
 
                         </div>
-
-
 
                     </div>
                     <div class="modal-footer">
@@ -118,11 +105,11 @@
             </div>
         </div>
 
-        <div id="edit_categoria" wire:ignore.self class="modal fade" aria-hidden="true">
+        <div id="edit_rol" wire:ignore.self class="modal fade" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered modal-lg modal-dialog-scrollable">
                 <div class="modal-content">
                     <div class="modal-header col">
-                        <h5 class="modal-title  fw-bold" id="createprojectlLabel"> Editar categoria</h5>
+                        <h5 class="modal-title  fw-bold" id="createprojectlLabel"> Editar rol</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
 
@@ -138,20 +125,11 @@
                         @endif
                         <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                             <div class="mb-3">
-                                <label class="form-label">Codigo</label>
-                                <input type="text" wire:model.defer="codigo" class="form-control">
-                            </div>
-
-                        </div>
-
-                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                            <div class="mb-3">
-                                <label class="form-label">Categoria</label>
+                                <label class="form-label">Rol</label>
                                 <input type="text" wire:model.defer="nombre" class="form-control">
                             </div>
 
                         </div>
-
 
                     </div>
                     <div class="modal-footer">
@@ -170,7 +148,7 @@
         right: 0px;
         bottom: 0px;">
 
-            <button class="botonF1" wire:click="create()" data-bs-toggle="modal" data-bs-target="#create_categoria"
+            <button class="botonF1" wire:click="create()" data-bs-toggle="modal" data-bs-target="#create_rol"
                 style=" width: 60px;
         height: 60px;
         border-radius: 100%;
@@ -218,12 +196,12 @@
         });
 
         window.addEventListener('close-modal', (e) => {
-            $('#create_categoria').modal('hide')
+            $('#create_rol').modal('hide')
         });
 
 
         window.addEventListener('close-modal-edit', (e) => {
-            $('#edit_categoria').modal('hide')
+            $('#edit_rol').modal('hide')
         });
     </script>
 </div>

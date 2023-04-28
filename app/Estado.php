@@ -9,5 +9,5 @@ class Estado extends Model
     //
     protected $table = 'estados';
 
-    protected $fillable = ['nombre'];
+    protected $fillable = ['nombre','color','prioridad'];
 }

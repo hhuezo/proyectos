@@ -46,7 +46,7 @@
                             <li><a class="ms-link {{ Request::segment(3) == 'index' ? 'active' : '' }}"
                                     href="{{ url('usuario') }}"><span>Usuario</span></a></li>
                             <li><a class="ms-link {{ Request::segment(3) == 'tasks' ? 'active' : '' }}"
-                                    href="{{ url('proyecto_finalizado') }}"><span>Finalizados </span></a></li>
+                                    href="{{ url('rol') }}"><span>Roles </span></a></li>
 
                         </ul>
                     </li>
@@ -60,11 +60,13 @@
                         <ul class="sub-menu {{ Request::segment(2) == 'project' ? 'collapsed show' : 'collapse' }}"
                             id="project-Components3">
                             <li><a class="ms-link {{ Request::segment(3) == 'index' ? 'active' : '' }}"
-                                    href="{{ url('unidad') }}"><span>Unidad</span></a></li>
+                                    href="{{ url('unidad') }}"><span>Unidades</span></a></li>
                             <li><a class="ms-link {{ Request::segment(3) == 'index' ? 'active' : '' }}"
-                                    href="{{ url('estado') }}"><span>Estado</span></a></li>
+                                    href="{{ url('estado') }}"><span>Estados</span></a></li>
                             <li><a class="ms-link {{ Request::segment(3) == 'index' ? 'active' : '' }}"
                                     href="{{ url('categoria') }}"><span>Categorias</span></a></li>
+                            <li><a class="ms-link {{ Request::segment(3) == 'index' ? 'active' : '' }}"
+                                    href="{{ url('prioridad') }}"><span>Prioridades</span></a></li>
                         </ul>
                     </li>
                 @endif
