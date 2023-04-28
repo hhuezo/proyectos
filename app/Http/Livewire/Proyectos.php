@@ -15,12 +15,20 @@ use Carbon\Carbon;
 class Proyectos extends Component
 {
     public $id_proyecto = 0, $estado_id = 2, $nombre, $descripcion, $busqueda, $busqueda_actividad;
-    public $proyectos, $id_unidad, $actividades;
+    public $proyectos, $id_unidad, $actividades, $tipo = 1;
 
     public $id_actividad, $numero_ticket = 0, $ponderacion = 0.01, $descripcion_actividad,
         $fecha_inicio, $categoria_id, $estado_actividad_id, $prioridad_id, $fecha_fin, $forma = "NO APLICA", $users_id;
 
 
+    public function changeType()
+    {
+        if ($this->tipo == 1) {
+            $this->tipo = 2;
+        } else {
+            $this->tipo = 1;
+        }
+    }
     public function mount()
     {
         if (session('id_unidad')) {
@@ -62,7 +70,7 @@ class Proyectos extends Component
             $this->actividades = Actividad::where('proyecto_id', '=', $this->id_proyecto)
                 ->where('unidad_id', '=', $this->id_unidad)
                 ->where('descripcion', 'LIKE', '%' . $this->busqueda_actividad . '%')
-                ->orderBy('id','desc')
+                ->orderBy('id', 'desc')
                 ->get();
         }
 
@@ -71,9 +79,9 @@ class Proyectos extends Component
         $usuarios = User::where('id', '>', 1)->where('unidad_id', '=', $this->id_unidad)->get();
 
 
-        $colors = ["", "planned_task", "review_task", "progress_task", "completed_task", "completed_task", "planned_task"];
+        $colors = ["", "#0dcaf0", "#F19828", "#0dcaf0", "#198754", "##0d6efd",  "#0d6efd", "#dc3545"];
 
-        return view('livewire.proyectos', compact('estados', 'colors', 'unidad', 'categorias', 'prioridades', 'usuarios','estados_actividad'));
+        return view('livewire.proyectos', compact('estados', 'colors', 'unidad', 'categorias', 'prioridades', 'usuarios', 'estados_actividad'));
     }
 
 

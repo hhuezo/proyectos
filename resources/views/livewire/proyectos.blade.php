@@ -158,7 +158,8 @@
                                                 <div class="col-lg-1 col-md-1 col-sm-12 col-xs-12"
                                                     style="text-align: left">
                                                     <button class="btn btn-primary" data-bs-toggle="modal"
-                                                    data-bs-target="#create_actividad" wire:click="create_actividad()">+</button>
+                                                        data-bs-target="#create_actividad"
+                                                        wire:click="create_actividad()">+</button>
                                                 </div>
                                             </div>
 
@@ -258,7 +259,7 @@
                 <input type="hidden" wire:model.defer="id_proyecto">
                 <div class="modal-body row">
                     @if (count($errors) > 0)
-                        <div  class="alert alert-danger">
+                        <div class="alert alert-danger">
                             <ul>
                                 @foreach ($errors->all() as $error)
                                     <li>{{ $error }}</li>
@@ -285,7 +286,7 @@
                     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                         <div class="mb-3">
                             <label class="form-label">Descripcion</label>
-                            <textarea class="form-control" wire:model.defer="descripcion_actividad" ></textarea>
+                            <textarea class="form-control" wire:model.defer="descripcion_actividad"></textarea>
                         </div>
                     </div>
 
@@ -368,8 +369,7 @@
             <div class="modal-content">
                 <div class="modal-header col">
                     <h5 class="modal-title  fw-bold" id="createprojectlLabel">Modificar actividad</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"
-                        aria-label="Close"></button>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <input type="hidden" wire:model.defer="id_proyecto">
                 <div class="modal-body row">
@@ -481,8 +481,6 @@
     </div>
 
     <div class="py-12">
-
-
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg px-4 py-4">
 
@@ -500,9 +498,18 @@
 
                                 </h5>
                             </div>
-                            <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+                            <div class="col-lg-5 col-md-5 col-sm-11  col-11">
                                 <input type="text" class="form-control" placeholder="Buscar"
                                     wire:model="busqueda">
+                            </div>
+                            <div class="col-lg-1 col-md-1 col-sm-1 col-1" style="text-align: left">
+                                @if ($tipo == 1)
+                                    <button class="btn btn-primary" wire:click="changeType"><i
+                                            class="icofont-listine-dots fa-lg"></i></button>
+                                @else
+                                    <button class="btn btn-primary" wire:click="changeType"><i
+                                            class="icofont-penalty-card fa-lg"></i></button>
+                                @endif
                             </div>
 
 
@@ -512,115 +519,203 @@
                 </div>
 
 
-                <div class="row taskboard g-3 py-xxl-4">
-                    @foreach ($estados as $estado)
-                        <div
-                            class="col-xxl-3 col-xl-6 col-lg-6 col-md-6 mt-xxl-4 mt-xl-4 mt-lg-4 mt-md-4 mt-sm-4 mt-4">
-                            <h6 class="fw-bold py-3 mb-0">{{ $estado->nombre }}</h6>
-                            <div class="{{ $colors[$estado->id] }} col-lg-12 col-md-12">
-                                <div class="dd" data-plugin="nestable">
-                                    <ol class="dd-list">
-                                        @foreach ($proyectos as $proyecto)
-                                            @if ($proyecto->estado_id == $estado->id)
-                                                <div class="dd-handle" data-bs-toggle="modal"
-                                                    data-bs-target="#exampleModalFullscreen"
-                                                    wire:click="edit({{ $proyecto->id }})">
-                                                    <div
-                                                        class="task-info d-flex align-items-center justify-content-between">
-                                                        <!--<h6
-                                                            class="bg-lightgreen py-1 px-2 rounded-1 d-inline-block fw-bold small-14 mb-0">
-                                                            <i class="icofont-ui-edit fa-lg"
-                                                                wire:click="edit({{ $proyecto->id }})"
-                                                                class="btn btn-outline-secondary"
-                                                                data-bs-toggle="modal"
-                                                                data-bs-target="#edit_proyecto"></i>
 
-                                                        </h6>
-                                                        <span>
-                                                            <h6><strong>{{ $proyecto->id }}</strong></h6>
-                                                        </span>-->
-                                                    </div>
-                                                    <p class="py-2 mb-0"> <strong>{{ $proyecto->nombre }}</strong></p>
-                                                    <p class="py-2 mb-0">{{ $proyecto->descripcion }}</p>
-                                                    <div class="tikit-info row g-3 align-items-center">
+                <div class="row taskboard ">
+                    @if ($tipo == 1)
+                        @foreach ($estados as $estado)
+                            <div
+                                class="col-xxl-3 col-xl-6 col-lg-6 col-md-6 mt-xxl-4 mt-xl-4 mt-lg-4 mt-md-4 mt-sm-4 mt-4">
+                                <div class="card border-{{ $estado->color }}">
+                                    <h6 class="fw-bold py-3 mb-0">{{ $estado->nombre }}</h6>
+                                </div>
+                                <div class="{{ $colors[$estado->id] }} col-lg-12 col-md-12">
+                                    <div class="dd" data-plugin="nestable">
+                                        <ol class="dd-list">
+                                            @foreach ($proyectos as $proyecto)
+                                                @if ($proyecto->estado_id == $estado->id)
+                                                    <div class="dd-handle" data-bs-toggle="modal"
+                                                        data-bs-target="#exampleModalFullscreen"
+                                                        wire:click="edit({{ $proyecto->id }})">
+                                                        <div
+                                                            class="task-info d-flex align-items-center justify-content-between">
+                                                            <!--<h6
+                                                        class="bg-lightgreen py-1 px-2 rounded-1 d-inline-block fw-bold small-14 mb-0">
+                                                        <i class="icofont-ui-edit fa-lg"
+                                                            wire:click="edit({{ $proyecto->id }})"
+                                                            class="btn btn-outline-secondary"
+                                                            data-bs-toggle="modal"
+                                                            data-bs-target="#edit_proyecto"></i>
 
-                                                        <div class="col-sm text-end">
+                                                    </h6>
+                                                    <span>
+                                                        <h6><strong>{{ $proyecto->id }}</strong></h6>
+                                                    </span>-->
+                                                        </div>
+                                                        <p class="py-2 mb-0"> <strong>{{ $proyecto->nombre }}</strong>
+                                                        </p>
+                                                        <p class="py-2 mb-0">{{ $proyecto->descripcion }}</p>
+                                                        <div class="tikit-info row g-3 align-items-center">
 
-                                                            <div class="d-flex align-items-center">
-                                                                @if ($proyecto->id != 9 && $proyecto->id != 11)
-                                                                    @if ($proyecto->avance < 50)
-                                                                        <div class="progress"
-                                                                            style="height: 20px; width: 150px;">
-                                                                            <div class="progress-bar bg-danger"
-                                                                                role="progressbar" style="width: 50%"
-                                                                                aria-valuenow="60" aria-valuemin="0"
-                                                                                aria-valuemax="100">
-                                                                                {{ $proyecto->avance }}%</div>
-                                                                        </div>
-                                                                    @elseif($proyecto->avance < 70)
-                                                                        <div class="progress"
-                                                                            style="height: 20px; width: 150px;">
-                                                                            <div class="progress-bar bg-warning"
-                                                                                role="progressbar"
-                                                                                style="width: {{ $proyecto->avance }}%"
-                                                                                aria-valuenow="60" aria-valuemin="0"
-                                                                                aria-valuemax="100">
-                                                                                {{ $proyecto->avance }}%</div>
-                                                                        </div>
-                                                                    @else
-                                                                        <div class="progress"
-                                                                            style="height: 20px; width: 150px;">
-                                                                            <div class="progress-bar bg-success"
-                                                                                role="progressbar"
-                                                                                style="width: {{ $proyecto->avance }}%"
-                                                                                aria-valuenow="60" aria-valuemin="0"
-                                                                                aria-valuemax="100">
-                                                                                {{ $proyecto->avance }}%</div>
-                                                                        </div>
+                                                            <div class="col-sm text-end">
+
+                                                                <div class="d-flex align-items-center">
+                                                                    @if ($proyecto->id != 9 && $proyecto->id != 11)
+                                                                        @if ($proyecto->avance < 50)
+                                                                            <div class="progress"
+                                                                                style="height: 20px; width: 150px;">
+                                                                                <div class="progress-bar bg-danger"
+                                                                                    role="progressbar"
+                                                                                    style="width: 50%"
+                                                                                    aria-valuenow="60"
+                                                                                    aria-valuemin="0"
+                                                                                    aria-valuemax="100">
+                                                                                    {{ $proyecto->avance }}%</div>
+                                                                            </div>
+                                                                        @elseif($proyecto->avance < 70)
+                                                                            <div class="progress"
+                                                                                style="height: 20px; width: 150px;">
+                                                                                <div class="progress-bar bg-warning"
+                                                                                    role="progressbar"
+                                                                                    style="width: {{ $proyecto->avance }}%"
+                                                                                    aria-valuenow="60"
+                                                                                    aria-valuemin="0"
+                                                                                    aria-valuemax="100">
+                                                                                    {{ $proyecto->avance }}%</div>
+                                                                            </div>
+                                                                        @else
+                                                                            <div class="progress"
+                                                                                style="height: 20px; width: 150px;">
+                                                                                <div class="progress-bar bg-success"
+                                                                                    role="progressbar"
+                                                                                    style="width: {{ $proyecto->avance }}%"
+                                                                                    aria-valuenow="60"
+                                                                                    aria-valuemin="0"
+                                                                                    aria-valuemax="100">
+                                                                                    {{ $proyecto->avance }}%</div>
+                                                                            </div>
+                                                                        @endif
                                                                     @endif
-                                                                @endif
 
+
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-sm text-end">
+                                                                <!--<div class="bg-lightgreen py-1 px-2 rounded-1 d-inline-block fw-bold small-14 mb-0"
+                                                            wire:click="actividad_show({{ $proyecto->id }})">
+                                                            <strong><i class="icofont-eye fa-lg"></i>
+                                                                Actividades</strong>
+                                                        </div>-->
 
                                                             </div>
                                                         </div>
-                                                        <div class="col-sm text-end">
-                                                            <!--<div class="bg-lightgreen py-1 px-2 rounded-1 d-inline-block fw-bold small-14 mb-0"
-                                                                wire:click="actividad_show({{ $proyecto->id }})">
-                                                                <strong><i class="icofont-eye fa-lg"></i>
-                                                                    Actividades</strong>
-                                                            </div>-->
 
-                                                        </div>
                                                     </div>
-
-                                                </div>
-                                            @endif
-                                        @endforeach
+                                                @endif
+                                            @endforeach
 
 
-                                    </ol>
+                                        </ol>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    @endforeach
+                        @endforeach
+                    @else
+                        @foreach ($estados as $estado)
+                            <div class="card"  data-plugin="nestable">
+                                <h6 class="fw-bold py-3 mb-0" style="text-align: left; border-top-color: coral">{{ $estado->nombre }}</h6>
+
+                                <table class="table table-hover align-middle mb-0" style="width:100%">
+                                    <thead>
+                                        <tr>
+                                            <th>Id</th>
+                                            <th>Nombre</th>
+                                            <th>Descripción</th>
+                                            <th>Avance</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach ($proyectos as $proyecto)
+                                            @if ($proyecto->estado_id == $estado->id)
+                                                <tr style="text-align: left"  data-bs-toggle="modal"
+                                                data-bs-target="#exampleModalFullscreen"
+                                                wire:click="edit({{ $proyecto->id }})">
+                                                    <td>{{ $proyecto->id }}</td>
+                                                    <td>{{ $proyecto->nombre }}</td>
+                                                    <td>{{ $proyecto->descripcion }}</td>
+                                                    <td>
+                                                        @if ($proyecto->id != 9 && $proyecto->id != 11)
+                                                            @if ($proyecto->avance < 50)
+                                                                <div class="progress"
+                                                                    style="height: 20px; width: 150px;">
+                                                                    <div class="progress-bar bg-danger"
+                                                                        role="progressbar"
+                                                                        style="width: 50%"
+                                                                        aria-valuenow="60"
+                                                                        aria-valuemin="0"
+                                                                        aria-valuemax="100">
+                                                                        {{ $proyecto->avance }}%</div>
+                                                                </div>
+                                                            @elseif($proyecto->avance < 70)
+                                                                <div class="progress"
+                                                                    style="height: 20px; width: 150px;">
+                                                                    <div class="progress-bar bg-warning"
+                                                                        role="progressbar"
+                                                                        style="width: {{ $proyecto->avance }}%"
+                                                                        aria-valuenow="60"
+                                                                        aria-valuemin="0"
+                                                                        aria-valuemax="100">
+                                                                        {{ $proyecto->avance }}%</div>
+                                                                </div>
+                                                            @else
+                                                                <div class="progress"
+                                                                    style="height: 20px; width: 150px;">
+                                                                    <div class="progress-bar bg-success"
+                                                                        role="progressbar"
+                                                                        style="width: {{ $proyecto->avance }}%"
+                                                                        aria-valuenow="60"
+                                                                        aria-valuemin="0"
+                                                                        aria-valuemax="100">
+                                                                        {{ $proyecto->avance }}%</div>
+                                                                </div>
+                                                            @endif
+                                                        @endif
 
 
+                                                    </div>
 
 
+                                                    </td>
+                                                </tr>
+                                            @endif
+                                        @endforeach
+                                    </tbody>
+                                </table>
+
+                            </div>
+                           <div>&nbsp;</div>
+                        @endforeach
                 </div>
 
+                @endif
+
+
+
+
+
             </div>
+
         </div>
     </div>
+</div>
 
 
-    @if (auth()->user()->rol_id != 6)
-        <div class="contenedor">
-            <button class="botonF1" wire:click="create()" data-bs-toggle="modal" data-bs-target="#create_proyecto">
-                <span>+</span>
-            </button>
-        </div>
-    @endif
+@if (auth()->user()->rol_id != 6)
+    <div class="contenedor">
+        <button class="botonF1" wire:click="create()" data-bs-toggle="modal" data-bs-target="#create_proyecto">
+            <span>+</span>
+        </button>
+    </div>
+@endif
 
 
 </div>
@@ -658,5 +753,4 @@
     window.addEventListener('error-message-proyecto-show', (e) => {
         $('#error-proyecto').show();
     });
-
 </script>
