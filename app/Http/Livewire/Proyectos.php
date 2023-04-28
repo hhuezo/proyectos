@@ -18,7 +18,7 @@ class Proyectos extends Component
     public $proyectos, $id_unidad, $actividades, $tipo = 1;
 
     public $id_actividad, $numero_ticket = 0, $ponderacion = 0.01, $descripcion_actividad,
-        $fecha_inicio, $categoria_id, $estado_actividad_id, $prioridad_id, $fecha_fin, $forma = "NO APLICA", $users_id;
+        $fecha_inicio, $categoria_id, $estado_actividad_id, $prioridad_id, $fecha_fin, $forma = "NO APLICA", $users_id,$avance;
 
 
     public function changeType()
@@ -128,11 +128,13 @@ class Proyectos extends Component
     public function edit($id)
     {
         $proyecto = Proyecto::findOrFail($id);
+        $this->ponderacion = Actividad::where('proyecto_id', '=', $id)->sum('ponderacion');
         $this->id_proyecto = $proyecto->id;
         $this->nombre = $proyecto->nombre;
         $this->descripcion = $proyecto->descripcion;
         $this->estado_id = $proyecto->estado_id;
         $this->actividades = Actividad::where('proyecto_id', '=', $id)->get();
+        $this->avance = $proyecto->avance;
         $this->busqueda_actividad = "";
     }
 

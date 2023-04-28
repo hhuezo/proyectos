@@ -25,6 +25,7 @@
 
                 </li>
 
+                @if (auth()->user()->rol_id == 1 || auth()->user()->rol_id == 6)
                 <li class="collapsed">
                     <a class="m-link {{ Request::segment(2) == 'hr-dashboard' || Request::segment(2) == 'project-dashboard' ? 'active' : '' }}"
                         href="{{ url('load_unidades') }}">
@@ -32,6 +33,7 @@
                     <!-- Menu: Sub menu ul -->
 
                 </li>
+                @endif
 
 
                 @if (auth()->user()->rol_id == 1)

@@ -88,9 +88,37 @@
         <div class="modal-dialog modal-fullscreen">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title h4" id="exampleModalFullscreenLabel">Proyecto</h5>
+                    <h5 class="modal-title h4" id="exampleModalFullscreenLabel" style="text-align: left;">Proyecto <br>
+
+                        <div class="col-12">
+
+                            @if ($avance < 50)
+                                <div class="progress" style="height: 20px; width: 250px;">
+                                    <div class="progress-bar bg-danger" role="progressbar" style="width: 50%"
+                                        aria-valuenow="60" aria-valuemin="0" aria-valuemax="100">
+                                        {{ $avance }}% de {{ $ponderacion }}</div>
+                                </div>
+                            @elseif($avance < 70)
+                                <div class="progress" style="height: 20px; width: 250px;">
+                                    <div class="progress-bar bg-warning" role="progressbar"
+                                        style="width: {{ $avance }}%" aria-valuenow="60" aria-valuemin="0"
+                                        aria-valuemax="100">
+                                        {{ $avance }}% de {{ $ponderacion }}</div>
+                                </div>
+                            @else
+                                <div class="progress" style="height: 20px; width: 250px;">
+                                    <div class="progress-bar bg-success" role="progressbar"
+                                        style="width: {{ $avance }}%" aria-valuenow="60" aria-valuemin="0"
+                                        aria-valuemax="100">
+                                        {{ $avance }}% de {{ $ponderacion }}</div>
+                                </div>
+                            @endif
+                        </div>
+                    </h5>
+
 
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+
                 </div>
                 <div class="modal-body">
                     <div class="tab-content">
@@ -538,18 +566,7 @@
                                                         wire:click="edit({{ $proyecto->id }})">
                                                         <div
                                                             class="task-info d-flex align-items-center justify-content-between">
-                                                            <!--<h6
-                                                        class="bg-lightgreen py-1 px-2 rounded-1 d-inline-block fw-bold small-14 mb-0">
-                                                        <i class="icofont-ui-edit fa-lg"
-                                                            wire:click="edit({{ $proyecto->id }})"
-                                                            class="btn btn-outline-secondary"
-                                                            data-bs-toggle="modal"
-                                                            data-bs-target="#edit_proyecto"></i>
 
-                                                    </h6>
-                                                    <span>
-                                                        <h6><strong>{{ $proyecto->id }}</strong></h6>
-                                                    </span>-->
                                                         </div>
                                                         <p class="py-2 mb-0"> <strong>{{ $proyecto->nombre }}</strong>
                                                         </p>
@@ -621,8 +638,9 @@
                         @endforeach
                     @else
                         @foreach ($estados as $estado)
-                            <div class="card"  data-plugin="nestable">
-                                <h6 class="fw-bold py-3 mb-0" style="text-align: left; border-top-color: coral">{{ $estado->nombre }}</h6>
+                            <div class="card" data-plugin="nestable">
+                                <h6 class="fw-bold py-3 mb-0" style="text-align: left; border-top-color: coral">
+                                    {{ $estado->nombre }}</h6>
 
                                 <table class="table table-hover align-middle mb-0" style="width:100%">
                                     <thead>
@@ -636,9 +654,9 @@
                                     <tbody>
                                         @foreach ($proyectos as $proyecto)
                                             @if ($proyecto->estado_id == $estado->id)
-                                                <tr style="text-align: left"  data-bs-toggle="modal"
-                                                data-bs-target="#exampleModalFullscreen"
-                                                wire:click="edit({{ $proyecto->id }})">
+                                                <tr style="text-align: left" data-bs-toggle="modal"
+                                                    data-bs-target="#exampleModalFullscreen"
+                                                    wire:click="edit({{ $proyecto->id }})">
                                                     <td>{{ $proyecto->id }}</td>
                                                     <td>{{ $proyecto->nombre }}</td>
                                                     <td>{{ $proyecto->descripcion }}</td>
@@ -648,10 +666,8 @@
                                                                 <div class="progress"
                                                                     style="height: 20px; width: 150px;">
                                                                     <div class="progress-bar bg-danger"
-                                                                        role="progressbar"
-                                                                        style="width: 50%"
-                                                                        aria-valuenow="60"
-                                                                        aria-valuemin="0"
+                                                                        role="progressbar" style="width: 50%"
+                                                                        aria-valuenow="60" aria-valuemin="0"
                                                                         aria-valuemax="100">
                                                                         {{ $proyecto->avance }}%</div>
                                                                 </div>
@@ -661,8 +677,7 @@
                                                                     <div class="progress-bar bg-warning"
                                                                         role="progressbar"
                                                                         style="width: {{ $proyecto->avance }}%"
-                                                                        aria-valuenow="60"
-                                                                        aria-valuemin="0"
+                                                                        aria-valuenow="60" aria-valuemin="0"
                                                                         aria-valuemax="100">
                                                                         {{ $proyecto->avance }}%</div>
                                                                 </div>
@@ -672,8 +687,7 @@
                                                                     <div class="progress-bar bg-success"
                                                                         role="progressbar"
                                                                         style="width: {{ $proyecto->avance }}%"
-                                                                        aria-valuenow="60"
-                                                                        aria-valuemin="0"
+                                                                        aria-valuenow="60" aria-valuemin="0"
                                                                         aria-valuemax="100">
                                                                         {{ $proyecto->avance }}%</div>
                                                                 </div>
@@ -681,31 +695,31 @@
                                                         @endif
 
 
-                                                    </div>
-
-
-                                                    </td>
-                                                </tr>
-                                            @endif
-                                        @endforeach
-                                    </tbody>
-                                </table>
-
                             </div>
-                           <div>&nbsp;</div>
-                        @endforeach
+
+
+                            </td>
+                            </tr>
+                        @endif
+                    @endforeach
+                    </tbody>
+                    </table>
+
                 </div>
-
-                @endif
-
-
-
-
-
+                <div>&nbsp;</div>
+                @endforeach
             </div>
 
+            @endif
+
+
+
+
+
         </div>
+
     </div>
+</div>
 </div>
 
 
