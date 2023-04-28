@@ -81,6 +81,14 @@ class Actividades extends Component
     public function create()
     {
         $this->resetInput();
+
+        $time = Carbon::now('America/El_Salvador');
+        $this->fecha_inicio = $time->format('Y-m-d');
+        $this->fecha_fin = $time->format('Y-m-d');
+        $this->numero_ticket = 0;
+        $this->ponderacion = 0.01;
+        $this->categoria_id = "";
+        $this->prioridad_id = 1;
     }
 
     public function store()
@@ -113,12 +121,13 @@ class Actividades extends Component
             'proyecto_id' => 9,
             'numero_ticket' => $this->numero_ticket,
             'ponderacion' => $this->ponderacion,
-            'descripcion' => $this->descripcion,
+            'descripcion' => strtoupper($this->descripcion),
             'fecha_inicio' => $this->fecha_inicio,
             'categoria_id' => $this->categoria_id,
             'estado_id' => 1,
             'prioridad_id' => $this->prioridad_id,
             'fecha_fin' => $this->fecha_fin,
+            'unidad_id'=> auth()->user()->unidad_id,
             'forma' => $this->forma,
             'porcentaje' => 0,
             'users_id' => auth()->user()->id,
