@@ -13,7 +13,7 @@ class Actividad extends Model
 
     protected $fillable = ['numero_ticket','descripcion','fecha_inicio','fecha_fin','porcentaje',
                             'fecha_asignacion', 'fecha_liberacion','proyecto_id','users_id',
-                            'estado_id','categoria_id','prioridad_id','ponderacion','contenido','forma'];
+                            'estado_id','categoria_id','prioridad_id','ponderacion','contenido','forma','unidad_id'];
 
     public function proyecto(){
         return $this->belongsTo('App\Proyecto');
