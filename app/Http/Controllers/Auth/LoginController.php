@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Providers\RouteServiceProvider;
+use App\User;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 
 use GuzzleHttp\Psr7\Request;
@@ -60,17 +61,16 @@ class LoginController extends Controller
         $email = $request->input('email');
         $password = $request->input('password');
 
-        return view('auth.login')->with(compact('email','password'));
+        return view('auth.login')->with(compact('email', 'password'));
     }
 
     public function redirectTo()
     {
-      if(session()->has('redirect_to'))
-        return session()->pull('redirect_to');
+        if (session()->has('redirect_to'))
+            return session()->pull('redirect_to');
 
-      return $this->redirectTo;
-
+        $usuarios = User::take(10)->get();
+        session(['session_usuarios' => $usuarios]);
+        return $this->redirectTo;
     }
-
-
 }

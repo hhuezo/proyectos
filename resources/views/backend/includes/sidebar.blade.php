@@ -29,7 +29,7 @@
                 <li class="collapsed">
                     <a class="m-link {{ Request::segment(2) == 'hr-dashboard' || Request::segment(2) == 'project-dashboard' ? 'active' : '' }}"
                         href="{{ url('load_unidades') }}">
-                        <i class="icofont-home fs-5"></i> <span>Unidades</span> </a>
+                        <i class="icofont-ui-office fs-5"></i> <span>Unidades</span> </a>
                     <!-- Menu: Sub menu ul -->
 
                 </li>
@@ -56,7 +56,7 @@
                     <li class="collapsed">
                         <a class="m-link {{ Request::segment(2) == 'project' ? 'active' : '' }}"
                             data-bs-toggle="collapse" data-bs-target="#project-Components3" href="#">
-                            <i class="icofont-user"></i><span>Catalogo</span> <span
+                            <i class="icofont-ui-folder"></i><span>Catalogo</span> <span
                                 class="arrow icofont-dotted-down ms-auto text-end fs-5"></span></a>
                         <!-- Menu: Sub menu ul -->
                         <ul class="sub-menu {{ Request::segment(2) == 'project' ? 'collapsed show' : 'collapse' }}"
@@ -116,13 +116,13 @@
                 <li class="collapsed">
                     <a class="m-link {{ Request::segment(2) == 'project' ? 'active' : '' }}"
                         href="{{ url('actividades') }}">
-                        <i class="icofont-ticket"></i><span>Actividades</span></a>
+                        <i class="icofont-list"></i><span>Actividades</span></a>
                 </li>
 
                 <li class="collapsed">
                     <a class="m-link {{ Request::segment(2) == 'project' ? 'active' : '' }}"
                         href="{{ url('actividades_finalizadas') }}">
-                        <i class="icofont-ticket"></i><span>Actividades finalizadas</span></a>
+                        <i class="icofont-check-circled"></i><span>Actividades finalizadas</span></a>
                 </li>
                 @endif
 
@@ -131,7 +131,7 @@
                 <li class="collapsed">
                     <a class="m-link {{ Request::segment(2) == 'project' ? 'active' : '' }}"
                         href="{{ url('facturar') }}">
-                        <i class="icofont-ticket"></i><span>Facturar</span></a>
+                        <i class="icofont-notepad"></i><span>Facturar</span></a>
                 </li>
 
                 @endif
@@ -140,7 +140,7 @@
                     <li class="collapsed">
                         <a class="m-link {{ Request::segment(2) == 'project' ? 'active' : '' }}"
                             href="{{ url('iso/matriz_riesgo2022') }}">
-                            <i class="icofont-ticket"></i><span>Iso 2022</span></a>
+                            <i class="icofont-notepad"></i><span>Iso 2022</span></a>
                     </li>
                 @endif
 
@@ -148,7 +148,7 @@
                     <li class="collapsed">
                         <a class="m-link {{ Request::segment(2) == 'project' ? 'active' : '' }}"
                             href="{{ url('actividades_coordinador') }}">
-                            <i class="icofont-ticket"></i><span>Coordinador</span></a>
+                            <i class="icofont-paperclip"></i><span>Coordinador</span></a>
                     </li>
 
 
@@ -275,9 +275,9 @@
 
             <!-- Theme: Switch Theme -->
 
-            <?php
-            /*
-            <ul class="list-unstyled mb-0">
+
+
+            <!--<ul class="list-unstyled mb-0">
                 <li class="d-flex align-items-center justify-content-center">
                     <div class="form-check form-switch theme-switch">
                         <input class="form-check-input" type="checkbox" id="theme-switch">
@@ -290,14 +290,13 @@
                         <label class="form-check-label" for="theme-rtl">Enable RTL Mode!</label>
                     </div>
                 </li>
-            </ul>
+            </ul>-->
 
             <!-- Menu: menu collepce btn -->
             <button type="button" class="btn btn-link sidebar-mini-btn text-light">
                 <span class="ms-2"><i class="icofont-bubble-right"></i></span>
             </button>
-            */
-            ?>
+
         </div>
     </div>
 @endif
