@@ -99,11 +99,14 @@ class HomeController extends Controller
         $usuarios = $dsb_tot_actividades_desarrollo->pluck('user_name');
         $numero_actividades = $dsb_tot_actividades_desarrollo->pluck('numero_actividades');
 
-        $data_users_dev = array();
+        $data_users_dev_label = array();
+        $data_users_dev_value = array();
 
         for ($i = 0; $i < count($usuarios); $i++) {
-            $array_user_dev = array("name" => $usuarios[$i], "y" => $numero_actividades[$i], "color" => "#4670C0");
-            array_push($data_users_dev, $array_user_dev);
+            //$array_user_dev = array("name" => $usuarios[$i], "y" => $numero_actividades[$i], "color" => "#4670C0");
+
+            array_push($data_users_dev_label, $usuarios[$i]);
+            array_push($data_users_dev_value, $numero_actividades[$i]);
         }
 
 
@@ -330,11 +333,15 @@ class HomeController extends Controller
         $users = $dsb_tot_actividades_finalizadas_usuario_semana->pluck('user_name');
         $numero_actividades = $dsb_tot_actividades_finalizadas_usuario_semana->pluck('numero_actividades');
 
-        $data_users_week_end = array();
+        //$data_users_week_end = array();
+        $data_users_week_end_label = array();
+        $data_users_week_end_value = array();
 
         for ($i = 0; $i < count($users); $i++) {
-            $array_user_week_end = array("name" => $users[$i], "y" => $numero_actividades[$i], "color" => "#4670C0");
-            array_push($data_users_week_end, $array_user_week_end);
+            //$array_user_week_end = array("name" => $users[$i], "y" => $numero_actividades[$i], "color" => "#4670C0");
+            array_push($data_users_week_end_label, $users[$i]);
+            array_push($data_users_week_end_value, $numero_actividades[$i]);
+
         }
 
 
@@ -359,13 +366,25 @@ class HomeController extends Controller
         $meses = $dsb_tot_actividades_finalizadas->pluck('mes_str');
         $tiempo_horas = $dsb_tot_actividades_finalizadas->pluck('tiempo_horas');
 
-        $data_horas_meses_end = array();
+        // $data_horas_meses_end = array();
 
-        for ($i = 0; $i < count($meses); $i++) {
-            $array_horas_meses_end = array("name" => $meses[$i], "y" => $tiempo_horas[$i], "color" => "#4670C0");
-            array_push($data_horas_meses_end, $array_horas_meses_end);
-        }
+        // for ($i = 0; $i < count($meses); $i++) {
+        //     $array_horas_meses_end = array("name" => $meses[$i], "y" => $tiempo_horas[$i], "color" => "#4670C0");
+        //     array_push($data_horas_meses_end, $array_horas_meses_end);
+        // }
 
+
+
+                //$data_users_week_end = array();
+                $data_horas_meses_end_label = array();
+                $data_horas_meses_end_value = array();
+
+                for ($i = 0; $i < count($meses); $i++) {
+                    //$array_user_week_end = array("name" => $users[$i], "y" => $numero_actividades[$i], "color" => "#4670C0");
+                    array_push($data_horas_meses_end_label, $meses[$i]);
+                    array_push($data_horas_meses_end_value, $tiempo_horas[$i]);
+
+                }
 
 
 
@@ -430,7 +449,9 @@ class HomeController extends Controller
                 //'data_users_end' => $data_users_end,
                 'data_users_end_label' => $data_users_end_label,
                 'data_users_end_value' => $data_users_end_value,
-                'data_users_dev' => $data_users_dev,
+
+                'data_users_dev_label' => $data_users_dev_label,
+                'data_users_dev_value' => $data_users_dev_value,
 
                 'numero_tickets_anterior' => $numero_tickets_anterior,
                 'numero_tickets_actual' => $numero_tickets_actual,
@@ -457,8 +478,13 @@ class HomeController extends Controller
 
                 'proyectos_fin' => $proyectos_fin,
                 'tiempos_fin' => $tiempos_fin,
-                'data_users_week_end' => $data_users_week_end,
-                'data_horas_meses_end' => $data_horas_meses_end,
+
+                'data_users_week_end_label' => $data_users_week_end_label,
+                'data_users_week_end_value' => $data_users_week_end_value,
+
+                'data_horas_meses_end_label' => $data_horas_meses_end_label,
+                'data_horas_meses_end_value' => $data_horas_meses_end_value,
+
                 'dsb_tot_actividades_categorias' => $dsb_tot_actividades_categorias,
 
                 'data_categorias' => substr($data_categorias, 0, -1),
