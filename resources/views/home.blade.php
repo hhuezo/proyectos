@@ -628,43 +628,46 @@
                         </div>
                     </div>
 
-                    <div class="row g-3">
-                        <div class="col-md-12">
-                            <div class="card">
-                                <div
-                                    class="card-header py-3 d-flex justify-content-between bg-transparent border-bottom-0">
-                                    <h5 class="mb-0 fw-bold ">INDICE DE ERROR SOBRE TOTAL DE PROGRAMAS CREADOS Y
-                                        MODIFICADOS 2021</h5>
-                                </div>
-                                <canvas id="char_indice_error_meses_2021"></canvas>
-                            </div>
-                        </div>
-                    </div>
 
-                    <div class="row g-3">
-                        <div class="col-md-12">
-                            <div class="card">
-                                <div
-                                    class="card-header py-3 d-flex justify-content-between bg-transparent border-bottom-0">
-                                    <h5 class="mb-0 fw-bold ">INDICE DE ERROR SOBRE TOTAL DE PROGRAMAS CREADOS Y
-                                        MODIFICADOS 2022</h5>
+                    @if (Session::get('id_unidad') == 1)
+                        <div class="row g-3">
+                            <div class="col-md-12">
+                                <div class="card">
+                                    <div
+                                        class="card-header py-3 d-flex justify-content-between bg-transparent border-bottom-0">
+                                        <h5 class="mb-0 fw-bold ">INDICE DE ERROR SOBRE TOTAL DE PROGRAMAS CREADOS Y
+                                            MODIFICADOS 2021</h5>
+                                    </div>
+                                    <canvas id="char_indice_error_meses_2021"></canvas>
                                 </div>
-                                <canvas id="char_indice_error_meses_2022"></canvas>
                             </div>
                         </div>
-                    </div>
 
-                    <div class="row g-3">
-                        <div class="col-md-12">
-                            <div class="card">
-                                <div
-                                    class="card-header py-3 d-flex justify-content-between bg-transparent border-bottom-0">
-                                    <h5 class="mb-0 fw-bold ">Actividades por Categoria Finalizadas por Mes</h5>
+                        <div class="row g-3">
+                            <div class="col-md-12">
+                                <div class="card">
+                                    <div
+                                        class="card-header py-3 d-flex justify-content-between bg-transparent border-bottom-0">
+                                        <h5 class="mb-0 fw-bold ">INDICE DE ERROR SOBRE TOTAL DE PROGRAMAS CREADOS Y
+                                            MODIFICADOS 2022</h5>
+                                    </div>
+                                    <canvas id="char_indice_error_meses_2022"></canvas>
                                 </div>
-                                <canvas id="char_actividades_finalizadas_categoria_mes"></canvas>
                             </div>
                         </div>
-                    </div>
+
+                        <div class="row g-3">
+                            <div class="col-md-12">
+                                <div class="card">
+                                    <div
+                                        class="card-header py-3 d-flex justify-content-between bg-transparent border-bottom-0">
+                                        <h5 class="mb-0 fw-bold ">Actividades por Categoria Finalizadas por Mes</h5>
+                                    </div>
+                                    <canvas id="char_actividades_finalizadas_categoria_mes"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    @endif
 
 
 

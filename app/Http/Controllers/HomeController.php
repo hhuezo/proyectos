@@ -38,6 +38,17 @@ class HomeController extends Controller
 
     public function index()
     {
+
+
+            if (session('id_unidad')) {
+                $id_unidad = session('id_unidad');
+            } else {
+                $id_unidad = auth()->user()->unidad_id;
+            }
+
+
+
+
         if (auth()->user()->rol_id == 6 && !session('id_unidad')) {
             $unidades = Unidad::where('id', '>', 0)->where('id', '<>', 8)->get();
             return view('unidades', compact('unidades'));
@@ -55,7 +66,7 @@ class HomeController extends Controller
                 ->join('proyectos', 'actividades.proyecto_id', '=', 'proyectos.id')
                 ->join('users', 'actividades.users_id', '=', 'users.id')
                 ->join('estados', 'proyectos.estado_id', '=', 'estados.id')
-                ->where('users.unidad_id', '=', auth()->user()->unidadId())
+                ->where('users.unidad_id', '=', $id_unidad)
                 ->distinct()
                 ->get();
         } else {
@@ -75,7 +86,7 @@ class HomeController extends Controller
         }
 
 
-        $dsb_actividades_finalizadas = DB::select("call dashboardActividadesFinalizadas('" . auth()->user()->unidadId() . "')");
+        $dsb_actividades_finalizadas = DB::select("call dashboardActividadesFinalizadas('" . $id_unidad . "')");
 
         //$dsb_tot_actividades_finalizadas = TmpTotDsbActividadFinalizada::all();
         $dsb_tot_actividades_finalizadas = DB::table('tmp_tot_dsb_actividades_finalizadas')->orderBy('tmp_tot_dsb_actividades_finalizadas.numero_actividades');
@@ -95,7 +106,7 @@ class HomeController extends Controller
         //dd($data_users_end);
 
         //$dsb_actividades_desarrollo = DB::select('call dashboardActividadesEnDesarrollo()');
-        $dsb_actividades_desarrollo = DB::select("call dashboardActividadesEnDesarrollo('" . auth()->user()->unidadId() . "')");
+        $dsb_actividades_desarrollo = DB::select("call dashboardActividadesEnDesarrollo('" . $id_unidad . "')");
 
         //$dsb_tot_actividades_desarrollo = TmpTotDsbActividadDesarrollo::all();
 
@@ -118,7 +129,7 @@ class HomeController extends Controller
 
 
         //$dsb_actividades_finalizadas_mes = DB::select('call dashboardActividadesFinalizadasMes()');
-        /*  $dsb_actividades_finalizadas_mes = DB::select("call dashboardActividadesFinalizadasMes('".auth()->user()->unidadId()."')");
+        /*  $dsb_actividades_finalizadas_mes = DB::select("call dashboardActividadesFinalizadasMes('".$id_unidad."')");
 
         $dsb_tot_actividades_finalizadas = DB::table('tmp_tot_dsb_actividades_finalizadas_mes')
         ->select('tmp_tot_dsb_actividades_finalizadas_mes.mes', 'tmp_tot_dsb_actividades_finalizadas_mes.mes_str',
@@ -146,7 +157,7 @@ class HomeController extends Controller
         $actividades_finalizadas_mes = Actividad::join('users', 'users.id', '=', 'actividades.users_id')
             ->where('actividades.porcentaje', '=', 100)
             ->where('actividades.fecha_inicio', '>', $fecha_inicial)
-            ->where('users.unidad_id', '=', auth()->user()->unidadId())
+            ->where('users.unidad_id', '=', $id_unidad)
             ->select(\DB::raw('count(actividades.id) as conteo,month(actividades.fecha_inicio) as mes,year(actividades.fecha_inicio) as anio'))
             ->groupBy(\DB::raw('year(actividades.fecha_inicio),month(actividades.fecha_inicio)'))
             ->get();
@@ -238,20 +249,20 @@ class HomeController extends Controller
 
 
 
-        $dsb_obtener_datos = DB::select("call dashboardObtenerDatos('" . auth()->user()->unidadId() . "')");
+        $dsb_obtener_datos = DB::select("call dashboardObtenerDatos('" . $id_unidad . "')");
 
         //dd($dsb_obtener_datos);
 
         //$numero_tickets_anterior = TmpDsbDato::all()->get()->first()->numero_tickets_anterior;
-        $numero_tickets_anterior = DB::table('tmp_dsb_datos')->where('unidad_id', '=', auth()->user()->unidadId())->get()->first()->numero_tickets_anterior;
-        $numero_tickets_actual = DB::table('tmp_dsb_datos')->where('unidad_id', '=', auth()->user()->unidadId())->get()->first()->numero_tickets_actual;
-        $numero_incremento_prod = DB::table('tmp_dsb_datos')->where('unidad_id', '=', auth()->user()->unidadId())->get()->first()->numero_incremento_prod;
-        $numero_proyectos_desarrollo = DB::table('tmp_dsb_datos')->where('unidad_id', '=', auth()->user()->unidadId())->get()->first()->numero_proyectos_desarrollo;
+        $numero_tickets_anterior = DB::table('tmp_dsb_datos')->where('unidad_id', '=', $id_unidad)->get()->first()->numero_tickets_anterior;
+        $numero_tickets_actual = DB::table('tmp_dsb_datos')->where('unidad_id', '=', $id_unidad)->get()->first()->numero_tickets_actual;
+        $numero_incremento_prod = DB::table('tmp_dsb_datos')->where('unidad_id', '=', $id_unidad)->get()->first()->numero_incremento_prod;
+        $numero_proyectos_desarrollo = DB::table('tmp_dsb_datos')->where('unidad_id', '=', $id_unidad)->get()->first()->numero_proyectos_desarrollo;
 
         //dd($numero_tickets_anterior);
 
         //$dsb_actividades_diarias = DB::select('call dashboardActividadesDiarias()');
-        $dsb_actividades_diarias = DB::select("call dashboardActividadesDiarias('" . auth()->user()->unidadId() . "')");
+        $dsb_actividades_diarias = DB::select("call dashboardActividadesDiarias('" . $id_unidad . "')");
         //$dsb_tot_actividades_diarias = TmpDsbActividadDiaria::all();
         $dsb_tot_actividades_diarias = DB::table('tmp_tot_dsb_actividades_diarias')->orderBy('tmp_tot_dsb_actividades_diarias.dia');
 
@@ -280,7 +291,7 @@ class HomeController extends Controller
 
 
         //$dsb_estado_proyectos = DB::select('call dashboardEstadoProyectos()');
-        $dsb_estado_proyectos = DB::select("call dashboardEstadoProyectos('" . auth()->user()->unidadId() . "')");
+        $dsb_estado_proyectos = DB::select("call dashboardEstadoProyectos('" . $id_unidad . "')");
 
         //$numero_tickets_anterior = TmpDsbDato::all()->get()->first()->numero_tickets_anterior;
         $numero_proyectos_asignados = DB::table('tmp_dsb_proyectos_estados')->get()->first()->numero_proyectos_asignados;
@@ -294,7 +305,7 @@ class HomeController extends Controller
         $data_estado_proyectos_value = [$numero_proyectos_desarrollo, $numero_proyectos_certificacion, $numero_proyectos_pausa];
 
         //$dsb_proyectos_desa_tiempo = DB::select('call dashboardTiempoProyectosDesarrollo()');
-        $dsb_proyectos_desa_tiempo = DB::select("call dashboardTiempoProyectosDesarrollo('" . auth()->user()->unidadId() . "')");
+        $dsb_proyectos_desa_tiempo = DB::select("call dashboardTiempoProyectosDesarrollo('" . $id_unidad . "')");
 
         $proyectos_avance = DB::table('tmp_tot_dsb_proyectos_desarrollo_tiempo')
             ->select('tmp_tot_dsb_proyectos_desarrollo_tiempo.id', 'tmp_tot_dsb_proyectos_desarrollo_tiempo.nombre', 'tmp_tot_dsb_proyectos_desarrollo_tiempo.avance', 'tmp_tot_dsb_proyectos_desarrollo_tiempo.tiempo')
@@ -312,7 +323,7 @@ class HomeController extends Controller
 
 
         //$dsb_proyectos_tiempo = DB::select('call dashboardTiempoProyectos()');
-        $dsb_proyectos_tiempo = DB::select("call dashboardTiempoProyectos('" . auth()->user()->unidadId() . "')");
+        $dsb_proyectos_tiempo = DB::select("call dashboardTiempoProyectos('" . $id_unidad . "')");
         //$dsb_tot_proyectos_tiempo = TmpDsbActividadDiaria::all();
         $dsb_tot_proyectos_tiempo = DB::table('tmp_tot_dsb_proyectos_tiempo')->orderBy('tmp_tot_dsb_proyectos_tiempo.tiempo');
 
@@ -336,7 +347,7 @@ class HomeController extends Controller
 
 
         //$dsb_actividades_finalizadas_usuario_semana = DB::select('call dashboardActividadesFinalizadasUsuarioSemana()');
-        $dsb_actividades_finalizadas_usuario_semana = DB::select("call dashboardActividadesFinalizadasUsuarioSemana('" . auth()->user()->unidadId() . "')");
+        $dsb_actividades_finalizadas_usuario_semana = DB::select("call dashboardActividadesFinalizadasUsuarioSemana('" . $id_unidad . "')");
 
         $dsb_tot_actividades_finalizadas_usuario_semana = DB::table('tmp_tot_actividades_finalizadas_usuario_semana')->orderBy('tmp_tot_actividades_finalizadas_usuario_semana.numero_actividades');
         $users = $dsb_tot_actividades_finalizadas_usuario_semana->pluck('user_name');
@@ -360,7 +371,7 @@ class HomeController extends Controller
 
 
         //$dsb_actividades_finalizadas_horas_mes = DB::select('call dashboardActividadesFinalizadasHorasMes()');
-        $dsb_actividades_finalizadas_horas_mes = DB::select("call dashboardActividadesFinalizadasHorasMes('" . auth()->user()->unidadId() . "')");
+        $dsb_actividades_finalizadas_horas_mes = DB::select("call dashboardActividadesFinalizadasHorasMes('" . $id_unidad . "')");
 
         $dsb_tot_actividades_finalizadas = DB::table('tmp_tot_dsb_actividades_finalizadas_horas_mes')
             ->select(
