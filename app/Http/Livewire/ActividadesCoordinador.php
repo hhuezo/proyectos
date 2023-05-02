@@ -49,6 +49,7 @@ class ActividadesCoordinador extends Component
                 'actividades.fecha_fin',
                 'actividades.porcentaje',
                 'users.user_name',
+                'users.image',
                 'estados.nombre as estado',
                 'prioridad_tickets.color',
                 'actividades.estado_id'

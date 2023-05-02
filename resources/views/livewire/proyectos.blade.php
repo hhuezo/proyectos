@@ -88,7 +88,7 @@
         <div class="modal-dialog modal-fullscreen">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title h4" id="exampleModalFullscreenLabel" style="text-align: left;">Proyecto <br>
+                    <h5 class="modal-title h4" id="exampleModalFullscreenLabel" style="text-align: left;">{{$nombre}} <br>
 
                         <div class="col-12">
 

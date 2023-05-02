@@ -14,7 +14,8 @@
                     <div class="card-header py-3 no-bg bg-transparent d-flex px-0  border-bottom flex-wrap">
                         <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12" style="text-align: left;">
                             <h5 class="fw-bold mb-0">
-                                <a href="{{ url('actividades_coordinador/') }}"><i class="icofont-arrow-left fa-lg"></i></a>
+                                <a href="{{ url('actividades_coordinador/') }}"><i
+                                        class="icofont-arrow-left fa-lg"></i></a>
                                 {{ $usuario->name }}
                             </h5>
 
@@ -55,7 +56,9 @@
                                 <ol class="dd-list">
                                     @foreach ($actividades as $actividad)
                                         @if ($actividad->proyecto_id == $proyecto->proyecto_id)
-                                            <li class="dd-item" data-id="1">
+                                            <li class="dd-item" data-id="1" data-bs-toggle="modal"
+                                                wire:click="edit({{ $actividad->id }})"
+                                                data-bs-target="#edit_actividad">
                                                 <div class="dd-handle">
 
                                                     <div
@@ -63,32 +66,26 @@
                                                         <div
                                                             class="task-priority d-flex flex-column align-items-center justify-content-center">
 
-                                                            <h6 class="light-success-bg py-1 px-2 rounded-1 d-inline-block fw-bold small-14 mb-0"
-                                                                data-bs-toggle="modal"
-                                                                wire:click="edit({{ $actividad->id }})"
-                                                                data-bs-target="#edit_actividad">
-                                                                <i class="icofont-ui-edit fa-lg"></i> &nbsp;
-                                                                {{ $actividad->id }}
+                                                            <h6
+                                                                class="light-success-bg py-1 px-2 rounded-1 d-inline-block fw-bold small-14 mb-0">
+                                                                &nbsp;
+                                                                {{ $actividad->estado }}
                                                             </h6>
                                                         </div>
                                                         <div
                                                             class="task-priority d-flex flex-column align-items-center justify-content-center">
                                                             <div class="avatar-list avatar-list-stacked m-0">
-                                                                @if ($actividad->users_id)
-                                                                    @if ($actividad->usuario)
-                                                                        <img class="avatar rounded-circle small-avt"
-                                                                            src="{{ url('/images/users') }}/{{ $actividad->usuario->image }}"
-                                                                            alt="">
-                                                                    @else
-                                                                        <img class="avatar rounded-circle small-avt"
-                                                                            src="{{ url('/') . '/images/xs/avatar1.jpg' }}"
-                                                                            alt="">
-                                                                    @endif
+
+                                                                @if ($actividad->image)
+                                                                    <img class="avatar rounded-circle small-avt"
+                                                                        src="{{ url('/images/users') }}/{{ $actividad->image }}"
+                                                                        alt="">
                                                                 @else
                                                                     <img class="avatar rounded-circle small-avt"
                                                                         src="{{ url('/') . '/images/xs/avatar1.jpg' }}"
                                                                         alt="">
                                                                 @endif
+
                                                             </div>
                                                             <span class="badge bg-warning text-end mt-2">
                                                                 {{ $actividad->user_name }}
@@ -168,27 +165,7 @@
                                                         </div>
 
                                                     </div>
-                                                    <br>
-                                                    <div class="tikit-info row g-3 align-items-center">
-                                                        <div class="col-sm">
-                                                            <ul
-                                                                class="d-flex list-unstyled align-items-center flex-wrap">
-                                                                <li class="col-lg-8 col-md-8 col-sm-12 col-xs-12 ">
-                                                                    <div class="d-flex align-items-right">
-                                                                        <span
-                                                                            class="ms-1 float-right"><strong>{{ $actividad->estado }}</strong></span>
-                                                                    </div>
-                                                                </li>
 
-
-
-
-
-
-                                                            </ul>
-                                                        </div>
-
-                                                    </div>
                                                 </div>
 
                                             </li>
@@ -206,7 +183,6 @@
                             <tr>
                                 <th>Id</th>
                                 <th>Ticket</th>
-                                <th>Usuario</th>
                                 <th>Descripción</th>
                                 <th>Avance</th>
                                 <th>Fechas</th>
@@ -220,12 +196,17 @@
                                 <tr>
                                     <td>{{ $actividad->id }}</td>
                                     <td>{{ $actividad->numero_ticket }}</td>
-                                    <td><img src="{{ URL('/') . '/images/xs/avatar3.jpg' }}"
-                                            class="avatar sm rounded-circle me-2" alt="profile-image"><span>
-                                            {{ $actividad->user_name }}
-                                        </span>
+                                    <td style="text-align: left" data-bs-toggle="modal"
+                                        onclick="show_descripcion('{{ $actividad->actividad }}')"
+                                        data-bs-target="#modal_actividad">
+                                        @if (strlen($actividad->actividad) > 150)
+                                            {{ substr($actividad->actividad, 0, 150) }}....
+                                        @else
+                                            {{ $actividad->actividad }}
+                                        @endif
+
+
                                     </td>
-                                    <td style="text-align: left">{{ $actividad->actividad }}</td>
                                     <td>
                                         <div class="progress" style="height: 20px;"
                                             wire:click="load_actividad({{ $actividad->id }})"
@@ -247,8 +228,9 @@
                                     <td>
                                         <div class="btn-group" role="group" aria-label="Basic outlined example">
                                             <button class="btn btn-primary">
-                                            <i class="icofont-ui-edit fa-lg" data-bs-toggle="modal" wire:click="edit({{ $actividad->id }})"
-                                                data-bs-target="#edit_actividad"></i></button>
+                                                <i class="icofont-ui-edit fa-lg" data-bs-toggle="modal"
+                                                    wire:click="edit({{ $actividad->id }})"
+                                                    data-bs-target="#edit_actividad"></i></button>
 
                                         </div>
                                     </td>
@@ -543,7 +525,20 @@
 
         </div>
 
-
+        <div id="modal_actividad" wire:ignore.self class="modal fade" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-lg modal-dialog-scrollable">
+                <div class="modal-content">
+                    <div class="modal-header col">
+                        <h5 class="modal-title  fw-bold" id="createprojectlLabel">Descripción</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                            aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body row" style="text-align: left;">
+                        <span id="modal_descripcion"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
 
     </div>
     <script src="{{ asset('assets/jquery.min.js') }}"></script>
@@ -570,5 +565,9 @@
         window.addEventListener('close-modal-edit', (e) => {
             $('#edit_actividad').modal('hide')
         });
+
+        function show_descripcion(descripcion) {
+            $('#modal_descripcion').text(descripcion);
+        }
     </script>
 </div>
