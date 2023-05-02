@@ -368,7 +368,12 @@
                     <div class="row g-3">
                         <div class="col-md-12">
                             <div class="card">
-                                bbbbbbbbbbbbb
+                                <div
+                                    class="card-header py-3 d-flex justify-content-between bg-transparent border-bottom-0">
+                                    <h5 class="mb-0 fw-bold ">Actividades Finalizadas por Mes</h5>
+                                    <h6>Numero de actividades resueltas por Mes</h6>
+                                </div>
+                                <canvas id="char_actividades_finalizadas_mes"></canvas>
                             </div>
                         </div>
                     </div>
@@ -376,7 +381,12 @@
                     <div class="row g-3">
                         <div class="col-md-12">
                             <div class="card">
-                                cccccccccccc
+                                <div
+                                    class="card-header py-3 d-flex justify-content-between bg-transparent border-bottom-0">
+                                    <h5 class="mb-0 fw-bold ">INDICE DE ERROR SOBRE TOTAL DE PROGRAMAS CREADOS Y
+                                        MODIFICADOS 2021</h5>
+                                </div>
+                                <canvas id="char_indice_error_meses_2021"></canvas>
                             </div>
                         </div>
                     </div>
@@ -543,6 +553,54 @@
                     data: @json($data_horas_meses_end_value),
                     borderWidth: 1
                 }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+
+
+
+        const ctx7 = document.getElementById('char_actividades_finalizadas_mes');
+
+        new Chart(ctx7, {
+            type: 'bar',
+            data: {
+                labels: @json($data_meses_end_mes_anio_label),
+                datasets: [{
+                    label: '',
+                    data: @json($data_meses_end_mes_anio_value),
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+
+
+        const ctx8 = document.getElementById('char_indice_error_meses_2021');
+
+        new Chart(ctx8, {
+            data: {
+                datasets: [{
+                    type: 'bar',
+                    label: 'Bar Dataset',
+                    data: [10, 20, 30, 40]
+                }, {
+                    type: 'line',
+                    label: 'Line Dataset',
+                    data: [50, 50, 50, 50],
+                }],
+                labels: ['January', 'February', 'March', 'April']
             },
             options: {
                 scales: {

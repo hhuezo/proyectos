@@ -147,10 +147,15 @@ class HomeController extends Controller
             ->groupBy(\DB::raw('year(actividades.fecha_inicio),month(actividades.fecha_inicio)'))
             ->get();
 
-        $data_meses_end = array();
+        //$data_meses_end = array();
+
+        $data_meses_end_mes_anio_label = array();
+        $data_meses_end_mes_anio_value = array();
 
         foreach ($actividades_finalizadas_mes as $registro) {
-            array_push($data_meses_end, array("name" => $meses[$registro->mes + 0] . " " . $registro->anio, "y" => intval($registro->conteo), "color" => "#4670C0"));
+            //array_push($data_meses_end, array("name" => $meses[$registro->mes + 0] . " " . $registro->anio, "y" => intval($registro->conteo), "color" => "#4670C0"));
+            array_push($data_meses_end_mes_anio_label, array($meses[$registro->mes + 0] . " " . $registro->anio));
+            array_push($data_meses_end_mes_anio_value, array(intval($registro->conteo)));
         }
 
 
@@ -473,7 +478,9 @@ class HomeController extends Controller
 
 
                 'proyectos_avance' => $proyectos_avance,
-                'data_meses_end' => $data_meses_end,
+                'data_meses_end_mes_anio_label' => $data_meses_end_mes_anio_label,
+                'data_meses_end_mes_anio_value' => $data_meses_end_mes_anio_value,
+
                 'data_proyectos_tiempo' => $data_proyectos_tiempo,
 
                 'proyectos_fin' => $proyectos_fin,
