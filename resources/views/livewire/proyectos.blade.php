@@ -221,8 +221,16 @@
                                                                         @endif
                                                                     </span>
                                                                 </td>
-                                                                <td style="text-align: left">
-                                                                    {{ $actividad->descripcion }}</td>
+                                                                <td style="text-align: left" data-bs-toggle="modal"
+                                                                    onclick="show_descripcion('{{ $actividad->descripcion }}')"
+                                                                    data-bs-target="#modal_actividad">
+                                                                    @if (strlen($actividad->descripcion) > 150)
+                                                                        {{ substr($actividad->descripcion, 0, 150) }}....
+                                                                    @else
+                                                                        {{ $actividad->descripcion, 0, 100 }}
+                                                                    @endif
+
+                                                                </td>
                                                                 <td>
                                                                     <div class="progress" style="height: 20px;">
                                                                         <div class="progress-bar progress-bar-warning"
@@ -275,6 +283,19 @@
         </div>
     </div>
 
+    <div id="modal_actividad" wire:ignore.self class="modal fade" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header col">
+                    <h5 class="modal-title  fw-bold" id="createprojectlLabel">Descripción</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body row" style="text-align: left;">
+                    <span id="modal_descripcion"></span>
+                </div>
+            </div>
+        </div>
+    </div>
 
 
     <div id="create_actividad" wire:ignore.self class="modal fade" aria-hidden="true">
@@ -639,9 +660,11 @@
                     @else
                         @foreach ($estados as $estado)
                             <div class="card" data-plugin="nestable">
+                                <a  data-bs-toggle="collapse" href="#table-{{$estado->id}}" role="button" aria-expanded="false" aria-controls="collapseExample">
                                 <h6 class="fw-bold py-3 mb-0" style="text-align: left; border-top-color: coral">
-                                    {{ $estado->nombre }}</h6>
-
+                                    <span class="text-{{$estado->color}}" >{{ $estado->nombre }} </span></h6>
+                                </a>
+                                <div id="table-{{$estado->id}}" class="accordion-collapse collapse show">
                                 <table class="table table-hover align-middle mb-0" style="width:100%">
                                     <thead>
                                         <tr>
@@ -657,10 +680,10 @@
                                                 <tr style="text-align: left" data-bs-toggle="modal"
                                                     data-bs-target="#exampleModalFullscreen"
                                                     wire:click="edit({{ $proyecto->id }})">
-                                                    <td>{{ $proyecto->id }}</td>
-                                                    <td>{{ $proyecto->nombre }}</td>
+                                                    <td style="width: 5%; text-align: center;">{{ $proyecto->id }}</td>
+                                                    <td style="width: 15%">{{ $proyecto->nombre }}</td>
                                                     <td>{{ $proyecto->descripcion }}</td>
-                                                    <td>
+                                                    <td style="width: 10%">
                                                         @if ($proyecto->id != 9 && $proyecto->id != 11)
                                                             @if ($proyecto->avance < 50)
                                                                 <div class="progress"
@@ -695,76 +718,74 @@
                                                         @endif
 
 
+
+                                                    </td>
+                                                </tr>
+                                            @endif
+                                        @endforeach
+                                    </tbody>
+                                </table>
+                                </div>
                             </div>
-
-
-                            </td>
-                            </tr>
-                        @endif
-                    @endforeach
-                    </tbody>
-                    </table>
-
+                            <div>&nbsp;</div>
+                        @endforeach
                 </div>
-                <div>&nbsp;</div>
-                @endforeach
+
+                @endif
+
+
+
+
+
             </div>
 
-            @endif
-
-
-
-
-
         </div>
-
+        @if (auth()->user()->rol_id != 6)
+            <div class="contenedor">
+                <button class="botonF1" wire:click="create()" data-bs-toggle="modal"
+                    data-bs-target="#create_proyecto">
+                    <span>+</span>
+                </button>
+            </div>
+        @endif
     </div>
-</div>
-</div>
 
 
-@if (auth()->user()->rol_id != 6)
-    <div class="contenedor">
-        <button class="botonF1" wire:click="create()" data-bs-toggle="modal" data-bs-target="#create_proyecto">
-            <span>+</span>
-        </button>
-    </div>
-@endif
 
+    <script type="text/javascript">
+        window.addEventListener('close-modal', (e) => {
+            $('#create_proyecto').modal('hide')
+        });
 
-</div>
+        window.addEventListener('close-modal-edit', (e) => {
+            $('#edit_proyecto').modal('hide')
+        });
 
+        window.addEventListener('update-message-show', (e) => {
+            $('#update_message').show();
+        });
 
-<script type="text/javascript">
-    window.addEventListener('close-modal', (e) => {
-        $('#create_proyecto').modal('hide')
-    });
+        window.addEventListener('update-message-hide', (e) => {
+            $('#update_message').hide();
+        });
 
-    window.addEventListener('close-modal-edit', (e) => {
-        $('#edit_proyecto').modal('hide')
-    });
+        window.addEventListener('close-modal-create-actividad', (e) => {
+            $('#create_actividad').modal('hide');
+        });
 
-    window.addEventListener('update-message-show', (e) => {
-        $('#update_message').show();
-    });
+        window.addEventListener('close-modal-edit-actividad', (e) => {
+            $('#edit_actividad').modal('hide');
+        });
 
-    window.addEventListener('update-message-hide', (e) => {
-        $('#update_message').hide();
-    });
+        window.addEventListener('error-message-proyecto', (e) => {
+            $('#error-proyecto').hide();
+        });
 
-    window.addEventListener('close-modal-create-actividad', (e) => {
-        $('#create_actividad').modal('hide');
-    });
+        window.addEventListener('error-message-proyecto-show', (e) => {
+            $('#error-proyecto').show();
+        });
 
-    window.addEventListener('close-modal-edit-actividad', (e) => {
-        $('#edit_actividad').modal('hide');
-    });
-
-    window.addEventListener('error-message-proyecto', (e) => {
-        $('#error-proyecto').hide();
-    });
-
-    window.addEventListener('error-message-proyecto-show', (e) => {
-        $('#error-proyecto').show();
-    });
-</script>
+        function show_descripcion(descripcion) {
+            $('#modal_descripcion').text(descripcion);
+        }
+    </script>

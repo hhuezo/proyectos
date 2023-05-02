@@ -15,7 +15,7 @@ use Carbon\Carbon;
 class Proyectos extends Component
 {
     public $id_proyecto = 0, $estado_id = 2, $nombre, $descripcion, $busqueda, $busqueda_actividad;
-    public $proyectos, $id_unidad, $actividades, $tipo = 1;
+    public $proyectos, $id_unidad, $actividades, $tipo = 2;
 
     public $id_actividad, $numero_ticket = 0, $ponderacion = 0.01, $descripcion_actividad,
         $fecha_inicio, $categoria_id, $estado_actividad_id, $prioridad_id, $fecha_fin, $forma = "NO APLICA", $users_id,$avance;
@@ -296,4 +296,6 @@ class Proyectos extends Component
 
         $this->dispatchBrowserEvent('close-modal-edit-actividad');
     }
+
+
 }

@@ -40,17 +40,17 @@
                     </thead>
                     <tbody>
                         @foreach ($usuarios as $usuario)
-                        <tr>
-                            <td style="text-align: center"> <a style="color:black; font-weight:bold"
-                                    href="{{ url('/admin/coordinador/' . $usuario->id . '/edit') }}">
-                                   {{ $usuario->id }}
-                                </a></td>
-                            <td>{{ $usuario->name }}</td>
-                            <td>{{ $usuario->user_name }}</td>
-                            <td style="text-align: center">
-                                <a href="{{url('actividades_coordinador')}}/{{$usuario->id}}"> <i class="icofont-search-2 fa-2x"></i></a>
-                            </td>
-                        </tr>
+                            <tr>
+                                <td style="text-align: center">
+                                    {{ $usuario->id }}
+                                </td>
+                                <td>{{ $usuario->name }}</td>
+                                <td>{{ $usuario->user_name }}</td>
+                                <td style="text-align: center">
+                                    <a href="{{ url('actividades_coordinador') }}/{{ $usuario->id }}"> <i
+                                            class="icofont-search-2 fa-2x"></i></a>
+                                </td>
+                            </tr>
                         @endforeach
 
                     </tbody>
