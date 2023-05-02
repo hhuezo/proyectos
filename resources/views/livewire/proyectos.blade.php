@@ -88,7 +88,8 @@
         <div class="modal-dialog modal-fullscreen">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title h4" id="exampleModalFullscreenLabel" style="text-align: left;">{{$nombre}} <br>
+                    <h5 class="modal-title h4" id="exampleModalFullscreenLabel" style="text-align: left;">
+                        {{ $nombre }} <br>
 
                         <div class="col-12">
 
@@ -660,71 +661,81 @@
                     @else
                         @foreach ($estados as $estado)
                             <div class="card" data-plugin="nestable">
-                                <a  data-bs-toggle="collapse" href="#table-{{$estado->id}}" role="button" aria-expanded="false" aria-controls="collapseExample">
-                                <h6 class="fw-bold py-3 mb-0" style="text-align: left; border-top-color: coral">
-                                    <span class="text-{{$estado->color}}" >{{ $estado->nombre }} </span></h6>
+                                <a data-bs-toggle="collapse" href="#table-{{ $estado->id }}" role="button"
+                                    aria-expanded="false" aria-controls="collapseExample">
+                                    <h6 class="fw-bold py-3 mb-0" onclick="show_callapse({{ $estado->id }})"
+                                        style="text-align: left; border-top-color: coral">
+
+                                        <span class="text-{{ $estado->color }}">
+                                            <i id="icon-down-{{ $estado->id }}"
+                                                class="icofont-circled-down fa-lg"></i>
+                                            <i id="icon-right-{{ $estado->id }}"
+                                                class="icofont-circled-right fa-lg" style="display: none"></i>
+                                            {{ $estado->nombre }} </span>
+                                    </h6>
                                 </a>
-                                <div id="table-{{$estado->id}}" class="accordion-collapse collapse show">
-                                <table class="table table-hover align-middle mb-0" style="width:100%">
-                                    <thead>
-                                        <tr>
-                                            <th>Id</th>
-                                            <th>Nombre</th>
-                                            <th>Descripción</th>
-                                            <th>Avance</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @foreach ($proyectos as $proyecto)
-                                            @if ($proyecto->estado_id == $estado->id)
-                                                <tr style="text-align: left" data-bs-toggle="modal"
-                                                    data-bs-target="#exampleModalFullscreen"
-                                                    wire:click="edit({{ $proyecto->id }})">
-                                                    <td style="width: 5%; text-align: center;">{{ $proyecto->id }}</td>
-                                                    <td style="width: 15%">{{ $proyecto->nombre }}</td>
-                                                    <td>{{ $proyecto->descripcion }}</td>
-                                                    <td style="width: 10%">
-                                                        @if ($proyecto->id != 9 && $proyecto->id != 11)
-                                                            @if ($proyecto->avance < 50)
-                                                                <div class="progress"
-                                                                    style="height: 20px; width: 150px;">
-                                                                    <div class="progress-bar bg-danger"
-                                                                        role="progressbar" style="width: 50%"
-                                                                        aria-valuenow="60" aria-valuemin="0"
-                                                                        aria-valuemax="100">
-                                                                        {{ $proyecto->avance }}%</div>
-                                                                </div>
-                                                            @elseif($proyecto->avance < 70)
-                                                                <div class="progress"
-                                                                    style="height: 20px; width: 150px;">
-                                                                    <div class="progress-bar bg-warning"
-                                                                        role="progressbar"
-                                                                        style="width: {{ $proyecto->avance }}%"
-                                                                        aria-valuenow="60" aria-valuemin="0"
-                                                                        aria-valuemax="100">
-                                                                        {{ $proyecto->avance }}%</div>
-                                                                </div>
-                                                            @else
-                                                                <div class="progress"
-                                                                    style="height: 20px; width: 150px;">
-                                                                    <div class="progress-bar bg-success"
-                                                                        role="progressbar"
-                                                                        style="width: {{ $proyecto->avance }}%"
-                                                                        aria-valuenow="60" aria-valuemin="0"
-                                                                        aria-valuemax="100">
-                                                                        {{ $proyecto->avance }}%</div>
-                                                                </div>
+                                <div id="table-{{ $estado->id }}" class="accordion-collapse collapse show">
+                                    <table class="table table-hover align-middle mb-0" style="width:100%">
+                                        <thead>
+                                            <tr>
+                                                <th>Id</th>
+                                                <th>Nombre</th>
+                                                <th>Descripción</th>
+                                                <th>Avance</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach ($proyectos as $proyecto)
+                                                @if ($proyecto->estado_id == $estado->id)
+                                                    <tr style="text-align: left" data-bs-toggle="modal"
+                                                        data-bs-target="#exampleModalFullscreen"
+                                                        wire:click="edit({{ $proyecto->id }})">
+                                                        <td style="width: 5%; text-align: center;">{{ $proyecto->id }}
+                                                        </td>
+                                                        <td style="width: 15%">{{ $proyecto->nombre }}</td>
+                                                        <td>{{ $proyecto->descripcion }}</td>
+                                                        <td style="width: 10%">
+                                                            @if ($proyecto->id != 9 && $proyecto->id != 11)
+                                                                @if ($proyecto->avance < 50)
+                                                                    <div class="progress"
+                                                                        style="height: 20px; width: 150px;">
+                                                                        <div class="progress-bar bg-danger"
+                                                                            role="progressbar" style="width: 50%"
+                                                                            aria-valuenow="60" aria-valuemin="0"
+                                                                            aria-valuemax="100">
+                                                                            {{ $proyecto->avance }}%</div>
+                                                                    </div>
+                                                                @elseif($proyecto->avance < 70)
+                                                                    <div class="progress"
+                                                                        style="height: 20px; width: 150px;">
+                                                                        <div class="progress-bar bg-warning"
+                                                                            role="progressbar"
+                                                                            style="width: {{ $proyecto->avance }}%"
+                                                                            aria-valuenow="60" aria-valuemin="0"
+                                                                            aria-valuemax="100">
+                                                                            {{ $proyecto->avance }}%</div>
+                                                                    </div>
+                                                                @else
+                                                                    <div class="progress"
+                                                                        style="height: 20px; width: 150px;">
+                                                                        <div class="progress-bar bg-success"
+                                                                            role="progressbar"
+                                                                            style="width: {{ $proyecto->avance }}%"
+                                                                            aria-valuenow="60" aria-valuemin="0"
+                                                                            aria-valuemax="100">
+                                                                            {{ $proyecto->avance }}%</div>
+                                                                    </div>
+                                                                @endif
                                                             @endif
-                                                        @endif
 
 
 
-                                                    </td>
-                                                </tr>
-                                            @endif
-                                        @endforeach
-                                    </tbody>
-                                </table>
+                                                        </td>
+                                                    </tr>
+                                                @endif
+                                            @endforeach
+                                        </tbody>
+                                    </table>
                                 </div>
                             </div>
                             <div>&nbsp;</div>
@@ -787,5 +798,25 @@
 
         function show_descripcion(descripcion) {
             $('#modal_descripcion').text(descripcion);
+        }
+
+        function show_callapse(id) {
+
+            var table = "#table-" + id;
+            var icon_right = "#icon-right-" + id;
+            var icon_down = "#icon-down-" + id;
+            //console.log(table);
+            //iconos
+            $(table).on('shown.bs.collapse', function() {
+                //console.log("Opened");
+                $(icon_right).hide();
+                $(icon_down).show();
+            });
+
+            $(table).on('hidden.bs.collapse', function() {
+                //console.log("Closed");
+                $(icon_right).show();
+                $(icon_down).hide();
+            });
         }
     </script>

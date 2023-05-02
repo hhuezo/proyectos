@@ -16,8 +16,7 @@ class ActividadCoordinadorController extends Controller
     public function index()
     {
 
-        $usuarios = User::whereNotIn('id',[1,3,6,7,25])->where('unidad_id','=',auth()->user()->id)->get();
-        return view('produccion.actividades_coordinador.index',compact('usuarios'));
+        return view('produccion.actividades_coordinador.index');
     }
 
     public function create()

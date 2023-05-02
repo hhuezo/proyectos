@@ -56,18 +56,17 @@
                                 <ol class="dd-list">
                                     @foreach ($actividades as $actividad)
                                         @if ($actividad->proyecto_id == $proyecto->proyecto_id)
-                                            <li class="dd-item" data-id="1" data-bs-toggle="modal"
-                                                wire:click="edit({{ $actividad->id }})"
-                                                data-bs-target="#edit_actividad">
+                                            <li class="dd-item" data-id="1">
                                                 <div class="dd-handle">
 
                                                     <div
                                                         class="task-info d-flex align-items-center justify-content-between">
-                                                        <div
-                                                            class="task-priority d-flex flex-column align-items-center justify-content-center">
+                                                        <div class="task-priority d-flex flex-column align-items-center justify-content-center"
+                                                        data-bs-toggle="modal"  wire:click="edit({{ $actividad->id }})" data-bs-target="#edit_actividad">
 
                                                             <h6
                                                                 class="light-success-bg py-1 px-2 rounded-1 d-inline-block fw-bold small-14 mb-0">
+                                                                <i class="icofont-ui-edit fa-lg"></i>
                                                                 &nbsp;
                                                                 {{ $actividad->estado }}
                                                             </h6>
@@ -93,8 +92,17 @@
                                                         </div>
 
                                                     </div>
-                                                    <p class="py-2 mb-0" style="text-align: left;">
-                                                        {{ $actividad->actividad }}</p>
+                                                    <p class="py-2 mb-0" style="text-align: left;"
+                                                        data-bs-toggle="modal"
+                                                        onclick="show_descripcion('{{ $actividad->actividad }}')"
+                                                        data-bs-target="#modal_actividad">
+
+                                                        @if (strlen($actividad->actividad) > 150)
+                                                            {{ substr($actividad->actividad, 0, 150) }}....
+                                                        @else
+                                                            {{ $actividad->actividad }}
+                                                        @endif
+                                                    </p>
                                                     <div class="tikit-info row g-3 align-items-center">
                                                         <div class="col-sm">
                                                             <ul
@@ -227,7 +235,7 @@
                                         </span></td>
                                     <td>
                                         <div class="btn-group" role="group" aria-label="Basic outlined example">
-                                            <button class="btn btn-primary">
+                                            <button class="btn btn-success">
                                                 <i class="icofont-ui-edit fa-lg" data-bs-toggle="modal"
                                                     wire:click="edit({{ $actividad->id }})"
                                                     data-bs-target="#edit_actividad"></i></button>
