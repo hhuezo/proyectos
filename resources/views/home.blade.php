@@ -602,18 +602,7 @@
         <div class="container-xxl">
             <div class="row clearfix g-3">
                 <div class="col-xl-8 col-lg-12 col-md-12 flex-column">
-                    <div class="row g-3">
-                        <div class="col-md-12">
-                            <div class="card">
-                                <div
-                                    class="card-header py-3 d-flex justify-content-between bg-transparent border-bottom-0">
-                                    <h5 class="mb-0 fw-bold ">Bolson Horas Operatoria Diaria</h5>
-                                    <h6>Numero de horas operatoria diaria</h6>
-                                </div>
-                                <canvas id="char_bolson_horas_operatoria_diaria"></canvas>
-                            </div>
-                        </div>
-                    </div>
+
 
                     <div class="row g-3">
                         <div class="col-md-12">
@@ -630,6 +619,19 @@
 
 
                     @if (Session::get('id_unidad') == 1)
+                        <div class="row g-3">
+                            <div class="col-md-12">
+                                <div class="card">
+                                    <div
+                                        class="card-header py-3 d-flex justify-content-between bg-transparent border-bottom-0">
+                                        <h5 class="mb-0 fw-bold ">Bolson Horas Operatoria Diaria</h5>
+                                        <h6>Numero de horas operatoria diaria</h6>
+                                    </div>
+                                    <canvas id="char_bolson_horas_operatoria_diaria"></canvas>
+                                </div>
+                            </div>
+                        </div>
+
                         <div class="row g-3">
                             <div class="col-md-12">
                                 <div class="card">
