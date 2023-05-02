@@ -20,6 +20,10 @@ use App\VWTiempoDiarioUsuariosDetalle;
 use DB;
 use Carbon\Carbon;
 
+
+
+
+
 class HomeController extends Controller
 {
     /**

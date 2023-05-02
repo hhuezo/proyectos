@@ -5,6 +5,256 @@
 @section('content')
 
 
+    <?php
+    
+    $cantidad_codigo_3_1 = 0;
+    $cantidad_codigo_3_2 = 0;
+    $cantidad_codigo_3_3 = 0;
+    $cantidad_codigo_3_4 = 0;
+    $cantidad_codigo_3_5 = 0;
+    $cantidad_codigo_3_6 = 0;
+    $cantidad_codigo_3_7 = 0;
+    $cantidad_codigo_3_8 = 0;
+    $cantidad_codigo_3_9 = 0;
+    $cantidad_codigo_3_10 = 0;
+    $cantidad_codigo_3_11 = 0;
+    $cantidad_codigo_3_12 = 0;
+    
+    $cantidad_codigo_8_1 = 0;
+    $cantidad_codigo_8_2 = 0;
+    $cantidad_codigo_8_3 = 0;
+    $cantidad_codigo_8_4 = 0;
+    $cantidad_codigo_8_5 = 0;
+    $cantidad_codigo_8_6 = 0;
+    $cantidad_codigo_8_7 = 0;
+    $cantidad_codigo_8_8 = 0;
+    $cantidad_codigo_8_9 = 0;
+    $cantidad_codigo_8_10 = 0;
+    $cantidad_codigo_8_11 = 0;
+    $cantidad_codigo_8_12 = 0;
+    
+    $cantidad_codigo_9_1 = 0;
+    $cantidad_codigo_9_2 = 0;
+    $cantidad_codigo_9_3 = 0;
+    $cantidad_codigo_9_4 = 0;
+    $cantidad_codigo_9_5 = 0;
+    $cantidad_codigo_9_6 = 0;
+    $cantidad_codigo_9_7 = 0;
+    $cantidad_codigo_9_8 = 0;
+    $cantidad_codigo_9_9 = 0;
+    $cantidad_codigo_9_10 = 0;
+    $cantidad_codigo_9_11 = 0;
+    $cantidad_codigo_9_12 = 0;
+    
+    foreach ($dsb_tot_actividades_categorias as $dsb_actividad_categoria) {
+        if ($dsb_actividad_categoria->id == '3') {
+            $nombre_codigo_3 = $dsb_actividad_categoria->nombre;
+            $url_codigo_3 = $dsb_actividad_categoria->url;
+    
+            if ($dsb_actividad_categoria->mes == '1') {
+                $cantidad_codigo_3_1 = $dsb_actividad_categoria->cantidad;
+            }
+    
+            if ($dsb_actividad_categoria->mes == '2') {
+                $cantidad_codigo_3_2 = $dsb_actividad_categoria->cantidad;
+            }
+    
+            if ($dsb_actividad_categoria->mes == '3') {
+                $cantidad_codigo_3_3 = $dsb_actividad_categoria->cantidad;
+            }
+    
+            if ($dsb_actividad_categoria->mes == '4') {
+                $cantidad_codigo_3_4 = $dsb_actividad_categoria->cantidad;
+            }
+    
+            if ($dsb_actividad_categoria->mes == '5') {
+                $cantidad_codigo_3_5 = $dsb_actividad_categoria->cantidad;
+            }
+    
+            if ($dsb_actividad_categoria->mes == '6') {
+                $cantidad_codigo_3_6 = $dsb_actividad_categoria->cantidad;
+            }
+    
+            if ($dsb_actividad_categoria->mes == '7') {
+                $cantidad_codigo_3_7 = $dsb_actividad_categoria->cantidad;
+            }
+    
+            if ($dsb_actividad_categoria->mes == '8') {
+                $cantidad_codigo_3_8 = $dsb_actividad_categoria->cantidad;
+            }
+    
+            if ($dsb_actividad_categoria->mes == '9') {
+                $cantidad_codigo_3_9 = $dsb_actividad_categoria->cantidad;
+            }
+    
+            if ($dsb_actividad_categoria->mes == '10') {
+                $cantidad_codigo_3_10 = $dsb_actividad_categoria->cantidad;
+            }
+    
+            if ($dsb_actividad_categoria->mes == '11') {
+                $cantidad_codigo_3_11 = $dsb_actividad_categoria->cantidad;
+            }
+    
+            if ($dsb_actividad_categoria->mes == '12') {
+                $cantidad_codigo_3_12 = $dsb_actividad_categoria->cantidad;
+            }
+        }
+    
+        if ($dsb_actividad_categoria->id == '8') {
+            $nombre_codigo_8 = $dsb_actividad_categoria->nombre;
+            $url_codigo_8 = $dsb_actividad_categoria->url;
+    
+            if ($dsb_actividad_categoria->mes == '1') {
+                $cantidad_codigo_8_1 = $dsb_actividad_categoria->cantidad;
+            }
+    
+            if ($dsb_actividad_categoria->mes == '2') {
+                $cantidad_codigo_8_2 = $dsb_actividad_categoria->cantidad;
+            }
+    
+            if ($dsb_actividad_categoria->mes == '3') {
+                $cantidad_codigo_8_3 = $dsb_actividad_categoria->cantidad;
+            }
+    
+            if ($dsb_actividad_categoria->mes == '4') {
+                $cantidad_codigo_8_4 = $dsb_actividad_categoria->cantidad;
+            }
+    
+            if ($dsb_actividad_categoria->mes == '5') {
+                $cantidad_codigo_8_5 = $dsb_actividad_categoria->cantidad;
+            }
+    
+            if ($dsb_actividad_categoria->mes == '6') {
+                $cantidad_codigo_8_6 = $dsb_actividad_categoria->cantidad;
+            }
+    
+            if ($dsb_actividad_categoria->mes == '7') {
+                $cantidad_codigo_8_7 = $dsb_actividad_categoria->cantidad;
+            }
+    
+            if ($dsb_actividad_categoria->mes == '8') {
+                $cantidad_codigo_8_8 = $dsb_actividad_categoria->cantidad;
+            }
+    
+            if ($dsb_actividad_categoria->mes == '9') {
+                $cantidad_codigo_8_9 = $dsb_actividad_categoria->cantidad;
+            }
+    
+            if ($dsb_actividad_categoria->mes == '10') {
+                $cantidad_codigo_8_10 = $dsb_actividad_categoria->cantidad;
+            }
+    
+            if ($dsb_actividad_categoria->mes == '11') {
+                $cantidad_codigo_8_11 = $dsb_actividad_categoria->cantidad;
+            }
+    
+            if ($dsb_actividad_categoria->mes == '12') {
+                $cantidad_codigo_8_12 = $dsb_actividad_categoria->cantidad;
+            }
+        }
+    
+        if ($dsb_actividad_categoria->id == '9') {
+            $nombre_codigo_9 = $dsb_actividad_categoria->nombre;
+            $url_codigo_9 = $dsb_actividad_categoria->url;
+    
+            if ($dsb_actividad_categoria->mes == '1') {
+                $cantidad_codigo_9_1 = $dsb_actividad_categoria->cantidad;
+            }
+    
+            if ($dsb_actividad_categoria->mes == '2') {
+                $cantidad_codigo_9_2 = $dsb_actividad_categoria->cantidad;
+            }
+    
+            if ($dsb_actividad_categoria->mes == '3') {
+                $cantidad_codigo_9_3 = $dsb_actividad_categoria->cantidad;
+            }
+    
+            if ($dsb_actividad_categoria->mes == '4') {
+                $cantidad_codigo_9_4 = $dsb_actividad_categoria->cantidad;
+            }
+    
+            if ($dsb_actividad_categoria->mes == '5') {
+                $cantidad_codigo_9_5 = $dsb_actividad_categoria->cantidad;
+            }
+    
+            if ($dsb_actividad_categoria->mes == '6') {
+                $cantidad_codigo_9_6 = $dsb_actividad_categoria->cantidad;
+            }
+    
+            if ($dsb_actividad_categoria->mes == '7') {
+                $cantidad_codigo_9_7 = $dsb_actividad_categoria->cantidad;
+            }
+    
+            if ($dsb_actividad_categoria->mes == '8') {
+                $cantidad_codigo_9_8 = $dsb_actividad_categoria->cantidad;
+            }
+    
+            if ($dsb_actividad_categoria->mes == '9') {
+                $cantidad_codigo_9_9 = $dsb_actividad_categoria->cantidad;
+            }
+    
+            if ($dsb_actividad_categoria->mes == '10') {
+                $cantidad_codigo_9_10 = $dsb_actividad_categoria->cantidad;
+            }
+    
+            if ($dsb_actividad_categoria->mes == '11') {
+                $cantidad_codigo_9_11 = $dsb_actividad_categoria->cantidad;
+            }
+    
+            if ($dsb_actividad_categoria->mes == '12') {
+                $cantidad_codigo_9_12 = $dsb_actividad_categoria->cantidad;
+            }
+        }
+    }
+    
+    $array_cantidad_codigo_3 = [];
+    
+    array_push($array_cantidad_codigo_3, $cantidad_codigo_3_3);
+    array_push($array_cantidad_codigo_3, $cantidad_codigo_3_4);
+    array_push($array_cantidad_codigo_3, $cantidad_codigo_3_5);
+    array_push($array_cantidad_codigo_3, $cantidad_codigo_3_6);
+    array_push($array_cantidad_codigo_3, $cantidad_codigo_3_7);
+    array_push($array_cantidad_codigo_3, $cantidad_codigo_3_8);
+    array_push($array_cantidad_codigo_3, $cantidad_codigo_3_9);
+    array_push($array_cantidad_codigo_3, $cantidad_codigo_3_10);
+    array_push($array_cantidad_codigo_3, $cantidad_codigo_3_11);
+    array_push($array_cantidad_codigo_3, $cantidad_codigo_3_12);
+    array_push($array_cantidad_codigo_3, $cantidad_codigo_3_1);
+    array_push($array_cantidad_codigo_3, $cantidad_codigo_3_2);
+    
+    $array_cantidad_codigo_8 = [];
+    
+    array_push($array_cantidad_codigo_8, $cantidad_codigo_8_3);
+    array_push($array_cantidad_codigo_8, $cantidad_codigo_8_4);
+    array_push($array_cantidad_codigo_8, $cantidad_codigo_8_5);
+    array_push($array_cantidad_codigo_8, $cantidad_codigo_8_6);
+    array_push($array_cantidad_codigo_8, $cantidad_codigo_8_7);
+    array_push($array_cantidad_codigo_8, $cantidad_codigo_8_8);
+    array_push($array_cantidad_codigo_8, $cantidad_codigo_8_9);
+    array_push($array_cantidad_codigo_8, $cantidad_codigo_8_10);
+    array_push($array_cantidad_codigo_8, $cantidad_codigo_8_11);
+    array_push($array_cantidad_codigo_8, $cantidad_codigo_8_12);
+    array_push($array_cantidad_codigo_8, $cantidad_codigo_8_1);
+    array_push($array_cantidad_codigo_8, $cantidad_codigo_8_2);
+    
+    $array_cantidad_codigo_9 = [];
+    
+    array_push($array_cantidad_codigo_9, $cantidad_codigo_9_3);
+    array_push($array_cantidad_codigo_9, $cantidad_codigo_9_4);
+    array_push($array_cantidad_codigo_9, $cantidad_codigo_9_5);
+    array_push($array_cantidad_codigo_9, $cantidad_codigo_9_6);
+    array_push($array_cantidad_codigo_9, $cantidad_codigo_9_7);
+    array_push($array_cantidad_codigo_9, $cantidad_codigo_9_8);
+    array_push($array_cantidad_codigo_9, $cantidad_codigo_9_9);
+    array_push($array_cantidad_codigo_9, $cantidad_codigo_9_10);
+    array_push($array_cantidad_codigo_9, $cantidad_codigo_9_11);
+    array_push($array_cantidad_codigo_9, $cantidad_codigo_9_12);
+    array_push($array_cantidad_codigo_9, $cantidad_codigo_9_1);
+    array_push($array_cantidad_codigo_9, $cantidad_codigo_9_2);
+    
+    ?>
+
+
 
     {{-- 1 13 32 14 22 20 --}}
     {{-- @foreach ($data_actividades_diarias as $data_actividad_diaria)
@@ -391,6 +641,34 @@
                         </div>
                     </div>
 
+                    <div class="row g-3">
+                        <div class="col-md-12">
+                            <div class="card">
+                                <div
+                                    class="card-header py-3 d-flex justify-content-between bg-transparent border-bottom-0">
+                                    <h5 class="mb-0 fw-bold ">INDICE DE ERROR SOBRE TOTAL DE PROGRAMAS CREADOS Y
+                                        MODIFICADOS 2022</h5>
+                                </div>
+                                <canvas id="char_indice_error_meses_2022"></canvas>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row g-3">
+                        <div class="col-md-12">
+                            <div class="card">
+                                <div
+                                    class="card-header py-3 d-flex justify-content-between bg-transparent border-bottom-0">
+                                    <h5 class="mb-0 fw-bold ">Actividades por Categoria Finalizadas por Mes</h5>
+                                </div>
+                                <canvas id="char_actividades_finalizadas_categoria_mes"></canvas>
+                            </div>
+                        </div>
+                    </div>
+
+
+
+
                 </div>
                 <div class="col-xl-4 col-lg-12 col-md-12">
                     <div class="row g-3 row-deck">
@@ -594,13 +872,109 @@
                 datasets: [{
                     type: 'bar',
                     label: 'Bar Dataset',
-                    data: [10, 20, 30, 40]
+                    data: [3.45, 4.65, 7.32, 1.04, 0.00, 0.00, 0.00, 2.70, 0.00, 4.54, 1.75, 0.00]
                 }, {
                     type: 'line',
                     label: 'Line Dataset',
-                    data: [50, 50, 50, 50],
+                    data: [5.00, 5.00, 5.00, 5.00, 5.00, 5.00, 5.00, 5.00, 5.00, 5.00, 5.00, 5.00]
                 }],
-                labels: ['January', 'February', 'March', 'April']
+                labels: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre',
+                    'Octubre', 'Noviembre', 'Diciembre'
+                ]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+
+
+
+        const ctx9 = document.getElementById('char_indice_error_meses_2022');
+
+        new Chart(ctx9, {
+            data: {
+                datasets: [{
+                    type: 'bar',
+                    label: 'Bar Dataset',
+                    data: [1.47, 0.72, 0.64, 1.23, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00]
+                }, {
+                    type: 'line',
+                    label: 'Line Dataset',
+                    data: [5.00, 5.00, 5.00, 5.00, 5.00, 5.00, 5.00, 5.00, 5.00, 5.00, 5.00, 5.00]
+                }],
+                labels: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre',
+                    'Octubre', 'Noviembre', 'Diciembre'
+                ]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+
+
+        const ctx10 = document.getElementById('char_actividades_finalizadas_categoria_mes');
+
+        new Chart(ctx10, {
+            type: 'bar',
+            data: {
+                labels: [<?php echo $data_categorias; ?>],
+                datasets: [{
+                        label: '<?php echo $nombre_codigo_3; ?>',
+                        data: @json($array_cantidad_codigo_3),
+                        backgroundColor: [
+                            'rgba(255,99,132,0.2)'
+                        ],
+                        borderColor: [
+                            'rgba(255,99,132,1)',
+                            'rgba(54,162,235,1)',
+                            'rgba(255,206,86,1)',
+                            'rgba(75,192,192,1)',
+                            'rgba(153,102,255,1)',
+                            'rgba(255,159,64,1)',
+                        ],
+                        borderWidth: 1
+                    },
+                    {
+                        label: '<?php echo $nombre_codigo_8; ?>',
+                        data: @json($array_cantidad_codigo_8),
+                        backgroundColor: [
+                            'rgba(54,162,235,0.2)'
+                        ],
+                        borderColor: [
+                            'rgba(255,99,132,1)',
+                            'rgba(54,162,235,1)',
+                            'rgba(255,206,86,1)',
+                            'rgba(75,192,192,1)',
+                            'rgba(153,102,255,1)',
+                            'rgba(255,159,64,1)',
+                        ],
+                        borderWidth: 1
+                    },
+                    {
+                        label: '<?php echo $nombre_codigo_9; ?>',
+                        data: @json($array_cantidad_codigo_9),
+                        backgroundColor: [
+                            'rgba(255,206,86,0.2)'
+                        ],
+                        borderColor: [
+                            'rgba(255,99,132,1)',
+                            'rgba(54,162,235,1)',
+                            'rgba(255,206,86,1)',
+                            'rgba(75,192,192,1)',
+                            'rgba(153,102,255,1)',
+                            'rgba(255,159,64,1)',
+                        ],
+                        borderWidth: 1
+                    }
+                ]
             },
             options: {
                 scales: {
