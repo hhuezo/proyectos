@@ -13,7 +13,12 @@ class Estados extends Component
     public function render()
     {
         $estados = Estado::where('nombre', 'LIKE', '%' . $this->busqueda . '%')->get();
-        return view('livewire.estados',compact('estados'));
+
+        $colores = ["success","primary","info","warning","danger","secondary"];
+
+        return view('livewire.estados',compact('estados','colores'));
+
+
     }
 
     public function create()

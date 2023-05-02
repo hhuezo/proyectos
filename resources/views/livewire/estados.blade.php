@@ -103,7 +103,13 @@
                         <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                             <div class="mb-3">
                                 <label class="form-label">Color</label>
-                                <input type="text" wire:model.defer="color" class="form-control">
+
+                                <select wire:model.defer="color" class="form-control">
+                                    <option value="">Seleccione</option>
+                                    @foreach ($colores as $color)
+                                        <option value="{{ $color }}">{{ $color }}</option>
+                                    @endforeach
+                                </select>
                             </div>
 
                         </div>
@@ -154,7 +160,14 @@
                         <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                             <div class="mb-3">
                                 <label class="form-label">Color</label>
-                                <input type="text" wire:model.defer="color" class="form-control">
+
+                                <select wire:model.defer="color" class="form-control">
+                                    <option value="">Seleccione</option>
+                                    @foreach ($colores as $color)
+                                        <option value="{{ $color }}">{{ $color }}</option>
+                                    @endforeach
+                                </select>
+
                             </div>
 
                         </div>
