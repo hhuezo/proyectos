@@ -14,7 +14,6 @@
                 <div class="d-flex">
                     <!--<a class="nav-link text-primary collapsed" href="#" title="Get Help">
                         <i class="icofont-info-square fs-5"></i>
-<<<<<<< HEAD
                     </a>-->
                     @if (session('session_usuarios'))
                         <div class="avatar-list avatar-list-stacked px-3">
@@ -35,25 +34,6 @@
                         </div>
                     @endif
 
-=======
-                    </a>
-                    <div class="avatar-list avatar-list-stacked px-3">
-                        <img class="avatar rounded-circle" src="{{ url('/') . '/images/xs/avatar2.jpg' }}"
-                            alt="">
-                        <img class="avatar rounded-circle" src="{{ url('/') . '/images/xs/avatar1.jpg' }}"
-                            alt="">
-                        <img class="avatar rounded-circle" src="{{ url('/') . '/images/xs/avatar3.jpg' }}"
-                            alt="">
-                        <img class="avatar rounded-circle" src="{{ url('/') . '/images/xs/avatar4.jpg' }}"
-                            alt="">
-                        <img class="avatar rounded-circle" src="{{ url('/') . '/images/xs/avatar7.jpg' }}"
-                            alt="">
-                        <img class="avatar rounded-circle" src="{{ url('/') . '/images/xs/avatar8.jpg' }}"
-                            alt="">
-                        <span class="avatar rounded-circle text-center pointer" data-bs-toggle="modal"
-                            data-bs-target="#addUser"><i class="icofont-ui-add"></i></span>
-                    </div>
->>>>>>> 09257836eb5283ed3ed34f8ae5a969044916860e
                 </div>
                 <!-- <div class="dropdown notifications zindex-popover">
                     <a class="nav-link dropdown-toggle pulse" href="#" role="button" data-bs-toggle="dropdown">
