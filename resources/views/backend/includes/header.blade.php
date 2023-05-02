@@ -14,6 +14,7 @@
                 <div class="d-flex">
                     <!--<a class="nav-link text-primary collapsed" href="#" title="Get Help">
                         <i class="icofont-info-square fs-5"></i>
+<<<<<<< HEAD
                     </a>-->
                     @if (session('session_usuarios'))
                         <div class="avatar-list avatar-list-stacked px-3">
@@ -34,6 +35,25 @@
                         </div>
                     @endif
 
+=======
+                    </a>
+                    <div class="avatar-list avatar-list-stacked px-3">
+                        <img class="avatar rounded-circle" src="{{ url('/') . '/images/xs/avatar2.jpg' }}"
+                            alt="">
+                        <img class="avatar rounded-circle" src="{{ url('/') . '/images/xs/avatar1.jpg' }}"
+                            alt="">
+                        <img class="avatar rounded-circle" src="{{ url('/') . '/images/xs/avatar3.jpg' }}"
+                            alt="">
+                        <img class="avatar rounded-circle" src="{{ url('/') . '/images/xs/avatar4.jpg' }}"
+                            alt="">
+                        <img class="avatar rounded-circle" src="{{ url('/') . '/images/xs/avatar7.jpg' }}"
+                            alt="">
+                        <img class="avatar rounded-circle" src="{{ url('/') . '/images/xs/avatar8.jpg' }}"
+                            alt="">
+                        <span class="avatar rounded-circle text-center pointer" data-bs-toggle="modal"
+                            data-bs-target="#addUser"><i class="icofont-ui-add"></i></span>
+                    </div>
+>>>>>>> 09257836eb5283ed3ed34f8ae5a969044916860e
                 </div>
                 <!-- <div class="dropdown notifications zindex-popover">
                     <a class="nav-link dropdown-toggle pulse" href="#" role="button" data-bs-toggle="dropdown">
@@ -59,7 +79,8 @@
                                                 <div class="flex-fill ms-2">
                                                     <p class="d-flex justify-content-between mb-0 "><span
                                                             class="font-weight-bold">{{ auth()->user()->user_name }}</span>
-                                                        <small>2MIN</small></p>
+                                                        <small>2MIN</small>
+                                                    </p>
                                                     <span class="">Added 2021-02-19 my-Task ui/ux Design <span
                                                             class="badge bg-success">Review</span></span>
                                                 </div>
@@ -71,7 +92,8 @@
                                                 <div class="flex-fill ms-2">
                                                     <p class="d-flex justify-content-between mb-0 "><span
                                                             class="font-weight-bold">Diane Fisher</span>
-                                                        <small>13MIN</small></p>
+                                                        <small>13MIN</small>
+                                                    </p>
                                                     <span class="">Task added Get Started with Fast Cad
                                                         project</span>
                                                 </div>
@@ -84,7 +106,8 @@
                                                 <div class="flex-fill ms-2">
                                                     <p class="d-flex justify-content-between mb-0 "><span
                                                             class="font-weight-bold">Andrea Gill</span>
-                                                        <small>1HR</small></p>
+                                                        <small>1HR</small>
+                                                    </p>
                                                     <span class="">Quality Assurance Task Completed</span>
                                                 </div>
                                             </a>
@@ -96,7 +119,8 @@
                                                 <div class="flex-fill ms-2">
                                                     <p class="d-flex justify-content-between mb-0 "><span
                                                             class="font-weight-bold">Diane Fisher</span>
-                                                        <small>13MIN</small></p>
+                                                        <small>13MIN</small>
+                                                    </p>
                                                     <span class="">Add New Project for App Developemnt</span>
                                                 </div>
                                             </a>
@@ -108,7 +132,8 @@
                                                 <div class="flex-fill ms-2">
                                                     <p class="d-flex justify-content-between mb-0 "><span
                                                             class="font-weight-bold">Andrea Gill</span>
-                                                        <small>1HR</small></p>
+                                                        <small>1HR</small>
+                                                    </p>
                                                     <span class="">Add Timesheet For Rhinestone project</span>
                                                 </div>
                                             </a>
@@ -135,7 +160,8 @@
                 <div class="dropdown user-profile ml-2 ml-sm-3 d-flex align-items-center zindex-popover">
                     <div class="u-info me-2">
                         <p class="mb-0 text-end line-height-sm "><span
-                                class="font-weight-bold">{{ auth()->user()->user_name }}</span></p>
+                                class="font-weight-bold">{{ auth()->user()->user_name }}
+                            </span></p>
                         <small>
                             @if (auth()->user()->rol_id)
                                 {{ auth()->user()->rol->name }}
@@ -153,7 +179,11 @@
                             <div class="card-body pb-0">
                                 <div class="d-flex py-1">
                                     <img class="avatar rounded-circle"
+<<<<<<< HEAD
                                         src="{{ url('/') .  '/images/users/'.auth()->user()->image }}" alt="profile">
+=======
+                                        src="{{ url('/') . '/images/profile_av.png' }}" alt="profile">
+>>>>>>> 09257836eb5283ed3ed34f8ae5a969044916860e
                                     <div class="flex-fill ms-3">
                                         <p class="mb-0"><span
                                                 class="font-weight-bold">{{ auth()->user()->user_name }}</span></p>
