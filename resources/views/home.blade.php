@@ -6,7 +6,7 @@
 
 
     <?php
-    
+
     $cantidad_codigo_3_1 = 0;
     $cantidad_codigo_3_2 = 0;
     $cantidad_codigo_3_3 = 0;
@@ -19,7 +19,7 @@
     $cantidad_codigo_3_10 = 0;
     $cantidad_codigo_3_11 = 0;
     $cantidad_codigo_3_12 = 0;
-    
+
     $cantidad_codigo_8_1 = 0;
     $cantidad_codigo_8_2 = 0;
     $cantidad_codigo_8_3 = 0;
@@ -32,7 +32,7 @@
     $cantidad_codigo_8_10 = 0;
     $cantidad_codigo_8_11 = 0;
     $cantidad_codigo_8_12 = 0;
-    
+
     $cantidad_codigo_9_1 = 0;
     $cantidad_codigo_9_2 = 0;
     $cantidad_codigo_9_3 = 0;
@@ -45,170 +45,170 @@
     $cantidad_codigo_9_10 = 0;
     $cantidad_codigo_9_11 = 0;
     $cantidad_codigo_9_12 = 0;
-    
+
     foreach ($dsb_tot_actividades_categorias as $dsb_actividad_categoria) {
         if ($dsb_actividad_categoria->id == '3') {
             $nombre_codigo_3 = $dsb_actividad_categoria->nombre;
             $url_codigo_3 = $dsb_actividad_categoria->url;
-    
+
             if ($dsb_actividad_categoria->mes == '1') {
                 $cantidad_codigo_3_1 = $dsb_actividad_categoria->cantidad;
             }
-    
+
             if ($dsb_actividad_categoria->mes == '2') {
                 $cantidad_codigo_3_2 = $dsb_actividad_categoria->cantidad;
             }
-    
+
             if ($dsb_actividad_categoria->mes == '3') {
                 $cantidad_codigo_3_3 = $dsb_actividad_categoria->cantidad;
             }
-    
+
             if ($dsb_actividad_categoria->mes == '4') {
                 $cantidad_codigo_3_4 = $dsb_actividad_categoria->cantidad;
             }
-    
+
             if ($dsb_actividad_categoria->mes == '5') {
                 $cantidad_codigo_3_5 = $dsb_actividad_categoria->cantidad;
             }
-    
+
             if ($dsb_actividad_categoria->mes == '6') {
                 $cantidad_codigo_3_6 = $dsb_actividad_categoria->cantidad;
             }
-    
+
             if ($dsb_actividad_categoria->mes == '7') {
                 $cantidad_codigo_3_7 = $dsb_actividad_categoria->cantidad;
             }
-    
+
             if ($dsb_actividad_categoria->mes == '8') {
                 $cantidad_codigo_3_8 = $dsb_actividad_categoria->cantidad;
             }
-    
+
             if ($dsb_actividad_categoria->mes == '9') {
                 $cantidad_codigo_3_9 = $dsb_actividad_categoria->cantidad;
             }
-    
+
             if ($dsb_actividad_categoria->mes == '10') {
                 $cantidad_codigo_3_10 = $dsb_actividad_categoria->cantidad;
             }
-    
+
             if ($dsb_actividad_categoria->mes == '11') {
                 $cantidad_codigo_3_11 = $dsb_actividad_categoria->cantidad;
             }
-    
+
             if ($dsb_actividad_categoria->mes == '12') {
                 $cantidad_codigo_3_12 = $dsb_actividad_categoria->cantidad;
             }
         }
-    
+
         if ($dsb_actividad_categoria->id == '8') {
             $nombre_codigo_8 = $dsb_actividad_categoria->nombre;
             $url_codigo_8 = $dsb_actividad_categoria->url;
-    
+
             if ($dsb_actividad_categoria->mes == '1') {
                 $cantidad_codigo_8_1 = $dsb_actividad_categoria->cantidad;
             }
-    
+
             if ($dsb_actividad_categoria->mes == '2') {
                 $cantidad_codigo_8_2 = $dsb_actividad_categoria->cantidad;
             }
-    
+
             if ($dsb_actividad_categoria->mes == '3') {
                 $cantidad_codigo_8_3 = $dsb_actividad_categoria->cantidad;
             }
-    
+
             if ($dsb_actividad_categoria->mes == '4') {
                 $cantidad_codigo_8_4 = $dsb_actividad_categoria->cantidad;
             }
-    
+
             if ($dsb_actividad_categoria->mes == '5') {
                 $cantidad_codigo_8_5 = $dsb_actividad_categoria->cantidad;
             }
-    
+
             if ($dsb_actividad_categoria->mes == '6') {
                 $cantidad_codigo_8_6 = $dsb_actividad_categoria->cantidad;
             }
-    
+
             if ($dsb_actividad_categoria->mes == '7') {
                 $cantidad_codigo_8_7 = $dsb_actividad_categoria->cantidad;
             }
-    
+
             if ($dsb_actividad_categoria->mes == '8') {
                 $cantidad_codigo_8_8 = $dsb_actividad_categoria->cantidad;
             }
-    
+
             if ($dsb_actividad_categoria->mes == '9') {
                 $cantidad_codigo_8_9 = $dsb_actividad_categoria->cantidad;
             }
-    
+
             if ($dsb_actividad_categoria->mes == '10') {
                 $cantidad_codigo_8_10 = $dsb_actividad_categoria->cantidad;
             }
-    
+
             if ($dsb_actividad_categoria->mes == '11') {
                 $cantidad_codigo_8_11 = $dsb_actividad_categoria->cantidad;
             }
-    
+
             if ($dsb_actividad_categoria->mes == '12') {
                 $cantidad_codigo_8_12 = $dsb_actividad_categoria->cantidad;
             }
         }
-    
+
         if ($dsb_actividad_categoria->id == '9') {
             $nombre_codigo_9 = $dsb_actividad_categoria->nombre;
             $url_codigo_9 = $dsb_actividad_categoria->url;
-    
+
             if ($dsb_actividad_categoria->mes == '1') {
                 $cantidad_codigo_9_1 = $dsb_actividad_categoria->cantidad;
             }
-    
+
             if ($dsb_actividad_categoria->mes == '2') {
                 $cantidad_codigo_9_2 = $dsb_actividad_categoria->cantidad;
             }
-    
+
             if ($dsb_actividad_categoria->mes == '3') {
                 $cantidad_codigo_9_3 = $dsb_actividad_categoria->cantidad;
             }
-    
+
             if ($dsb_actividad_categoria->mes == '4') {
                 $cantidad_codigo_9_4 = $dsb_actividad_categoria->cantidad;
             }
-    
+
             if ($dsb_actividad_categoria->mes == '5') {
                 $cantidad_codigo_9_5 = $dsb_actividad_categoria->cantidad;
             }
-    
+
             if ($dsb_actividad_categoria->mes == '6') {
                 $cantidad_codigo_9_6 = $dsb_actividad_categoria->cantidad;
             }
-    
+
             if ($dsb_actividad_categoria->mes == '7') {
                 $cantidad_codigo_9_7 = $dsb_actividad_categoria->cantidad;
             }
-    
+
             if ($dsb_actividad_categoria->mes == '8') {
                 $cantidad_codigo_9_8 = $dsb_actividad_categoria->cantidad;
             }
-    
+
             if ($dsb_actividad_categoria->mes == '9') {
                 $cantidad_codigo_9_9 = $dsb_actividad_categoria->cantidad;
             }
-    
+
             if ($dsb_actividad_categoria->mes == '10') {
                 $cantidad_codigo_9_10 = $dsb_actividad_categoria->cantidad;
             }
-    
+
             if ($dsb_actividad_categoria->mes == '11') {
                 $cantidad_codigo_9_11 = $dsb_actividad_categoria->cantidad;
             }
-    
+
             if ($dsb_actividad_categoria->mes == '12') {
                 $cantidad_codigo_9_12 = $dsb_actividad_categoria->cantidad;
             }
         }
     }
-    
+
     $array_cantidad_codigo_3 = [];
-    
+
     array_push($array_cantidad_codigo_3, $cantidad_codigo_3_3);
     array_push($array_cantidad_codigo_3, $cantidad_codigo_3_4);
     array_push($array_cantidad_codigo_3, $cantidad_codigo_3_5);
@@ -221,9 +221,9 @@
     array_push($array_cantidad_codigo_3, $cantidad_codigo_3_12);
     array_push($array_cantidad_codigo_3, $cantidad_codigo_3_1);
     array_push($array_cantidad_codigo_3, $cantidad_codigo_3_2);
-    
+
     $array_cantidad_codigo_8 = [];
-    
+
     array_push($array_cantidad_codigo_8, $cantidad_codigo_8_3);
     array_push($array_cantidad_codigo_8, $cantidad_codigo_8_4);
     array_push($array_cantidad_codigo_8, $cantidad_codigo_8_5);
@@ -236,9 +236,9 @@
     array_push($array_cantidad_codigo_8, $cantidad_codigo_8_12);
     array_push($array_cantidad_codigo_8, $cantidad_codigo_8_1);
     array_push($array_cantidad_codigo_8, $cantidad_codigo_8_2);
-    
+
     $array_cantidad_codigo_9 = [];
-    
+
     array_push($array_cantidad_codigo_9, $cantidad_codigo_9_3);
     array_push($array_cantidad_codigo_9, $cantidad_codigo_9_4);
     array_push($array_cantidad_codigo_9, $cantidad_codigo_9_5);
@@ -251,7 +251,7 @@
     array_push($array_cantidad_codigo_9, $cantidad_codigo_9_12);
     array_push($array_cantidad_codigo_9, $cantidad_codigo_9_1);
     array_push($array_cantidad_codigo_9, $cantidad_codigo_9_2);
-    
+
     ?>
 
 
@@ -673,35 +673,7 @@
 
 
                 </div>
-                <div class="col-xl-4 col-lg-12 col-md-12">
-                    <div class="row g-3 row-deck">
 
-                        <div class="col-md-6 col-lg-6 col-xl-12  flex-column">
-                            <div class="card mb-3">
-                                <div class="card-body">
-
-                                    ddddddddddd
-
-                                </div>
-                            </div>
-                            <div class="card mb-3">
-                                <div class="card-body">
-
-                                    eeeeeeeeeee
-
-                                </div>
-                            </div>
-                            <div class="card mb-3">
-                                <div class="card-body">
-
-                                    ffffffffffffff
-
-                                </div>
-                            </div>
-                        </div>
-
-                    </div>
-                </div>
 
             </div><!-- Row End -->
         </div>

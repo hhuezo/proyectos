@@ -14,11 +14,11 @@ use Carbon\Carbon;
 
 class Proyectos extends Component
 {
-    public $id_proyecto = 0, $estado_id = 2, $nombre, $descripcion, $busqueda, $busqueda_actividad;
-    public $proyectos, $id_unidad, $actividades, $tipo = 1;
+    public $id_proyecto = 0, $estado_id = 2, $nombre, $descripcion, $busqueda, $busqueda_actividad, $ponderacion_proyecto, $avance_proyecto;
+    public $proyectos, $id_unidad, $actividades, $tipo = 1, $finalizado = 0;
 
     public $id_actividad, $numero_ticket = 0, $ponderacion = 0.01, $descripcion_actividad,
-        $fecha_inicio, $categoria_id, $estado_actividad_id, $prioridad_id, $fecha_fin, $forma = "NO APLICA", $users_id,$avance;
+        $fecha_inicio, $categoria_id, $estado_actividad_id, $prioridad_id, $fecha_fin, $forma = "NO APLICA", $users_id, $avance;
 
 
     public function changeType()
@@ -52,9 +52,9 @@ class Proyectos extends Component
                 'estados.nombre as estado',
                 'estados.color',
                 'proyectos.destacado',
-                'proyectos.avance',
                 'proyectos.finalizado',
-                'proyectos.estado_id'
+                'proyectos.estado_id',
+                \DB::raw('(select ifnull(sum((act.porcentaje/100) * act.ponderacion),0) from actividades act where act.proyecto_id = proyectos.id) as avance')
             )
             ->where('proyectos.unidad_id', '=', $this->id_unidad)
             ->where('proyectos.finalizado', '=', 0)
@@ -127,15 +127,17 @@ class Proyectos extends Component
 
     public function edit($id)
     {
-        $proyecto = Proyecto::findOrFail($id);
-        $this->ponderacion = Actividad::where('proyecto_id', '=', $id)->sum('ponderacion');
+        $proyecto = Proyecto::select('id', 'nombre', 'descripcion', 'estado_id', \DB::raw('(select ifnull(sum((act.porcentaje/100) * act.ponderacion),0) from actividades act where act.proyecto_id = proyectos.id) as porcentaje'))
+            ->findOrFail($id);
+        $this->ponderacion_proyecto = Actividad::where('proyecto_id', '=', $id)->sum('ponderacion');
         $this->id_proyecto = $proyecto->id;
         $this->nombre = $proyecto->nombre;
         $this->descripcion = $proyecto->descripcion;
         $this->estado_id = $proyecto->estado_id;
         $this->actividades = Actividad::where('proyecto_id', '=', $id)->get();
-        $this->avance = $proyecto->avance;
+        $this->avance_proyecto = $proyecto->porcentaje;
         $this->busqueda_actividad = "";
+        $this->finalizado = $proyecto->finalizado;
     }
 
 
@@ -294,8 +296,24 @@ class Proyectos extends Component
         $actividad->users_id = $this->users_id;
         $actividad->update();
 
+
+        $proyecto = Proyecto::select(\DB::raw('(select ifnull(sum((act.porcentaje/100) * act.ponderacion),0) from actividades act where act.proyecto_id = proyectos.id) as porcentaje'))
+            ->findOrFail($actividad->proyecto_id);
+        $this->ponderacion_proyecto = Actividad::where('proyecto_id', '=', $actividad->proyecto_id)->sum('ponderacion');
+        $this->avance_proyecto = $proyecto->porcentaje;
+
         $this->dispatchBrowserEvent('close-modal-edit-actividad');
     }
 
+    public function finalizar_proyecto()
+    {
+        $proyecto = Proyecto::findOrFail($this->id_proyecto);
+        $proyecto->finalizado = 1;
+        $proyecto->update();
 
+        //186
+        $this->finalizado = 1;
+
+        $this->dispatchBrowserEvent('hide-proyecto');
+    }
 }

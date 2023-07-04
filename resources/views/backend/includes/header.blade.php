@@ -159,11 +159,7 @@
                             <div class="card-body pb-0">
                                 <div class="d-flex py-1">
                                     <img class="avatar rounded-circle"
-<<<<<<< HEAD
                                         src="{{ url('/') .  '/images/users/'.auth()->user()->image }}" alt="profile">
-=======
-                                        src="{{ url('/') . '/images/profile_av.png' }}" alt="profile">
->>>>>>> 09257836eb5283ed3ed34f8ae5a969044916860e
                                     <div class="flex-fill ms-3">
                                         <p class="mb-0"><span
                                                 class="font-weight-bold">{{ auth()->user()->user_name }}</span></p>

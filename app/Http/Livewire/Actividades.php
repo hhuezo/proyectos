@@ -6,22 +6,46 @@ use App\Actividad;
 use App\CategoriaTicket;
 use App\MovimientoActividad;
 use App\PrioridadTicket;
+use App\Proyecto;
 use Livewire\Component;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
 
 class Actividades extends Component
 {
-    public $id_proyecto = 9,  $numero_ticket = 0, $ponderacion = 0.01, $descripcion,
+    public $id_proyecto = 9, $proyectos, $catalogo_proyectos, $proyecto_id, $numero_ticket = 0, $ponderacion = 0.01, $descripcion,
         $fecha_inicio, $categoria_id, $estado_id, $prioridad_id = 1, $fecha_fin, $forma = "NO APLICA",  $tipo = 1, $busqueda,
         $id_actividad, $nombre_actividad, $porcentaje_diario = 0, $porcentaje_actual, $porcentaje_anterior = 0, $tiempo_minutos, $detalle;
 
 
 
+    public function load_edit_actividad($id)
+    {
+        $actividad = Actividad::findOrFail($id);
+        if ($actividad) {
+            $this->id_actividad = $id;
+            $this->nombre_actividad = $actividad->descripcion;
+            $this->proyecto_id = $actividad->proyecto_id;
+        }
+    }
+
+    public function edit_actividad()
+    {
+        $actividad = Actividad::findOrFail($this->id_actividad);
+        $actividad->proyecto_id = $this->proyecto_id;
+        $actividad->update();
+        $this->dispatchBrowserEvent('close-modal-edit');
+    }
+
     public function render()
     {
-
-        $proyectos =  Actividad::join('proyectos', 'actividades.proyecto_id', '=', 'proyectos.id')
+        $busqueda_temp = $this->busqueda;
+        $this->proyectos =  Actividad::join('proyectos', 'actividades.proyecto_id', '=', 'proyectos.id')
             ->select('proyectos.id as proyecto_id', 'proyectos.nombre', 'proyectos.avance')
+            ->where(function ($query) use ($busqueda_temp) {
+                $query->where('actividades.descripcion', 'like', '%' . $busqueda_temp . '%')
+                    ->orWhere('proyectos.nombre', 'like', '%' . $busqueda_temp . '%');
+            })
             ->where('actividades.users_id', '=', auth()->user()->id)
             ->whereNotIn('actividades.estado_id', [4, 7])
             ->orderBy('proyectos.id', 'desc')->distinct()->get();
@@ -44,20 +68,30 @@ class Actividades extends Component
                 'actividades.fecha_fin',
                 'actividades.porcentaje',
                 'users.user_name',
+                'users.image',
                 'estados.nombre as estado',
                 'prioridad_tickets.color',
                 'actividades.estado_id'
             )
+            ->where(function ($query) use ($busqueda_temp) {
+                $query->where('actividades.descripcion', 'like', '%' . $busqueda_temp . '%')
+                    ->orWhere('proyectos.nombre', 'like', '%' . $busqueda_temp . '%');
+            })
             ->where('actividades.estado_id', '<>', 7)
             ->where('actividades.estado_id', '<>', 4)
             ->where('actividades.users_id', '=', auth()->user()->id)
-            ->where('actividades.descripcion', 'like', '%' . $this->busqueda . '%')
             ->orderBy('actividades.id', 'desc')->get();
 
         $categorias = CategoriaTicket::where('categoria_tickets.unidad_id', '=', auth()->user()->unidad_id)->get();
-        $prioridades = PrioridadTicket::get();
+        $prioridades = PrioridadTicket::get();  
+        $this->catalogo_proyectos = Proyecto::where('unidad_id', '=', auth()->user()->unidad_id)->get();    
 
-        return view('livewire.actividades', compact('actividades', 'proyectos', 'categorias', 'prioridades'));
+
+        return view('livewire.actividades', compact('actividades', 'categorias', 'prioridades' ));
+    }
+
+    public function hydrate() {
+        $this->emit('select2');
     }
 
     public function changeType()
@@ -117,22 +151,39 @@ class Actividades extends Component
 
         $time = Carbon::now('America/El_Salvador');
 
-        Actividad::create([
-            'proyecto_id' => 9,
-            'numero_ticket' => $this->numero_ticket,
-            'ponderacion' => $this->ponderacion,
-            'descripcion' => strtoupper($this->descripcion),
-            'fecha_inicio' => $this->fecha_inicio,
-            'categoria_id' => $this->categoria_id,
-            'estado_id' => 1,
-            'prioridad_id' => $this->prioridad_id,
-            'fecha_fin' => $this->fecha_fin,
-            'unidad_id'=> auth()->user()->unidad_id,
-            'forma' => $this->forma,
-            'porcentaje' => 0,
-            'users_id' => auth()->user()->id,
-            'fecha_asignacion' => $time->toDateTimeString(),
-        ]);
+
+
+        $actividad = new Actividad();
+        $actividad->proyecto_id = $this->id_proyecto;
+        $actividad->numero_ticket = $this->numero_ticket;
+        $actividad->ponderacion = $this->ponderacion;
+        $actividad->descripcion = $this->descripcion;
+        $actividad->fecha_inicio = $this->fecha_inicio;
+        $actividad->categoria_id = $this->categoria_id;
+        $actividad->estado_id = 1;
+        $actividad->prioridad_id = $this->prioridad_id;
+        $actividad->fecha_fin = $this->fecha_fin;
+        $actividad->unidad_id = auth()->user()->unidad_id;
+        $actividad->forma = $this->forma;
+        $actividad->porcentaje = 0;
+        $actividad->users_id = auth()->user()->id;
+        $actividad->fecha_asignacion = $time->toDateTimeString();
+        $actividad->save();
+
+
+
+        $movimientoActividad = new MovimientoActividad();
+        $time = Carbon::now('America/El_Salvador');
+        $movimientoActividad->fecha =  $time->toDateTimeString();
+        //$movimientoActividad->fecha = $mytime->toDateString();
+        $movimientoActividad->porcentaje = '0';
+        $movimientoActividad->porcentaje_acum = '0';
+        $movimientoActividad->actividad_id = $actividad->id;
+        $movimientoActividad->estado_id = 3;
+        $movimientoActividad->detalle = '';
+        $movimientoActividad->tiempo = '0';
+
+        $movimientoActividad->save();
 
 
         $this->dispatchBrowserEvent('close-modal');
@@ -179,9 +230,9 @@ class Actividades extends Component
         $fecha_act = $movimientoActividad->fecha;
         $mov_actividad_id = $movimientoActividad->id;
 
-        $dsb_actividades2a = \DB::select("call spCalculaTiempoEntreDias2('$mov_actividad_id','$actividad_id','$fecha_ant','$fecha_act')");
-        $dsb_actividades2b = \DB::select("call spActualizarMovimientoActividadesTiempo('$actividad_id')");
-        $dsb_actividades2c = \DB::select("call spActualizaTiempoActividades('$actividad_id')");
+        $dsb_actividades2a = DB::select("call spCalculaTiempoEntreDias2('$mov_actividad_id','$actividad_id','$fecha_ant','$fecha_act')");
+        $dsb_actividades2b = DB::select("call spActualizarMovimientoActividadesTiempo('$actividad_id')");
+        $dsb_actividades2c = DB::select("call spActualizaTiempoActividades('$actividad_id')");
     }
 
 
@@ -229,11 +280,13 @@ class Actividades extends Component
             $fecha_act = $movimientoActividad->fecha;
             $mov_actividad_id = $movimientoActividad->id;
 
-            $dsb_actividades1a = \DB::select("call spCalculaTiempoEntreDias2('$mov_actividad_id','$actividad_id','$fecha_ant','$fecha_act')");
-            $dsb_actividades1b = \DB::select("call spActualizarMovimientoActividadesTiempo('$actividad_id')");
-            $dsb_actividades1c = \DB::select("call spActualizaTiempoActividades('$actividad_id')");
+            $dsb_actividades1a = DB::select("call spCalculaTiempoEntreDias2('$mov_actividad_id','$actividad_id','$fecha_ant','$fecha_act')");
+            $dsb_actividades1b = DB::select("call spActualizarMovimientoActividadesTiempo('$actividad_id')");
+            $dsb_actividades1c = DB::select("call spActualizaTiempoActividades('$actividad_id')");
         }
     }
+
+
 
     public function load_actividad($id)
     {
@@ -333,6 +386,7 @@ class Actividades extends Component
             $movimientoActividad->detalle = $this->detalle;
             $movimientoActividad->tiempo = '0';
             $movimientoActividad->tiempo_minutos = $this->tiempo_minutos;
+            $movimientoActividad->save();
         }
 
         $this->id_actividad = 0;

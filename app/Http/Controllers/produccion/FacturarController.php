@@ -5,6 +5,7 @@ namespace App\Http\Controllers\produccion;
 use App\Actividad;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use DB;
 
 class FacturarController extends Controller
 {
@@ -63,7 +64,7 @@ class FacturarController extends Controller
 
         $actividades = Actividad::join('movimiento_actividades','movimiento_actividades.actividad_id','=','actividades.id')
         ->join('users','actividades.users_id','=','users.id')
-        ->select('actividades.id',\DB::raw('DATE_FORMAT(movimiento_actividades.fecha, "%d/%m/%Y") as fecha'),
+        ->select('actividades.id',\DB::raw('DATE_FORMAT(actividades.fecha_liberacion, "%d/%m/%Y") as fecha'),
         'actividades.numero_ticket','actividades.descripcion',
         \DB::raw('sum(movimiento_actividades.tiempo_minutos) as tiempo_minutos'))
         //->whereYear('actividades.fecha_liberacion','2023')
@@ -73,9 +74,11 @@ class FacturarController extends Controller
         ->where('movimiento_actividades.tiempo_minutos', '>',0)
         ->where('users.unidad_id', '=',1)
         //->orderBy('actividades.id')
-        ->orderBy(\DB::raw('DATE_FORMAT(movimiento_actividades.fecha, "%d/%m/%Y")'))
-        ->groupBy('actividades.id',\DB::raw('DATE_FORMAT(movimiento_actividades.fecha, "%d/%m/%Y")'),'actividades.numero_ticket','actividades.descripcion')
+        ->orderBy(\DB::raw('DATE_FORMAT(actividades.fecha_liberacion, "%d/%m/%Y")'))
+        ->groupBy('actividades.id',\DB::raw('DATE_FORMAT(actividades.fecha_liberacion, "%d/%m/%Y")'),'actividades.numero_ticket','actividades.descripcion')
         ->get();
+
+
 
         $tiempo_total_minutos = 0;
         $minutos_meta = 500 * 60; //500 horas del mes

@@ -1,4 +1,6 @@
-@extends('layouts.form')
+
+@extends('welcome')
+<?php /*@extends('layouts.form')
 
 @section('title','Inicio de sesion')
 @section('subtitle','Ingresa tus datos para iniciar sesion')
@@ -83,3 +85,5 @@
       </div>
     </div>
 @endsection
+
+*/?>

@@ -299,6 +299,7 @@
 
         </div>
     </div>
+
 @endif
 @if (Request::segment(2) == 'ui-components')
     <div class="sidebar px-4 py-2 py-md-4 me-0">
@@ -420,4 +421,6 @@
             </button>
         </div>
     </div>
+
+
 @endif

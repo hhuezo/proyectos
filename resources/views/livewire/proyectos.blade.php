@@ -93,25 +93,28 @@
 
                         <div class="col-12">
 
-                            @if ($avance < 50)
+                            @if ($avance_proyecto < 50)
                                 <div class="progress" style="height: 20px; width: 250px;">
                                     <div class="progress-bar bg-danger" role="progressbar" style="width: 50%"
                                         aria-valuenow="60" aria-valuemin="0" aria-valuemax="100">
-                                        {{ $avance }}% de {{ $ponderacion }}</div>
+                                        {{ number_format($avance_proyecto, 2, '.', '') }}% de
+                                        {{ $ponderacion_proyecto }}</div>
                                 </div>
-                            @elseif($avance < 70)
+                            @elseif($avance_proyecto < 70)
                                 <div class="progress" style="height: 20px; width: 250px;">
                                     <div class="progress-bar bg-warning" role="progressbar"
-                                        style="width: {{ $avance }}%" aria-valuenow="60" aria-valuemin="0"
+                                        style="width: {{ $avance_proyecto }}%" aria-valuenow="60" aria-valuemin="0"
                                         aria-valuemax="100">
-                                        {{ $avance }}% de {{ $ponderacion }}</div>
+                                        {{ number_format($avance_proyecto, 2, '.', '') }}% de
+                                        {{ $ponderacion_proyecto }}</div>
                                 </div>
                             @else
                                 <div class="progress" style="height: 20px; width: 250px;">
                                     <div class="progress-bar bg-success" role="progressbar"
-                                        style="width: {{ $avance }}%" aria-valuenow="60" aria-valuemin="0"
+                                        style="width: {{ $avance_proyecto }}%" aria-valuenow="60" aria-valuemin="0"
                                         aria-valuemax="100">
-                                        {{ $avance }}% de {{ $ponderacion }}</div>
+                                        {{ number_format($avance_proyecto, 2, '.', '') }}% de
+                                        {{ $ponderacion_proyecto }}</div>
                                 </div>
                             @endif
                         </div>
@@ -119,6 +122,8 @@
 
 
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+
+
 
                 </div>
                 <div class="modal-body">
@@ -142,37 +147,51 @@
                                             @endif
 
                                             <div class="row g-3 mb-3">
+                                                @if ($finalizado == 0)
+                                                    <div class="col-sm-12" style="text-align: right">
+                                                        <button class="btn btn-warning" data-bs-toggle="modal"
+                                                            data-bs-target="#proyecto_finalizar">Finalizar</button>
+                                                    </div>
+                                                @endif
 
-                                                <div class="col-sm-12">
-                                                    <label for="depone" class="form-label"
-                                                        style="text-align: left">Nombre</label>
+                                                <div class="col-sm-12" style="text-align: left;">
+                                                    <label for="depone" class="form-label">Nombre</label>
                                                     <input type="text" wire:model.defer="nombre"
                                                         class="form-control">
                                                 </div>
-                                                <div class="col-sm-12">
+                                                <div class="col-sm-12" style="text-align: left;">
                                                     <label for="abc" class="form-label">Descripción</label>
                                                     <textarea class="form-control" wire:model.defer="descripcion" rows="3"></textarea>
                                                 </div>
                                             </div>
-                                            <div class="mb-3">
+                                            <div class="mb-3" style="text-align: left;">
                                                 <input type="hidden" wire:model.defer="id_proyecto">
                                                 <label class="form-label">Estado</label>
                                                 <select class="form-select" wire:model.defer="estado_id"
                                                     aria-label="Default select Project Category">
                                                     @foreach ($estados as $obj)
-                                                        <option value="{{ $obj->id }}">{{ $obj->nombre }}
-                                                        </option>
+                                                        @if (auth()->user()->unidad_id == 1 && $obj->id == 4)
+                                                            <option value="{{ $obj->id }}">CERTIFICACIÓN
+                                                            </option>
+                                                        @else
+                                                            <option value="{{ $obj->id }}">{{ $obj->nombre }}
+                                                            </option>
+                                                        @endif
                                                     @endforeach
                                                 </select>
                                             </div>
-                                            <button type="guardar" wire:click="update()" class="btn btn-primary"
-                                                type="button">Modificar</button>
-                                            <br>
+                                            @if ($finalizado == 0)
+                                                <button type="guardar" wire:click="update()" class="btn btn-primary"
+                                                    type="button">Modificar</button>
+                                                <br>
+                                            @else
+                                                <div role="alert" id="update_message"
+                                                    class="alert alert-success mx-auto">Proyecto finalizado</div>
+                                            @endif
 
 
                                         </div>
-                                        <div role="alert" id="update_message" style="display: none"
-                                            class="alert alert-success mx-auto">Registro modificado correctamente</div>
+
                                     </div>
                                 </div>
                                 <div class="col-lg-8">
@@ -186,9 +205,12 @@
                                                 </div>
                                                 <div class="col-lg-1 col-md-1 col-sm-12 col-xs-12"
                                                     style="text-align: left">
+                                                    @if ($finalizado == 0)
                                                     <button class="btn btn-primary" data-bs-toggle="modal"
-                                                        data-bs-target="#create_actividad"
-                                                        wire:click="create_actividad()">+</button>
+                                                    data-bs-target="#create_actividad"
+                                                    wire:click="create_actividad()">+</button>
+                                                    @endif
+                                                   
                                                 </div>
                                             </div>
 
@@ -298,6 +320,39 @@
         </div>
     </div>
 
+
+    <div id="proyecto_finalizar" wire:ignore.self class="modal fade" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header col">
+                    <h5 class="modal-title  fw-bold" id="createprojectlLabel">Finalizar</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <input type="hidden" wire:model.defer="id_proyecto">
+                <div class="modal-body row">
+                    @if (count($errors) > 0)
+                        <div class="alert alert-danger">
+                            <ul>
+                                @foreach ($errors->all() as $error)
+                                    <li>{{ $error }}</li>
+                                @endforeach
+                            </ul>
+                        </div>
+                    @endif
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                        <div class="mb-3">
+                            <label class="form-label">¿Desea finalizar el proyecto?</label>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button class="btn btn-primary" wire:click="finalizar_proyecto()">Guardar</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <div id="create_actividad" wire:ignore.self class="modal fade" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered modal-lg modal-dialog-scrollable">
@@ -576,7 +631,14 @@
                             <div
                                 class="col-xxl-3 col-xl-6 col-lg-6 col-md-6 mt-xxl-4 mt-xl-4 mt-lg-4 mt-md-4 mt-sm-4 mt-4">
                                 <div class="card border-{{ $estado->color }}">
-                                    <h6 class="fw-bold py-3 mb-0">{{ $estado->nombre }}</h6>
+                                    <h6 class="fw-bold py-3 mb-0">
+                                        @if (auth()->user()->unidad_id == 1 && $estado->id == 4)
+                                            CERTIFICACIÓN
+                                        @else
+                                            {{ $estado->nombre }}
+                                        @endif
+
+                                    </h6>
                                 </div>
                                 <div class="{{ $colors[$estado->id] }} col-lg-12 col-md-12">
                                     <div class="dd" data-plugin="nestable">
@@ -608,7 +670,8 @@
                                                                                     aria-valuenow="60"
                                                                                     aria-valuemin="0"
                                                                                     aria-valuemax="100">
-                                                                                    {{ $proyecto->avance }}%</div>
+                                                                                    {{ number_format($proyecto->avance, 2, '.', '') }}%
+                                                                                </div>
                                                                             </div>
                                                                         @elseif($proyecto->avance < 70)
                                                                             <div class="progress"
@@ -619,7 +682,8 @@
                                                                                     aria-valuenow="60"
                                                                                     aria-valuemin="0"
                                                                                     aria-valuemax="100">
-                                                                                    {{ $proyecto->avance }}%</div>
+                                                                                    {{ number_format($proyecto->avance, 2, '.', '') }}%
+                                                                                </div>
                                                                             </div>
                                                                         @else
                                                                             <div class="progress"
@@ -630,7 +694,8 @@
                                                                                     aria-valuenow="60"
                                                                                     aria-valuemin="0"
                                                                                     aria-valuemax="100">
-                                                                                    {{ $proyecto->avance }}%</div>
+                                                                                    {{ number_format($proyecto->avance, 2, '.', '') }}%
+                                                                                </div>
                                                                             </div>
                                                                         @endif
                                                                     @endif
@@ -703,7 +768,8 @@
                                                                             role="progressbar" style="width: 50%"
                                                                             aria-valuenow="60" aria-valuemin="0"
                                                                             aria-valuemax="100">
-                                                                            {{ $proyecto->avance }}%</div>
+                                                                            {{ number_format($proyecto->avance, 2, '.', '') }}%
+                                                                        </div>
                                                                     </div>
                                                                 @elseif($proyecto->avance < 70)
                                                                     <div class="progress"
@@ -713,7 +779,8 @@
                                                                             style="width: {{ $proyecto->avance }}%"
                                                                             aria-valuenow="60" aria-valuemin="0"
                                                                             aria-valuemax="100">
-                                                                            {{ $proyecto->avance }}%</div>
+                                                                            {{ number_format($proyecto->avance, 2, '.', '') }}%
+                                                                        </div>
                                                                     </div>
                                                                 @else
                                                                     <div class="progress"
@@ -723,7 +790,8 @@
                                                                             style="width: {{ $proyecto->avance }}%"
                                                                             aria-valuenow="60" aria-valuemin="0"
                                                                             aria-valuemax="100">
-                                                                            {{ $proyecto->avance }}%</div>
+                                                                            {{ number_format($proyecto->avance, 2, '.', '') }}%
+                                                                        </div>
                                                                     </div>
                                                                 @endif
                                                             @endif
@@ -784,6 +852,10 @@
             $('#create_actividad').modal('hide');
         });
 
+        window.addEventListener('hide-proyecto', (e) => {
+            $('#proyecto_finalizar').modal('hide');
+        });
+
         window.addEventListener('close-modal-edit-actividad', (e) => {
             $('#edit_actividad').modal('hide');
         });
@@ -799,6 +871,8 @@
         function show_descripcion(descripcion) {
             $('#modal_descripcion').text(descripcion);
         }
+
+       
 
         function show_callapse(id) {
 

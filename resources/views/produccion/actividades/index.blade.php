@@ -9,7 +9,7 @@
 
 
 
-@include('sweet::alert')
+
 <script src="{{ asset('assets/bundles/libscripts.bundle.js') }}"></script>
 <script src="{{ asset('assets/bundles/nestable.bundle.js') }}"></script>
 <script src="{{ asset('js/template.js') }}"></script>
