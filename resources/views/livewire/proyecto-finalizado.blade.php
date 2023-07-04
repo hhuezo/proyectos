@@ -37,29 +37,57 @@
                 </div>
 
                 <div class="row col-lg-12 col-md-12 col-md-12 col-xs-12">
-                    @foreach ($proyectos as $proyecto)
-                        <div class=" taskboard g-3 col-lg-3 col-md-3 col-md-6 col-xs-6">
-                            <li class="dd-item" data-id="2">
-                                <div class="dd-handle" data-bs-toggle="modal" data-bs-target="#exampleModalFullscreen"
-                                    wire:click="edit({{ $proyecto->id }})">
-                                    <div class="task-info d-flex align-items-center justify-content-between">
+                    <div class="card" data-plugin="nestable">
 
-                                    </div>
-                                    <p class="py-2 mb-0"> <strong>{{ $proyecto->nombre }}</strong>
-                                    </p>
-                                    <p class="py-2 mb-0">{{ $proyecto->descripcion }}</p>
-                                    <div class="tikit-info row g-3 align-items-center">
+                        <div class="accordion-collapse collapse show">
+                            <table class="table table-hover align-middle mb-0" style="width:100%">
+                                <thead>
+                                    <tr>
+                                        <th>Id</th>
+                                        <th>Nombre</th>
+                                        <th>Descripción</th>
+                                        <th>Fecha inicio</th>
+                                        <th>Fecha final</th>
+                                        <th>Tiempo desarrollo (Horas)</th>
+                                        <th>Avance</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach ($proyectos as $proyecto)
+                                        <tr style="text-align: left" data-bs-toggle="modal"
+                                            data-bs-target="#exampleModalFullscreen"
+                                            wire:click="edit({{ $proyecto->id }})">
+                                            <td style="width: 5%; text-align: center;">{{ $proyecto->id }}
+                                            </td>
+                                            <td style="width: 15%">{{ $proyecto->nombre }}</td>
+                                            <td>{{ $proyecto->descripcion }}</td>
+                                            @if ($proyecto->fecha_inicio)
+                                                <td>{{ date('d/m/Y', strtotime($proyecto->fecha_inicio)) }}</td>
+                                            @else
+                                                <td></td>
+                                            @endif
 
-                                        <div class="col-sm text-end">
+                                            @if ($proyecto->fecha_final)
+                                                <td>{{ date('d/m/Y', strtotime($proyecto->fecha_final)) }}</td>
+                                            @else
+                                                <td></td>
+                                            @endif
 
-                                            <div class="d-flex align-items-center">
+                                            @if ($proyecto->tiempo)
+                                                <td>{{ intval($proyecto->tiempo/60)  }} horas</td>
+                                            @else
+                                                <td></td>
+                                            @endif
+
+                                            <td style="width: 10%">
                                                 @if ($proyecto->id != 9 && $proyecto->id != 11)
                                                     @if ($proyecto->avance < 50)
                                                         <div class="progress" style="height: 20px; width: 150px;">
                                                             <div class="progress-bar bg-danger" role="progressbar"
                                                                 style="width: 50%" aria-valuenow="60" aria-valuemin="0"
                                                                 aria-valuemax="100">
-                                                                {{ $proyecto->avance }}%</div>
+                                                                {{ number_format($proyecto->avance, 2, '.', '') }}%
+                                                            </div>
                                                         </div>
                                                     @elseif($proyecto->avance < 70)
                                                         <div class="progress" style="height: 20px; width: 150px;">
@@ -67,7 +95,8 @@
                                                                 style="width: {{ $proyecto->avance }}%"
                                                                 aria-valuenow="60" aria-valuemin="0"
                                                                 aria-valuemax="100">
-                                                                {{ $proyecto->avance }}%</div>
+                                                                {{ number_format($proyecto->avance, 2, '.', '') }}%
+                                                            </div>
                                                         </div>
                                                     @else
                                                         <div class="progress" style="height: 20px; width: 150px;">
@@ -75,30 +104,23 @@
                                                                 style="width: {{ $proyecto->avance }}%"
                                                                 aria-valuenow="60" aria-valuemin="0"
                                                                 aria-valuemax="100">
-                                                                {{ $proyecto->avance }}%</div>
+                                                                {{ number_format($proyecto->avance, 2, '.', '') }}%
+                                                            </div>
                                                         </div>
                                                     @endif
                                                 @endif
 
 
-                                            </div>
-                                        </div>
-                                        <div class="col-sm text-end">
-                                            <!--<div class="bg-lightgreen py-1 px-2 rounded-1 d-inline-block fw-bold small-14 mb-0"
-                                                            wire:click="actividad_show({{ $proyecto->id }})">
-                                                            <strong><i class="icofont-eye fa-lg"></i>
-                                                                Actividades</strong>
-                                                        </div>-->
 
-                                        </div>
-                                    </div>
-
-                                </div>
-
-
-                            </li>
+                                            </td>
+                                        </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
                         </div>
-                    @endforeach
+                    </div>
+                    <div>&nbsp;</div>
+
 
                 </div>
 
@@ -119,7 +141,8 @@
         <div class="modal-dialog modal-fullscreen">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title h4" id="exampleModalFullscreenLabel" style="text-align: left;">{{$nombre}} <br>
+                    <h5 class="modal-title h4" id="exampleModalFullscreenLabel" style="text-align: left;">
+                        {{ $nombre }} <br>
 
                         <div class="col-12">
 
@@ -159,85 +182,84 @@
                             <div class="row clearfix g-3">
 
 
-                                    <div class="card mb-3">
+                                <div class="card mb-3">
 
-                                        <div class="card-body">
-                                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 row">
-                                                <div class="col-lg-11 col-md-11 col-sm-12 col-xs-12">
-                                                    <input type="text" class="form-control" placeholder="Buscar"
-                                                        wire:model="busqueda_actividad">
-                                                </div>
-
+                                    <div class="card-body">
+                                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 row">
+                                            <div class="col-lg-11 col-md-11 col-sm-12 col-xs-12">
+                                                <input type="text" class="form-control" placeholder="Buscar"
+                                                    wire:model="busqueda_actividad">
                                             </div>
 
-                                            <br>
-                                            <table id="myProjectTable" class="table table-hover align-middle mb-0"
-                                                style="width:100%">
-                                                <thead>
-                                                    <tr>
-                                                        <th>Id</th>
-                                                        <th>Ticket</th>
-                                                        <th>Usuario</th>
-                                                        <th>Descripción</th>
-                                                        <th>Avance</th>
-                                                        <th>Ponderación</th>
-                                                        <th>Estado</th>
-                                                        <th>Opciones</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                    @if ($actividades)
-                                                        @foreach ($actividades as $actividad)
-                                                            <tr>
-                                                                <td>{{ $actividad->id }}</td>
-                                                                <td>{{ $actividad->numero_ticket }}</td>
-                                                                <td style="text-align: left"><img
-                                                                        src="{{ URL('/') . '/images/xs/avatar3.jpg' }}"
-                                                                        class="avatar sm rounded-circle me-2"
-                                                                        alt="profile-image"><span>
-                                                                        @if ($actividad->usuario)
-                                                                            {{ $actividad->usuario->name }}
-                                                                        @endif
-                                                                    </span>
-                                                                </td>
-                                                                <td style="text-align: left">
-                                                                    {{ $actividad->descripcion }}</td>
-                                                                <td>
-                                                                    <div class="progress" style="height: 20px;">
-                                                                        <div class="progress-bar progress-bar-warning"
-                                                                            role="progressbar" aria-valuenow="40"
-                                                                            aria-valuemin="0" aria-valuemax="100"
-                                                                            style="width: 100%;">
-                                                                            {{ $actividad->porcentaje }}%
-                                                                        </div>
-                                                                    </div>
-                                                                </td>
-                                                                <td>{{ $actividad->ponderacion }}</td>
-                                                                <td><span class="badge bg-info">
-                                                                        @if ($actividad->estado_id)
-                                                                            {{ $actividad->estado->nombre }}
-                                                                        @endif
-                                                                    </span>
-
-                                                                </td>
-                                                                <td>
-                                                                    <div class="btn-group" role="group"
-                                                                        aria-label="Basic outlined example">
-                                                                        <button type="button"
-                                                                            class="btn btn-success"><i
-                                                                                class="icofont-edit fa-lg"
-                                                                                data-bs-toggle="modal"
-                                                                                wire:click="edit_actividad({{ $actividad->id }})"
-                                                                                data-bs-target="#edit_actividad"></i></button>
-                                                                    </div>
-                                                                </td>
-                                                            </tr>
-                                                        @endforeach
-                                                    @endif
-                                                </tbody>
-                                            </table>
                                         </div>
+
+                                        <br>
+                                        <table id="myProjectTable" class="table table-hover align-middle mb-0"
+                                            style="width:100%">
+                                            <thead>
+                                                <tr>
+                                                    <th>Id</th>
+                                                    <th>Ticket</th>
+                                                    <th>Usuario</th>
+                                                    <th>Descripción</th>
+                                                    <th>Avance</th>
+                                                    <th>Ponderación</th>
+                                                    <th>Estado</th>
+                                                    <th>Opciones</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @if ($actividades)
+                                                    @foreach ($actividades as $actividad)
+                                                        <tr>
+                                                            <td>{{ $actividad->id }}</td>
+                                                            <td>{{ $actividad->numero_ticket }}</td>
+                                                            <td style="text-align: left"><img
+                                                                    src="{{ URL('/') . '/images/xs/avatar3.jpg' }}"
+                                                                    class="avatar sm rounded-circle me-2"
+                                                                    alt="profile-image"><span>
+                                                                    @if ($actividad->usuario)
+                                                                        {{ $actividad->usuario->name }}
+                                                                    @endif
+                                                                </span>
+                                                            </td>
+                                                            <td style="text-align: left">
+                                                                {{ $actividad->descripcion }}</td>
+                                                            <td>
+                                                                <div class="progress" style="height: 20px;">
+                                                                    <div class="progress-bar progress-bar-warning"
+                                                                        role="progressbar" aria-valuenow="40"
+                                                                        aria-valuemin="0" aria-valuemax="100"
+                                                                        style="width: 100%;">
+                                                                        {{ $actividad->porcentaje }}%
+                                                                    </div>
+                                                                </div>
+                                                            </td>
+                                                            <td>{{ $actividad->ponderacion }}</td>
+                                                            <td><span class="badge bg-info">
+                                                                    @if ($actividad->estado_id)
+                                                                        {{ $actividad->estado->nombre }}
+                                                                    @endif
+                                                                </span>
+
+                                                            </td>
+                                                            <td>
+                                                                <div class="btn-group" role="group"
+                                                                    aria-label="Basic outlined example">
+                                                                    <button type="button" class="btn btn-success"><i
+                                                                            class="icofont-edit fa-lg"
+                                                                            data-bs-toggle="modal"
+                                                                            wire:click="edit_actividad({{ $actividad->id }})"
+                                                                            data-bs-target="#edit_actividad"></i></button>
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                    @endforeach
+                                                @endif
+                                            </tbody>
+                                        </table>
                                     </div>
+                                </div>
 
                             </div><!-- Row End -->
                         </div>

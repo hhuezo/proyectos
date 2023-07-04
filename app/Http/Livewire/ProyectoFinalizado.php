@@ -7,6 +7,7 @@ use Livewire\Component;
 use App\Estado;
 use App\Proyecto;
 use App\Unidad;
+use Illuminate\Support\Facades\DB;
 
 class ProyectoFinalizado extends Component
 {
@@ -29,6 +30,7 @@ class ProyectoFinalizado extends Component
     {
         $estados =  Estado::where('id', '<>', 7)->where('id', '>', 1)->get();
 
+
         $this->proyectos = Proyecto::join('estados', 'proyectos.estado_id', '=', 'estados.id')
             ->select(
                 'proyectos.id',
@@ -39,13 +41,22 @@ class ProyectoFinalizado extends Component
                 'proyectos.destacado',
                 'proyectos.avance',
                 'proyectos.finalizado',
-                'proyectos.estado_id'
+                'proyectos.estado_id',
+                DB::raw('(select min(fecha_asignacion) from actividades where actividades.proyecto_id = proyectos.id) as fecha_inicio, 
+                (select max(fecha_liberacion) from actividades where actividades.proyecto_id = proyectos.id) as fecha_final,
+                (select ifnull(sum(movimiento_actividades.tiempo),0) from movimiento_actividades inner join actividades on actividades.id = movimiento_actividades.actividad_id
+                where actividades.proyecto_id = proyectos.id) + 
+                (select ifnull(sum(movimiento_actividades.tiempo_minutos),0) from movimiento_actividades inner join actividades on actividades.id = movimiento_actividades.actividad_id
+                where actividades.proyecto_id = proyectos.id
+                ) as tiempo')
             )
             ->where('proyectos.nombre', 'LIKE', '%' . $this->busqueda . '%')
             ->where('proyectos.unidad_id', '=', $this->id_unidad)
             ->where('proyectos.finalizado', '=', 1)
             ->orderBy('proyectos.id', 'desc')
             ->get();
+
+            //dd($this->proyectos);
 
             if ($this->id_proyecto != 0) {
                 $this->actividades = Actividad::where('proyecto_id', '=', $this->id_proyecto)
