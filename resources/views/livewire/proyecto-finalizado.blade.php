@@ -38,7 +38,6 @@
 
                 <div class="row col-lg-12 col-md-12 col-md-12 col-xs-12">
                     <div class="card" data-plugin="nestable">
-
                         <div class="accordion-collapse collapse show">
                             <table class="table table-hover align-middle mb-0" style="width:100%">
                                 <thead>
@@ -46,8 +45,26 @@
                                         <th>Id</th>
                                         <th>Nombre</th>
                                         <th>Descripción</th>
-                                        <th>Fecha inicio</th>
-                                        <th>Fecha final</th>
+                                        <th wire:click="orden_fecha_inicio();">Fecha inicio
+                                            @if ($order_fecha_inicio == 1)
+                                                <i class="fa fa-arrow-circle-down fa-2x"></i>
+                                            @elseif ($order_fecha_inicio == 2)
+                                                <i class="fa fa-arrow-circle-up fa-2x"></i>
+                                            @else
+                                                <i class="fa fa-arrow-circle-o-down fa-2x"></i>
+                                            @endif
+                                        </th>
+                                        <th wire:click="orden_fecha_final();">Fecha final 
+                                            @if ($order_fecha_final == 1)
+                                                <i class="fa fa-arrow-circle-down fa-2x"></i>
+                                            @elseif ($order_fecha_final == 2)
+                                                <i class="fa fa-arrow-circle-up fa-2x"></i>
+                                            @else
+                                                <i class="fa fa-arrow-circle-o-down fa-2x"></i>
+                                            @endif
+
+
+                                        </th>
                                         <th>Tiempo desarrollo (Horas)</th>
                                         <th>Avance</th>
                                     </tr>
@@ -55,8 +72,7 @@
                                 <tbody>
                                     @foreach ($proyectos as $proyecto)
                                         <tr style="text-align: left" data-bs-toggle="modal"
-                                            data-bs-target="#exampleModalFullscreen"
-                                            wire:click="edit({{ $proyecto->id }})">
+                                            data-bs-target="#exampleModalFullscreen" wire:click="edit({{ $proyecto->id }})">
                                             <td style="width: 5%; text-align: center;">{{ $proyecto->id }}
                                             </td>
                                             <td style="width: 15%">{{ $proyecto->nombre }}</td>
@@ -74,7 +90,7 @@
                                             @endif
 
                                             @if ($proyecto->tiempo)
-                                                <td>{{ intval($proyecto->tiempo/60)  }} horas</td>
+                                                <td>{{ intval($proyecto->tiempo / 60) }} horas</td>
                                             @else
                                                 <td></td>
                                             @endif
@@ -275,4 +291,126 @@
             </div>
         </div>
     </div>
+
+
+
+
+
+    <div id="edit_actividad" wire:ignore.self class="modal fade" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header col">
+                    <h5 class="modal-title  fw-bold" id="createprojectlLabel">Actividad</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <input type="hidden" wire:model.defer="id_proyecto">
+                <div class="modal-body row">
+                    @if (count($errors) > 0)
+                        <div class="alert alert-danger">
+                            <ul>
+                                @foreach ($errors->all() as $error)
+                                    <li>{{ $error }}</li>
+                                @endforeach
+                            </ul>
+                        </div>
+                    @endif
+                    <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+                        <input type="hidden" wire:model.defer="id_actividad">
+                        <div class="mb-3">
+                            <label class="form-label">Ticket</label>
+                            <input type="number" wire:model.defer="numero_ticket" class="form-control">
+                        </div>
+
+                    </div>
+
+                    <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+                        <div class="mb-3">
+                            <label class="form-label">Ponderacion</label>
+                            <input type="number" step="0.01" wire:model.defer="ponderacion"
+                                class="form-control">
+                        </div>
+                    </div>
+
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                        <div class="mb-3">
+                            <label class="form-label">Descripcion</label>
+                            <textarea class="form-control" wire:model.defer="descripcion_actividad"></textarea>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+                        <div class="mb-3">
+                            <label class="form-label">Fecha inicio</label>
+                            <input type="date" wire:model.defer="fecha_inicio" class="form-control">
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Categoria</label>
+                            <select wire:model.defer="categoria_id" class="form-control select2">
+                                <option value="">Seleccione</option>
+                                @foreach ($categorias as $obj)
+                                    <option value="{{ $obj->id }}">{{ $obj->nombre }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Estado</label>
+                            <select class="form-select" wire:model.defer="estado_actividad_id"
+                                aria-label="Default select Project Category">
+                                @foreach ($estados as $obj)
+                                    <option value="{{ $obj->id }}">{{ $obj->nombre }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Prioridad</label>
+                            <select class="form-select" wire:model.defer="prioridad_id"
+                                aria-label="Default select Project Category">
+                                @foreach ($prioridades as $obj)
+                                    <option value="{{ $obj->id }}">{{ $obj->nombre }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+
+                    </div>
+
+                    <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+                        <div class="mb-3">
+                            <label class="form-label">Fecha final</label>
+                            <input type="date" wire:model.defer="fecha_fin" class="form-control">
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Forma</label>
+                            <input type="text" wire:model.defer="forma" class="form-control">
+                        </div>
+
+
+
+
+                        <div class="mb-3">
+                            <label class="form-label">Usuario</label>
+                            <select class="form-select" wire:model.defer="users_id"
+                                aria-label="Default select Project Category">
+                                <option value="">Seleccione</option>
+                                @foreach ($usuarios as $obj)
+                                    <option value="{{ $obj->id }}">{{ $obj->name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+
+
+                </div>
+                <div class="modal-footer">
+                    <!--<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button class="btn btn-primary" wire:click="update_actividad()">Guardar</button>-->
+                </div>
+            </div>
+        </div>
+    </div>
+
+
 </div>
