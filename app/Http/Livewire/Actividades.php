@@ -10,6 +10,7 @@ use App\Proyecto;
 use Livewire\Component;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
+use Exception;
 
 class Actividades extends Component
 {
@@ -83,14 +84,15 @@ class Actividades extends Component
             ->orderBy('actividades.id', 'desc')->get();
 
         $categorias = CategoriaTicket::where('categoria_tickets.unidad_id', '=', auth()->user()->unidad_id)->get();
-        $prioridades = PrioridadTicket::get();  
-        $this->catalogo_proyectos = Proyecto::where('unidad_id', '=', auth()->user()->unidad_id)->get();    
+        $prioridades = PrioridadTicket::get();
+        $this->catalogo_proyectos = Proyecto::where('unidad_id', '=', auth()->user()->unidad_id)->get();
 
 
-        return view('livewire.actividades', compact('actividades', 'categorias', 'prioridades' ));
+        return view('livewire.actividades', compact('actividades', 'categorias', 'prioridades'));
     }
 
-    public function hydrate() {
+    public function hydrate()
+    {
         $this->emit('select2');
     }
 
@@ -136,6 +138,7 @@ class Actividades extends Component
             'prioridad_id.required' => 'La prioridad es requerida',
             'fecha_fin.required' => 'La fecha final es requerida',
             'forma.required' => 'La forma final es requerida',
+            'id_proyecto.required' => 'El proyecto es requerido',
         ];
         $validate = $this->validate([
             'numero_ticket' => 'required',
@@ -146,6 +149,7 @@ class Actividades extends Component
             'prioridad_id' => 'required',
             'fecha_fin' => 'required',
             'forma' => 'required',
+            'id_proyecto' => 'required',
         ], $messages);
 
 
@@ -303,10 +307,13 @@ class Actividades extends Component
 
     public function calculo_porcentaje()
     {
-        if ($this->porcentaje_diario) {
-            $this->porcentaje_actual = $this->porcentaje_anterior + $this->porcentaje_diario;
-        } else {
-            $this->porcentaje_actual = $this->porcentaje_anterior;
+        try {
+            if ($this->porcentaje_diario) {
+                $this->porcentaje_actual = $this->porcentaje_anterior + $this->porcentaje_diario;
+            } else {
+                $this->porcentaje_actual = $this->porcentaje_anterior;
+            }
+        } catch (Exception $e) {
         }
     }
 
@@ -337,7 +344,8 @@ class Actividades extends Component
             $time = Carbon::now('America/El_Salvador');
             $actividad->fecha_liberacion = $time->toDateTimeString();
         }
-        $actividad->save();
+        $actividad->update();
+
 
         if ($this->porcentaje_actual < 100) {
             $actividades = Actividad::join('movimiento_actividades', 'actividades.id', '=', 'movimiento_actividades.actividad_id')

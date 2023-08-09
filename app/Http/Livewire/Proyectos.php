@@ -127,9 +127,9 @@ class Proyectos extends Component
 
     public function edit($id)
     {
-        $proyecto = Proyecto::select('id', 'nombre', 'descripcion', 'estado_id', \DB::raw('(select ifnull(sum((act.porcentaje/100) * act.ponderacion),0) from actividades act where act.proyecto_id = proyectos.id) as porcentaje'))
+        $proyecto = Proyecto::select('id', 'nombre', 'descripcion', 'estado_id', \DB::raw('(select ifnull(sum((act.porcentaje/100) * act.ponderacion),0) from actividades act where act.proyecto_id = proyectos.id and act.estado_id <> 7) as porcentaje'))
             ->findOrFail($id);
-        $this->ponderacion_proyecto = Actividad::where('proyecto_id', '=', $id)->sum('ponderacion');
+        $this->ponderacion_proyecto = Actividad::where('proyecto_id', '=', $id)->where('estado_id', '<>', 7)->sum('ponderacion');
         $this->id_proyecto = $proyecto->id;
         $this->nombre = $proyecto->nombre;
         $this->descripcion = $proyecto->descripcion;

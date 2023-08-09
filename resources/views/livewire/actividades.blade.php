@@ -350,7 +350,7 @@
 
         </div>
 
-        |
+        
         <div id="edit_actividad" wire:ignore.self class="modal" tabindex="-1" role="dialog" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered modal-lg modal-dialog-scrollable">
                 <form wire:submit.prevent="edit_actividad()">
@@ -440,8 +440,8 @@
 
                         <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
                             <div class="mb-3">
-                                <label class="form-label">Proyectosss</label>
-                                    <select class="form-control select2">
+                                <label class="form-label">Proyectos</label>
+                                    <select class="form-control select2" wire:model="id_proyecto">
                                         <option value="">Seleccione</option>
                                         @if ($catalogo_proyectos)
                                             @foreach ($catalogo_proyectos as $obj)

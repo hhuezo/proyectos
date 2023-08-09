@@ -19,8 +19,8 @@ class ProyectoFinalizado extends Component
 
     public $id_actividad, $numero_ticket = 0, $ponderacion = 0.01, $descripcion_actividad,
         $fecha_inicio, $categoria_id, $estado_actividad_id, $prioridad_id, $fecha_fin, $forma = "NO APLICA", $users_id, $avance,
-         $order_fecha_inicio = 0 /* 0 = sin ordenamiento, 1 = ascendente, 2 descendente */, 
-         $order_fecha_final = 0 /* 0 = sin ordenamiento, 1 = ascendente, 2 descendente */;
+        $order_fecha_inicio = 0 /* 0 = sin ordenamiento, 1 = ascendente, 2 descendente */,
+        $order_fecha_final = 0 /* 0 = sin ordenamiento, 1 = ascendente, 2 descendente */;
 
 
     public function mount()
@@ -82,7 +82,8 @@ class ProyectoFinalizado extends Component
                 where actividades.proyecto_id = proyectos.id) + 
                 (select ifnull(sum(movimiento_actividades.tiempo_minutos),0) from movimiento_actividades inner join actividades on actividades.id = movimiento_actividades.actividad_id
                 where actividades.proyecto_id = proyectos.id
-                ) as tiempo'))
+                ) as tiempo')
+                )
                 ->where('proyectos.nombre', 'LIKE', '%' . $this->busqueda . '%')
                 ->where('proyectos.unidad_id', '=', $this->id_unidad)
                 ->where('proyectos.finalizado', '=', 1)
@@ -236,8 +237,8 @@ class ProyectoFinalizado extends Component
     }
 
     public function edit($id)
-    {        
-$proyecto = Proyecto::findOrFail($id);
+    {
+        $proyecto = Proyecto::findOrFail($id);
         $this->id_proyecto = $proyecto->id;
         $this->nombre = $proyecto->nombre;
         $this->descripcion = $proyecto->descripcion;
@@ -245,6 +246,7 @@ $proyecto = Proyecto::findOrFail($id);
         $this->busqueda_actividad = "";
         $this->ponderacion = Actividad::where('proyecto_id', '=', $id)->sum('ponderacion');
         $this->avance = $proyecto->avance;
+        $this->actividades = Actividad::where('proyecto_id', '=', $id)->get();
     }
 
 
@@ -279,14 +281,13 @@ $proyecto = Proyecto::findOrFail($id);
 
     public function orden_fecha_inicio()
     {
-        
+
         if ($this->order_fecha_inicio == 2 || $this->order_fecha_inicio == 0) {
             $this->order_fecha_inicio = 1;
         } else if ($this->order_fecha_inicio == 1) {
             $this->order_fecha_inicio = 2;
         }
         $this->order_fecha_final = 0;
-
     }
 
     public function orden_fecha_final()

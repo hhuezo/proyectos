@@ -126,6 +126,14 @@
                 </li>
                 @endif
 
+                @if (auth()->user()->rol_id == 1 || auth()->user()->rol_id == 4)
+                <li class="collapsed">
+                    <a class="m-link {{ Request::segment(2) == 'project' ? 'active' : '' }}"
+                        href="{{ url('actividades/create') }}">
+                        <i class="icofont-check-circled"></i><span>Actividades en proceso</span></a>
+                </li>
+                @endif
+
 
                 @if (auth()->user()->rol_id == 1)
                 <li class="collapsed">

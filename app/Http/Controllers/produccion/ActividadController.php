@@ -2,21 +2,43 @@
 
 namespace App\Http\Controllers\produccion;
 
+
 use App\Http\Controllers\Controller;
+use App\MovimientoActividad;
 use Illuminate\Http\Request;
+use Carbon\Carbon;
+
 
 class ActividadController extends Controller
 {
 
     public function __construct()
     {
-          $this->middleware('auth');
+        $this->middleware('auth');
     }
     public function index()
     {
         return view('produccion.actividades.index');
     }
 
+
+    public function actividades_tiempo(Request $request)
+    {
+        if ($request->get('fecha')) {
+            $now = Carbon::parse($request->get('fecha'));
+        } else {
+            $now = Carbon::now();
+        }
+
+
+        $actividades = MovimientoActividad::join('actividades', 'actividades.Id', '=', 'movimiento_actividades.actividad_id')
+            ->whereBetween('movimiento_actividades.fecha', [$now->format('Y-m-d 00:00:00'), $now->format('Y-m-d 23:00:00')])
+            ->where('movimiento_actividades.tiempo_minutos', '>', 0)
+            ->where('actividades.users_id', '=', auth()->user()->id)
+            ->get();
+
+        return view('produccion.actividades.actividades_tiempo', ["actividades" => $actividades]);
+    }
     /**
      * Show the form for creating a new resource.
      *
@@ -24,7 +46,7 @@ class ActividadController extends Controller
      */
     public function create()
     {
-        //
+        return view('produccion.actividades.actual');
     }
 
     /**
