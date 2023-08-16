@@ -26,8 +26,10 @@ class ActividadController extends Controller
     {
         if ($request->get('fecha')) {
             $now = Carbon::parse($request->get('fecha'));
+            $fecha = $request->get('fecha');
         } else {
             $now = Carbon::now();
+            $fecha = $now->format('Y-m-d');
         }
 
 
@@ -37,7 +39,7 @@ class ActividadController extends Controller
             ->where('actividades.users_id', '=', auth()->user()->id)
             ->get();
 
-        return view('produccion.actividades.actividades_tiempo', ["actividades" => $actividades]);
+        return view('produccion.actividades.actividades_tiempo', ["actividades" => $actividades, 'fecha' => $fecha]);
     }
     /**
      * Show the form for creating a new resource.
