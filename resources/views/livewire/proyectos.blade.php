@@ -1,93 +1,15 @@
 <div style="text-align: center">
-    <style>
-        .dd-handle:hover {
-            transform: scale(1.05);
-            box-shadow: 0 10px 20px rgba(0, 0, 0, .12), 0 4px 8px rgba(0, 0, 0, .06);
-        }
-
-        .contenedor {
-            style="width: 90px;
-        height: 240px;
-        position: absolute;
-        right: 0px;
-        bottom: 0px;"
-        }
-
-        .botonF1 {
-            width: 60px;
-            height: 60px;
-            border-radius: 100%;
-            background: #484c7f;
-            right: 0;
-            bottom: 0;
-            position: absolute;
-            margin-right: 16px;
-            margin-bottom: 16px;
-            border: none;
-            outline: none;
-            color: #FFF;
-            font-size: 36px;
-            box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
-            transition: .3s;
-        }
-    </style>
-
-    <div id="create_proyecto" wire:ignore.self tabindex="-1" class="modal fade" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered modal-md modal-dialog-scrollable">
-            <div class="modal-content">
-                <div class="modal-header col">
-                    <h5 class="modal-title  fw-bold" id="createprojectlLabel"> Nuevo proyecto
-                    </h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-
-                <div class="modal-body">
-                    @if (count($errors) > 0)
-                        <div class="alert alert-danger">
-                            <ul>
-                                @foreach ($errors->all() as $error)
-                                    <li>{{ $error }}</li>
-                                @endforeach
-                            </ul>
-                        </div>
-                    @endif
-                    <div class="mb-3">
-                        <label class="form-label">Estado</label>
-                        <select class="form-select" wire:model.defer="estado_id"
-                            aria-label="Default select Project Category">
-                            @foreach ($estados as $obj)
-                                <option value="{{ $obj->id }}">{{ $obj->nombre }}</option>
-                            @endforeach
-                        </select>
-                    </div>
-
-                    <div class="mb-3">
-                        <label class="form-label">Nombre</label>
-                        <input type="text" wire:model.defer="nombre" name="nombre" class="form-control">
-                    </div>
-
-
-                    <div class="mb-3">
-                        <label for="exampleFormControlTextarea786" class="form-label">Descripción</label>
-                        <textarea class="form-control" wire:model.defer="descripcion" rows="3"></textarea>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                    <button class="btn btn-primary" wire:click="store()">Create</button>
-                </div>
-            </div>
-        </div>
-    </div>
 
 
 
     <!-- Modal Fullscreen -->
-    <div class="modal fade" wire:ignore.self id="exampleModalFullscreen" tabindex="-1"
-        aria-labelledby="exampleModalFullscreenLabel" aria-hidden="true" style="display: none;">
+    <div class="modal fade" wire:ignore.self id="exampleModalFullscreen">
         <div class="modal-dialog modal-fullscreen">
+
             <div class="modal-content">
+
                 <div class="modal-header">
+
                     <h5 class="modal-title h4" id="exampleModalFullscreenLabel" style="text-align: left;">
                         {{ $nombre }} <br>
 
@@ -126,6 +48,9 @@
 
 
                 </div>
+
+
+
                 <div class="modal-body">
                     <div class="tab-content">
 
@@ -134,64 +59,76 @@
                             <div class="row clearfix g-3">
                                 <div class="col-lg-4">
                                     <div class="card">
-
-                                        <div class="card-body">
-                                            @if (count($errors) > 0)
-                                                <div class="alert alert-danger" id="error-proyecto">
-                                                    <ul>
-                                                        @foreach ($errors->all() as $error)
-                                                            <li>{{ $error }}</li>
-                                                        @endforeach
-                                                    </ul>
-                                                </div>
-                                            @endif
-
-                                            <div class="row g-3 mb-3">
-                                                @if ($finalizado == 0)
-                                                    <div class="col-sm-12" style="text-align: right">
-                                                        <button class="btn btn-warning" data-bs-toggle="modal"
-                                                            data-bs-target="#proyecto_finalizar">Finalizar</button>
+                                        <form wire:submit.prevent="update()">
+                                            <div class="card-body">
+                                                @if (count($errors) > 0)
+                                                    <div class="alert alert-danger" id="error-proyecto">
+                                                        <ul>
+                                                            @foreach ($errors->all() as $error)
+                                                                <li>{{ $error }}</li>
+                                                            @endforeach
+                                                        </ul>
                                                     </div>
                                                 @endif
 
-                                                <div class="col-sm-12" style="text-align: left;">
-                                                    <label for="depone" class="form-label">Nombre</label>
-                                                    <input type="text" wire:model.defer="nombre"
-                                                        class="form-control">
+                                                <div class="row g-3 mb-3">
+                                                    @if ($finalizado == 0)
+                                                        <div class="col-sm-12" style="text-align: right">
+                                                            <button class="btn btn-warning" data-bs-toggle="modal"
+                                                                data-bs-target="#proyecto_finalizar">Finalizar</button>
+                                                        </div>
+                                                    @endif
+
+                                                    <div class="col-sm-12" style="text-align: left;">
+                                                        <label for="depone" class="form-label">Nombre</label>
+                                                        <input type="text" wire:model.defer="nombre"
+                                                            class="form-control">
+                                                    </div>
+                                                    <div class="col-sm-12" style="text-align: left;">
+                                                        <label for="abc" class="form-label">Descripción</label>
+                                                        <textarea class="form-control" wire:model.defer="descripcion" rows="3"></textarea>
+                                                    </div>
+
+                                                    <div class="col-sm-12" style="text-align: left;">
+                                                        <label for="depone" class="form-label">Prioridad</label>
+                                                        <input type="text" wire:model.defer="prioridad"
+                                                            class="form-control">
+                                                    </div>
                                                 </div>
-                                                <div class="col-sm-12" style="text-align: left;">
-                                                    <label for="abc" class="form-label">Descripción</label>
-                                                    <textarea class="form-control" wire:model.defer="descripcion" rows="3"></textarea>
+                                                <div class="mb-3" style="text-align: left;">
+                                                    <input type="hidden" wire:model.defer="id_proyecto">
+                                                    <label class="form-label">Estado</label>
+                                                    <select class="form-select" wire:model.defer="estado_id"
+                                                        aria-label="Default select Project Category">
+                                                        @foreach ($estados as $obj)
+                                                            @if (auth()->user()->unidad_id == 1 && $obj->id == 4)
+                                                                <option value="{{ $obj->id }}">CERTIFICACIÓN
+                                                                </option>
+                                                            @else
+                                                                <option value="{{ $obj->id }}">
+                                                                    {{ $obj->nombre }}
+                                                                </option>
+                                                            @endif
+                                                        @endforeach
+                                                    </select>
                                                 </div>
+                                                @if ($finalizado == 0)
+                                                    
+                                                    <button type="submit" class="btn btn-primary"
+                                                        type="button">Modificar</button>
+                                                    <br>
+                                                    @if ($modificado == 1)
+                                                    <br>
+                                                    <div role="alert" id="update_message"  class="alert alert-success mx-auto">Proyecto modificado</div>
+                                                    @endif
+                                                @else
+                                                    <div role="alert" id="update_message"
+                                                        class="alert alert-success mx-auto">Proyecto finalizado</div>
+                                                @endif
+
+
                                             </div>
-                                            <div class="mb-3" style="text-align: left;">
-                                                <input type="hidden" wire:model.defer="id_proyecto">
-                                                <label class="form-label">Estado</label>
-                                                <select class="form-select" wire:model.defer="estado_id"
-                                                    aria-label="Default select Project Category">
-                                                    @foreach ($estados as $obj)
-                                                        @if (auth()->user()->unidad_id == 1 && $obj->id == 4)
-                                                            <option value="{{ $obj->id }}">CERTIFICACIÓN
-                                                            </option>
-                                                        @else
-                                                            <option value="{{ $obj->id }}">{{ $obj->nombre }}
-                                                            </option>
-                                                        @endif
-                                                    @endforeach
-                                                </select>
-                                            </div>
-                                            @if ($finalizado == 0)
-                                                <button type="guardar" wire:click="update()" class="btn btn-primary"
-                                                    type="button">Modificar</button>
-                                                <br>
-                                            @else
-                                                <div role="alert" id="update_message"
-                                                    class="alert alert-success mx-auto">Proyecto finalizado</div>
-                                            @endif
-
-
-                                        </div>
-
+                                        </form>
                                     </div>
                                 </div>
                                 <div class="col-lg-8">
@@ -206,11 +143,11 @@
                                                 <div class="col-lg-1 col-md-1 col-sm-12 col-xs-12"
                                                     style="text-align: left">
                                                     @if ($finalizado == 0)
-                                                    <button class="btn btn-primary" data-bs-toggle="modal"
-                                                    data-bs-target="#create_actividad"
-                                                    wire:click="create_actividad()">+</button>
+                                                        <button class="btn btn-primary" data-bs-toggle="modal"
+                                                            data-bs-target="#create_actividad"
+                                                            wire:click="create_actividad()">+</button>
                                                     @endif
-                                                   
+
                                                 </div>
                                             </div>
 
@@ -302,288 +239,16 @@
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                 </div>
-            </div>
-        </div>
-    </div>
 
-    <div id="modal_actividad" wire:ignore.self class="modal fade" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered modal-lg modal-dialog-scrollable">
-            <div class="modal-content">
-                <div class="modal-header col">
-                    <h5 class="modal-title  fw-bold" id="createprojectlLabel">Descripción</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body row" style="text-align: left;">
-                    <span id="modal_descripcion"></span>
-                </div>
+
+
+
             </div>
         </div>
     </div>
 
 
-    <div id="proyecto_finalizar" wire:ignore.self class="modal fade" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered modal-lg modal-dialog-scrollable">
-            <div class="modal-content">
-                <div class="modal-header col">
-                    <h5 class="modal-title  fw-bold" id="createprojectlLabel">Finalizar</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <input type="hidden" wire:model.defer="id_proyecto">
-                <div class="modal-body row">
-                    @if (count($errors) > 0)
-                        <div class="alert alert-danger">
-                            <ul>
-                                @foreach ($errors->all() as $error)
-                                    <li>{{ $error }}</li>
-                                @endforeach
-                            </ul>
-                        </div>
-                    @endif
-                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                        <div class="mb-3">
-                            <label class="form-label">¿Desea finalizar el proyecto?</label>
-                        </div>
 
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                    <button class="btn btn-primary" wire:click="finalizar_proyecto()">Guardar</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div id="create_actividad" wire:ignore.self class="modal fade" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered modal-lg modal-dialog-scrollable">
-            <div class="modal-content">
-                <div class="modal-header col">
-                    <h5 class="modal-title  fw-bold" id="createprojectlLabel"> Nueva actividad</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <input type="hidden" wire:model.defer="id_proyecto">
-                <div class="modal-body row">
-                    @if (count($errors) > 0)
-                        <div class="alert alert-danger">
-                            <ul>
-                                @foreach ($errors->all() as $error)
-                                    <li>{{ $error }}</li>
-                                @endforeach
-                            </ul>
-                        </div>
-                    @endif
-                    <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
-                        <div class="mb-3">
-                            <label class="form-label">Ticket</label>
-                            <input type="number" wire:model.defer="numero_ticket" class="form-control">
-                        </div>
-
-                    </div>
-
-                    <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
-                        <div class="mb-3">
-                            <label class="form-label">Ponderacion</label>
-                            <input type="number" step="0.01" wire:model.defer="ponderacion"
-                                class="form-control">
-                        </div>
-                    </div>
-
-                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                        <div class="mb-3">
-                            <label class="form-label">Descripcion</label>
-                            <textarea class="form-control" wire:model.defer="descripcion_actividad"></textarea>
-                        </div>
-                    </div>
-
-                    <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
-                        <div class="mb-3">
-                            <label class="form-label">Fecha inicio</label>
-                            <input type="date" wire:model.defer="fecha_inicio" class="form-control">
-                        </div>
-
-                        <div class="mb-3">
-                            <label class="form-label">Categoria</label>
-                            <select wire:model.defer="categoria_id" class="form-control select2">
-                                <option value="">Seleccione</option>
-                                @foreach ($categorias as $obj)
-                                    <option value="{{ $obj->id }}">{{ $obj->nombre }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-
-                        <div class="mb-3">
-                            <label class="form-label">Estado</label>
-                            <select class="form-select" wire:model.defer="estado_actividad_id"
-                                aria-label="Default select Project Category">
-                                @foreach ($estados_actividad as $obj)
-                                    <option value="{{ $obj->id }}">{{ $obj->nombre }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-
-                        <div class="mb-3">
-                            <label class="form-label">Prioridad</label>
-                            <select class="form-select" wire:model.defer="prioridad_id"
-                                aria-label="Default select Project Category">
-                                @foreach ($prioridades as $obj)
-                                    <option value="{{ $obj->id }}">{{ $obj->nombre }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-
-                    </div>
-
-                    <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
-                        <div class="mb-3">
-                            <label class="form-label">Fecha final</label>
-                            <input type="date" wire:model.defer="fecha_fin" class="form-control">
-                        </div>
-
-                        <div class="mb-3">
-                            <label class="form-label">Forma</label>
-                            <input type="text" wire:model.defer="forma" class="form-control">
-                        </div>
-
-
-
-
-                        <div class="mb-3">
-                            <label class="form-label">Usuario</label>
-                            <select class="form-select" wire:model.defer="users_id"
-                                aria-label="Default select Project Category">
-                                <option value="">Seleccione</option>
-                                @foreach ($usuarios as $obj)
-                                    <option value="{{ $obj->id }}">{{ $obj->name }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                    </div>
-
-
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                    <button class="btn btn-primary" wire:click="store_actividad()">Guardar</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div id="edit_actividad" wire:ignore.self class="modal fade" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered modal-lg modal-dialog-scrollable">
-            <div class="modal-content">
-                <div class="modal-header col">
-                    <h5 class="modal-title  fw-bold" id="createprojectlLabel">Modificar actividad</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <input type="hidden" wire:model.defer="id_proyecto">
-                <div class="modal-body row">
-                    @if (count($errors) > 0)
-                        <div class="alert alert-danger">
-                            <ul>
-                                @foreach ($errors->all() as $error)
-                                    <li>{{ $error }}</li>
-                                @endforeach
-                            </ul>
-                        </div>
-                    @endif
-                    <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
-                        <input type="hidden" wire:model.defer="id_actividad">
-                        <div class="mb-3">
-                            <label class="form-label">Ticket</label>
-                            <input type="number" wire:model.defer="numero_ticket" class="form-control">
-                        </div>
-
-                    </div>
-
-                    <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
-                        <div class="mb-3">
-                            <label class="form-label">Ponderacion</label>
-                            <input type="number" step="0.01" wire:model.defer="ponderacion"
-                                class="form-control">
-                        </div>
-                    </div>
-
-                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                        <div class="mb-3">
-                            <label class="form-label">Descripcion</label>
-                            <textarea class="form-control" wire:model.defer="descripcion_actividad"></textarea>
-                        </div>
-                    </div>
-
-                    <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
-                        <div class="mb-3">
-                            <label class="form-label">Fecha inicio</label>
-                            <input type="date" wire:model.defer="fecha_inicio" class="form-control">
-                        </div>
-
-                        <div class="mb-3">
-                            <label class="form-label">Categoria</label>
-                            <select wire:model.defer="categoria_id" class="form-control select2">
-                                <option value="">Seleccione</option>
-                                @foreach ($categorias as $obj)
-                                    <option value="{{ $obj->id }}">{{ $obj->nombre }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-
-                        <div class="mb-3">
-                            <label class="form-label">Estado</label>
-                            <select class="form-select" wire:model.defer="estado_actividad_id"
-                                aria-label="Default select Project Category">
-                                @foreach ($estados as $obj)
-                                    <option value="{{ $obj->id }}">{{ $obj->nombre }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-
-                        <div class="mb-3">
-                            <label class="form-label">Prioridad</label>
-                            <select class="form-select" wire:model.defer="prioridad_id"
-                                aria-label="Default select Project Category">
-                                @foreach ($prioridades as $obj)
-                                    <option value="{{ $obj->id }}">{{ $obj->nombre }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-
-                    </div>
-
-                    <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
-                        <div class="mb-3">
-                            <label class="form-label">Fecha final</label>
-                            <input type="date" wire:model.defer="fecha_fin" class="form-control">
-                        </div>
-
-                        <div class="mb-3">
-                            <label class="form-label">Forma</label>
-                            <input type="text" wire:model.defer="forma" class="form-control">
-                        </div>
-
-
-
-
-                        <div class="mb-3">
-                            <label class="form-label">Usuario</label>
-                            <select class="form-select" wire:model.defer="users_id"
-                                aria-label="Default select Project Category">
-                                <option value="">Seleccione</option>
-                                @foreach ($usuarios as $obj)
-                                    <option value="{{ $obj->id }}">{{ $obj->name }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                    </div>
-
-
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                    <button class="btn btn-primary" wire:click="update_actividad()">Guardar</button>
-                </div>
-            </div>
-        </div>
-    </div>
 
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
@@ -702,13 +367,11 @@
 
 
                                                                 </div>
+
+
                                                             </div>
                                                             <div class="col-sm text-end">
-                                                                <!--<div class="bg-lightgreen py-1 px-2 rounded-1 d-inline-block fw-bold small-14 mb-0"
-                                                            wire:click="actividad_show({{ $proyecto->id }})">
-                                                            <strong><i class="icofont-eye fa-lg"></i>
-                                                                Actividades</strong>
-                                                        </div>-->
+                                                                <strong>Prioridad: {{ $proyecto->prioridad }}</strong>
 
                                                             </div>
                                                         </div>
@@ -831,7 +494,390 @@
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <div id="create_proyecto" wire:ignore.self tabindex="-1" class="modal fade" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-md modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header col">
+                    <h5 class="modal-title  fw-bold" id="createprojectlLabel"> Nuevo proyecto
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+
+                <div class="modal-body">
+                    @if (count($errors) > 0)
+                        <div class="alert alert-danger">
+                            <ul>
+                                @foreach ($errors->all() as $error)
+                                    <li>{{ $error }}</li>
+                                @endforeach
+                            </ul>
+                        </div>
+                    @endif
+                    <div class="mb-3">
+                        <label class="form-label">Estado</label>
+                        <select class="form-select" wire:model.defer="estado_id"
+                            aria-label="Default select Project Category">
+                            @foreach ($estados as $obj)
+                                <option value="{{ $obj->id }}">{{ $obj->nombre }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Nombre</label>
+                        <input type="text" wire:model.defer="nombre" name="nombre" class="form-control">
+                    </div>
+
+
+                    <div class="mb-3">
+                        <label for="exampleFormControlTextarea786" class="form-label">Descripción</label>
+                        <textarea class="form-control" wire:model.defer="descripcion" rows="3"></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button class="btn btn-primary" wire:click="store()">Create</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div id="modal_actividad" wire:ignore.self class="modal fade" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header col">
+                    <h5 class="modal-title  fw-bold" id="createprojectlLabel">Descripción</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body row" style="text-align: left;">
+                    <span id="modal_descripcion"></span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div id="proyecto_finalizar" wire:ignore.self class="modal fade" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header col">
+                    <h5 class="modal-title  fw-bold" id="createprojectlLabel">Finalizar</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <input type="hidden" wire:model.defer="id_proyecto">
+                <div class="modal-body row">
+                    @if (count($errors) > 0)
+                        <div class="alert alert-danger">
+                            <ul>
+                                @foreach ($errors->all() as $error)
+                                    <li>{{ $error }}</li>
+                                @endforeach
+                            </ul>
+                        </div>
+                    @endif
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                        <div class="mb-3">
+                            <label class="form-label">¿Desea finalizar el proyecto?</label>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button class="btn btn-primary" wire:click="finalizar_proyecto()">Guardar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+    <div id="create_actividad" wire:ignore.self class="modal fade" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header col">
+                    <h5 class="modal-title  fw-bold" id="createprojectlLabel"> Nueva actividad</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <input type="hidden" wire:model.defer="id_proyecto">
+                <div class="modal-body row">
+                    @if (count($errors) > 0)
+                        <div class="alert alert-danger">
+                            <ul>
+                                @foreach ($errors->all() as $error)
+                                    <li>{{ $error }}</li>
+                                @endforeach
+                            </ul>
+                        </div>
+                    @endif
+                    <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+                        <div class="mb-3">
+                            <label class="form-label">Ticket</label>
+                            <input type="number" wire:model.defer="numero_ticket" class="form-control">
+                        </div>
+
+                    </div>
+
+                    <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+                        <div class="mb-3">
+                            <label class="form-label">Ponderacion</label>
+                            <input type="number" step="0.01" wire:model.defer="ponderacion"
+                                class="form-control">
+                        </div>
+                    </div>
+
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                        <div class="mb-3">
+                            <label class="form-label">Descripcion</label>
+                            <textarea class="form-control" wire:model.defer="descripcion_actividad"></textarea>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+                        <div class="mb-3">
+                            <label class="form-label">Fecha inicio</label>
+                            <input type="date" wire:model.defer="fecha_inicio" class="form-control">
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Categoria</label>
+                            <select wire:model.defer="categoria_id" class="form-control select2">
+                                <option value="">Seleccione</option>
+                                @foreach ($categorias as $obj)
+                                    <option value="{{ $obj->id }}">{{ $obj->nombre }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Estado</label>
+                            <select class="form-select" wire:model.defer="estado_actividad_id"
+                                aria-label="Default select Project Category">
+                                @foreach ($estados_actividad as $obj)
+                                    <option value="{{ $obj->id }}">{{ $obj->nombre }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Prioridad</label>
+                            <select class="form-select" wire:model.defer="prioridad_id"
+                                aria-label="Default select Project Category">
+                                @foreach ($prioridades as $obj)
+                                    <option value="{{ $obj->id }}">{{ $obj->nombre }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+
+                    </div>
+
+                    <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+                        <div class="mb-3">
+                            <label class="form-label">Fecha final</label>
+                            <input type="date" wire:model.defer="fecha_fin" class="form-control">
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Forma</label>
+                            <input type="text" wire:model.defer="forma" class="form-control">
+                        </div>
+
+
+
+
+                        <div class="mb-3">
+                            <label class="form-label">Usuario</label>
+                            <select class="form-select" wire:model.defer="users_id"
+                                aria-label="Default select Project Category">
+                                <option value="">Seleccione</option>
+                                @foreach ($usuarios as $obj)
+                                    <option value="{{ $obj->id }}">{{ $obj->name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button class="btn btn-primary" wire:click="store_actividad()">Guardar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+    <div id="edit_actividad" wire:ignore.self class="modal fade" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header col">
+                    <h5 class="modal-title  fw-bold" id="createprojectlLabel">Modificar actividad</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <input type="hidden" wire:model.defer="id_proyecto">
+                <div class="modal-body row">
+                    @if (count($errors) > 0)
+                        <div class="alert alert-danger">
+                            <ul>
+                                @foreach ($errors->all() as $error)
+                                    <li>{{ $error }}</li>
+                                @endforeach
+                            </ul>
+                        </div>
+                    @endif
+                    <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+                        <input type="hidden" wire:model.defer="id_actividad">
+                        <div class="mb-3">
+                            <label class="form-label">Ticket</label>
+                            <input type="number" wire:model.defer="numero_ticket" class="form-control">
+                        </div>
+
+                    </div>
+
+                    <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+                        <div class="mb-3">
+                            <label class="form-label">Ponderacion</label>
+                            <input type="number" step="0.01" wire:model.defer="ponderacion"
+                                class="form-control">
+                        </div>
+                    </div>
+
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                        <div class="mb-3">
+                            <label class="form-label">Descripcion</label>
+                            <textarea class="form-control" wire:model.defer="descripcion_actividad"></textarea>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+                        <div class="mb-3">
+                            <label class="form-label">Fecha inicio</label>
+                            <input type="date" wire:model.defer="fecha_inicio" class="form-control">
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Categoria</label>
+                            <select wire:model.defer="categoria_id" class="form-control select2">
+                                <option value="">Seleccione</option>
+                                @foreach ($categorias as $obj)
+                                    <option value="{{ $obj->id }}">{{ $obj->nombre }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Estado</label>
+                            <select class="form-select" wire:model.defer="estado_actividad_id"
+                                aria-label="Default select Project Category">
+                                @foreach ($estados as $obj)
+                                    <option value="{{ $obj->id }}">{{ $obj->nombre }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Prioridad</label>
+                            <select class="form-select" wire:model.defer="prioridad_id"
+                                aria-label="Default select Project Category">
+                                @foreach ($prioridades as $obj)
+                                    <option value="{{ $obj->id }}">{{ $obj->nombre }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+
+                    </div>
+
+                    <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+                        <div class="mb-3">
+                            <label class="form-label">Fecha final</label>
+                            <input type="date" wire:model.defer="fecha_fin" class="form-control">
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Forma</label>
+                            <input type="text" wire:model.defer="forma" class="form-control">
+                        </div>
+
+
+
+
+                        <div class="mb-3">
+                            <label class="form-label">Usuario</label>
+                            <select class="form-select" wire:model.defer="users_id"
+                                aria-label="Default select Project Category">
+                                <option value="">Seleccione</option>
+                                @foreach ($usuarios as $obj)
+                                    <option value="{{ $obj->id }}">{{ $obj->name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button class="btn btn-primary" wire:click="update_actividad()">Guardar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
     <script type="text/javascript">
+        window.addEventListener('update-message-show', (e) => {
+            const Toast = Swal.mixin({
+                toast: true,
+                position: 'top-right',
+                iconColor: 'white',
+                customClass: {
+                    popup: 'colored-toast'
+                },
+                showConfirmButton: false,
+                timer: 2000,
+                timerProgressBar: true
+            });
+            Toast.fire({
+                icon: 'success',
+                title: 'Registro guardado correctamente'
+            })
+        });
+
+
+
+
+
+
+
+
+
         window.addEventListener('close-modal', (e) => {
             $('#create_proyecto').modal('hide')
         });
@@ -840,9 +886,6 @@
             $('#edit_proyecto').modal('hide')
         });
 
-        window.addEventListener('update-message-show', (e) => {
-            $('#update_message').show();
-        });
 
         window.addEventListener('update-message-hide', (e) => {
             $('#update_message').hide();
@@ -872,7 +915,7 @@
             $('#modal_descripcion').text(descripcion);
         }
 
-       
+
 
         function show_callapse(id) {
 
@@ -894,3 +937,4 @@
             });
         }
     </script>
+</div>
