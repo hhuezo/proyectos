@@ -6,7 +6,7 @@
 
 
     <?php
-
+    
     $cantidad_codigo_3_1 = 0;
     $cantidad_codigo_3_2 = 0;
     $cantidad_codigo_3_3 = 0;
@@ -19,7 +19,7 @@
     $cantidad_codigo_3_10 = 0;
     $cantidad_codigo_3_11 = 0;
     $cantidad_codigo_3_12 = 0;
-
+    
     $cantidad_codigo_8_1 = 0;
     $cantidad_codigo_8_2 = 0;
     $cantidad_codigo_8_3 = 0;
@@ -32,7 +32,7 @@
     $cantidad_codigo_8_10 = 0;
     $cantidad_codigo_8_11 = 0;
     $cantidad_codigo_8_12 = 0;
-
+    
     $cantidad_codigo_9_1 = 0;
     $cantidad_codigo_9_2 = 0;
     $cantidad_codigo_9_3 = 0;
@@ -45,170 +45,170 @@
     $cantidad_codigo_9_10 = 0;
     $cantidad_codigo_9_11 = 0;
     $cantidad_codigo_9_12 = 0;
-
+    
     foreach ($dsb_tot_actividades_categorias as $dsb_actividad_categoria) {
         if ($dsb_actividad_categoria->id == '3') {
             $nombre_codigo_3 = $dsb_actividad_categoria->nombre;
             $url_codigo_3 = $dsb_actividad_categoria->url;
-
+    
             if ($dsb_actividad_categoria->mes == '1') {
                 $cantidad_codigo_3_1 = $dsb_actividad_categoria->cantidad;
             }
-
+    
             if ($dsb_actividad_categoria->mes == '2') {
                 $cantidad_codigo_3_2 = $dsb_actividad_categoria->cantidad;
             }
-
+    
             if ($dsb_actividad_categoria->mes == '3') {
                 $cantidad_codigo_3_3 = $dsb_actividad_categoria->cantidad;
             }
-
+    
             if ($dsb_actividad_categoria->mes == '4') {
                 $cantidad_codigo_3_4 = $dsb_actividad_categoria->cantidad;
             }
-
+    
             if ($dsb_actividad_categoria->mes == '5') {
                 $cantidad_codigo_3_5 = $dsb_actividad_categoria->cantidad;
             }
-
+    
             if ($dsb_actividad_categoria->mes == '6') {
                 $cantidad_codigo_3_6 = $dsb_actividad_categoria->cantidad;
             }
-
+    
             if ($dsb_actividad_categoria->mes == '7') {
                 $cantidad_codigo_3_7 = $dsb_actividad_categoria->cantidad;
             }
-
+    
             if ($dsb_actividad_categoria->mes == '8') {
                 $cantidad_codigo_3_8 = $dsb_actividad_categoria->cantidad;
             }
-
+    
             if ($dsb_actividad_categoria->mes == '9') {
                 $cantidad_codigo_3_9 = $dsb_actividad_categoria->cantidad;
             }
-
+    
             if ($dsb_actividad_categoria->mes == '10') {
                 $cantidad_codigo_3_10 = $dsb_actividad_categoria->cantidad;
             }
-
+    
             if ($dsb_actividad_categoria->mes == '11') {
                 $cantidad_codigo_3_11 = $dsb_actividad_categoria->cantidad;
             }
-
+    
             if ($dsb_actividad_categoria->mes == '12') {
                 $cantidad_codigo_3_12 = $dsb_actividad_categoria->cantidad;
             }
         }
-
+    
         if ($dsb_actividad_categoria->id == '8') {
             $nombre_codigo_8 = $dsb_actividad_categoria->nombre;
             $url_codigo_8 = $dsb_actividad_categoria->url;
-
+    
             if ($dsb_actividad_categoria->mes == '1') {
                 $cantidad_codigo_8_1 = $dsb_actividad_categoria->cantidad;
             }
-
+    
             if ($dsb_actividad_categoria->mes == '2') {
                 $cantidad_codigo_8_2 = $dsb_actividad_categoria->cantidad;
             }
-
+    
             if ($dsb_actividad_categoria->mes == '3') {
                 $cantidad_codigo_8_3 = $dsb_actividad_categoria->cantidad;
             }
-
+    
             if ($dsb_actividad_categoria->mes == '4') {
                 $cantidad_codigo_8_4 = $dsb_actividad_categoria->cantidad;
             }
-
+    
             if ($dsb_actividad_categoria->mes == '5') {
                 $cantidad_codigo_8_5 = $dsb_actividad_categoria->cantidad;
             }
-
+    
             if ($dsb_actividad_categoria->mes == '6') {
                 $cantidad_codigo_8_6 = $dsb_actividad_categoria->cantidad;
             }
-
+    
             if ($dsb_actividad_categoria->mes == '7') {
                 $cantidad_codigo_8_7 = $dsb_actividad_categoria->cantidad;
             }
-
+    
             if ($dsb_actividad_categoria->mes == '8') {
                 $cantidad_codigo_8_8 = $dsb_actividad_categoria->cantidad;
             }
-
+    
             if ($dsb_actividad_categoria->mes == '9') {
                 $cantidad_codigo_8_9 = $dsb_actividad_categoria->cantidad;
             }
-
+    
             if ($dsb_actividad_categoria->mes == '10') {
                 $cantidad_codigo_8_10 = $dsb_actividad_categoria->cantidad;
             }
-
+    
             if ($dsb_actividad_categoria->mes == '11') {
                 $cantidad_codigo_8_11 = $dsb_actividad_categoria->cantidad;
             }
-
+    
             if ($dsb_actividad_categoria->mes == '12') {
                 $cantidad_codigo_8_12 = $dsb_actividad_categoria->cantidad;
             }
         }
-
+    
         if ($dsb_actividad_categoria->id == '9') {
             $nombre_codigo_9 = $dsb_actividad_categoria->nombre;
             $url_codigo_9 = $dsb_actividad_categoria->url;
-
+    
             if ($dsb_actividad_categoria->mes == '1') {
                 $cantidad_codigo_9_1 = $dsb_actividad_categoria->cantidad;
             }
-
+    
             if ($dsb_actividad_categoria->mes == '2') {
                 $cantidad_codigo_9_2 = $dsb_actividad_categoria->cantidad;
             }
-
+    
             if ($dsb_actividad_categoria->mes == '3') {
                 $cantidad_codigo_9_3 = $dsb_actividad_categoria->cantidad;
             }
-
+    
             if ($dsb_actividad_categoria->mes == '4') {
                 $cantidad_codigo_9_4 = $dsb_actividad_categoria->cantidad;
             }
-
+    
             if ($dsb_actividad_categoria->mes == '5') {
                 $cantidad_codigo_9_5 = $dsb_actividad_categoria->cantidad;
             }
-
+    
             if ($dsb_actividad_categoria->mes == '6') {
                 $cantidad_codigo_9_6 = $dsb_actividad_categoria->cantidad;
             }
-
+    
             if ($dsb_actividad_categoria->mes == '7') {
                 $cantidad_codigo_9_7 = $dsb_actividad_categoria->cantidad;
             }
-
+    
             if ($dsb_actividad_categoria->mes == '8') {
                 $cantidad_codigo_9_8 = $dsb_actividad_categoria->cantidad;
             }
-
+    
             if ($dsb_actividad_categoria->mes == '9') {
                 $cantidad_codigo_9_9 = $dsb_actividad_categoria->cantidad;
             }
-
+    
             if ($dsb_actividad_categoria->mes == '10') {
                 $cantidad_codigo_9_10 = $dsb_actividad_categoria->cantidad;
             }
-
+    
             if ($dsb_actividad_categoria->mes == '11') {
                 $cantidad_codigo_9_11 = $dsb_actividad_categoria->cantidad;
             }
-
+    
             if ($dsb_actividad_categoria->mes == '12') {
                 $cantidad_codigo_9_12 = $dsb_actividad_categoria->cantidad;
             }
         }
     }
-
+    
     $array_cantidad_codigo_3 = [];
-
+    
     array_push($array_cantidad_codigo_3, $cantidad_codigo_3_3);
     array_push($array_cantidad_codigo_3, $cantidad_codigo_3_4);
     array_push($array_cantidad_codigo_3, $cantidad_codigo_3_5);
@@ -221,9 +221,9 @@
     array_push($array_cantidad_codigo_3, $cantidad_codigo_3_12);
     array_push($array_cantidad_codigo_3, $cantidad_codigo_3_1);
     array_push($array_cantidad_codigo_3, $cantidad_codigo_3_2);
-
+    
     $array_cantidad_codigo_8 = [];
-
+    
     array_push($array_cantidad_codigo_8, $cantidad_codigo_8_3);
     array_push($array_cantidad_codigo_8, $cantidad_codigo_8_4);
     array_push($array_cantidad_codigo_8, $cantidad_codigo_8_5);
@@ -236,9 +236,9 @@
     array_push($array_cantidad_codigo_8, $cantidad_codigo_8_12);
     array_push($array_cantidad_codigo_8, $cantidad_codigo_8_1);
     array_push($array_cantidad_codigo_8, $cantidad_codigo_8_2);
-
+    
     $array_cantidad_codigo_9 = [];
-
+    
     array_push($array_cantidad_codigo_9, $cantidad_codigo_9_3);
     array_push($array_cantidad_codigo_9, $cantidad_codigo_9_4);
     array_push($array_cantidad_codigo_9, $cantidad_codigo_9_5);
@@ -251,7 +251,7 @@
     array_push($array_cantidad_codigo_9, $cantidad_codigo_9_12);
     array_push($array_cantidad_codigo_9, $cantidad_codigo_9_1);
     array_push($array_cantidad_codigo_9, $cantidad_codigo_9_2);
-
+    
     ?>
 
 
@@ -263,9 +263,13 @@
 
 
 
-
+    @if (auth()->user()->rol_id != 1)
+        @php($visibility = 'none')
+        @else
+        @php($visibility = 'block')
+    @endif
     <div class="body d-flex py-3">
-        <div class="container-xxl">
+        <div class="container-xxl" style="display: {{$visibility}}">
             <div class="row clearfix g-3">
                 <div class="col-xl-12 col-lg-12 col-md-12 flex-column">
                     <div class="row g-3">
@@ -404,7 +408,8 @@
 
 
         <div class="row">
-            <div class="col-md-12 col-lg-6 col-xl-6 col-xxl-6">
+            
+            <div class="col-md-12 col-lg-6 col-xl-6 col-xxl-6" style="display: {{$visibility}}">
                 <div class="card">
                     <div class="card-header py-3">
                         <h6 class="mb-0 fw-bold ">Avance de Proyectos</h6>
@@ -447,8 +452,10 @@
                     </div>
                 </div>
             </div>
+            
             <div class="col-md-12 col-lg-6 col-xl-6 col-xxl-6">
-                <div class="col-xxl-12 col-xl-12 col-lg-12 col-md-12">
+                
+                <div class="col-xxl-12 col-xl-12 col-lg-12 col-md-12" style="display: {{$visibility}}">
                     <div class="card">
                         <div class="card-header py-3">
                             <h6 class="mb-0 fw-bold ">Actividades finalizadas por día</h6>
@@ -461,7 +468,7 @@
 
 
 
-                <div class="row">
+                <div class="row" style="display: {{$visibility}}">
                     <div class="col-xxl-6 col-xl-6 col-lg-6 col-md-6">
                         <div class="card">
                             <div class="card-header py-3 d-flex justify-content-between bg-transparent border-bottom-0">
@@ -529,7 +536,7 @@
 
                 </div>
 
-
+               
 
 
 
@@ -557,7 +564,7 @@
                     </div>
                 </div>
 
-                <div class="col-xxl-12 col-xl-12 col-lg-12 col-md-12">
+                <div class="col-xxl-12 col-xl-12 col-lg-12 col-md-12" style="display: {{$visibility}}">
                     <div class="card">
                         <div class="card-header py-3 d-flex justify-content-between bg-transparent border-bottom-0">
                             <h6 class="mb-0 fw-bold ">Actividades finalizadas por analista (Ultimos 15 dias)</h6>
@@ -598,8 +605,8 @@
 
 
     <!-- Body: Body -->
-    <div class="body d-flex py-3">
-        <div class="container-xxl">
+    <div class="body d-flex py-3" >
+        <div class="container-xxl" style="display: {{$visibility}}">
             <div class="row clearfix g-3">
                 <div class="col-xl-8 col-lg-12 col-md-12 flex-column">
                     <div class="row g-3">

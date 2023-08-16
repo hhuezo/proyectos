@@ -127,15 +127,29 @@ class Proyectos extends Component
 
     public function edit($id)
     {
-        $proyecto = Proyecto::select('id', 'nombre', 'descripcion', 'estado_id', \DB::raw('(select ifnull(sum((act.porcentaje/100) * act.ponderacion),0) from actividades act where act.proyecto_id = proyectos.id and act.estado_id <> 7) as porcentaje'))
+        $proyecto = Proyecto::select('id', 'nombre', 'descripcion', 'estado_id')
             ->findOrFail($id);
+
+        $this->actividades = Actividad::where('proyecto_id', '=', $id)->where('estado_id','<>',7)->get();
+
+        $porcentaje = 0;
+
+        foreach($this->actividades as $actividad)
+        {
+            if($actividad->ponderacion > 0)
+            {
+                $porcentaje += ($actividad->ponderacion/100 * $actividad->porcentaje/100) * 100;
+            } 
+        }
+
+
         $this->ponderacion_proyecto = Actividad::where('proyecto_id', '=', $id)->where('estado_id', '<>', 7)->sum('ponderacion');
         $this->id_proyecto = $proyecto->id;
         $this->nombre = $proyecto->nombre;
         $this->descripcion = $proyecto->descripcion;
         $this->estado_id = $proyecto->estado_id;
-        $this->actividades = Actividad::where('proyecto_id', '=', $id)->get();
-        $this->avance_proyecto = $proyecto->porcentaje;
+        
+        $this->avance_proyecto = $porcentaje;
         $this->busqueda_actividad = "";
         $this->finalizado = $proyecto->finalizado;
     }

@@ -85,7 +85,7 @@ class Actividades extends Component
 
         $categorias = CategoriaTicket::where('categoria_tickets.unidad_id', '=', auth()->user()->unidad_id)->get();
         $prioridades = PrioridadTicket::get();
-        $this->catalogo_proyectos = Proyecto::where('unidad_id', '=', auth()->user()->unidad_id)->get();
+        $this->catalogo_proyectos = Proyecto::where('unidad_id', '=', auth()->user()->unidad_id)->whereIn('estado_id',[1,2,3,6])->orderBy('nombre')->get();
 
 
         return view('livewire.actividades', compact('actividades', 'categorias', 'prioridades'));

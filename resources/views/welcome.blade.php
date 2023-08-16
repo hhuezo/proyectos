@@ -98,7 +98,7 @@
         }
     </style>
 
-    <!-- <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css" rel="stylesheet" /> -->
+
 @endsection
 
 @section('content')
@@ -140,18 +140,18 @@
                                 <div class="col-12 text-center mb-5">
                                     <h1>Inicio de sesion</h1>
                                     <span>Ingresa tus datos para iniciar sesion</span>
-                                  
+
 
                                 </div>
                                 <!-- <div class="col-12 text-center mb-4">
-                                    <a class="btn btn-lg btn-outline-secondary btn-block" href="#">
-                                        <span class="d-flex justify-content-center align-items-center">
-                                            <img class="avatar xs me-2" src="{{ url('/') . '/images/google.svg' }}" alt="Image Description">
-                                            Sign in with Google
-                                        </span>
-                                    </a>
-                                    <span class="dividers text-muted mt-4">OR</span>
-                                </div>-->
+                                        <a class="btn btn-lg btn-outline-secondary btn-block" href="#">
+                                            <span class="d-flex justify-content-center align-items-center">
+                                                <img class="avatar xs me-2" src="{{ url('/') . '/images/google.svg' }}" alt="Image Description">
+                                                Sign in with Google
+                                            </span>
+                                        </a>
+                                        <span class="dividers text-muted mt-4">OR</span>
+                                    </div>-->
                                 <div class="col-12">
                                     <div class="mb-2">
                                         <label class="form-label">Usuario</label>
@@ -185,7 +185,7 @@
                                         class="btn btn-lg btn-block btn-light lift text-uppercase">Ingresar</button>
                                 </div>
                                 <div class="col-12 text-center mt-4">
-                                     @if ($errors->any())
+                                    @if ($errors->any())
                                         <div class="alert alert-danger">
                                             <ul>
                                                 @foreach ($errors->all() as $error)

@@ -5,6 +5,7 @@
 @section('content')
 
 
+
 <livewire:actividades />
 
 

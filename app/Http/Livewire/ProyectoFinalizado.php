@@ -176,7 +176,6 @@ class ProyectoFinalizado extends Component
 
     public function edit_actividad($id)
     {
-
         //$this->dispatchBrowserEvent('error-message-proyecto');
         $actividad = Actividad::findOrFail($id);
         $this->id_actividad = $id;
@@ -238,15 +237,33 @@ class ProyectoFinalizado extends Component
 
     public function edit($id)
     {
+       
+
+        $this->actividades = Actividad::where('proyecto_id', '=', $id)->where('estado_id','<>',7)->get();
+
+        $porcentaje = 0;
+        $ponderacion = 0;
+
+        foreach($this->actividades as $actividad)
+        {
+            if($actividad->porcentaje > 0)
+            {
+                $porcentaje += ($actividad->ponderacion/100 * $actividad->porcentaje/100) * 100;
+                $ponderacion += $actividad->ponderacion;
+            } 
+        }
+
+
+
         $proyecto = Proyecto::findOrFail($id);
         $this->id_proyecto = $proyecto->id;
         $this->nombre = $proyecto->nombre;
         $this->descripcion = $proyecto->descripcion;
         $this->estado_id = $proyecto->estado_id;
         $this->busqueda_actividad = "";
-        $this->ponderacion = Actividad::where('proyecto_id', '=', $id)->sum('ponderacion');
+        $this->ponderacion = $ponderacion;
         $this->avance = $proyecto->avance;
-        $this->actividades = Actividad::where('proyecto_id', '=', $id)->get();
+        
     }
 
 
