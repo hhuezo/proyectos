@@ -441,7 +441,7 @@
                         <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
                             <div class="mb-3">
                                 <label class="form-label">Proyectos</label>
-                                <select class="form-control" wire:ignore >
+                                <select class="form-control" wire:ignore id="id_proyecto" >
                                     <option value="">Seleccione</option>
                                     @if ($catalogo_proyectos)
                                         @foreach ($catalogo_proyectos as $obj)
