@@ -1,7 +1,5 @@
 <div style="text-align: center">
 
-    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
-    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 
     <style>
         .dd-item:hover {
@@ -45,10 +43,10 @@
         }
     </style>
 
- 
+
     <!-- Body: Body -->
     <div class="body d-flex py-lg-3 py-md-2">
-   
+
 
         <div class="container-xxl">
             <div class="row align-items-center">
@@ -394,7 +392,7 @@
                 </form>
             </div>
         </div>
-      
+
 
         <div id="create_actividad" wire:ignore.self class="modal" tabindex="-1" role="dialog"
             aria-hidden="true">
@@ -441,14 +439,14 @@
                         <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
                             <div class="mb-3">
                                 <label class="form-label">Proyectos</label>
-                                <select class="form-control" wire:ignore id="id_proyecto" >
+                                <select class="form-control" wire:model="id_proyecto" >
                                     <option value="">Seleccione</option>
                                     @if ($catalogo_proyectos)
                                         @foreach ($catalogo_proyectos as $obj)
                                             <option value="{{ $obj->id }}">{{ $obj->nombre }}</option>
                                         @endforeach
                                     @endif
-                                </select>                
+                                </select>
                             </div>
                         </div>
 

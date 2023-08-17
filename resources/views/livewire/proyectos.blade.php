@@ -147,9 +147,35 @@
                                     </div>
                                 </div>
                                 <div class="col-lg-8">
-                                    <div class="card mb-3">
 
-                                        <div class="card-body">
+
+
+
+
+
+                                    <div class="card" data-plugin="nestable">
+                                        <a data-bs-toggle="collapse" href="#tab-1" role="button"
+                                            aria-expanded="false" aria-controls="collapseExample">
+                                            <h6 class="fw-bold py-3 mb-0"
+                                                onclick="show_callapse_tab({{ 1 }})"
+                                                style="text-align: left; border-top-color: coral">
+
+                                                <span class="text-blue">&nbsp;&nbsp;
+                                                    <i id="icon-down-1" class="icofont-circled-down fa-lg"></i>
+                                                    <i id="icon-right-1" class="icofont-circled-right fa-lg"
+                                                        style="display: none"></i>
+                                                    Actividades </span>
+
+                                                {{-- <span class="text-{{ $estado->color }}">
+                                                    <i id="icon-down-{{ $estado->id }}"
+                                                        class="icofont-circled-down fa-lg"></i>
+                                                    <i id="icon-right-{{ $estado->id }}"
+                                                        class="icofont-circled-right fa-lg" style="display: none"></i>
+                                                    {{ $estado->nombre }} </span> --}}
+                                            </h6>
+                                        </a>
+                                        <div id="tab-1" class="accordion-collapse collapse show">
+
                                             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 row">
                                                 <div class="col-lg-11 col-md-11 col-sm-12 col-xs-12">
                                                     <input type="text" class="form-control" placeholder="Buscar"
@@ -240,6 +266,25 @@
                                                     @endif
                                                 </tbody>
                                             </table>
+                                        </div>
+
+                                    </div>
+
+
+
+
+
+
+
+
+
+
+
+
+                                    <div class="card mb-3">
+
+                                        <div class="card-body">
+
                                         </div>
                                     </div>
                                 </div>
@@ -349,9 +394,9 @@
 
                                                             <div class="col-md-6 text-end">
                                                                 @if ($proyecto->fecha_fin != null)
-                                                                <strong>Fecha fin:
-                                                                    {{ date('d/m/Y', strtotime($proyecto->fecha_fin)) }}</strong>
-                                                            @endif
+                                                                    <strong>Fecha fin:
+                                                                        {{ date('d/m/Y', strtotime($proyecto->fecha_fin)) }}</strong>
+                                                                @endif
                                                             </div>
                                                         </div>
 
