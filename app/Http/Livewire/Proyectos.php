@@ -15,10 +15,10 @@ use Carbon\Carbon;
 class Proyectos extends Component
 {
     public $id_proyecto = 0, $estado_id = 2, $nombre, $descripcion, $busqueda, $busqueda_actividad, $ponderacion_proyecto, $avance_proyecto;
-    public $proyectos, $id_unidad, $actividades, $tipo = 1, $finalizado = 0,$modificado =0;
+    public $proyectos, $id_unidad, $actividades, $tipo = 1, $finalizado = 0, $modificado = 0;
 
     public $id_actividad, $numero_ticket = 0, $ponderacion = 0.01, $descripcion_actividad,
-        $fecha_inicio, $categoria_id, $estado_actividad_id, $prioridad_id,$prioridad, $fecha_fin, $forma = "NO APLICA", $users_id, $avance;
+        $fecha_inicio, $categoria_id, $estado_actividad_id, $prioridad_id, $prioridad, $fecha_fin, $forma = "NO APLICA", $users_id, $avance;
 
 
     public function changeType()
@@ -55,6 +55,8 @@ class Proyectos extends Component
                 'proyectos.finalizado',
                 'proyectos.estado_id',
                 'proyectos.prioridad',
+                'proyectos.fecha_inicio',
+                'proyectos.fecha_fin',
                 \DB::raw('(select ifnull(sum((act.porcentaje/100) * act.ponderacion),0) from actividades act where act.proyecto_id = proyectos.id) as avance')
             )
             ->where('proyectos.unidad_id', '=', $this->id_unidad)
@@ -109,11 +111,15 @@ class Proyectos extends Component
             'estado_id.required' => 'El estado es requerido',
             'nombre.required' => 'El nombre es requerido',
             'descripcion.required' => 'La descripcion es requerida',
+            'fecha_inicio.required' => 'La fecha de inicio es requerida',
+            'fecha_fin.required' => 'La fecha final es requerida',
         ];
         $validateData = $this->validate([
             'estado_id' => 'required',
             'nombre' => 'required',
             'descripcion' => 'required',
+            'fecha_inicio' => 'required',
+            'fecha_fin' => 'required',
         ], $messages);
 
         $proyecto = new Proyecto();
@@ -122,6 +128,8 @@ class Proyectos extends Component
         $proyecto->descripcion = $this->descripcion;
         $proyecto->unidad_id = auth()->user()->unidad_id;
         $proyecto->avance = 0;
+        $proyecto->fecha_inicio = $this->fecha_inicio;
+        $proyecto->fecha_fin = $this->fecha_fin;
         $proyecto->save();
         session()->flash('message', 'Registro creado correctamente');
         $this->resetInput();
@@ -131,17 +139,15 @@ class Proyectos extends Component
 
     public function edit($id)
     {
-        $proyecto = Proyecto::select('id', 'nombre', 'descripcion', 'estado_id','prioridad')->findOrFail($id);
+        $proyecto = Proyecto::select('id', 'nombre', 'descripcion', 'estado_id', 'prioridad', 'fecha_inicio', 'fecha_fin')->findOrFail($id);
 
-        $this->actividades = Actividad::where('proyecto_id', '=', $id)->where('estado_id','<>',7)->get();
+        $this->actividades = Actividad::where('proyecto_id', '=', $id)->where('estado_id', '<>', 7)->get();
 
         $porcentaje = 0;
 
-        foreach($this->actividades as $actividad)
-        {
-            if($actividad->ponderacion > 0)
-            {
-                $porcentaje += ($actividad->ponderacion/100 * $actividad->porcentaje/100) * 100;
+        foreach ($this->actividades as $actividad) {
+            if ($actividad->ponderacion > 0) {
+                $porcentaje += ($actividad->ponderacion / 100 * $actividad->porcentaje / 100) * 100;
             }
         }
 
@@ -156,6 +162,9 @@ class Proyectos extends Component
         $this->busqueda_actividad = "";
         $this->finalizado = $proyecto->finalizado;
         $this->prioridad = $proyecto->prioridad;
+
+        $this->fecha_inicio = $proyecto->fecha_inicio;
+        $this->fecha_fin = $proyecto->fecha_fin;
 
         $this->modificado = 0;
     }
@@ -337,6 +346,8 @@ class Proyectos extends Component
         $proyecto->descripcion = $this->descripcion;
         $proyecto->estado_id = $this->estado_id;
         $proyecto->prioridad = $this->prioridad;
+        $proyecto->fecha_inicio = $this->fecha_inicio;
+        $proyecto->fecha_fin = $this->fecha_fin ;
         $proyecto->update();
 
         $this->modificado = 1;

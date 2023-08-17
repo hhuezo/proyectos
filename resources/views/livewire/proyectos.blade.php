@@ -94,6 +94,19 @@
                                                         <input type="text" wire:model.defer="prioridad"
                                                             class="form-control">
                                                     </div>
+
+                                                    <div class="col-sm-12" style="text-align: left;">
+                                                        <label for="depone" class="form-label">Fecha inicio</label>
+                                                        <input type="date" wire:model.defer="fecha_inicio"
+                                                            class="form-control">
+                                                    </div>
+
+
+                                                    <div class="col-sm-12" style="text-align: left;">
+                                                        <label for="depone" class="form-label">Fecha final</label>
+                                                        <input type="date" wire:model.defer="fecha_fin"
+                                                            class="form-control">
+                                                    </div>
                                                 </div>
                                                 <div class="mb-3" style="text-align: left;">
                                                     <input type="hidden" wire:model.defer="id_proyecto">
@@ -118,8 +131,10 @@
                                                         type="button">Modificar</button>
                                                     <br>
                                                     @if ($modificado == 1)
-                                                    <br>
-                                                    <div role="alert" id="update_message"  class="alert alert-success mx-auto">Proyecto modificado</div>
+                                                        <br>
+                                                        <div role="alert" id="update_message"
+                                                            class="alert alert-success mx-auto">Proyecto modificado
+                                                        </div>
                                                     @endif
                                                 @else
                                                     <div role="alert" id="update_message"
@@ -320,6 +335,27 @@
                                                         <p class="py-2 mb-0"> <strong>{{ $proyecto->nombre }}</strong>
                                                         </p>
                                                         <p class="py-2 mb-0">{{ $proyecto->descripcion }}</p>
+
+
+                                                        <div class="tikit-info row g-3">
+
+                                                            <div class="col-md-6  align-items-left">
+                                                                @if ($proyecto->fecha_inicio != null)
+                                                                    <strong>Fecha inicio:
+                                                                        {{ date('d/m/Y', strtotime($proyecto->fecha_inicio)) }}</strong>
+                                                                @endif
+
+                                                            </div>
+
+                                                            <div class="col-md-6 text-end">
+                                                                @if ($proyecto->fecha_fin != null)
+                                                                <strong>Fecha fin:
+                                                                    {{ date('d/m/Y', strtotime($proyecto->fecha_fin)) }}</strong>
+                                                            @endif
+                                                            </div>
+                                                        </div>
+
+
                                                         <div class="tikit-info row g-3 align-items-center">
 
                                                             <div class="col-sm text-end">
@@ -460,7 +496,7 @@
                                                                 @endif
                                                             @endif
 
-                                                            <td align="center">{{ $proyecto->prioridad }}</td>
+                                                        <td align="center">{{ $proyecto->prioridad }}</td>
 
                                                         </td>
                                                     </tr>
@@ -555,6 +591,18 @@
                     <div class="mb-3">
                         <label for="exampleFormControlTextarea786" class="form-label">Descripción</label>
                         <textarea class="form-control" wire:model.defer="descripcion" rows="3"></textarea>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="exampleFormControlTextarea786" class="form-label">Fecha aproximada de
+                            inicio</label>
+                        <input type="date" wire:model.defer="fecha_inicio" class="form-control">
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="exampleFormControlTextarea786" class="form-label">Fecha aproximada de
+                            finalización</label>
+                        <input type="date" wire:model.defer="fecha_fin" class="form-control">
                     </div>
                 </div>
                 <div class="modal-footer">
