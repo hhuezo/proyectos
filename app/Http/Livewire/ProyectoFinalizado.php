@@ -8,6 +8,7 @@ use Livewire\Component;
 use App\Estado;
 use App\PrioridadTicket;
 use App\Proyecto;
+use App\ProyectoHistorial;
 use App\Unidad;
 use App\User;
 use Illuminate\Support\Facades\DB;
@@ -323,5 +324,33 @@ class ProyectoFinalizado extends Component
             $proyecto->estado_id = 4;
         }
         $proyecto->update();
+
+
+
+
+
+        $historial = new ProyectoHistorial();
+        $historial->proyecto_id = $proyecto->id;
+        if ($proyecto->estado_id == 4) {
+            $historial->estado_id = 8;
+        } else {
+            $historial->estado_id = 4;
+        }
+        $historial->nombre = $proyecto->nombre;
+        $historial->descripcion = $proyecto->descripcion;
+        $historial->prioridad = $proyecto->prioridad;
+
+        if ($proyecto->fecha_inicio != null) {
+            $historial->fecha_inicio = $proyecto->fecha_inicio;
+        }
+
+        if ($proyecto->fecha_fin != null) {
+            $historial->fecha_fin = $proyecto->fecha_fin;
+        }
+        $historial->users_id = auth()->user()->id;
+        $historial->avance = $proyecto->avance;
+        $historial->unidad_id = auth()->user()->unidad_id;
+        $historial->finalizado = 1;
+        $historial->save();
     }
 }

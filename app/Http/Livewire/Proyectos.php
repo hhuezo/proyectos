@@ -8,6 +8,7 @@ use Livewire\Component;
 use App\Estado;
 use App\PrioridadTicket;
 use App\Proyecto;
+use App\ProyectoHistorial;
 use App\Unidad;
 use App\User;
 use Carbon\Carbon;
@@ -132,6 +133,21 @@ class Proyectos extends Component
         $proyecto->fecha_fin = $this->fecha_fin;
         $proyecto->save();
         session()->flash('message', 'Registro creado correctamente');
+
+
+
+        $historial = new ProyectoHistorial();
+        $historial->proyecto_id = $proyecto->id;
+        $historial->estado_id = $this->estado_id;
+        $historial->nombre = $this->nombre;
+        $historial->descripcion = $this->descripcion;
+        $historial->unidad_id = auth()->user()->unidad_id;
+        $historial->avance = 0;
+        $historial->fecha_inicio = $this->fecha_inicio;
+        $historial->fecha_fin = $this->fecha_fin;
+        $historial->users_id = auth()->user()->id;
+        $historial->save();
+
         $this->resetInput();
 
         $this->dispatchBrowserEvent('close-modal');
@@ -320,6 +336,26 @@ class Proyectos extends Component
         //186
         $this->finalizado = 1;
 
+        $historial = new ProyectoHistorial();
+        $historial->proyecto_id = $proyecto->id;
+        $historial->estado_id = $proyecto->estado_id;
+        $historial->nombre = $proyecto->nombre;
+        $historial->descripcion = $proyecto->descripcion;
+        $historial->prioridad = $proyecto->prioridad;
+        if ($proyecto->fecha_inicio != null) {
+            $historial->fecha_inicio = $proyecto->fecha_inicio;
+        }
+
+        if ($proyecto->fecha_fin != null) {
+            $historial->fecha_fin = $proyecto->fecha_fin;
+        }
+        $historial->users_id = auth()->user()->id;
+        $historial->avance = $proyecto->avance;
+        $historial->unidad_id = auth()->user()->unidad_id;
+        $historial->finalizado = 1;
+        $historial->save();
+
+
         $this->dispatchBrowserEvent('hide-proyecto');
     }
 
@@ -347,8 +383,23 @@ class Proyectos extends Component
         $proyecto->estado_id = $this->estado_id;
         $proyecto->prioridad = $this->prioridad;
         $proyecto->fecha_inicio = $this->fecha_inicio;
-        $proyecto->fecha_fin = $this->fecha_fin ;
+        $proyecto->fecha_fin = $this->fecha_fin;
         $proyecto->update();
+
+
+        $historial = new ProyectoHistorial();
+        $historial->proyecto_id = $proyecto->id;
+        $historial->estado_id = $this->estado_id;
+        $historial->nombre = $this->nombre;
+        $historial->descripcion = $this->descripcion;
+        $historial->prioridad = $this->prioridad;
+        $historial->fecha_inicio = $this->fecha_inicio;
+        $historial->fecha_fin = $this->fecha_fin;
+        $historial->users_id = auth()->user()->id;
+        $historial->avance = $proyecto->avance;
+        $historial->unidad_id = auth()->user()->unidad_id;
+        $historial->save();
+
 
         $this->modificado = 1;
     }
