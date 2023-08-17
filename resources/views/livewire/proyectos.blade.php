@@ -113,7 +113,7 @@
                                                     </select>
                                                 </div>
                                                 @if ($finalizado == 0)
-                                                    
+
                                                     <button type="submit" class="btn btn-primary"
                                                         type="button">Modificar</button>
                                                     <br>
@@ -410,6 +410,7 @@
                                                 <th>Nombre</th>
                                                 <th>Descripción</th>
                                                 <th>Avance</th>
+                                                <th>Prioridad</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -459,7 +460,7 @@
                                                                 @endif
                                                             @endif
 
-
+                                                            <td align="center">{{ $proyecto->prioridad }}</td>
 
                                                         </td>
                                                     </tr>

@@ -51,10 +51,10 @@ class ProyectoFinalizado extends Component
                     'proyectos.avance',
                     'proyectos.finalizado',
                     'proyectos.estado_id',
-                    DB::raw('(select min(fecha_asignacion) from actividades where actividades.proyecto_id = proyectos.id) as fecha_inicio, 
+                    DB::raw('(select min(fecha_asignacion) from actividades where actividades.proyecto_id = proyectos.id) as fecha_inicio,
                 (select max(fecha_liberacion) from actividades where actividades.proyecto_id = proyectos.id) as fecha_final,
                 (select ifnull(sum(movimiento_actividades.tiempo),0) from movimiento_actividades inner join actividades on actividades.id = movimiento_actividades.actividad_id
-                where actividades.proyecto_id = proyectos.id) + 
+                where actividades.proyecto_id = proyectos.id) +
                 (select ifnull(sum(movimiento_actividades.tiempo_minutos),0) from movimiento_actividades inner join actividades on actividades.id = movimiento_actividades.actividad_id
                 where actividades.proyecto_id = proyectos.id
                 ) as tiempo')
@@ -76,10 +76,10 @@ class ProyectoFinalizado extends Component
                     'proyectos.avance',
                     'proyectos.finalizado',
                     'proyectos.estado_id',
-                    DB::raw('(select min(fecha_asignacion) from actividades where actividades.proyecto_id = proyectos.id) as fecha_inicio, 
+                    DB::raw('(select min(fecha_asignacion) from actividades where actividades.proyecto_id = proyectos.id) as fecha_inicio,
                 (select max(fecha_liberacion) from actividades where actividades.proyecto_id = proyectos.id) as fecha_final,
                 (select ifnull(sum(movimiento_actividades.tiempo),0) from movimiento_actividades inner join actividades on actividades.id = movimiento_actividades.actividad_id
-                where actividades.proyecto_id = proyectos.id) + 
+                where actividades.proyecto_id = proyectos.id) +
                 (select ifnull(sum(movimiento_actividades.tiempo_minutos),0) from movimiento_actividades inner join actividades on actividades.id = movimiento_actividades.actividad_id
                 where actividades.proyecto_id = proyectos.id
                 ) as tiempo')
@@ -101,10 +101,10 @@ class ProyectoFinalizado extends Component
                     'proyectos.avance',
                     'proyectos.finalizado',
                     'proyectos.estado_id',
-                    DB::raw('(select min(fecha_asignacion) from actividades where actividades.proyecto_id = proyectos.id) as fecha_inicio, 
+                    DB::raw('(select min(fecha_asignacion) from actividades where actividades.proyecto_id = proyectos.id) as fecha_inicio,
                 (select max(fecha_liberacion) from actividades where actividades.proyecto_id = proyectos.id) as fecha_final,
                 (select ifnull(sum(movimiento_actividades.tiempo),0) from movimiento_actividades inner join actividades on actividades.id = movimiento_actividades.actividad_id
-                where actividades.proyecto_id = proyectos.id) + 
+                where actividades.proyecto_id = proyectos.id) +
                 (select ifnull(sum(movimiento_actividades.tiempo_minutos),0) from movimiento_actividades inner join actividades on actividades.id = movimiento_actividades.actividad_id
                 where actividades.proyecto_id = proyectos.id
                 ) as tiempo')
@@ -126,10 +126,10 @@ class ProyectoFinalizado extends Component
                     'proyectos.avance',
                     'proyectos.finalizado',
                     'proyectos.estado_id',
-                    DB::raw('(select min(fecha_asignacion) from actividades where actividades.proyecto_id = proyectos.id) as fecha_inicio, 
+                    DB::raw('(select min(fecha_asignacion) from actividades where actividades.proyecto_id = proyectos.id) as fecha_inicio,
                 (select max(fecha_liberacion) from actividades where actividades.proyecto_id = proyectos.id) as fecha_final,
                 (select ifnull(sum(movimiento_actividades.tiempo),0) from movimiento_actividades inner join actividades on actividades.id = movimiento_actividades.actividad_id
-                where actividades.proyecto_id = proyectos.id) + 
+                where actividades.proyecto_id = proyectos.id) +
                 (select ifnull(sum(movimiento_actividades.tiempo_minutos),0) from movimiento_actividades inner join actividades on actividades.id = movimiento_actividades.actividad_id
                 where actividades.proyecto_id = proyectos.id
                 ) as tiempo')
@@ -151,10 +151,10 @@ class ProyectoFinalizado extends Component
                     'proyectos.avance',
                     'proyectos.finalizado',
                     'proyectos.estado_id',
-                    DB::raw('(select min(fecha_asignacion) from actividades where actividades.proyecto_id = proyectos.id) as fecha_inicio, 
+                    DB::raw('(select min(fecha_asignacion) from actividades where actividades.proyecto_id = proyectos.id) as fecha_inicio,
             (select max(fecha_liberacion) from actividades where actividades.proyecto_id = proyectos.id) as fecha_final,
             (select ifnull(sum(movimiento_actividades.tiempo),0) from movimiento_actividades inner join actividades on actividades.id = movimiento_actividades.actividad_id
-            where actividades.proyecto_id = proyectos.id) + 
+            where actividades.proyecto_id = proyectos.id) +
             (select ifnull(sum(movimiento_actividades.tiempo_minutos),0) from movimiento_actividades inner join actividades on actividades.id = movimiento_actividades.actividad_id
             where actividades.proyecto_id = proyectos.id
             ) as tiempo')
@@ -237,20 +237,18 @@ class ProyectoFinalizado extends Component
 
     public function edit($id)
     {
-       
 
-        $this->actividades = Actividad::where('proyecto_id', '=', $id)->where('estado_id','<>',7)->get();
+
+        $this->actividades = Actividad::where('proyecto_id', '=', $id)->where('estado_id', '<>', 7)->get();
 
         $porcentaje = 0;
         $ponderacion = 0;
 
-        foreach($this->actividades as $actividad)
-        {
-            if($actividad->porcentaje > 0)
-            {
-                $porcentaje += ($actividad->ponderacion/100 * $actividad->porcentaje/100) * 100;
+        foreach ($this->actividades as $actividad) {
+            if ($actividad->porcentaje > 0) {
+                $porcentaje += ($actividad->ponderacion / 100 * $actividad->porcentaje / 100) * 100;
                 $ponderacion += $actividad->ponderacion;
-            } 
+            }
         }
 
 
@@ -263,7 +261,6 @@ class ProyectoFinalizado extends Component
         $this->busqueda_actividad = "";
         $this->ponderacion = $ponderacion;
         $this->avance = $proyecto->avance;
-        
     }
 
 
@@ -315,5 +312,16 @@ class ProyectoFinalizado extends Component
             $this->order_fecha_final = 2;
         }
         $this->order_fecha_inicio = 0;
+    }
+
+    public function facturar($id)
+    {
+        $proyecto = Proyecto::findOrFail($id);
+        if ($proyecto->estado_id == 4) {
+            $proyecto->estado_id = 8;
+        } else {
+            $proyecto->estado_id = 4;
+        }
+        $proyecto->update();
     }
 }

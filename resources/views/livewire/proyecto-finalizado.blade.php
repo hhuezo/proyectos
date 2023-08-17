@@ -4,6 +4,68 @@
             transform: scale(1.05);
             box-shadow: 0 10px 20px rgba(0, 0, 0, .12), 0 4px 8px rgba(0, 0, 0, .06);
         }
+
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 50px;
+            height: 22px;
+        }
+
+        /* Hide default HTML checkbox */
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        /* The slider */
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            -webkit-transition: .4s;
+            transition: .4s;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 15px;
+            width: 15px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            -webkit-transition: .4s;
+            transition: .4s;
+        }
+
+        input:checked+.slider {
+            background-color: #2196F3;
+        }
+
+        input:focus+.slider {
+            box-shadow: 0 0 1px #2196F3;
+        }
+
+        input:checked+.slider:before {
+            -webkit-transform: translateX(26px);
+            -ms-transform: translateX(26px);
+            transform: translateX(26px);
+        }
+
+        /* Rounded sliders */
+        .slider.round {
+            border-radius: 34px;
+        }
+
+        .slider.round:before {
+            border-radius: 50%;
+        }
     </style>
 
 
@@ -54,7 +116,7 @@
                                                 <i class="fa fa-arrow-circle-o-down fa-2x"></i>
                                             @endif
                                         </th>
-                                        <th wire:click="orden_fecha_final();">Fecha final 
+                                        <th wire:click="orden_fecha_final();">Fecha final
                                             @if ($order_fecha_final == 1)
                                                 <i class="fa fa-arrow-circle-down fa-2x"></i>
                                             @elseif ($order_fecha_final == 2)
@@ -67,12 +129,15 @@
                                         </th>
                                         <th>Tiempo desarrollo (Horas)</th>
                                         <th>Avance</th>
+                                        <th>Facturado</th>
+                                        <th>Opción</th>
                                     </tr>
                                 </thead>
                                 <tbody>
+
+                                    {{-- data-bs-toggle="modal" data-bs-target="#exampleModalFullscreen"  wire:click="edit({{ $proyecto->id }})" --}}
                                     @foreach ($proyectos as $proyecto)
-                                        <tr style="text-align: left" data-bs-toggle="modal"
-                                            data-bs-target="#exampleModalFullscreen" wire:click="edit({{ $proyecto->id }})">
+                                        <tr style="text-align: left">
                                             <td style="width: 5%; text-align: center;">{{ $proyecto->id }}
                                             </td>
                                             <td style="width: 15%">{{ $proyecto->nombre }}</td>
@@ -124,12 +189,26 @@
                                                             </div>
                                                         </div>
                                                     @endif
-                                                @endif
-
-
 
                                             </td>
-                                        </tr>
+                                            <td>
+                                                <label class="switch">
+                                                    <input type="checkbox" {{$proyecto->estado_id == 8 ? 'checked':''}} wire:click="facturar({{ $proyecto->id }})">
+                                                    <span class="slider round"></span>
+                                                </label>
+                                            </td>
+                                            <td>
+                                                <button class="btn btn-info" data-bs-toggle="modal"
+                                                    data-bs-target="#exampleModalFullscreen"
+                                                    wire:click="edit({{ $proyecto->id }})"><i
+                                                        class="fa fa-eye fa-lg"></i></button>
+                                            </td>
+                                    @endif
+
+
+
+                                    </td>
+                                    </tr>
                                     @endforeach
                                 </tbody>
                             </table>

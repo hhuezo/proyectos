@@ -81,13 +81,13 @@ class Proyectos extends Component
         $usuarios = User::where('id', '>', 1)->where('unidad_id', '=', $this->id_unidad)->get();
 
 
-        $colors = ["", "#0dcaf0", "#F19828", "#0dcaf0", "#198754", "##0d6efd",  "#0d6efd", "#dc3545"];
+        $colors = ["", "#0dcaf0", "#F19828", "#0dcaf0", "#198754", "##0d6efd",  "#0d6efd", "#dc3545", "#dc3545"];
 
         return view('livewire.proyectos', compact('estados', 'colors', 'unidad', 'categorias', 'prioridades', 'usuarios', 'estados_actividad'));
     }
 
 
-   
+
 
     private function resetInput()
     {
@@ -142,7 +142,7 @@ class Proyectos extends Component
             if($actividad->ponderacion > 0)
             {
                 $porcentaje += ($actividad->ponderacion/100 * $actividad->porcentaje/100) * 100;
-            } 
+            }
         }
 
 
@@ -151,7 +151,7 @@ class Proyectos extends Component
         $this->nombre = $proyecto->nombre;
         $this->descripcion = $proyecto->descripcion;
         $this->estado_id = $proyecto->estado_id;
-        
+
         $this->avance_proyecto = $porcentaje;
         $this->busqueda_actividad = "";
         $this->finalizado = $proyecto->finalizado;
@@ -161,7 +161,7 @@ class Proyectos extends Component
     }
 
 
- 
+
 
     public function create_actividad()
     {
@@ -319,7 +319,7 @@ class Proyectos extends Component
     {
 
         $this->dispatchBrowserEvent('error-message-proyecto-show');
-        
+
         $messages = [
             'estado_id.required' => 'El estado es requerido',
             'nombre.required' => 'El nombre es requerido',
@@ -331,14 +331,14 @@ class Proyectos extends Component
             'nombre' => 'required',
             'descripcion' => 'required',
         ], $messages);
-       
+
         $proyecto = Proyecto::findOrFail($this->id_proyecto);
         $proyecto->nombre = $this->nombre;
         $proyecto->descripcion = $this->descripcion;
         $proyecto->estado_id = $this->estado_id;
         $proyecto->prioridad = $this->prioridad;
         $proyecto->update();
-    
+
         $this->modificado = 1;
     }
 }
