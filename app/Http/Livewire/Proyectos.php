@@ -16,10 +16,13 @@ use Carbon\Carbon;
 class Proyectos extends Component
 {
     public $id_proyecto = 0, $estado_id = 2, $nombre, $descripcion, $busqueda, $busqueda_actividad, $ponderacion_proyecto, $avance_proyecto;
-    public $proyectos, $id_unidad, $actividades, $tipo = 1, $finalizado = 0, $modificado = 0;
+    public $proyectos, $id_unidad, $actividades,$historial, $tipo = 1, $finalizado = 0, $modificado = 0;
 
     public $id_actividad, $numero_ticket = 0, $ponderacion = 0.01, $descripcion_actividad,
         $fecha_inicio, $categoria_id, $estado_actividad_id, $prioridad_id, $prioridad, $fecha_fin, $forma = "NO APLICA", $users_id, $avance;
+
+
+    public $tab1 = 1, $tab2 = 0;
 
 
     public function changeType()
@@ -41,7 +44,7 @@ class Proyectos extends Component
 
     public function render()
     {
-        $estados =  Estado::where('id', '<>', 7)->where('id', '<>', 1)->get();
+        $estados =  Estado::whereNotIn('id', [1,7,8])->get();
         $estados_actividad =  Estado::where('id', '<>', 7)->get();
         $unidad = Unidad::findOrFail($this->id_unidad);
 
@@ -64,6 +67,7 @@ class Proyectos extends Component
             ->where('proyectos.finalizado', '=', 0)
             ->where('proyectos.estado_id', '<>', 7)
             ->where('proyectos.estado_id', '>', 1)
+            ->where('proyectos.estado_id', '<>', 8)
             ->where('proyectos.id', '<>', 28)
             ->where('proyectos.nombre', 'LIKE', '%' . $this->busqueda . '%')
             ->orderBy('proyectos.prioridad')
@@ -77,6 +81,8 @@ class Proyectos extends Component
                 ->where('descripcion', 'LIKE', '%' . $this->busqueda_actividad . '%')
                 ->orderBy('id', 'desc')
                 ->get();
+
+            $this->historial = ProyectoHistorial::where('proyecto_id','=',$this->id_proyecto)->get();
         }
 
         $categorias = CategoriaTicket::where('unidad_id', '=', $this->id_unidad)->get();
@@ -98,6 +104,8 @@ class Proyectos extends Component
         $this->nombre = '';
         $this->descripcion = '';
         $this->estado_id = 2;
+        $this->fecha_inicio = '';
+        $this->fecha_fin = '';
     }
 
     public function create()
@@ -184,9 +192,6 @@ class Proyectos extends Component
 
         $this->modificado = 0;
     }
-
-
-
 
     public function create_actividad()
     {
@@ -402,5 +407,26 @@ class Proyectos extends Component
 
 
         $this->modificado = 1;
+    }
+
+
+    public function show_callapse_tab($id)
+    {
+        if ($id == 1) {
+            if ($this->tab1 == 1) {
+                $this->tab1 = 0;
+            } else {
+                $this->tab1 = 1;
+            }
+        }
+
+
+        if ($id == 2) {
+            if ($this->tab2 == 1) {
+                $this->tab2 = 0;
+            } else {
+                $this->tab2 = 1;
+            }
+        }
     }
 }

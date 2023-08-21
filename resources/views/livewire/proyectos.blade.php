@@ -156,25 +156,21 @@
                                     <div class="card" data-plugin="nestable">
                                         <a data-bs-toggle="collapse" href="#tab-1" role="button"
                                             aria-expanded="false" aria-controls="collapseExample">
-                                            <h6 class="fw-bold py-3 mb-0"
-                                                onclick="show_callapse_tab({{ 1 }})"
-                                                style="text-align: left; border-top-color: coral">
+                                            <h6 class="fw-bold py-3 mb-0"  style="text-align: left; border-top-color: coral">
 
                                                 <span class="text-blue">&nbsp;&nbsp;
-                                                    <i id="icon-down-1" class="icofont-circled-down fa-lg"></i>
-                                                    <i id="icon-right-1" class="icofont-circled-right fa-lg"
-                                                        style="display: none"></i>
-                                                    Actividades </span>
 
-                                                {{-- <span class="text-{{ $estado->color }}">
-                                                    <i id="icon-down-{{ $estado->id }}"
-                                                        class="icofont-circled-down fa-lg"></i>
-                                                    <i id="icon-right-{{ $estado->id }}"
-                                                        class="icofont-circled-right fa-lg" style="display: none"></i>
-                                                    {{ $estado->nombre }} </span> --}}
+
+                                                        <i id="icon-right-1" class="icofont-circled-right fa-lg"></i>
+                                                        {{-- @if ($tab1 == 1)
+                                                    @else
+                                                       <i id="icon-down-1" class="icofont-circled-down fa-lg"></i>
+                                                    @endif --}}
+                                                    Actividades
+                                                </span>
                                             </h6>
                                         </a>
-                                        <div id="tab-1" class="accordion-collapse collapse show">
+                                        <div id="tab-1"  class="accordion-collapse collapse show">
 
                                             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 row">
                                                 <div class="col-lg-11 col-md-11 col-sm-12 col-xs-12">
@@ -244,7 +240,7 @@
                                                                 </td>
                                                                 <td>{{ $actividad->ponderacion }}</td>
                                                                 <td><span class="badge bg-info">
-                                                                        @if ($actividad->estado_id)
+                                                                        @if ($actividad->estado)
                                                                             {{ $actividad->estado->nombre }}
                                                                         @endif
                                                                     </span>
@@ -280,11 +276,61 @@
 
 
 
+                                    <div class="card" data-plugin="nestable">
+                                        <a data-bs-toggle="collapse" href="#tab-2" role="button"
+                                            aria-expanded="false" aria-controls="collapseExample">
+                                            <h6 class="fw-bold py-3 mb-0"
+                                                style="text-align: left; border-top-color: coral">
+                                                &nbsp;&nbsp;
 
-                                    <div class="card mb-3">
+                                              <span class="text-blue">
+                                                    <i id="icon-right-2" class="icofont-circled-right fa-lg"></i>
+                                                    {{--   @if ($tab2 == 1)
+                                                        <i id="icon-down-2" class="icofont-circled-down fa-lg"></i>
+                                                    @else
 
-                                        <div class="card-body">
+                                                    @endif--}}
+                                                    Historial de movimientos
+                                                </span>
+                                            </h6>
+                                        </a>
+                                        <div id="tab-2"
+                                            class="accordion-collapse collapse">
 
+                                            <table  class="table table-hover align-middle mb-0"
+                                                style="width:100%">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Fecha registro</th>
+                                                        <th>Estado</th>
+                                                        <th>Usuario</th>
+                                                        <th>Avance</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    @if ($historial)
+                                                        @foreach ($historial as $obj)
+                                                            <tr>
+                                                                <td>{{ date('d/m/Y', strtotime($obj->created_at)) }}</td>
+                                                                @if ($obj->estado)
+                                                                    <td>{{ $obj->estado->nombre }}</td>
+                                                                @else
+                                                                    <td></td>
+                                                                @endif
+
+                                                                @if ($obj->usuario)
+                                                                    <td>{{ $obj->usuario->name }}</td>
+                                                                @else
+                                                                    <td></td>
+                                                                @endif
+
+                                                                <td>{{ $obj->avance }} %</td>
+
+                                                            </tr>
+                                                        @endforeach
+                                                    @endif
+                                                </tbody>
+                                            </table>
                                         </div>
                                     </div>
                                 </div>
