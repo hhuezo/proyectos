@@ -5,9 +5,10 @@
 @section('content')
 
 
-<livewire:actividades-coordinador />
 
+{{-- <livewire:actividades-coordinador /> --}}
 
+@livewire('actividades-coordinador', ['id' => $id_usuario])
 
 @include('sweet::alert')
 <script src="{{ asset('assets/bundles/libscripts.bundle.js') }}"></script>

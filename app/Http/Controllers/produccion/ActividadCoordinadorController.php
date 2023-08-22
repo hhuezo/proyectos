@@ -11,7 +11,7 @@ class ActividadCoordinadorController extends Controller
 
     public function __construct()
     {
-          $this->middleware('auth');
+        $this->middleware('auth');
     }
     public function index()
     {
@@ -32,7 +32,7 @@ class ActividadCoordinadorController extends Controller
     public function show($id)
     {
         session(['id_usuario' => $id]);
-        return view('produccion.actividades_coordinador.show');
+        return view('produccion.actividades_coordinador.show', ["id_usuario" => $id]);
     }
 
     public function edit($id)

@@ -14,13 +14,11 @@ use Carbon\Carbon;
 class ActividadesCoordinador extends Component
 {
 
-    public $id_actividad = 0,$users_id = 0, $busqueda, $tipo = 1,$proyecto_id,$numero_ticket = 0, $ponderacion = 0.01,
-    $descripcion, $fecha_inicio, $categoria_id, $estado_id, $prioridad_id = 1, $fecha_fin, $forma = "NO APLICA";
-    public function mount()
+    public $id_actividad = 0, $users_id = 0, $busqueda, $tipo = 1, $proyecto_id, $numero_ticket = 0, $ponderacion = 0.01,
+        $descripcion, $fecha_inicio, $categoria_id, $estado_id, $prioridad_id = 1, $fecha_fin, $forma = "NO APLICA";
+    public function mount($id)
     {
-        if (session('id_usuario')) {
-            $this->users_id = session('id_usuario');
-        }
+        $this->users_id = $id;
     }
     public function render()
     {
@@ -64,8 +62,8 @@ class ActividadesCoordinador extends Component
         $prioridades = PrioridadTicket::get();
         $proyectos_unidad = Proyecto::where('unidad_id', '=', $usuario->unidad_id)->get();
         $estados = Estado::get();
-        $usuarios = User::where('unidad_id','=',auth()->user()->unidad_id)->get();
-        return view('livewire.actividades-coordinador', compact('actividades', 'proyectos', 'categorias', 'prioridades', 'usuario', 'proyectos_unidad','estados','usuarios'));
+        $usuarios = User::where('unidad_id', '=', auth()->user()->unidad_id)->get();
+        return view('livewire.actividades-coordinador', compact('actividades', 'proyectos', 'categorias', 'prioridades', 'usuario', 'proyectos_unidad', 'estados', 'usuarios'));
     }
 
     public function changeType()
@@ -80,9 +78,18 @@ class ActividadesCoordinador extends Component
     private function resetInput()
     {
         $tipo_temp = $this->tipo;
-        $this->reset();
+        //$this->reset();
         $this->tipo =  $tipo_temp;
-        $this->users_id = session('id_usuario');
+        $time = Carbon::now('America/El_Salvador');
+        $this->fecha_inicio = $time->format('Y-m-d');
+        $this->fecha_fin = $time->format('Y-m-d');
+        $this->numero_ticket = 0;
+        $this->ponderacion = 0.01;
+        $this->categoria_id = "";
+        $this->prioridad_id = 1;
+        $this->descripcion = "";
+        $this->proyecto_id = "";
+
     }
 
 
@@ -119,6 +126,8 @@ class ActividadesCoordinador extends Component
 
         $time = Carbon::now('America/El_Salvador');
 
+
+
         Actividad::create([
             'proyecto_id' => $this->proyecto_id,
             'numero_ticket' => $this->numero_ticket,
@@ -131,7 +140,7 @@ class ActividadesCoordinador extends Component
             'prioridad_id' => $this->prioridad_id,
             'fecha_fin' => $this->fecha_fin,
             'forma' => $this->forma,
-            'users_id' => $this->id_usuario,
+            'users_id' => $this->users_id,
             'fecha_asignacion' => $time->toDateTimeString(),
         ]);
 
