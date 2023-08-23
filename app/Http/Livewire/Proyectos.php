@@ -135,7 +135,7 @@ class Proyectos extends Component
         $proyecto->estado_id = $this->estado_id;
         $proyecto->nombre = $this->nombre;
         $proyecto->descripcion = $this->descripcion;
-        $proyecto->unidad_id = auth()->user()->unidad_id;
+        $proyecto->unidad_id = $this->id_unidad;
         $proyecto->avance = 0;
         $proyecto->fecha_inicio = $this->fecha_inicio;
         $proyecto->fecha_fin = $this->fecha_fin;
@@ -149,7 +149,7 @@ class Proyectos extends Component
         $historial->estado_id = $this->estado_id;
         $historial->nombre = $this->nombre;
         $historial->descripcion = $this->descripcion;
-        $historial->unidad_id = auth()->user()->unidad_id;
+        $historial->unidad_id = $this->id_unidad;
         $historial->avance = 0;
         $historial->fecha_inicio = $this->fecha_inicio;
         $historial->fecha_fin = $this->fecha_fin;
