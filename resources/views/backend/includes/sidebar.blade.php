@@ -73,7 +73,7 @@
                     </li>
                 @endif
 
-                @if (auth()->user()->rol_id == 1 || auth()->user()->rol_id == 4)
+                @if (auth()->user()->rol_id == 1 || auth()->user()->rol_id == 4 || auth()->user()->rol_id == 7)
                     <li class="collapsed">
                         <a class="m-link {{ Request::segment(2) == 'project' ? 'active' : '' }}"
                             data-bs-toggle="collapse" data-bs-target="#project-Components" href="#">
@@ -112,7 +112,7 @@
 
 
 
-                @if (auth()->user()->rol_id != 6)
+                @if (auth()->user()->rol_id != 6 && auth()->user()->rol_id != 7)
                 <li class="collapsed">
                     <a class="m-link {{ Request::segment(2) == 'project' ? 'active' : '' }}"
                         href="{{ url('actividades') }}">

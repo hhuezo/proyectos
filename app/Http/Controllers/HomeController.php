@@ -2,20 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-
 use App\Actividad;
-use App\Proyecto;
 
 use App\TmpTotDsbActividadFinalizada;
 use App\TmpTotDsbActividadDesarrollo;
-use App\TmpDsbActividadActual;
-use App\TmpDsbSemanaActividadActual;
 use App\TmpDsbDato;
 use App\TmpDsbActividadDiaria;
-use App\TmpTotDsbActividadFinalizadaUsuarioSemana;
 use App\Unidad;
-use App\ViewTiempoUsuarios;
 use App\VWTiempoDiarioUsuariosDetalle;
 use DB;
 use Carbon\Carbon;
