@@ -126,7 +126,7 @@ class ActividadesCoordinador extends Component
 
         $time = Carbon::now('America/El_Salvador');
 
-
+        $user_developer = User::findOrFail($this->users_id);
 
         Actividad::create([
             'proyecto_id' => $this->proyecto_id,
@@ -141,6 +141,7 @@ class ActividadesCoordinador extends Component
             'fecha_fin' => $this->fecha_fin,
             'forma' => $this->forma,
             'users_id' => $this->users_id,
+            'unidad_id' => $user_developer->unidad_id,
             'fecha_asignacion' => $time->toDateTimeString(),
         ]);
 
