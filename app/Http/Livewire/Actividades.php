@@ -85,15 +85,11 @@ class Actividades extends Component
 
         $categorias = CategoriaTicket::where('categoria_tickets.unidad_id', '=', auth()->user()->unidad_id)->get();
         $prioridades = PrioridadTicket::get();
-        $this->catalogo_proyectos = Proyecto::where('unidad_id', '=', auth()->user()->unidad_id)->whereIn('estado_id',[1,2,3,6])->orderBy('nombre')->get();
+        $this->catalogo_proyectos = Proyecto::where('unidad_id', '=', auth()->user()->unidad_id)
+        ->whereIn('estado_id', [1, 2, 3,4, 6])->where('finalizado', '<>', 1)->orderBy('nombre')->get();
 
 
         return view('livewire.actividades', compact('actividades', 'categorias', 'prioridades'));
-    }
-
-    public function hydrate()
-    {
-        $this->emit('select2');
     }
 
     public function changeType()
@@ -405,7 +401,7 @@ class Actividades extends Component
         $this->tiempo_minutos = 0;
         $this->detalle = "";
 
-        $this->dispatchBrowserEvent('close-modal-avance');
+        $this->dispatchBrowserEvent('');
     }
 
     public function update()

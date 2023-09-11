@@ -233,4 +233,4 @@
         </div>
     </nav>
 </div>
-@include('backend.layouts.common-oppup')
+
