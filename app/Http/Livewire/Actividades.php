@@ -11,6 +11,7 @@ use Livewire\Component;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Exception;
+use Illuminate\Support\Facades\Redirect;
 
 class Actividades extends Component
 {
@@ -112,15 +113,16 @@ class Actividades extends Component
 
     public function create()
     {
-        $this->resetInput();
+        return Redirect::to('actividades/create');
+        // $this->resetInput();
 
-        $time = Carbon::now('America/El_Salvador');
-        $this->fecha_inicio = $time->format('Y-m-d');
-        $this->fecha_fin = $time->format('Y-m-d');
-        $this->numero_ticket = 0;
-        $this->ponderacion = 0.01;
-        $this->categoria_id = "";
-        $this->prioridad_id = 1;
+        // $time = Carbon::now('America/El_Salvador');
+        // $this->fecha_inicio = $time->format('Y-m-d');
+        // $this->fecha_fin = $time->format('Y-m-d');
+        // $this->numero_ticket = 0;
+        // $this->ponderacion = 0.01;
+        // $this->categoria_id = "";
+        // $this->prioridad_id = 1;
     }
 
     public function store()

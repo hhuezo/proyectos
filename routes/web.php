@@ -24,8 +24,12 @@ use Carbon\Carbon;
 Auth::routes();
 
 Route::get('/', 'TestController@welcome')->name('welcome');
+
+Route::get('/home/{axo}/{month}', 'HomeController@home_soporte')->name('home_soporte');
 Route::get('/home', 'HomeController@index')->name('home');
+
 Route::get('/home/{id}', 'HomeController@unidad')->name('unidad');
+
 Route::get('/load_unidades', 'HomeController@load_unidades')->name('load_unidades');
 
 

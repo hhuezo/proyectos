@@ -3,19 +3,17 @@
 namespace App\Http\Controllers;
 
 use App\Actividad;
-
+use App\snipeit\VmMantenimiento;
 use App\TmpTotDsbActividadFinalizada;
 use App\TmpTotDsbActividadDesarrollo;
 use App\TmpDsbDato;
 use App\TmpDsbActividadDiaria;
 use App\Unidad;
 use App\VWTiempoDiarioUsuariosDetalle;
-use DB;
+use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
-
-
-
-
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Redirect;
 
 class HomeController extends Controller
 {
@@ -29,15 +27,69 @@ class HomeController extends Controller
         $this->middleware('auth');
     }
 
-    public function index()
+    public function home_soporte($year, $month)
     {
+        $meses = array(
+            '01' => 'Enero', '02' => 'Febrero', '03' => 'Marzo', '04' => 'Abril', '05' => 'Mayo', '06' => 'Junio',
+            '07' => 'Julio', '08' => 'Agosto', '09' => 'Septiembre', '10' => 'Octubre', '11' => 'Noviembre', '12' => 'Diciembre'
+        );
+
+        $resultados = VmMantenimiento::selectRaw("nombre_tecnico, sum(case when year(fecha_inicio) = $year and month(fecha_inicio) = $month and estado = 'PENDIENTE' then total else 0 end) as pendiente,
+            sum(case when year(fecha_inicio) = $year and month(fecha_inicio) = $month and estado = 'REALIZADO' then total else 0 end) as realizado")
+            ->whereYear('fecha_inicio', '=', $year)
+            ->whereMonth('fecha_inicio', '=', $month)
+            ->whereIn('tipo_mantenimiento', ['Maintenance', 'Mantenimiento'])
+            ->groupBy('nombre_tecnico')
+            ->get();
 
 
-            if (session('id_unidad')) {
-                $id_unidad = session('id_unidad');
-            } else {
-                $id_unidad = auth()->user()->unidad_id;
-            }
+        $resultados_sucursal = VmMantenimiento::selectRaw("sucursal, sum(case when year(fecha_inicio) = $year and month(fecha_inicio) = $month and estado = 'PENDIENTE' then total else 0 end) as pendiente,
+            sum(case when year(fecha_inicio) = $year and month(fecha_inicio) = $month and estado = 'REALIZADO' then total else 0 end) as realizado")
+            ->whereYear('fecha_inicio', '=', $year)
+            ->whereMonth('fecha_inicio', '=', $month)
+            ->whereIn('tipo_mantenimiento', ['Maintenance', 'Mantenimiento'])
+            ->groupBy('sucursal')
+            ->get();
+
+        $resultados_correctivos = VmMantenimiento::selectRaw("nombre_tecnico, sum(case when year(fecha_inicio) = $year and month(fecha_inicio) = $month and estado = 'PENDIENTE' then total else 0 end) as pendiente,
+            sum(case when year(fecha_inicio) = $year and month(fecha_inicio) = $month and estado = 'REALIZADO' then total else 0 end) as realizado")
+            ->whereYear('fecha_inicio', '=', $year)
+            ->whereMonth('fecha_inicio', '=', $month)
+            ->whereNotIn('tipo_mantenimiento', ['Maintenance', 'Mantenimiento'])
+            ->groupBy('nombre_tecnico')
+            ->get();
+
+        $resultados_sucursal_correctivos = VmMantenimiento::selectRaw("sucursal, sum(case when year(fecha_inicio) = $year and month(fecha_inicio) = $month and estado = 'PENDIENTE' then total else 0 end) as pendiente,
+            sum(case when year(fecha_inicio) = $year and month(fecha_inicio) = $month and estado = 'REALIZADO' then total else 0 end) as realizado")
+            ->whereYear('fecha_inicio', '=', $year)
+            ->whereMonth('fecha_inicio', '=', $month)
+            ->whereNotIn('tipo_mantenimiento', ['Maintenance', 'Mantenimiento'])
+            ->groupBy('sucursal')
+            ->get();
+
+
+
+        return view('home_soporte', compact('meses', 'resultados', 'resultados_sucursal', 'year', 'month','resultados_correctivos','resultados_sucursal_correctivos'));
+    }
+
+    public function index(Request $request)
+    {
+        if (session('id_unidad')) {
+            $id_unidad = session('id_unidad');
+        } else {
+            $id_unidad = auth()->user()->unidad_id;
+        }
+
+        //soporte técnico
+        if ($id_unidad == 6) {
+
+            $fecha = Carbon::now();
+            $year = $fecha->format('Y');
+            $month = $fecha->format('m');
+
+            return Redirect::to('home/' . $year . '/' . $month);
+        }
+
 
 
 
@@ -354,7 +406,6 @@ class HomeController extends Controller
             //$array_user_week_end = array("name" => $users[$i], "y" => $numero_actividades[$i], "color" => "#4670C0");
             array_push($data_users_week_end_label, $users[$i]);
             array_push($data_users_week_end_value, $numero_actividades[$i]);
-
         }
 
 
@@ -388,16 +439,15 @@ class HomeController extends Controller
 
 
 
-                //$data_users_week_end = array();
-                $data_horas_meses_end_label = array();
-                $data_horas_meses_end_value = array();
+        //$data_users_week_end = array();
+        $data_horas_meses_end_label = array();
+        $data_horas_meses_end_value = array();
 
-                for ($i = 0; $i < count($meses); $i++) {
-                    //$array_user_week_end = array("name" => $users[$i], "y" => $numero_actividades[$i], "color" => "#4670C0");
-                    array_push($data_horas_meses_end_label, $meses[$i]);
-                    array_push($data_horas_meses_end_value, $tiempo_horas[$i]);
-
-                }
+        for ($i = 0; $i < count($meses); $i++) {
+            //$array_user_week_end = array("name" => $users[$i], "y" => $numero_actividades[$i], "color" => "#4670C0");
+            array_push($data_horas_meses_end_label, $meses[$i]);
+            array_push($data_horas_meses_end_value, $tiempo_horas[$i]);
+        }
 
 
 
@@ -454,6 +504,12 @@ class HomeController extends Controller
 
         //dd($data_categorias);
         //dd($data_estado_proyectos);
+
+
+
+
+
+
 
         return view(
             'home',

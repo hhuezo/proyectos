@@ -19,5 +19,3 @@ Route::get('/departamento/{id}/municipios', 'Auth\RegisterController@getMunicipi
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });*/
-
-Route::get('pivoteTable', 'Api\pivoteTableController@index');

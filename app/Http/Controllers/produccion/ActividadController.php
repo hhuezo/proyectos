@@ -48,7 +48,7 @@ class ActividadController extends Controller
      */
     public function create()
     {
-        return view('produccion.actividades.actual');
+        return view('produccion.actividades.create');
     }
 
     /**
@@ -70,7 +70,7 @@ class ActividadController extends Controller
      */
     public function show($id)
     {
-        //
+        return view('produccion.actividades.actual');
     }
 
     /**

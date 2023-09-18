@@ -43,61 +43,6 @@
 
 
 
-<div id="create_actividad" wire:ignore.self class="modal"  aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-lg modal-dialog-scrollable">
-        <div class="modal-content">
-
-            <div class="modal-header col">
-                <h5 class="modal-title  fw-bold" id="createprojectlLabel"> Nueva actividad</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal"
-                    aria-label="Close"></button>
-            </div>
-
-
-
-            <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
-                <div class="mb-3">
-                    <label class="form-label">Proyectosss</label>
-
-                        <select class="form-control select2" style=" position: absolute; display: block;" wire:model="proyecto_id"
-                            style="width: 100%" id="perdon">
-                            @if ($catalogo_proyectos)
-                                @foreach ($catalogo_proyectos as $obj)
-                                    <option value="{{ $obj->id }}" style="z-index: 999;">{{ $obj->nombre }}</option>
-                                @endforeach
-                            @endif
-                        </select>
-
-                </div>
-            </div>
-
-            </div>
-        </div>
-    </div>
-</div>
-
-
-
-
-
-
-
-
-<div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
-    <div class="mb-3">
-        <label class="form-label">Proyectosss</label>
-        <div wire:ignore>
-            <select class="form-control select2" wire:model="proyecto_id"
-                style="width: 100%">
-                @if ($catalogo_proyectos)
-                    @foreach ($catalogo_proyectos as $obj)
-                        <option value="{{ $obj->id }}">{{ $obj->nombre }}</option>
-                    @endforeach
-                @endif
-            </select>
-        </div>
-    </div>
-</div>
     <!-- Body: Body -->
     <div class="body d-flex py-lg-3 py-md-2">
 
@@ -110,22 +55,6 @@
                             <h5 class="fw-bold mb-0">
                                 Actividades
                             </h5>
-                            {{--
-                            <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
-                                <div class="mb-3">
-                                    <label class="form-label">Proyectosss</label>
-                                    <div wire:ignore>
-                                        <select class="form-control select2" style="width: 100%">
-                                            <option value="">Seleccione</option>
-                                            @if ($catalogo_proyectos)
-                                                @foreach ($catalogo_proyectos as $obj)
-                                                    <option value="{{ $obj->id }}">{{ $obj->nombre }}</option>
-                                                @endforeach
-                                            @endif
-                                        </select>
-                                    </div>
-                                </div>
-                            </div> --}}
 
                         </div>
 
@@ -555,7 +484,7 @@
                 right: 0px;
                 bottom: 0px;">
 
-            <button class="botonF1" wire:click="create()" data-bs-toggle="modal" data-bs-target="#create_actividad"
+            <button class="botonF1" wire:click="create()"
                 style=" width: 60px;
                 height: 60px;
                 border-radius: 100%;
