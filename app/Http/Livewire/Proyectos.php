@@ -8,17 +8,21 @@ use Livewire\Component;
 use App\Estado;
 use App\PrioridadTicket;
 use App\Proyecto;
+use App\ProyectoHistorial;
 use App\Unidad;
 use App\User;
 use Carbon\Carbon;
 
 class Proyectos extends Component
 {
-    public $id_proyecto = 0, $estado_id = 2, $nombre, $descripcion, $busqueda, $busqueda_actividad;
-    public $proyectos, $id_unidad, $actividades, $tipo = 1;
+    public $id_proyecto = 0, $estado_id = 2, $nombre, $descripcion, $busqueda, $busqueda_actividad, $ponderacion_proyecto, $avance_proyecto;
+    public $proyectos, $id_unidad, $actividades,$historial, $tipo = 1, $finalizado = 0, $modificado = 0;
 
     public $id_actividad, $numero_ticket = 0, $ponderacion = 0.01, $descripcion_actividad,
-        $fecha_inicio, $categoria_id, $estado_actividad_id, $prioridad_id, $fecha_fin, $forma = "NO APLICA", $users_id;
+        $fecha_inicio, $categoria_id, $estado_actividad_id, $prioridad_id, $prioridad, $fecha_fin, $forma = "NO APLICA", $users_id, $avance;
+
+
+    public $tab1 = 1, $tab2 = 0;
 
 
     public function changeType()
@@ -40,7 +44,7 @@ class Proyectos extends Component
 
     public function render()
     {
-        $estados =  Estado::where('id', '<>', 7)->where('id', '<>', 1)->get();
+        $estados =  Estado::whereNotIn('id', [1,7,8])->get();
         $estados_actividad =  Estado::where('id', '<>', 7)->get();
         $unidad = Unidad::findOrFail($this->id_unidad);
 
@@ -52,16 +56,21 @@ class Proyectos extends Component
                 'estados.nombre as estado',
                 'estados.color',
                 'proyectos.destacado',
-                'proyectos.avance',
                 'proyectos.finalizado',
-                'proyectos.estado_id'
+                'proyectos.estado_id',
+                'proyectos.prioridad',
+                'proyectos.fecha_inicio',
+                'proyectos.fecha_fin',
+                \DB::raw('(select ifnull(sum((act.porcentaje/100) * act.ponderacion),0) from actividades act where act.proyecto_id = proyectos.id) as avance')
             )
             ->where('proyectos.unidad_id', '=', $this->id_unidad)
             ->where('proyectos.finalizado', '=', 0)
             ->where('proyectos.estado_id', '<>', 7)
             ->where('proyectos.estado_id', '>', 1)
+            ->where('proyectos.estado_id', '<>', 8)
             ->where('proyectos.id', '<>', 28)
             ->where('proyectos.nombre', 'LIKE', '%' . $this->busqueda . '%')
+            ->orderBy('proyectos.prioridad')
             ->orderBy('proyectos.id', 'desc')
             ->get();
 
@@ -72,6 +81,8 @@ class Proyectos extends Component
                 ->where('descripcion', 'LIKE', '%' . $this->busqueda_actividad . '%')
                 ->orderBy('id', 'desc')
                 ->get();
+
+            $this->historial = ProyectoHistorial::where('proyecto_id','=',$this->id_proyecto)->get();
         }
 
         $categorias = CategoriaTicket::where('unidad_id', '=', $this->id_unidad)->get();
@@ -79,10 +90,12 @@ class Proyectos extends Component
         $usuarios = User::where('id', '>', 1)->where('unidad_id', '=', $this->id_unidad)->get();
 
 
-        $colors = ["", "#0dcaf0", "#F19828", "#0dcaf0", "#198754", "##0d6efd",  "#0d6efd", "#dc3545"];
+        $colors = ["", "#0dcaf0", "#F19828", "#0dcaf0", "#198754", "##0d6efd",  "#0d6efd", "#dc3545", "#dc3545"];
 
         return view('livewire.proyectos', compact('estados', 'colors', 'unidad', 'categorias', 'prioridades', 'usuarios', 'estados_actividad'));
     }
+
+
 
 
     private function resetInput()
@@ -91,6 +104,8 @@ class Proyectos extends Component
         $this->nombre = '';
         $this->descripcion = '';
         $this->estado_id = 2;
+        $this->fecha_inicio = '';
+        $this->fecha_fin = '';
     }
 
     public function create()
@@ -105,21 +120,42 @@ class Proyectos extends Component
             'estado_id.required' => 'El estado es requerido',
             'nombre.required' => 'El nombre es requerido',
             'descripcion.required' => 'La descripcion es requerida',
+            'fecha_inicio.required' => 'La fecha de inicio es requerida',
+            'fecha_fin.required' => 'La fecha final es requerida',
         ];
         $validateData = $this->validate([
             'estado_id' => 'required',
             'nombre' => 'required',
             'descripcion' => 'required',
+            'fecha_inicio' => 'required',
+            'fecha_fin' => 'required',
         ], $messages);
 
         $proyecto = new Proyecto();
         $proyecto->estado_id = $this->estado_id;
         $proyecto->nombre = $this->nombre;
         $proyecto->descripcion = $this->descripcion;
-        $proyecto->unidad_id = auth()->user()->unidad_id;
+        $proyecto->unidad_id = $this->id_unidad;
         $proyecto->avance = 0;
+        $proyecto->fecha_inicio = $this->fecha_inicio;
+        $proyecto->fecha_fin = $this->fecha_fin;
         $proyecto->save();
         session()->flash('message', 'Registro creado correctamente');
+
+
+
+        $historial = new ProyectoHistorial();
+        $historial->proyecto_id = $proyecto->id;
+        $historial->estado_id = $this->estado_id;
+        $historial->nombre = $this->nombre;
+        $historial->descripcion = $this->descripcion;
+        $historial->unidad_id = $this->id_unidad;
+        $historial->avance = 0;
+        $historial->fecha_inicio = $this->fecha_inicio;
+        $historial->fecha_fin = $this->fecha_fin;
+        $historial->users_id = auth()->user()->id;
+        $historial->save();
+
         $this->resetInput();
 
         $this->dispatchBrowserEvent('close-modal');
@@ -127,39 +163,34 @@ class Proyectos extends Component
 
     public function edit($id)
     {
-        $proyecto = Proyecto::findOrFail($id);
+        $proyecto = Proyecto::select('id', 'nombre', 'descripcion', 'estado_id', 'prioridad', 'fecha_inicio', 'fecha_fin')->findOrFail($id);
+
+        $this->actividades = Actividad::where('proyecto_id', '=', $id)->where('estado_id', '<>', 7)->get();
+
+        $porcentaje = 0;
+
+        foreach ($this->actividades as $actividad) {
+            if ($actividad->ponderacion > 0) {
+                $porcentaje += ($actividad->ponderacion / 100 * $actividad->porcentaje / 100) * 100;
+            }
+        }
+
+
+        $this->ponderacion_proyecto = Actividad::where('proyecto_id', '=', $id)->where('estado_id', '<>', 7)->sum('ponderacion');
         $this->id_proyecto = $proyecto->id;
         $this->nombre = $proyecto->nombre;
         $this->descripcion = $proyecto->descripcion;
         $this->estado_id = $proyecto->estado_id;
-        $this->actividades = Actividad::where('proyecto_id', '=', $id)->get();
+
+        $this->avance_proyecto = $porcentaje;
         $this->busqueda_actividad = "";
-    }
+        $this->finalizado = $proyecto->finalizado;
+        $this->prioridad = $proyecto->prioridad;
 
+        $this->fecha_inicio = $proyecto->fecha_inicio;
+        $this->fecha_fin = $proyecto->fecha_fin;
 
-    public function update()
-    {
-        $this->dispatchBrowserEvent('error-message-proyecto-show');
-        $messages = [
-            'estado_id.required' => 'El estado es requerido',
-            'nombre.required' => 'El nombre es requerido',
-            'descripcion.required' => 'La descripcion es requerida',
-        ];
-
-        $validateData = $this->validate([
-            'estado_id' => 'required',
-            'nombre' => 'required',
-            'descripcion' => 'required',
-        ], $messages);
-
-        $proyecto = Proyecto::findOrFail($this->id_proyecto);
-        $proyecto->nombre = $this->nombre;
-        $proyecto->descripcion = $this->descripcion;
-        $proyecto->estado_id = $this->estado_id;
-        $proyecto->update();
-        //$this->reset();
-
-        $this->dispatchBrowserEvent('update-message-show');
+        $this->modificado = 0;
     }
 
     public function create_actividad()
@@ -292,6 +323,110 @@ class Proyectos extends Component
         $actividad->users_id = $this->users_id;
         $actividad->update();
 
+
+        $proyecto = Proyecto::select(\DB::raw('(select ifnull(sum((act.porcentaje/100) * act.ponderacion),0) from actividades act where act.proyecto_id = proyectos.id) as porcentaje'))
+            ->findOrFail($actividad->proyecto_id);
+        $this->ponderacion_proyecto = Actividad::where('proyecto_id', '=', $actividad->proyecto_id)->sum('ponderacion');
+        $this->avance_proyecto = $proyecto->porcentaje;
+
         $this->dispatchBrowserEvent('close-modal-edit-actividad');
+    }
+
+    public function finalizar_proyecto()
+    {
+        $proyecto = Proyecto::findOrFail($this->id_proyecto);
+        $proyecto->finalizado = 1;
+        $proyecto->update();
+
+        //186
+        $this->finalizado = 1;
+
+        $historial = new ProyectoHistorial();
+        $historial->proyecto_id = $proyecto->id;
+        $historial->estado_id = $proyecto->estado_id;
+        $historial->nombre = $proyecto->nombre;
+        $historial->descripcion = $proyecto->descripcion;
+        $historial->prioridad = $proyecto->prioridad;
+        if ($proyecto->fecha_inicio != null) {
+            $historial->fecha_inicio = $proyecto->fecha_inicio;
+        }
+
+        if ($proyecto->fecha_fin != null) {
+            $historial->fecha_fin = $proyecto->fecha_fin;
+        }
+        $historial->users_id = auth()->user()->id;
+        $historial->avance = $proyecto->avance;
+        $historial->unidad_id = auth()->user()->unidad_id;
+        $historial->finalizado = 1;
+        $historial->save();
+
+
+        $this->dispatchBrowserEvent('hide-proyecto');
+    }
+
+
+    public function update()
+    {
+
+        $this->dispatchBrowserEvent('error-message-proyecto-show');
+
+        $messages = [
+            'estado_id.required' => 'El estado es requerido',
+            'nombre.required' => 'El nombre es requerido',
+            'descripcion.required' => 'La descripcion es requerida',
+        ];
+
+        $validateData = $this->validate([
+            'estado_id' => 'required',
+            'nombre' => 'required',
+            'descripcion' => 'required',
+        ], $messages);
+
+        $proyecto = Proyecto::findOrFail($this->id_proyecto);
+        $proyecto->nombre = $this->nombre;
+        $proyecto->descripcion = $this->descripcion;
+        $proyecto->estado_id = $this->estado_id;
+        $proyecto->prioridad = $this->prioridad;
+        $proyecto->fecha_inicio = $this->fecha_inicio;
+        $proyecto->fecha_fin = $this->fecha_fin;
+        $proyecto->update();
+
+
+        $historial = new ProyectoHistorial();
+        $historial->proyecto_id = $proyecto->id;
+        $historial->estado_id = $this->estado_id;
+        $historial->nombre = $this->nombre;
+        $historial->descripcion = $this->descripcion;
+        $historial->prioridad = $this->prioridad;
+        $historial->fecha_inicio = $this->fecha_inicio;
+        $historial->fecha_fin = $this->fecha_fin;
+        $historial->users_id = auth()->user()->id;
+        $historial->avance = $proyecto->avance;
+        $historial->unidad_id = auth()->user()->unidad_id;
+        $historial->save();
+
+
+        $this->modificado = 1;
+    }
+
+
+    public function show_callapse_tab($id)
+    {
+        if ($id == 1) {
+            if ($this->tab1 == 1) {
+                $this->tab1 = 0;
+            } else {
+                $this->tab1 = 1;
+            }
+        }
+
+
+        if ($id == 2) {
+            if ($this->tab2 == 1) {
+                $this->tab2 = 0;
+            } else {
+                $this->tab2 = 1;
+            }
+        }
     }
 }

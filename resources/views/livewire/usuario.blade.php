@@ -269,7 +269,7 @@
                         <select wire:model.defer="rol_id" class="form-select">
                             <option value="">Seleccione</option>
                             @foreach ($roles as $obj)
-                                <option value="{{ $obj->id }}">{{ $obj->name }}</option>
+                                <option value="{{ $obj->id }}">{{ $obj->nombre }}</option>
                             @endforeach
                         </select>
                     </div>

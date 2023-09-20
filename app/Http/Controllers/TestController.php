@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Actividad;
+use App\Proyecto;
 use Illuminate\Http\Request;
 
 use App\User;
@@ -23,6 +25,4 @@ class TestController extends Controller
 
         return view('prueba');
     }
-
-
 }

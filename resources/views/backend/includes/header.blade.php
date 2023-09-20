@@ -5,6 +5,7 @@
         display: none;
     }
 </style>
+
 <div class="header">
     <nav class="navbar py-4">
         <div class="container-xxl">
@@ -12,32 +13,35 @@
             <!-- header rightbar icon -->
             <div class="h-right d-flex align-items-center mr-5 mr-lg-0 order-1">
                 <div class="d-flex">
-                    <a class="nav-link text-primary collapsed" href="#" title="Get Help">
+                    <!--<a class="nav-link text-primary collapsed" href="#" title="Get Help">
                         <i class="icofont-info-square fs-5"></i>
-                    </a>
-                    <div class="avatar-list avatar-list-stacked px-3">
-                        <img class="avatar rounded-circle" src="{{ url('/') . '/images/xs/avatar2.jpg' }}"
-                            alt="">
-                        <img class="avatar rounded-circle" src="{{ url('/') . '/images/xs/avatar1.jpg' }}"
-                            alt="">
-                        <img class="avatar rounded-circle" src="{{ url('/') . '/images/xs/avatar3.jpg' }}"
-                            alt="">
-                        <img class="avatar rounded-circle" src="{{ url('/') . '/images/xs/avatar4.jpg' }}"
-                            alt="">
-                        <img class="avatar rounded-circle" src="{{ url('/') . '/images/xs/avatar7.jpg' }}"
-                            alt="">
-                        <img class="avatar rounded-circle" src="{{ url('/') . '/images/xs/avatar8.jpg' }}"
-                            alt="">
-                        <span class="avatar rounded-circle text-center pointer" data-bs-toggle="modal"
-                            data-bs-target="#addUser"><i class="icofont-ui-add"></i></span>
-                    </div>
+                    </a>-->
+                    @if (session('session_usuarios'))
+                        <div class="avatar-list avatar-list-stacked px-3">
+                            @foreach (session('session_usuarios') as $user_temp)
+                                @if ($user_temp->image)
+                                    <img class="avatar rounded-circle"
+                                        src="{{ url('/') . '/images/users/' . $user_temp->image }}" alt="">
+                                @endif
+                            @endforeach
+                            <!--<img class="avatar rounded-circle" src="{{ url('/') . '/images/xs/avatar2.jpg' }}" alt="">
+                            <img class="avatar rounded-circle" src="{{ url('/') . '/images/xs/avatar1.jpg' }}" alt="">
+                            <img class="avatar rounded-circle" src="{{ url('/') . '/images/xs/avatar3.jpg' }}" alt="">
+                            <img class="avatar rounded-circle" src="{{ url('/') . '/images/xs/avatar4.jpg' }}" alt="">
+                            <img class="avatar rounded-circle" src="{{ url('/') . '/images/xs/avatar7.jpg' }}" alt="">
+                            <img class="avatar rounded-circle" src="{{ url('/') . '/images/xs/avatar8.jpg' }}" alt="">
+                            <span class="avatar rounded-circle text-center pointer" data-bs-toggle="modal"
+                                data-bs-target="#addUser"><i class="icofont-ui-add"></i></span>-->
+                        </div>
+                    @endif
+
                 </div>
-                <div class="dropdown notifications zindex-popover">
+                <!-- <div class="dropdown notifications zindex-popover">
                     <a class="nav-link dropdown-toggle pulse" href="#" role="button" data-bs-toggle="dropdown">
                         <i class="icofont-alarm fs-5"></i>
                         <span class="pulse-ring"></span>
                     </a>
-                    <div id="NotificationsDiv"
+                  <div id="NotificationsDiv"
                         class="dropdown-menu rounded-lg shadow border-0 dropdown-animation dropdown-menu-sm-end p-0 m-0">
                         <div class="card border-0 w380">
                             <div class="card-header border-0 p-3">
@@ -133,7 +137,7 @@
                             <a class="card-footer text-center border-top-0" href="#"> View all notifications</a>
                         </div>
                     </div>
-                </div>
+                </div>-->
                 <div class="dropdown user-profile ml-2 ml-sm-3 d-flex align-items-center zindex-popover">
                     <div class="u-info me-2">
                         <p class="mb-0 text-end line-height-sm "><span
@@ -149,14 +153,14 @@
                     <a class="nav-link dropdown-toggle pulse p-0" href="#" role="button"
                         data-bs-toggle="dropdown" data-bs-display="static">
                         <img class="avatar lg rounded-circle img-thumbnail"
-                            src="{{ url('/') . '/images/profile_av.png' }}" alt="profile">
+                            src="{{ url('/') . '/images/users/'.auth()->user()->image }}" alt="profile">
                     </a>
                     <div class="dropdown-menu rounded-lg shadow border-0 dropdown-animation dropdown-menu-end p-0 m-0">
                         <div class="card border-0 w280">
                             <div class="card-body pb-0">
                                 <div class="d-flex py-1">
                                     <img class="avatar rounded-circle"
-                                        src="{{ url('/') . '/images/profile_av.png' }}" alt="profile">
+                                        src="{{ url('/') .  '/images/users/'.auth()->user()->image }}" alt="profile">
                                     <div class="flex-fill ms-3">
                                         <p class="mb-0"><span
                                                 class="font-weight-bold">{{ auth()->user()->user_name }}</span></p>
@@ -169,16 +173,27 @@
                                 </div>
                             </div>
                             <div class="list-group m-2 ">
-                                <a href="#" class="list-group-item list-group-item-action border-0 "><i
-                                        class="icofont-tasks fs-5 me-3"></i>My Task</a>
-                                <a href="#" class="list-group-item list-group-item-action border-0 "><i
-                                        class="icofont-ui-user-group fs-6 me-3"></i>members</a>
+                                @if (auth()->user()->rol_id == 2 || auth()->user()->rol_id == 5)
+                                    <a href="{{ url('actividades/') }}"
+                                        class="list-group-item list-group-item-action border-0 "><i
+                                            class="icofont-tasks fs-5 me-3"></i>Actividades</a>
+                                @else
+                                    <a href="{{ url('proyecto/') }}"
+                                        class="list-group-item list-group-item-action border-0 "><i
+                                            class="icofont-tasks fs-5 me-3"></i>Proyectos</a>
+                                @endif
 
 
+                                <a href="#" class="list-group-item list-group-item-action border-0 "><i
+                                        class="icofont-ui-user fs-6 me-3"></i>Mi perfil</a>
+
+                                <div>
+                                    <hr class="dropdown-divider border-dark">
+                                </div>
                                 <a class="list-group-item list-group-item-action border-0 "
                                     href="{{ route('logout') }}"
                                     onclick="event.preventDefault(); document.getElementById('formLogout').submit();">
-                                    <i class="icofont-logout fs-6 me-3"></i>Signout
+                                    <i class="icofont-logout fs-6 me-3"></i>Cerrar sesión
                                 </a>
                                 <form action="{{ route('logout') }}" method="POST" style="display: none;"
                                     id="formLogout">
@@ -187,11 +202,11 @@
 
 
 
-                                <div>
+                                <!-- <div>
                                     <hr class="dropdown-divider border-dark">
                                 </div>
                                 <a href="#" class="list-group-item list-group-item-action border-0 "><i
-                                        class="icofont-contact-add fs-5 me-3"></i>Add personal account</a>
+                                        class="icofont-contact-add fs-5 me-3"></i>Add personal account</a>-->
                             </div>
                         </div>
                     </div>
@@ -219,4 +234,4 @@
         </div>
     </nav>
 </div>
-@include('backend.layouts.common-oppup')
+

@@ -11,13 +11,12 @@ class ActividadCoordinadorController extends Controller
 
     public function __construct()
     {
-          $this->middleware('auth');
+        $this->middleware('auth');
     }
     public function index()
     {
 
-        $usuarios = User::whereNotIn('id',[1,3,6,7,25])->where('unidad_id','=',auth()->user()->id)->get();
-        return view('produccion.actividades_coordinador.index',compact('usuarios'));
+        return view('produccion.actividades_coordinador.index');
     }
 
     public function create()
@@ -33,7 +32,7 @@ class ActividadCoordinadorController extends Controller
     public function show($id)
     {
         session(['id_usuario' => $id]);
-        return view('produccion.actividades_coordinador.show');
+        return view('produccion.actividades_coordinador.show', ["id_usuario" => $id]);
     }
 
     public function edit($id)
