@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers\produccion;
 
-
+use App\CategoriaTicket;
 use App\Http\Controllers\Controller;
 use App\MovimientoActividad;
+use App\PrioridadTicket;
+use App\Proyecto;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 
@@ -48,7 +50,10 @@ class ActividadController extends Controller
      */
     public function create()
     {
-        return view('produccion.actividades.create');
+        $proyectos = Proyecto::where('unidad_id', '=', auth()->user()->unidad_id)->whereIn('estado_id', [1, 2, 3,4, 6])->where('finalizado', '<>', 1)->orderBy('nombre')->get();
+        $categorias = CategoriaTicket::where('categoria_tickets.unidad_id', '=', auth()->user()->unidad_id)->get();
+        $prioridades = PrioridadTicket::get();
+        return view('produccion.actividades.create',compact('proyectos','categorias','prioridades'));
     }
 
     /**

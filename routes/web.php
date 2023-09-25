@@ -42,8 +42,12 @@ Route::get('actividades_tiempo', 'produccion\ActividadController@actividades_tie
 Route::resource('actividades', 'produccion\ActividadController');
 Route::resource('actividades_finalizadas', 'produccion\ActividadFinalizadaController');
 Route::resource('actividades_coordinador', 'produccion\ActividadCoordinadorController');
+
+
+Route::post('facturar/get_data', 'produccion\FacturarController@get_data');
 Route::resource('facturar', 'produccion\FacturarController');
 Route::get('facturar/{mes}/{anio}', 'produccion\FacturarController@facturar');
+
 
 Route::get('iso/matriz_riesgo2022', 'produccion\IsoMatrizController@iso2022');
 Route::get('iso/matriz_riesgo', 'produccion\IsoMatrizController@index');
@@ -53,6 +57,8 @@ Route::resource('unidad', 'catalogo\UnidadController');
 Route::resource('estado', 'catalogo\EstadoController');
 Route::resource('categoria', 'catalogo\CategoriaController');
 Route::resource('prioridad', 'catalogo\PrioridadController');
+
+Route::get('prueba', 'TestController@prueba');
 
 
 

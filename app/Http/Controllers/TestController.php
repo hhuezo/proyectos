@@ -21,7 +21,7 @@ class TestController extends Controller
 
     public function prueba()
     {
-        //$categories = Category::has('products')->get();
+
 
         return view('prueba');
     }
