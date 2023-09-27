@@ -40,7 +40,8 @@
                             <th>Id</th>
                             <th>Usuario</th>
                             <th>Nombre</th>
-                            <th>Actividad</th>
+                            <th>Proyecto</th>
+                            <th width="25%">Actividad</th>
                             <th>Cuenta</th>
                             <th>Avance</th>
                         </tr>
@@ -52,6 +53,7 @@
                                 <td>{{ $i }}</td>
                                 <td>{{ $registro->user_name }}</td>
                                 <td>{{ $registro->name }}</td>
+                                <td style="text-align: left">{{ $registro->proyecto}}</td>
                                 <td style="text-align: left">{{ $registro->actividad }}</td>
                                 <td>1</td>
                                 <td>{{ $registro->porcentaje }}%</td>

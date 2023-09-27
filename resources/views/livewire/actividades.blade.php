@@ -2,6 +2,13 @@
 
 
     <style>
+        .dd-item:hover {
+            transform: scale(1.05);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, .12), 0 4px 8px rgba(0, 0, 0, .06);
+        }
+    </style>
+
+    <style>
         /* The heart of the matter */
 
         .horizontal-scrollable>.row {
@@ -34,13 +41,7 @@
         .body {
             margin-top: -47px;
         }
-
-        .span.select2-dropdown.select2-dropdown--below{
-            z-index: 999999 !important;
-        }
-
     </style>
-
 
 
     <!-- Body: Body -->
@@ -370,18 +371,15 @@
                             @endif
 
                             <div class="form-group row">
-                                <label class="col-sm-3 control-label">Proyectos</label>
+                                <label class="col-sm-3 control-label">Proyecto</label>
                                 <div class="col-md-9 col-sm-9 col-xs-12">
-                                    <div wire:ignore>
-                                        <select class="form-select">
-                                            @if ($catalogo_proyectos)
-                                                @foreach ($catalogo_proyectos as $proyecto)
-                                                    <option value="{{ $proyecto->id }}">{{ $proyecto->nombre }}
-                                                    </option>
-                                                @endforeach
-                                            @endif
-                                        </select>
-                                    </div>
+                                    <select class="form-select" wire:model="proyecto_id">
+                                        @if ($catalogo_proyectos)
+                                            @foreach ($catalogo_proyectos as $proyecto)
+                                                <option value="{{ $proyecto->id }}">{{ $proyecto->nombre }}</option>
+                                            @endforeach
+                                        @endif
+                                    </select>
                                 </div>
                             </div>
                         </div>
@@ -396,6 +394,130 @@
         </div>
 
 
+        <div id="create_actividad" wire:ignore.self class="modal" tabindex="-1" role="dialog"
+            aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-lg modal-dialog-scrollable">
+                <div class="modal-content">
+                    <div class="modal-header col">
+                        <h5 class="modal-title  fw-bold" id="createprojectlLabel"> Nueva actividad</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                            aria-label="Close"></button>
+                    </div>
+
+                    <div class="modal-body row">
+                        @if (count($errors) > 0)
+                            <div class="alert alert-danger">
+                                <ul>
+                                    @foreach ($errors->all() as $error)
+                                        <li>{{ $error }}</li>
+                                    @endforeach
+                                </ul>
+                            </div>
+                        @endif
+
+
+
+
+
+
+                        <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+                            <div class="mb-3">
+                                <label class="form-label">Ticket</label>
+                                <input type="number" wire:model.defer="numero_ticket" class="form-control">
+                            </div>
+
+                        </div>
+
+                        <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+                            <div class="mb-3">
+                                <label class="form-label">Ponderacion</label>
+                                <input type="number" step="0.01" wire:model.defer="ponderacion" readonly
+                                    class="form-control">
+                            </div>
+                        </div>
+
+                        <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+                            <div class="mb-3">
+                                <label class="form-label">Proyectos</label>
+                                <select class="form-control" wire:model="id_proyecto" >
+                                    <option value="">Seleccione</option>
+                                    @if ($catalogo_proyectos)
+                                        @foreach ($catalogo_proyectos as $obj)
+                                            <option value="{{ $obj->id }}">{{ $obj->nombre }}</option>
+                                        @endforeach
+                                    @endif
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                            <div class="mb-3">
+                                <label class="form-label">Descripcion</label>
+                                <textarea class="form-control" wire:model.defer="descripcion"></textarea>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+                            <div class="mb-3">
+                                <label class="form-label">Fecha inicio</label>
+                                <input type="date" wire:model.defer="fecha_inicio" class="form-control">
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label">Categoria</label>
+                                <select wire:model.defer="categoria_id" class="form-select"
+                                    ria-label="Default select Project Category">
+                                    <option value="">Seleccione</option>
+                                    @foreach ($categorias as $obj)
+                                        <option value="{{ $obj->id }}">{{ $obj->nombre }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+
+
+                            <div class="mb-3">
+                                <label class="form-label">Prioridad</label>
+                                <select class="form-select" wire:model.defer="prioridad_id"
+                                    aria-label="Default select Project Category">
+                                    <option value="">Seleccione</option>
+                                    @foreach ($prioridades as $obj)
+                                        <option value="{{ $obj->id }}">{{ $obj->nombre }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+
+                        </div>
+
+                        <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+                            <div class="mb-3">
+                                <label class="form-label">Fecha final</label>
+                                <input type="date" wire:model.defer="fecha_fin" class="form-control">
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label">Forma</label>
+                                <input type="text" wire:model.defer="forma" class="form-control">
+                            </div>
+
+
+
+
+                            <div class="mb-3">
+                                <label class="form-label">Usuario</label>
+                                <input type="text" value="{{ auth()->user()->user_name }}" readonly
+                                    class="form-control">
+                            </div>
+                        </div>
+
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                        <button class="btn btn-primary" wire:click="store()">Guardar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
 
         <div id="create_avance" wire:ignore.self class="modal fade" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered modal-lg modal-dialog-scrollable">
@@ -484,7 +606,7 @@
                 right: 0px;
                 bottom: 0px;">
 
-            <button class="botonF1" wire:click="create()"
+            <button class="botonF1" wire:click="create()" data-bs-toggle="modal" data-bs-target="#create_actividad"
                 style=" width: 60px;
                 height: 60px;
                 border-radius: 100%;
@@ -509,13 +631,7 @@
 
     </div>
 
-    @push('scripts')
-        <script>
-            document.addEventListener('livewire:load', function() {
-                $('#select2').select2();
-            });
-        </script>
-    @endpush
+
 
 
     <script type="text/javascript">
@@ -554,8 +670,18 @@
         });
     </script>
 
-
-
+    <script>
+        window.initSelect2 = () => {
+            jQuery("#id_proyecto").select2({
+                minimumResultsForSearch: 2,
+                allowClear: true
+            });
+        }
+        initSelect2();
+        window.livewire.on('select2', () => {
+            initSelect2();
+        });
+    </script>
 
 
 </div>

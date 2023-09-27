@@ -59,6 +59,7 @@ Route::resource('categoria', 'catalogo\CategoriaController');
 Route::resource('prioridad', 'catalogo\PrioridadController');
 
 Route::get('prueba', 'TestController@prueba');
+Route::resource('catalogo/propietario', 'catalogo\PropietarioController');
 
 
 
