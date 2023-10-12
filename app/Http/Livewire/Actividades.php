@@ -115,7 +115,7 @@ class Actividades extends Component
     {
 //        return Redirect::to('actividades/create');
         $this->resetInput();
-        
+
 
         $time = Carbon::now('America/El_Salvador');
         $this->fecha_inicio = $time->format('Y-m-d');
@@ -404,7 +404,7 @@ class Actividades extends Component
         $this->tiempo_minutos = 0;
         $this->detalle = "";
 
-        $this->dispatchBrowserEvent('');
+        $this->dispatchBrowserEvent('close-modal-avance');
     }
 
     public function update()
