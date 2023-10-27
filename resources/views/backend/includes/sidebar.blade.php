@@ -140,6 +140,9 @@
 
                     <li><a class="ms-link {{ Request::is('admin/auth/user') ? 'active' : '' }}" href="{{ url('iso/matriz_riesgo') }}">Documentos</a></li>
                     <li><a class="ms-link {{ Request::is('admin/auth/role') || Request::is('admin/auth/role/create') ? 'active' : '' }}" href="{{ url('iso/matriz_riesgo2022') }}">Documentos 2022</a></li>
+
+                    <li><a class="ms-link {{ Request::is('admin/auth/user') ? 'active' : '' }}" href="{{ url('bitacora_rendimiento_base') }}">SFA-139 BITACORA REPORTES SOBRE RENDIMIENTO DE BASE DE DATOS</a></li>
+                    <li><a class="ms-link {{ Request::is('admin/auth/user') ? 'active' : '' }}" href="{{ url('bitacora_cambio_base') }}">SFA-129 BITACORA DE CAMBIOS EN BDs </a></li>
                 </ul>
             </li>
             @endif

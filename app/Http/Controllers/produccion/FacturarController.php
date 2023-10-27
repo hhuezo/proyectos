@@ -134,7 +134,7 @@ class FacturarController extends Controller
     public function store(Request $request)
     {
         $fecha_inicio = $request->fecha_inicio;
-        $fecha_final = $request->fecha_final;
+        $fecha_final = $request->fecha_final.' 23:00:00';
         $id_proyectos = $request->proyectos;
         $array_id = explode(',', $id_proyectos);
         $array_id = array_map('intval', $array_id);
@@ -152,6 +152,8 @@ class FacturarController extends Controller
             }, 'count')
             ->whereIn('proyectos.id', [9, 28])
             ->get();
+
+
 
 
 

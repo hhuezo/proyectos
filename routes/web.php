@@ -43,6 +43,9 @@ Route::resource('actividades', 'produccion\ActividadController');
 Route::resource('actividades_finalizadas', 'produccion\ActividadFinalizadaController');
 Route::resource('actividades_coordinador', 'produccion\ActividadCoordinadorController');
 
+Route::resource('bitacora_cambio_base', 'produccion\BitacoraCambioBaseController');
+Route::resource('bitacora_rendimiento_base', 'produccion\BitacoraRendimientoBaseController');
+
 
 Route::post('facturar/get_data', 'produccion\FacturarController@get_data');
 Route::resource('facturar', 'produccion\FacturarController');
@@ -58,7 +61,9 @@ Route::resource('estado', 'catalogo\EstadoController');
 Route::resource('categoria', 'catalogo\CategoriaController');
 Route::resource('prioridad', 'catalogo\PrioridadController');
 
-Route::get('prueba', 'TestController@prueba');
+Route::post('prueba', 'TestController@update');
+Route::get('prueba', 'TestController@index');
+Route::get('prueba/resultado/{usuario}/{fecha}', 'TestController@resultado');
 Route::resource('catalogo/propietario', 'catalogo\PropietarioController');
 
 
