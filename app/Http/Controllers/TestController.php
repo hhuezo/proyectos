@@ -45,6 +45,8 @@ class TestController extends Controller
     {
         $movimiento = MovimientoActividad::findOrFail($request->id);
         $movimiento->fecha = $request->fecha . ' ' . $request->hora;
+        $movimiento->created_at = $request->fecha . ' ' . $request->hora;
+        $movimiento->updated_at = $request->fecha . ' ' . $request->hora;
         $movimiento->detalle = $request->detalle;
         $movimiento->tiempo_minutos = $request->tiempo_minutos;
         $movimiento->update();

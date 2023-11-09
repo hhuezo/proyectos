@@ -60,7 +60,7 @@
                         <label class="form-label"><strong>Detalle</strong></label>
                         <div class="col-12">
                             <input type="hidden" name="id" id="id_modal">
-                            <input type="text" name="detalle" id="detalle_modal" required class="form-control">
+                            <input type="text" name="detalle" id="detalle_modal"  class="form-control">
                         </div>
                     </div>
                     <br>
@@ -84,7 +84,7 @@
                     <div class="form-group">
                         <label class="form-label"><strong>Minutos</strong></label>
                         <div class="col-12">
-                            <input type="number" name="tiempo_minutos" id="tiempo_minutos_modal" required
+                            <input type="number" name="tiempo_minutos" id="tiempo_minutos_modal"
                                 class="form-control">
                         </div>
                     </div>
