@@ -26,6 +26,8 @@ Auth::routes();
 Route::get('/', 'TestController@welcome')->name('welcome');
 
 Route::get('/home/{axo}/{month}', 'HomeController@home_soporte')->name('home_soporte');
+Route::get('/home/soporte_activos/{sucursal}/{estado}/{categoria}', 'HomeController@soporte_activos')->name('soporte_activos');
+Route::get('/home/soporte_activos/get_data/{sucursal}', 'HomeController@get_data')->name('get_data');
 Route::get('/home', 'HomeController@index')->name('home');
 
 Route::get('/home/{id}', 'HomeController@unidad')->name('unidad');
@@ -65,6 +67,9 @@ Route::post('prueba', 'TestController@update');
 Route::get('prueba', 'TestController@index');
 Route::get('prueba/resultado/{usuario}/{fecha}', 'TestController@resultado');
 Route::resource('catalogo/propietario', 'catalogo\PropietarioController');
+
+Route::get('calendarizacion/get_data/{fecha}', 'produccion\CalendarizacionController@get_data');
+Route::resource('calendarizacion','produccion\CalendarizacionController');
 
 
 

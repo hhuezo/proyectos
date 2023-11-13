@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Actividad;
+use App\snipeit\ActivosIso;
 use App\snipeit\VmMantenimiento;
 use App\TmpTotDsbActividadFinalizada;
 use App\TmpTotDsbActividadDesarrollo;
@@ -67,11 +68,70 @@ class HomeController extends Controller
             ->groupBy('sucursal')
             ->get();
 
+        $categorias = ActivosIso::distinct('categoria')->orderBy('categoria')->pluck('categoria');
+        $sucursales = ActivosIso::distinct('sucursal_std')->orderBy('sucursal_std')->pluck('sucursal_std');
+        $estados = ActivosIso::distinct('status')->orderBy('status')->pluck('status');
 
 
-        return view('home_soporte', compact('meses', 'resultados', 'resultados_sucursal', 'year', 'month','resultados_correctivos','resultados_sucursal_correctivos'));
+
+        return view('home_soporte', compact(
+            'meses',
+            'resultados',
+            'resultados_sucursal',
+            'year',
+            'month',
+            'resultados_correctivos',
+            'resultados_sucursal_correctivos',
+            'categorias',
+            'sucursales',
+            'estados'
+        ));
     }
 
+    public function soporte_activos(Request $request)
+    {
+
+
+        if ($request->sucursal != '0' || $request->estado != '0' || $request->categoria != '0') {
+            $string_sucursal  = "";
+
+            if ($request->sucursal != '0') {
+
+                $string_sucursal  = $string_sucursal . " where sucursal_std = '$request->sucursal'";
+            }
+
+            if ($request->estado != '0') {
+                if ($string_sucursal == '') {
+                    $string_sucursal = "where ";
+                }
+                else{
+                    $string_sucursal =  $string_sucursal .' and ';
+                }
+
+
+                $string_sucursal  = $string_sucursal . " status = '$request->estado'";
+            }
+
+            if ($request->categoria != '0') {
+                if ($string_sucursal == '') {
+                    $string_sucursal = "where ";
+                }
+                else{
+                    $string_sucursal =  $string_sucursal .' and ';
+                }
+
+                $string_sucursal  = $string_sucursal . " categoria = '$request->categoria'";
+            }
+            $sql = "select sucursal_std, count(*) as conteo from activos_iso " . $string_sucursal . " group by sucursal_std";
+        } else {
+            $sql = "select sucursal_std, count(*) as conteo from activos_iso group by sucursal_std";
+        }
+
+
+        $activos = DB::connection('mysql2')->select($sql);
+
+        return view('home_soporte_activos', compact('activos'));
+    }
     public function index(Request $request)
     {
         if (session('id_unidad')) {
@@ -89,9 +149,6 @@ class HomeController extends Controller
 
             return Redirect::to('home/' . $year . '/' . $month);
         }
-
-
-
 
 
         if (auth()->user()->rol_id == 6 && !session('id_unidad')) {
@@ -584,6 +641,15 @@ class HomeController extends Controller
     {
         session(['id_unidad' => $id]);
         return redirect('/home');
+    }
+
+    public function get_data($sucursal)
+    {
+        $categorias = ActivosIso::distinct('categoria')->where('sucursal_std', '=', $sucursal)->orderBy('categoria')->pluck('categoria');
+        $estados = ActivosIso::distinct('status')->where('sucursal_std', '=', $sucursal)->orderBy('status')->pluck('status');
+
+        $response = ["categorias" => $categorias, "estados" => $estados];
+        return $response;
     }
 
     public function load_unidades()
