@@ -196,6 +196,11 @@
                             href="{{ url('calendarizacion') }}">
                             <i class="icofont-notepad"></i><span>Calendarización de mantenimientos</span></a>
                     </li>
+                    <li class="collapsed">
+                        <a class="m-link {{ Request::segment(2) == 'project' ? 'active' : '' }}"
+                            href="{{ url('inventario_despliegues') }}">
+                            <i class="icofont-notepad"></i><span>Inventario despliegues</span></a>
+                    </li>
                 @endif
                 <?php
                 /*

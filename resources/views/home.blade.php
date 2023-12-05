@@ -262,14 +262,14 @@
     @endforeach --}}
 
 
-
     @if (auth()->user()->rol_id != 1)
         @php($visibility = 'none')
-        @else
+    @else
         @php($visibility = 'block')
     @endif
+
     <div class="body d-flex py-3">
-        <div class="container-xxl" style="display: {{$visibility}}">
+        <div class="container-xxl" style="display: {{ $visibility }}">
             <div class="row clearfix g-3">
                 <div class="col-xl-12 col-lg-12 col-md-12 flex-column">
                     <div class="row g-3">
@@ -409,7 +409,7 @@
 
         <div class="row">
 
-            <div class="col-md-12 col-lg-6 col-xl-6 col-xxl-6" style="display: {{$visibility}}">
+            <div class="col-md-12 col-lg-6 col-xl-6 col-xxl-6" style="display: {{ $visibility }}">
                 <div class="card">
                     <div class="card-header py-3">
                         <h6 class="mb-0 fw-bold ">Avance de Proyectos</h6>
@@ -455,7 +455,7 @@
 
             <div class="col-md-12 col-lg-6 col-xl-6 col-xxl-6">
 
-                <div class="col-xxl-12 col-xl-12 col-lg-12 col-md-12" style="display: {{$visibility}}">
+                <div class="col-xxl-12 col-xl-12 col-lg-12 col-md-12" style="display: {{ $visibility }}">
                     <div class="card">
                         <div class="card-header py-3">
                             <h6 class="mb-0 fw-bold ">Actividades finalizadas por día</h6>
@@ -468,7 +468,7 @@
 
 
 
-                <div class="row" style="display: {{$visibility}}">
+                <div class="row" style="display: {{ $visibility }}">
                     <div class="col-xxl-6 col-xl-6 col-lg-6 col-md-6">
                         <div class="card">
                             <div class="card-header py-3 d-flex justify-content-between bg-transparent border-bottom-0">
@@ -546,7 +546,7 @@
 
 
 
-                <div class="col-xxl-12 col-xl-12 col-lg-12 col-md-12" style="display: {{$visibility}}">
+                <div class="col-xxl-12 col-xl-12 col-lg-12 col-md-12" style="display: {{ $visibility }}">
                     <div class="card">
                         <div class="card-header py-3 d-flex justify-content-between bg-transparent border-bottom-0">
                             <h6 class="mb-0 fw-bold ">Actividades finalizadas por analista</h6>
@@ -607,8 +607,8 @@
 
 
     <!-- Body: Body -->
-    <div class="body d-flex py-3" >
-        <div class="container-xxl" style="display: {{$visibility}}">
+    <div class="body d-flex py-3">
+        <div class="container-xxl" style="display: {{ $visibility }}">
             <div class="row clearfix g-3">
                 <div class="col-xl-8 col-lg-12 col-md-12 flex-column">
                     <div class="row g-3">
@@ -638,7 +638,7 @@
                     </div>
 
 
-                    @if (Session::get('id_unidad') == 1)
+                    @if (auth()->user()->unidadId() == 1)
                         <div class="row g-3">
                             <div class="col-md-12">
                                 <div class="card">
@@ -664,6 +664,20 @@
                                 </div>
                             </div>
                         </div>
+
+                        <div class="row g-3">
+                            <div class="col-md-12">
+                                <div class="card">
+                                    <div
+                                        class="card-header py-3 d-flex justify-content-between bg-transparent border-bottom-0">
+                                        <h5 class="mb-0 fw-bold ">INDICE DE ERROR SOBRE TOTAL DE PROGRAMAS CREADOS Y
+                                            MODIFICADOS 2023</h5>
+                                    </div>
+                                    <canvas id="char_indice_error_meses_2023"></canvas>
+                                </div>
+                            </div>
+                        </div>
+
 
                         <div class="row g-3">
                             <div class="col-md-12">
@@ -889,6 +903,34 @@
                     type: 'line',
                     label: 'Line Dataset',
                     data: [5.00, 5.00, 5.00, 5.00, 5.00, 5.00, 5.00, 5.00, 5.00, 5.00, 5.00, 5.00]
+                }],
+                labels: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre',
+                    'Octubre', 'Noviembre', 'Diciembre'
+                ]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+
+
+        const ctx11 = document.getElementById('char_indice_error_meses_2023');
+
+        new Chart(ctx11, {
+            data: {
+                datasets: [{
+                    type: 'bar',
+                    label: 'LINEA DE DEFECTOS',
+
+                    data: [0.0, 0.0, 0.0, 0.0, 0.0, 4.76, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00]
+                }, {
+                    type: 'line',
+                    label: 'LINEA ESTANDAR ESTABLECIDO',
+                    data: [3.0, 3.0, 3.0, 3.0, 3.0, 3.0, 3.0, 3.0, 3.0, 3.0, 3.0, 3.0]
                 }],
                 labels: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre',
                     'Octubre', 'Noviembre', 'Diciembre'

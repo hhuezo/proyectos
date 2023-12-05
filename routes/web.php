@@ -70,6 +70,7 @@ Route::resource('catalogo/propietario', 'catalogo\PropietarioController');
 
 Route::get('calendarizacion/get_data/{fecha}', 'produccion\CalendarizacionController@get_data');
 Route::resource('calendarizacion','produccion\CalendarizacionController');
+Route::resource('inventario_despliegues', 'catalogo\InventarioDespliegueController');
 
 
 
