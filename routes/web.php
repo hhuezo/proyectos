@@ -26,8 +26,14 @@ Auth::routes();
 Route::get('/', 'TestController@welcome')->name('welcome');
 
 Route::get('/home/{axo}/{month}', 'HomeController@home_soporte')->name('home_soporte');
+Route::get('home/soporte_activos/get_data_activos/{sucursal}/{area}', 'HomeController@get_data_activos');
 Route::get('/home/soporte_activos/{sucursal}/{estado}/{categoria}', 'HomeController@soporte_activos')->name('soporte_activos');
+Route::get('/home/soporte_mantenimientos/{sucursal}/{area}/{activo}', 'HomeController@soporte_mantenimientos')->name('soporte_mantenimientos');
+
 Route::get('/home/soporte_activos/get_data/{sucursal}', 'HomeController@get_data')->name('get_data');
+
+
+Route::get('/home/soporte_activos/get_data_mantenimiento/{sucursal}', 'HomeController@get_data_mantenimiento')->name('get_data_mantenimiento');
 Route::get('/home', 'HomeController@index')->name('home');
 
 Route::get('/home/{id}', 'HomeController@unidad')->name('unidad');

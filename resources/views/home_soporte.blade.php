@@ -245,8 +245,64 @@
             </div>
         </div>
 
+        <br>
+        <div class="row col-12">
+            <div class="col-9 card" id="container_mantenimientos">
+            </div>
+            <div class="col-3 card">
+                <form method="GET" id="form_mantenimientos">
+                    <div class="col-md-12">&nbsp; </div>
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label class="form-label" align="right"><strong>Sucursal</strong></label>
+                            <div>
+                                <select id="mtto_sucursales" onchange="get_area_activo(this.value)" class="form-control">
+                                    <option value="0">SELECCIONE</option>
+                                    @foreach ($mtto_sucursales as $sucursal)
+                                        <option value="{{ $sucursal }}">{{ $sucursal }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+                    </div>
 
+                    <div class="col-md-12">&nbsp; </div>
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label class="form-label" align="right"><strong>Areas</strong></label>
+                            <div>
+                                <select id="mtto_areas" onchange="get_data_activos(this.value)" class="form-control">
+                                    <option value="0">SELECCIONE</option>
+                                    @foreach ($mtto_areas as $area)
+                                        <option value="{{ $area }}">{{ $area }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+                    </div>
 
+                    <div class="col-md-12">&nbsp; </div>
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label class="form-label" align="right"><strong>Activos</strong></label>
+                            <div>
+                                <select id="mtto_activos" class="form-control">
+                                    <option value="0">SELECCIONE</option>
+                                    @foreach ($mtto_activos as $activo)
+                                        <option value="{{ $activo }}">{{ $activo }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-12">&nbsp; </div>
+                    <div class="col-md-12" style="text-align: right">
+                        <button type="button" class="btn btn-primary" onclick="get_mantenimientos()">Aceptar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
 
     </figure>
 
@@ -264,6 +320,7 @@
     <script>
         $(document).ready(function() {
             get_activos();
+            get_mantenimientos();
         });
 
         Highcharts.chart('container', {
@@ -405,6 +462,79 @@
                         _select += '<option value="' + data.estados[i] + '" >' + data.estados[i] + '</option>';
                     }
                     $("#estado").html(_select);
+                },
+                error: function(error) {
+                    console.error('Error en la solicitud:', error);
+                }
+            });
+        }
+
+
+        function get_mantenimientos() {
+
+            var mtto_sucursales = document.getElementById('mtto_sucursales').value;
+            var mtto_areas = document.getElementById('mtto_areas').value;
+            var mtto_activos = document.getElementById('mtto_activos').value;
+
+
+            $.ajax({
+                url: "{{ url('/home/soporte_mantenimientos') }}/" + mtto_sucursales + "/" + mtto_areas + "/" +
+                    mtto_activos,
+                method: 'GET',
+                success: function(data) {
+                    console.log(data);
+                    $('#container_mantenimientos').html(data);
+                },
+                error: function(error) {
+                    console.error('Error en la solicitud:', error);
+                }
+            });
+        }
+
+
+        function get_area_activo(sucursal) {
+            $.ajax({
+                url: "{{ url('home/soporte_activos/get_data_mantenimiento') }}/" + sucursal,
+                method: 'GET',
+                success: function(data) {
+                    console.log(data);
+                    var _select = '<option value="0">SELECCIONE</option>';
+                    for (var i = 0; i < data.areas.length; i++) {
+                        _select += '<option value="' + data.areas[i] + '" >' + data.areas[i] +
+                            '</option>';
+                    }
+                    $("#mtto_areas").html(_select);
+
+                    var _select = '<option value="0">SELECCIONE</option>';
+                    for (var i = 0; i < data.activos.length; i++) {
+                        _select += '<option value="' + data.activos[i] + '" >' + data.activos[i] + '</option>';
+                    }
+                    $("#mtto_activos").html(_select);
+                },
+                error: function(error) {
+                    console.error('Error en la solicitud:', error);
+                }
+            });
+        }
+
+
+        function get_data_activos(area) {
+            var sucursal = document.getElementById('mtto_sucursales').value;
+            $.ajax({
+                url: "{{ url('home/soporte_activos/get_data_activos') }}/" + sucursal + "/" + area,
+                method: 'GET',
+                success: function(data) {
+
+                    // Initialize the select element with a default option
+                    var _select = '<option value="0">SELECCIONE</option>';
+
+                    // Loop through the data.activos array and create options for each item
+                    for (var i = 0; i < data.activos.length; i++) {
+                        _select += '<option value="' + data.activos[i] + '" >' + data.activos[i] + '</option>';
+                    }
+
+                    // Set the HTML content of the #mtto_activos element with the generated options
+                    $("#mtto_activos").html(_select);
                 },
                 error: function(error) {
                     console.error('Error en la solicitud:', error);

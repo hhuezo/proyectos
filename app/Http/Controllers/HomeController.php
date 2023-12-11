@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Actividad;
 use App\snipeit\ActivosIso;
+use App\snipeit\VmFrecuenciaMantenimiento;
 use App\snipeit\VmMantenimiento;
 use App\TmpTotDsbActividadFinalizada;
 use App\TmpTotDsbActividadDesarrollo;
@@ -72,7 +73,10 @@ class HomeController extends Controller
         $sucursales = ActivosIso::distinct('sucursal_std')->orderBy('sucursal_std')->pluck('sucursal_std');
         $estados = ActivosIso::distinct('status')->orderBy('status')->pluck('status');
 
-
+        $frecuencia_mtto = VmFrecuenciaMantenimiento::get();
+        $mtto_activos = $frecuencia_mtto->pluck('nombre_activo')->unique();
+        $mtto_sucursales = $frecuencia_mtto->pluck('sucursal')->unique();
+        $mtto_areas = $frecuencia_mtto->pluck('area')->unique();
 
         return view('home_soporte', compact(
             'meses',
@@ -84,13 +88,16 @@ class HomeController extends Controller
             'resultados_sucursal_correctivos',
             'categorias',
             'sucursales',
-            'estados'
+            'estados',
+            'frecuencia_mtto',
+            'mtto_activos',
+            'mtto_sucursales',
+            'mtto_areas'
         ));
     }
 
     public function soporte_activos(Request $request)
     {
-
 
         if ($request->sucursal != '0' || $request->estado != '0' || $request->categoria != '0') {
             $string_sucursal  = "";
@@ -103,9 +110,8 @@ class HomeController extends Controller
             if ($request->estado != '0') {
                 if ($string_sucursal == '') {
                     $string_sucursal = "where ";
-                }
-                else{
-                    $string_sucursal =  $string_sucursal .' and ';
+                } else {
+                    $string_sucursal =  $string_sucursal . ' and ';
                 }
 
 
@@ -115,9 +121,8 @@ class HomeController extends Controller
             if ($request->categoria != '0') {
                 if ($string_sucursal == '') {
                     $string_sucursal = "where ";
-                }
-                else{
-                    $string_sucursal =  $string_sucursal .' and ';
+                } else {
+                    $string_sucursal =  $string_sucursal . ' and ';
                 }
 
                 $string_sucursal  = $string_sucursal . " categoria = '$request->categoria'";
@@ -132,6 +137,41 @@ class HomeController extends Controller
 
         return view('home_soporte_activos', compact('activos'));
     }
+
+    public function soporte_mantenimientos($mtto_sucursales, $mtto_areas, $mtto_activos)
+    {
+
+        $frecuencia_mtto = VmFrecuenciaMantenimiento::when($mtto_sucursales != '0', function ($query) use ($mtto_sucursales) {
+            return $query->where('sucursal', '=', $mtto_sucursales);
+        })
+            ->when($mtto_areas != '0', function ($query) use ($mtto_areas) {
+                return $query->where('area', '=', $mtto_areas);
+            })
+
+            ->when($mtto_activos != '0', function ($query) use ($mtto_activos) {
+                return $query->where('nombre_activo', '=', $mtto_activos);
+            })->get();
+
+        return view('home_soporte_matenimientos', compact('frecuencia_mtto'));
+    }
+
+    public function get_data_mantenimiento($sucursal)
+    {
+        $frecuencia_mtto = VmFrecuenciaMantenimiento::where('sucursal', '=', $sucursal)->get();
+        $mtto_areas = $frecuencia_mtto->pluck('area')->unique()->values();
+        $mtto_activos = $frecuencia_mtto->pluck('nombre_activo')->unique()->values();
+        $response = ["areas" => $mtto_areas, "activos" => $mtto_activos];
+        return $response;
+    }
+
+    public function get_data_activos($sucursal, $area)
+    {
+        $frecuencia_mtto = VmFrecuenciaMantenimiento::where('sucursal', '=', $sucursal)->where('area', '=', $area)->get();
+        $mtto_activos = $frecuencia_mtto->pluck('nombre_activo')->unique()->values();
+        $response = ["activos" => $mtto_activos];
+        return $response;
+    }
+
     public function index(Request $request)
     {
         if (session('id_unidad')) {
@@ -651,6 +691,10 @@ class HomeController extends Controller
         $response = ["categorias" => $categorias, "estados" => $estados];
         return $response;
     }
+
+
+
+
 
     public function load_unidades()
     {
