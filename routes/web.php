@@ -61,7 +61,7 @@ Route::get('facturar/{mes}/{anio}', 'produccion\FacturarController@facturar');
 
 
 Route::get('iso/matriz_riesgo2022', 'produccion\IsoMatrizController@iso2022');
-Route::get('iso/matriz_riesgo', 'produccion\IsoMatrizController@index');
+Route::resource('iso/matriz_riesgo', 'produccion\IsoMatrizController');
 
 //catalogos
 Route::resource('unidad', 'catalogo\UnidadController');
