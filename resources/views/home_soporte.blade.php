@@ -304,7 +304,55 @@
             </div>
         </div>
 
+        <br>
+
+        <div class="row col-12">
+            <div class="col-9 card" id="container_dispositivos">
+            </div>
+            <div class="col-3 card">
+                <form method="GET" id="form_dispositivos">
+                    <div class="col-md-12">&nbsp; </div>
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label class="form-label" align="right"><strong>Sucursal</strong></label>
+                            <div>
+                                <select id="disp_sucursales" onchange="get_banco(this.value)" class="form-control">
+                                    <option value="0">SELECCIONE</option>
+                                    @foreach ($disp_sucursales as $sucursal)
+                                        <option value="{{ $sucursal }}">{{ $sucursal }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-12">&nbsp; </div>
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label class="form-label" align="right"><strong>Bancos</strong></label>
+                            <div>
+                                <select id="disp_bancos" class="form-control">
+                                    <option value="0">SELECCIONE</option>
+                                    @foreach ($disp_bancos as $area)
+                                        <option value="{{ $area }}">{{ $area }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-12">&nbsp; </div>
+                    <div class="col-md-12" style="text-align: right">
+                        <button type="button" class="btn btn-primary" onclick="get_dispositivos()">Aceptar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+
+
     </figure>
+
 
 
 
@@ -321,6 +369,7 @@
         $(document).ready(function() {
             get_activos();
             get_mantenimientos();
+            get_dispositivos();
         });
 
         Highcharts.chart('container', {
@@ -427,6 +476,32 @@
             }
         });
 
+        Highcharts.chart('container_dispositivos', {
+            data: {
+                table: 'datatable_dispositivos'
+            },
+            chart: {
+                type: 'column'
+            },
+            title: {
+                text: 'Mantenimientos correctivos(Sucursales)'
+            },
+            subtitle: {
+                text:
+                    //'Source: <a href="https://www.ssb.no/en/statbank/table/04231" target="_blank">SSB</a>'
+                    ''
+            },
+            xAxis: {
+                type: 'category'
+            },
+            yAxis: {
+                allowDecimals: false,
+                title: {
+                    text: 'Mantenimientos'
+                }
+            }
+        });
+
         function get_activos() {
             var sucursal = document.getElementById('sucursal').value;
             var estado = document.getElementById('estado').value;
@@ -491,6 +566,25 @@
             });
         }
 
+        function get_dispositivos() {
+
+            var sucursal = document.getElementById('disp_sucursales').value;
+            var banco = document.getElementById('disp_bancos').value;
+            console.log(sucursal, banco);
+
+            $.ajax({
+                url: "{{ url('/home/soporte_dispositivos') }}/" + sucursal + "/" + banco,
+                method: 'GET',
+                success: function(data) {
+                    console.log(data);
+                    $('#container_dispositivos').html(data);
+                },
+                error: function(error) {
+                    console.error('Error en la solicitud:', error);
+                }
+            });
+        }
+
 
         function get_area_activo(sucursal) {
             $.ajax({
@@ -541,7 +635,30 @@
                 }
             });
         }
+
+        function get_banco(sucursal) {
+            $.ajax({
+                url: "{{ url('home/soporte_activos/get_data_banco') }}/" + sucursal,
+                method: 'GET',
+                success: function(data) {
+                    console.log(data);
+                    var _select = '<option value="0">SELECCIONE</option>';
+                    for (var i = 0; i < data.bancos.length; i++) {
+                        _select += '<option value="' + data.bancos[i] + '" >' + data.bancos[i] +
+                            '</option>';
+                    }
+                    $("#disp_bancos").html(_select);
+
+
+                },
+                error: function(error) {
+                    console.error('Error en la solicitud:', error);
+                }
+            });
+        }
     </script>
+
+
 
 
     <!-- Jquery Page Js -->

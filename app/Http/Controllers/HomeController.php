@@ -78,6 +78,23 @@ class HomeController extends Controller
         $mtto_sucursales = $frecuencia_mtto->pluck('sucursal')->unique();
         $mtto_areas = $frecuencia_mtto->pluck('area')->unique();
 
+
+
+
+        $dispositivos_suc = DB::table('estadisticas_dispositivos_suc as s')
+            ->join('bancos as b', 's.ed_soc_codigo', '=', 'b.cod_sucursal')
+            ->select(DB::raw('SUBSTRING(s.ed_soc_codigo, 1, 3) as banco'), 'b.descripcion as sucursal', 's.eds_serial_impresora as serial', 's.eds_cantidad_restante as restante')
+            ->where('s.eds_id', '=', function ($query) {
+                $query->select(DB::raw('max(i.eds_id)'))
+                    ->from('estadisticas_dispositivos_suc as i')
+                    ->whereRaw('s.eds_id = i.eds_id');
+            })
+            ->orderBy('s.eds_cantidad_restante', 'asc')
+            ->get();
+
+        $disp_sucursales = $dispositivos_suc->pluck('sucursal')->unique();
+        $disp_bancos = $dispositivos_suc->pluck('banco')->unique();
+
         return view('home_soporte', compact(
             'meses',
             'resultados',
@@ -92,7 +109,9 @@ class HomeController extends Controller
             'frecuencia_mtto',
             'mtto_activos',
             'mtto_sucursales',
-            'mtto_areas'
+            'mtto_areas',
+            'disp_sucursales',
+            'disp_bancos'
         ));
     }
 
@@ -137,6 +156,88 @@ class HomeController extends Controller
 
         return view('home_soporte_activos', compact('activos'));
     }
+
+
+    public function soporte_dispositivos($sucursal, $banco)
+    {
+
+
+        if ($sucursal == "0" && $banco == "0") {
+
+            $dispositivos_suc = DB::table('estadisticas_dispositivos_suc as s')
+                ->join('bancos as b', 's.ed_soc_codigo', '=', 'b.cod_sucursal')
+                ->selectRaw("SUBSTRING(s.ed_soc_codigo, 1, 3) as banco")
+                ->select('b.descripcion as sucursal', 's.eds_serial_impresora as serial', 's.eds_cantidad_restante as restante')
+                ->where('s.eds_id', '=', function ($query) {
+                    $query->select(DB::raw('max(i.eds_id)'))
+                        ->from('estadisticas_dispositivos_suc as i')
+                        ->whereRaw('s.eds_serial_impresora = i.eds_serial_impresora ');
+                })
+                ->orderBy('s.eds_cantidad_restante', 'asc')
+                ->get();
+        } else if ($sucursal != "0" && $banco == "0") {
+            $dispositivos_suc = DB::table('estadisticas_dispositivos_suc as s')
+                ->join('bancos as b', 's.ed_soc_codigo', '=', 'b.cod_sucursal')
+                ->selectRaw("SUBSTRING(s.ed_soc_codigo, 1, 3) as banco")
+                ->select('b.descripcion as sucursal', 's.eds_serial_impresora as serial', 's.eds_cantidad_restante as restante')
+                ->where('s.eds_id', '=', function ($query) {
+                    $query->select(DB::raw('max(i.eds_id)'))
+                        ->from('estadisticas_dispositivos_suc as i')
+                        ->whereRaw('s.eds_serial_impresora = i.eds_serial_impresora ');
+                })
+                ->where('b.descripcion', $sucursal) // Assuming $sucursal is a variable with the desired value
+                ->orderBy('s.eds_cantidad_restante', 'asc')
+                ->get();
+        } else if ($sucursal == "0" && $banco != "0") {
+            $dispositivos_suc = DB::table('estadisticas_dispositivos_suc as s')
+                ->join('bancos as b', 's.ed_soc_codigo', '=', 'b.cod_sucursal')
+                ->selectRaw("SUBSTRING(s.ed_soc_codigo, 1, 3) as banco")
+                ->select('b.descripcion as sucursal', 's.eds_serial_impresora as serial', 's.eds_cantidad_restante as restante')
+                ->where('s.eds_id', '=', function ($query) {
+                    $query->select(DB::raw('max(i.eds_id)'))
+                        ->from('estadisticas_dispositivos_suc as i')
+                        ->whereRaw('s.eds_serial_impresora = i.eds_serial_impresora ');
+                })
+                ->whereRaw("SUBSTRING(s.ed_soc_codigo, 1, 3) = ?", [$banco])
+                ->orderBy('s.eds_cantidad_restante', 'asc')
+                ->get();
+        }
+
+        $data = array();
+
+        foreach ($dispositivos_suc as $dispositivo) {
+            $array_dispositivo = array("name" => $dispositivo->sucursal . ' - ' . $dispositivo->serial, "y" => $dispositivo->restante, "drilldown" =>  $dispositivo->sucursal . ' - ' . $dispositivo->serial);
+            array_push($data, $array_dispositivo);
+        }
+
+
+
+
+
+        return view('home_soporte_dispositivos', compact('dispositivos_suc', 'data'));
+    }
+
+    public function get_data_banco($sucursal)
+    {
+        $dispositivos_suc = DB::table('estadisticas_dispositivos_suc as s')
+            ->join('bancos as b', 's.ed_soc_codigo', '=', 'b.cod_sucursal')
+            ->select(DB::raw('SUBSTRING(s.ed_soc_codigo, 1, 3) as banco'), 'b.descripcion as sucursal', 's.eds_serial_impresora as serial', 's.eds_cantidad_restante as restante')
+            ->where('s.eds_id', '=', function ($query) {
+                $query->select(DB::raw('max(i.eds_id)'))
+                    ->from('estadisticas_dispositivos_suc as i')
+                    ->whereRaw('s.eds_id = i.eds_id');
+            })
+            ->where('b.descripcion', '=', $sucursal) // Agregamos la condición para sucursal
+            ->orderBy('s.eds_cantidad_restante', 'asc')
+            ->get();
+
+        $bancos = $dispositivos_suc->pluck('banco')->unique();
+
+        $response = ["bancos" => $bancos];
+
+        return $response;
+    }
+
 
     public function soporte_mantenimientos($mtto_sucursales, $mtto_areas, $mtto_activos)
     {
