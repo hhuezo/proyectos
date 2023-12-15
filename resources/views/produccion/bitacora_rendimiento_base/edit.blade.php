@@ -50,14 +50,16 @@
                                         <div class="form-group">
                                             <label class="form-label col-md-3"><strong>Fecha</strong></label>
                                             <div class="col-12">
-                                                <input type="text" name="fecha" value="{{$bitacora->fecha}}" required class="form-control">
+                                                <input type="date" name="fecha_ymd"
+                                                    value="{{ date('Y-m-d', strtotime($bitacora->fecha_ymd)) }}" required
+                                                    class="form-control">
                                             </div>
                                         </div>
                                         <br>
                                         <div class="form-group">
                                             <label class="form-label col-md-3"><strong>Hora</strong></label>
                                             <div class="col-12">
-                                                <input type="text" name="hora" value="{{$bitacora->hora}}" required
+                                                <input type="text" name="hora" value="{{ $bitacora->hora }}" required
                                                     class="form-control">
                                             </div>
                                         </div>
@@ -65,22 +67,24 @@
                                         <div class="form-group">
                                             <label class="form-label col-md-3"><strong>Tiempo</strong></label>
                                             <div class="col-12">
-                                                <input type="text" name="tiempo" value="{{$bitacora->tiempo}}" required class="form-control">
+                                                <input type="text" name="tiempo" value="{{ $bitacora->tiempo }}"
+                                                    required class="form-control">
                                             </div>
                                         </div>
                                         <br>
                                         <div class="form-group">
                                             <label class="form-label col-md-3"><strong>Tipo reporte</strong></label>
                                             <div class="col-12">
-                                                <input type="text" name="tipo_reporte" value="{{$bitacora->tipo_reporte}}" required class="form-control">
+                                                <input type="text" name="tipo_reporte"
+                                                    value="{{ $bitacora->tipo_reporte }}" required class="form-control">
                                             </div>
                                         </div>
                                         <br>
                                         <div class="form-group">
                                             <label class="form-label col-md-3"><strong>Unidad</strong></label>
                                             <div class="col-12">
-                                                <input type="text" name="unidad"  value="{{$bitacora->unidad}}" required
-                                                    class="form-control">
+                                                <input type="text" name="unidad" value="{{ $bitacora->unidad }}"
+                                                    required class="form-control">
                                             </div>
                                         </div>
                                         <br>
@@ -89,8 +93,8 @@
                                         <div class="form-group">
                                             <label class="form-label col-md-3"><strong>Programa</strong></label>
                                             <div class="col-12">
-                                                <input type="text" name="programa" value="{{$bitacora->programa}}" required
-                                                    class="form-control">
+                                                <input type="text" name="programa" value="{{ $bitacora->programa }}"
+                                                    required class="form-control">
                                             </div>
                                         </div>
 
@@ -110,7 +114,8 @@
                                         <div class="form-group">
                                             <label class="form-label col-md-3"><strong>Referencia</strong></label>
                                             <div class="col-12">
-                                                <input type="text" name="referencia" value="{{$bitacora->referencia}}" required class="form-control">
+                                                <input type="text" name="referencia" value="{{ $bitacora->referencia }}"
+                                                    required class="form-control">
                                             </div>
                                         </div>
 
@@ -120,8 +125,8 @@
                                         <div class="form-group">
                                             <label class="form-label col-md-3"><strong>Evento</strong></label>
                                             <div class="col-12">
-                                                <input type="text" name="evento" value="{{$bitacora->evento}}" required
-                                                    class="form-control">
+                                                <input type="text" name="evento" value="{{ $bitacora->evento }}"
+                                                    required class="form-control">
                                             </div>
                                         </div>
 
@@ -129,7 +134,9 @@
                                         <div class="form-group">
                                             <label class="form-label col-md-3"><strong>Accion ejecutada</strong></label>
                                             <div class="col-12">
-                                                <input type="text" name="accion_ejecutada" value="{{$bitacora->accion_ejecutada}}" required class="form-control">
+                                                <input type="text" name="accion_ejecutada"
+                                                    value="{{ $bitacora->accion_ejecutada }}" required
+                                                    class="form-control">
                                             </div>
                                         </div>
 
@@ -139,8 +146,8 @@
                                         <div class="form-group">
                                             <label class="form-label col-md-3"><strong>Diagnostico</strong></label>
                                             <div class="col-12">
-                                                <input type="text" name="diagnostico" value="{{$bitacora->diagnostico}}" required
-                                                    class="form-control">
+                                                <input type="text" name="diagnostico"
+                                                    value="{{ $bitacora->diagnostico }}" required class="form-control">
                                             </div>
                                         </div>
 
@@ -148,7 +155,26 @@
                                         <div class="form-group">
                                             <label class="form-label col-md-3"><strong>Responsable</strong></label>
                                             <div class="col-12">
-                                                <input type="text" name="responsable" value="{{$bitacora->responsable}}" required class="form-control">
+                                                <input type="text" name="responsable"
+                                                    value="{{ $bitacora->responsable }}" required class="form-control">
+                                            </div>
+                                        </div>
+                                        <br>
+                                        <div class="form-group">
+                                            <label class="form-label col-md-3"><strong>Estado</strong></label>
+                                            <div class="col-12">
+                                                <select id="estado_id" name="estado_id" required class="form-control">
+                                                    @foreach ($estados as $obj)
+                                                        @if ($obj->id == $bitacora->estado_rendimiento_id)
+                                                            <option value="{{ $obj->id }}" selected>
+                                                                {{ $obj->nombre }}
+                                                            </option>
+                                                        @else
+                                                            <option value="{{ $obj->id }}">{{ $obj->nombre }}
+                                                            </option>
+                                                        @endif
+                                                    @endforeach
+                                                </select>
                                             </div>
                                         </div>
                                     </div>

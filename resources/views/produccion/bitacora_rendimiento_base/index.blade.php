@@ -36,6 +36,7 @@
                                                 <th>FECHA</th>
                                                 <th>HORA</th>
                                                 <th>TIPO REPORTE</th>
+                                                <th>ESTADO</th>
                                                 <th>UNIDAD</th>
                                                 <th>PROGRAMA</th>
                                                 <th>Opciones</th>
@@ -49,6 +50,15 @@
                                                     <td>{{ $obj->fecha }}</td>
                                                     <td>{{ $obj->hora }}</td>
                                                     <td>{{ $obj->tipo_reporte }}</td>
+                                                    <td>
+                                                        @foreach ( $estados as $estado)
+                                                        @if ($obj->estado_rendimiento_id ==  $estado->id)
+                                                        <option value="{{ $estado->id }}" selected>
+                                                            {{ $estado->nombre }}
+                                                        </option>
+                                                        @endif
+                                                        @endforeach
+                                                    </td>
                                                     <td>{{ $obj->unidad }}</td>
                                                     <td>{{ $obj->programa }}</td>
                                                     <td>
