@@ -14,9 +14,10 @@ class BitacoraRendimientoBaseController extends Controller
 
     public function index()
     {
-        $bitacora = BitacoraRendimientoBaseDatos::get();
+        $bitacora = BitacoraRendimientoBaseDatos::orderBy('fecha_ymd', 'desc')->get() ;
         $estados=EstadoRendimientoBd::get();
-        return view('produccion.bitacora_rendimiento_base.index', compact('bitacora','estados'));
+        return view('produccion.bitacora_rendimiento_base.index', compact('bitacora','estados')   );
+
     }
 
 
