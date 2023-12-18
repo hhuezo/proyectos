@@ -11,7 +11,6 @@ use App\TmpTotDsbActividadDesarrollo;
 use App\TmpDsbDato;
 use App\TmpDsbActividadDiaria;
 use App\Unidad;
-use App\VWTiempoDiarioUsuariosDetalle;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -206,7 +205,14 @@ class HomeController extends Controller
         $data = array();
 
         foreach ($dispositivos_suc as $dispositivo) {
-            $array_dispositivo = array("name" => $dispositivo->sucursal . ' - ' . $dispositivo->serial, "y" => $dispositivo->restante, "drilldown" =>  $dispositivo->sucursal . ' - ' . $dispositivo->serial);
+            if ($dispositivo->restante < 300) {
+                $color = "red";
+            } else  if ($dispositivo->restante < 700) {
+                $color = "orange";
+            } else {
+                $color = "green";
+            }
+            $array_dispositivo = array("name" => $dispositivo->sucursal . ' - ' . $dispositivo->serial, "y" => $dispositivo->restante, "drilldown" =>  $dispositivo->sucursal . ' - ' . $dispositivo->serial, "color" =>  $color);
             array_push($data, $array_dispositivo);
         }
 
@@ -273,6 +279,82 @@ class HomeController extends Controller
         return $response;
     }
 
+    public function get_data_rendimiento_bd($anio)
+    {
+        if ($anio == Carbon::now()->year) {
+            $minFecha = Carbon::now()->firstOfYear();
+            $maxFecha = Carbon::now();
+        } else {
+            $minFecha = Carbon::createFromDate($anio, 1, 1)->startOfDay();
+            $maxFecha = Carbon::createFromDate($anio, 12, 31)->endOfDay();
+        }
+
+        $estado_rendimiento = DB::table('estados_rendimiento_bda')->get();
+        $categorias = $estado_rendimiento->pluck('nombre')->toArray();
+
+        $meses = array(
+            '01' => 'Enero', '02' => 'Febrero', '03' => 'Marzo', '04' => 'Abril', '05' => 'Mayo', '06' => 'Junio',
+            '07' => 'Julio', '08' => 'Agosto', '09' => 'Septiembre', '10' => 'Octubre', '11' => 'Noviembre', '12' => 'Diciembre'
+        );
+        $cod_meses = array('01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12');
+
+        $nombre_meses = array("Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre");
+
+        $series = [];
+
+        foreach ($categorias as $categoria) {
+            $array_data = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+            $resultados = DB::table('bitacora_rendimiento_base_datos as b')
+                ->join('estados_rendimiento_bda as e', 'b.estado_rendimiento_id', '=', 'e.id')
+                ->select(
+                    DB::raw('DATE_FORMAT(b.fecha_ymd, "%Y") as anio'),
+                    DB::raw('DATE_FORMAT(b.fecha_ymd, "%m") as mes'),
+                    'e.nombre',
+                    'e.id as estado_id',
+                    DB::raw('COUNT(*) as total')
+                )
+                ->where('e.nombre', $categoria) // Filtrar por el mes "01"
+                ->whereYear('b.fecha_ymd', $maxFecha->format('Y')) // Filtrar por el año "2023"
+                ->groupBy('anio', 'mes', 'e.nombre')
+                ->orderBy('anio')
+                ->orderBy('mes')
+                ->get();
+
+
+            foreach ($resultados as $resultado) {
+                $posicion = array_search($resultado->mes, $cod_meses);
+                $array_data[$posicion] = $resultado->total;
+            }
+
+            $array = ["name" => $categoria, "data" => $array_data];
+
+            array_push($series, $array);
+        }
+
+        return view('graficas.rendimiento_bd', compact('nombre_meses', 'series'));
+    }
+
+    public function get_modal_rendimiento_bd($anio, $categoria, $mes)
+    {
+        $meses = array(
+            '01' => 'Enero', '02' => 'Febrero', '03' => 'Marzo', '04' => 'Abril', '05' => 'Mayo', '06' => 'Junio',
+            '07' => 'Julio', '08' => 'Agosto', '09' => 'Septiembre', '10' => 'Octubre', '11' => 'Noviembre', '12' => 'Diciembre'
+        );
+
+        $valorMes = array_search($mes, $meses);
+
+        $resultados = DB::table('bitacora_rendimiento_base_datos as bitacora')
+            ->join('estados_rendimiento_bda as estado', 'bitacora.estado_rendimiento_id', '=', 'estado.id')
+            ->whereMonth('bitacora.fecha_ymd', '=', $valorMes)
+            ->whereYear('bitacora.fecha_ymd', '=', $anio)
+            ->where('estado.nombre', '=', $categoria)
+            ->get();
+
+
+        return view('graficas.rendimiento_bd_modal', compact('resultados','anio', 'categoria','mes'));
+
+    }
+
     public function index(Request $request)
     {
         if (session('id_unidad')) {
@@ -329,6 +411,306 @@ class HomeController extends Controller
         }
 
 
+
+        //primera fila SEMANA PASADA, SEMANA ACTUAL , DECREMENTO PRODUCCION y PROYECTOS EN DESARROLLO
+        $tmp_dsb_datos = DB::table('tmp_dsb_datos')->where('unidad_id', '=', $id_unidad)->select(['numero_tickets_anterior', 'numero_tickets_actual', 'numero_incremento_prod', 'numero_proyectos_desarrollo'])->first();
+
+        $numero_tickets_anterior = $tmp_dsb_datos->numero_tickets_anterior ?? null;
+        $numero_tickets_actual = $tmp_dsb_datos->numero_tickets_actual ?? null;
+        $numero_incremento_prod = $tmp_dsb_datos->numero_incremento_prod ?? null;
+        $numero_proyectos_desarrollo = $tmp_dsb_datos->numero_proyectos_desarrollo ?? null;
+
+        // fin primera fila SEMANA PASADA, SEMANA ACTUAL , DECREMENTO PRODUCCION y PROYECTOS EN DESARROLLO
+
+
+        //Avance de Proyectos
+        $proyectos_avance = DB::table('proyectos')
+            ->leftJoin('actividades as a', 'proyectos.id', '=', 'a.proyecto_id')
+            ->select('proyectos.id', 'proyectos.nombre', 'proyectos.avance', DB::raw('IFNULL(SUM(a.tiempo_desarrollo) / 60 / 8, 0) as tiempo'))
+            ->where('proyectos.finalizado', 0)
+            ->where('proyectos.unidad_id', $id_unidad)
+            ->whereNotIn('proyectos.id', [9, 11, 28])
+            ->groupBy('proyectos.id', 'proyectos.nombre')
+            ->orderByDesc('proyectos.avance')
+            ->get();
+
+        //fin de Avance de Proyectos
+
+        //Actividades finalizadas por día
+        $result = DB::table('actividades as a')
+            ->leftJoin('users as u', 'a.users_id', '=', 'u.id')
+            ->select(
+                DB::raw('DAY(a.fecha_liberacion) as dia'),
+                DB::raw('IFNULL(COUNT(*), 0) as cuenta')
+            )
+            ->whereYear('a.fecha_liberacion', now()->year)
+            ->whereMonth('a.fecha_liberacion', now()->month)
+            ->where('a.estado_id', 4)
+            ->where('u.unidad_id', $id_unidad)
+            ->groupBy(DB::raw('DAY(a.fecha_liberacion)'))
+            ->orderBy(DB::raw('DAY(a.fecha_liberacion)'))
+            ->get();
+
+        $actividades_finalizadas_label = $result->pluck('dia')->toArray();
+        $actividades_finalizadas_value = $result->pluck('cuenta')->toArray();
+        //dd($actividades_finalizadas_label,$actividades_finalizadas_value);
+        //fin Actividades finalizadas por día
+
+
+        //Estado de proyectos
+        $result = DB::table('proyectos as p')
+            ->select(
+                DB::raw('IFNULL(COUNT(DISTINCT CASE WHEN p.estado_id = 2 AND p.unidad_id = ' . $id_unidad . ' THEN p.id END), 0) as numero_proyectos_pausa'),
+                DB::raw('IFNULL(COUNT(DISTINCT CASE WHEN p.estado_id = 3 AND p.unidad_id = ' . $id_unidad . ' THEN p.id END), 0) as numero_proyectos_desarrollo'),
+                DB::raw('IFNULL(COUNT(DISTINCT CASE WHEN p.estado_id = 4 AND p.unidad_id = ' . $id_unidad . ' THEN p.id END), 0) as numero_proyectos_certificacion')
+            )
+            ->first();
+
+        $data_estado_proyectos_label = ["En Desarrollo (" . $result->numero_proyectos_desarrollo . ")", "En Certificacion (" . $result->numero_proyectos_certificacion . ")", "En Pausa (" . $result->numero_proyectos_pausa . ")"];
+        $data_estado_proyectos_value = [$result->numero_proyectos_desarrollo, $result->numero_proyectos_certificacion, $result->numero_proyectos_pausa];
+        //fin Estado de proyectos
+
+        //Actividades finalizadas por analista
+        $result = DB::table('users')
+            ->leftJoin('actividades', 'users.id', '=', 'actividades.users_id')
+            ->select('users.user_name', DB::raw('COUNT(actividades.id) as numero_actividades'))
+            ->where('actividades.porcentaje', '100')
+            ->where('users.unidad_id', $id_unidad)
+            ->groupBy('users.user_name')
+            ->orderBy(DB::raw('COUNT(actividades.id)'))
+            ->get();
+
+        $data_users_end_label = $result->pluck('user_name')->toArray();
+        $data_users_end_value = $result->pluck('numero_actividades')->toArray();
+
+        //fin Actividades finalizadas por analista
+
+        //Actividades finalizadas 15 dias por analista
+        $result = DB::table('users')
+            ->leftJoin('actividades', 'users.id', '=', 'actividades.users_id')
+            ->select('users.user_name', DB::raw('SUM(CASE WHEN actividades.porcentaje = "100" AND actividades.fecha_liberacion BETWEEN NOW() - INTERVAL 15 DAY AND NOW() THEN 1 ELSE 0 END) as numero_actividades'))
+            ->where('users.unidad_id', $id_unidad)
+            ->groupBy('users.user_name')
+            ->orderBy('numero_actividades')
+            ->get();
+
+        $data_users_week_end_label = $result->pluck('user_name')->toArray();
+        $data_users_week_end_value = $result->pluck('numero_actividades')->toArray();
+        //fin Actividades finalizadas 15 dias por analista
+
+
+        //Actividades asignadas por analista
+        $result = DB::table('users')
+            ->leftJoin('actividades', 'users.id', '=', 'actividades.users_id')
+            ->select('users.user_name', DB::raw('COUNT(actividades.id) as numero_actividades'))
+            ->where('actividades.porcentaje', '<', '100')
+            ->where('users.unidad_id', $id_unidad)
+            ->groupBy('users.user_name')
+            ->orderBy('numero_actividades')
+            ->get();
+
+        $data_users_dev_label = $result->pluck('user_name')->toArray();
+        $data_users_dev_value = $result->pluck('numero_actividades')->toArray();
+        //fin Actividades asignadas por analista
+
+
+        //Bolson Horas Operatoria Diaria
+        $result = DB::table('actividades')
+            ->leftJoin('users as u', 'actividades.users_id', '=', 'u.id')
+            ->select(
+                DB::raw('MONTH(fecha_liberacion) as num_mes'),
+                DB::raw('CASE
+                    WHEN MONTH(fecha_liberacion) = 1 THEN CONCAT("Enero ", YEAR(fecha_liberacion))
+                    WHEN MONTH(fecha_liberacion) = 2 THEN CONCAT("Febrero ", YEAR(fecha_liberacion))
+                    WHEN MONTH(fecha_liberacion) = 3 THEN CONCAT("Marzo ", YEAR(fecha_liberacion))
+                    WHEN MONTH(fecha_liberacion) = 4 THEN CONCAT("Abril ", YEAR(fecha_liberacion))
+                    WHEN MONTH(fecha_liberacion) = 5 THEN CONCAT("Mayo ", YEAR(fecha_liberacion))
+                    WHEN MONTH(fecha_liberacion) = 6 THEN CONCAT("Junio ", YEAR(fecha_liberacion))
+                    WHEN MONTH(fecha_liberacion) = 7 THEN CONCAT("Julio ", YEAR(fecha_liberacion))
+                    WHEN MONTH(fecha_liberacion) = 8 THEN CONCAT("Agosto ", YEAR(fecha_liberacion))
+                    WHEN MONTH(fecha_liberacion) = 9 THEN CONCAT("Septiembre ", YEAR(fecha_liberacion))
+                    WHEN MONTH(fecha_liberacion) = 10 THEN CONCAT("Octubre ", YEAR(fecha_liberacion))
+                    WHEN MONTH(fecha_liberacion) = 11 THEN CONCAT("Noviembre ", YEAR(fecha_liberacion))
+                    WHEN MONTH(fecha_liberacion) = 12 THEN CONCAT("Diciembre ", YEAR(fecha_liberacion))
+                END as mes'),
+                DB::raw('SUM(actividades.tiempo_desarrollo) / 60 as tiempo_horas'),
+                DB::raw('YEAR(fecha_liberacion) as anio')
+            )
+            ->whereIn('proyecto_id', [9, 28])
+            ->where('estado_id', 4)
+            ->whereNotNull('fecha_liberacion')
+            ->where('u.unidad_id', $id_unidad)
+            ->groupBy('num_mes', 'mes', 'anio')
+            ->orderBy('num_mes')
+            ->get();
+
+        $data_horas_meses_end_label = $result->pluck('mes')->toArray();
+        $data_horas_meses_end_value = $result->pluck('tiempo_horas')->toArray();
+        //fin Bolson Horas Operatoria Diaria
+
+
+
+        //Actividades Finalizadas por Mes
+        $fecha_actual = now();
+        $fecha_inicial = $fecha_actual->subMonths(11)->startOfMonth();
+        $fecha_final = now()->endOfDay();
+
+
+        $actividades_finalizadas_mes = Actividad::join('users', 'users.id', '=', 'actividades.users_id')
+            ->where('actividades.porcentaje', '=', 100)
+            ->where('actividades.fecha_inicio', '>', $fecha_inicial)
+            ->where('users.unidad_id', '=', $id_unidad)
+            ->selectRaw('COUNT(actividades.id) as conteo,
+                        CONCAT(
+                            CASE
+                                WHEN MONTH(actividades.fecha_inicio) = 1 THEN "Enero"
+                                WHEN MONTH(actividades.fecha_inicio) = 2 THEN "Febrero"
+                                WHEN MONTH(actividades.fecha_inicio) = 3 THEN "Marzo"
+                                WHEN MONTH(actividades.fecha_inicio) = 4 THEN "Abril"
+                                WHEN MONTH(actividades.fecha_inicio) = 5 THEN "Mayo"
+                                WHEN MONTH(actividades.fecha_inicio) = 6 THEN "Junio"
+                                WHEN MONTH(actividades.fecha_inicio) = 7 THEN "Julio"
+                                WHEN MONTH(actividades.fecha_inicio) = 8 THEN "Agosto"
+                                WHEN MONTH(actividades.fecha_inicio) = 9 THEN "Septiembre"
+                                WHEN MONTH(actividades.fecha_inicio) = 10 THEN "Octubre"
+                                WHEN MONTH(actividades.fecha_inicio) = 11 THEN "Noviembre"
+                                WHEN MONTH(actividades.fecha_inicio) = 12 THEN "Diciembre"
+                            END,
+                            " ",
+                            YEAR(actividades.fecha_inicio)
+                        ) as mes_anio')
+            ->groupBy(DB::raw('YEAR(actividades.fecha_inicio), MONTH(actividades.fecha_inicio)'))
+            ->get();
+
+        $data_meses_end_mes_anio_label = $actividades_finalizadas_mes->pluck('mes_anio')->toArray();
+        $data_meses_end_mes_anio_value = $actividades_finalizadas_mes->pluck('conteo')->toArray();
+
+
+
+
+
+        // fin Actividades Finalizadas por Mes
+
+
+        //Actividades por Categoria Finalizadas por Mes
+
+        $actividades_categoria = Actividad::join('categoria_tickets', 'categoria_tickets.id', '=', 'actividades.categoria_id')
+            ->whereBetween('actividades.fecha_liberacion', [$fecha_inicial, $fecha_final])
+            ->whereIn('actividades.categoria_id', [3, 8, 9])
+            ->where('actividades.numero_ticket', '<>', 1234)
+            ->where('actividades.fecha_liberacion', '<>', null)
+            ->select(
+                'categoria_tickets.id',
+                'categoria_tickets.codigo',
+                'categoria_tickets.nombre',
+                DB::raw('month(actividades.fecha_liberacion) as mes,year(actividades.fecha_liberacion) as anio,COUNT(actividades.id) as conteo')
+            )
+            ->groupBy(DB::raw('categoria_tickets.id,categoria_tickets.codigo,categoria_tickets.nombre,month(actividades.fecha_liberacion),year(actividades.fecha_liberacion)'))
+            ->orderBy(DB::raw('year(actividades.fecha_liberacion),month(actividades.fecha_liberacion)'))
+            ->get();
+
+        $data_categorias = "";
+        $array_cantidad_codigo_3 = array();
+        $array_cantidad_codigo_8 = array();
+        $array_cantidad_codigo_9 = array();
+
+        $meses = array('', 'Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre');
+
+        //$localizacion = array();
+        $j = 0;
+        for ($i = $fecha_actual->format('m') + 0; $i <= 12; $i++) {
+            $data_categorias = $data_categorias . "'" . $meses[$i] . " " . $fecha_actual->format('Y') . "',";
+            array_push($array_cantidad_codigo_3, 0);
+            array_push($array_cantidad_codigo_8, 0);
+            array_push($array_cantidad_codigo_9, 0);
+            $localizacion[$i . $fecha_actual->format('Y')] = $j;
+            $j++;
+        }
+
+        for ($i = 1; $i <= $fecha_actual->format('m') + 0; $i++) {
+            $data_categorias = $data_categorias . "'" . $meses[$i] . " " . Carbon::now()->format('Y') . "',";
+            array_push($array_cantidad_codigo_3, 0);
+            array_push($array_cantidad_codigo_8, 0);
+            array_push($array_cantidad_codigo_9, 0);
+            $localizacion[$i . Carbon::now()->format('Y')] = $j;
+            $j++;
+        }
+
+        //dd($actividades_categoria);
+
+        foreach ($actividades_categoria as $actividad) {
+            $posicion = $localizacion[$actividad->mes . $actividad->anio];
+
+            if ($actividad->id == 3) {
+                $array_cantidad_codigo_3[$posicion] = $actividad->conteo;
+                if ($actividad->nombre != null) $nombre_codigo_3 = $actividad->nombre;
+                else $nombre_codigo_3 = '';
+
+                //dd($nombre_codigo_3);
+
+                $url_codigo_3 = "http://localhost:8000/home";
+            } else  if ($actividad->id == 8) {
+                $array_cantidad_codigo_8[$posicion] = $actividad->conteo;
+                $nombre_codigo_8 = $actividad->nombre;
+                if ($actividad->nombre != null) $nombre_codigo_8 = $actividad->nombre;
+                else $nombre_codigo_8 = '';
+
+                $url_codigo_8 = "http://localhost:8000/home";
+            } else  if ($actividad->id == 9) {
+                $array_cantidad_codigo_9[$posicion] = $actividad->conteo;
+                $nombre_codigo_9 = $actividad->nombre;
+                if ($actividad->nombre != null) $nombre_codigo_9 = $actividad->nombre;
+                else $nombre_codigo_9 = '';
+
+                $url_codigo_9 = "http://localhost:8000/home";
+            }
+        }
+        //fin Actividades por Categoria Finalizadas por Mes
+
+
+
+
+
+
+
+        return view('home', compact(
+            'numero_tickets_anterior',
+            'numero_tickets_actual',
+            'numero_incremento_prod',
+            'numero_proyectos_desarrollo',
+            'proyectos_avance',
+            'actividades_finalizadas_label',
+            'actividades_finalizadas_value',
+            'data_estado_proyectos_label',
+            'data_estado_proyectos_value',
+            'data_users_end_label',
+            'data_users_end_value',
+            'data_users_week_end_label',
+            'data_users_week_end_value',
+            'data_users_dev_label',
+            'data_users_dev_value',
+            'data_horas_meses_end_label',
+            'data_horas_meses_end_value',
+            'data_meses_end_mes_anio_label',
+            'data_meses_end_mes_anio_value',
+            'data_categorias',
+            'array_cantidad_codigo_3',
+            'array_cantidad_codigo_8',
+            'array_cantidad_codigo_9',
+            'nombre_codigo_3',
+            'nombre_codigo_8',
+            'nombre_codigo_9',
+            'meses'
+        ));
+
+
+
+        /*    $data_categorias = array();
+        $array_cantidad_codigo_3 = array();
+        $array_cantidad_codigo_8 = array();
+        $array_cantidad_codigo_9 = array();
+
+
         $dsb_actividades_finalizadas = DB::select("call dashboardActividadesFinalizadas('" . $id_unidad . "')");
 
         //$dsb_tot_actividades_finalizadas = TmpTotDsbActividadFinalizada::all();
@@ -368,28 +750,6 @@ class HomeController extends Controller
         }
 
 
-        //dd($data_users_dev);
-
-
-        //$dsb_actividades_finalizadas_mes = DB::select('call dashboardActividadesFinalizadasMes()');
-        /*  $dsb_actividades_finalizadas_mes = DB::select("call dashboardActividadesFinalizadasMes('".$id_unidad."')");
-
-        $dsb_tot_actividades_finalizadas = DB::table('tmp_tot_dsb_actividades_finalizadas_mes')
-        ->select('tmp_tot_dsb_actividades_finalizadas_mes.mes', 'tmp_tot_dsb_actividades_finalizadas_mes.mes_str',
-        'tmp_tot_dsb_actividades_finalizadas_mes.numero_actividades')
-        ->orderBy('tmp_tot_dsb_actividades_finalizadas_mes.anio','asc')
-        ->orderBy('tmp_tot_dsb_actividades_finalizadas_mes.mes','asc')
-        ->get();
-
-        $meses=$dsb_tot_actividades_finalizadas->pluck('mes_str');
-        $numero_actividades=$dsb_tot_actividades_finalizadas->pluck('numero_actividades');
-
-        $data_meses_end = array();
-
-        for ($i = 0; $i < count($meses); $i++) {
-            $array_meses_end = array("name"=>$meses[$i],"y"=>$numero_actividades[$i],"color"=>"#4670C0");
-            array_push($data_meses_end, $array_meses_end);
-        }*/
 
         $meses = array('', 'Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre');
 
@@ -582,12 +942,6 @@ class HomeController extends Controller
         $proyectos_fin = $dsb_tot_proyectos_tiempo->pluck('proyecto');
         $tiempos_fin = $dsb_tot_proyectos_tiempo->pluck('tiempo');
 
-        //dd($proyectos);
-        //dd($tiempos);
-
-
-        //dd($data_proyectos_tiempo);
-
 
         //$dsb_actividades_finalizadas_usuario_semana = DB::select('call dashboardActividadesFinalizadasUsuarioSemana()');
         $dsb_actividades_finalizadas_usuario_semana = DB::select("call dashboardActividadesFinalizadasUsuarioSemana('" . $id_unidad . "')");
@@ -606,12 +960,6 @@ class HomeController extends Controller
             array_push($data_users_week_end_value, $numero_actividades[$i]);
         }
 
-
-        //dd($data_users_week_end);
-        //dd($data_users_end);
-
-
-
         //$dsb_actividades_finalizadas_horas_mes = DB::select('call dashboardActividadesFinalizadasHorasMes()');
         $dsb_actividades_finalizadas_horas_mes = DB::select("call dashboardActividadesFinalizadasHorasMes('" . $id_unidad . "')");
 
@@ -627,13 +975,6 @@ class HomeController extends Controller
 
         $meses = $dsb_tot_actividades_finalizadas->pluck('mes_str');
         $tiempo_horas = $dsb_tot_actividades_finalizadas->pluck('tiempo_horas');
-
-        // $data_horas_meses_end = array();
-
-        // for ($i = 0; $i < count($meses); $i++) {
-        //     $array_horas_meses_end = array("name" => $meses[$i], "y" => $tiempo_horas[$i], "color" => "#4670C0");
-        //     array_push($data_horas_meses_end, $array_horas_meses_end);
-        // }
 
 
 
@@ -671,42 +1012,67 @@ class HomeController extends Controller
             ->get();
 
 
-        //dd($dsb_tot_actividades_categorias);
-
-
-        /* $data_horas_meses_end = array();
-
-        for ($i = 0; $i < count($meses); $i++) {
-            $array_horas_meses_end = array("name"=>$meses[$i],"y"=>$tiempo_horas[$i],"color"=>"#4670C0");
-            array_push($data_horas_meses_end, $array_horas_meses_end);
-        }*/
-
         $fecha_actual = \Carbon::now()->addMonths(-1);
         $fecha_inicial = $fecha_actual->format('Y-m-d') . ' 00:00:00';
         $fecha_final = \Carbon::now()->format('Y-m-d') . ' 23:59:00';
 
-        /*$sql =  "SELECT PROYECTO, `id usuario` as IdUsuario , Usuario , ifnull(SUM( `Tiempo Percibido Minutos`),0) TMP_INGRESADO
-        FROM `VWTiempoDiarioUsuariosDetalle` WHERE `Fecha Movimiento` BETWEEN ? AND  ? and Usuario <> 'MVALLE_ID'
-        GROUP BY PROYECTO, `id usuario` , Usuario  having TMP_INGRESADO > 0 order by PROYECTO,Usuario";
-
-        $data_consolidado_proyectos = DB::select($sql, array($fecha_inicial, $fecha_final));*/
         $data_consolidado_proyectos = null;
-
-        /*
-        $sql =  "SELECT PROYECTO, `id usuario` as IdUsuario , Usuario ,   ifnull(sum( `Tiempo sistema Minutos`),0) TMP_INGRESADO
-        FROM `VWTiempoDiarioUsuariosDetalle` WHERE `Fecha Movimiento` BETWEEN ? AND  ? and Usuario = 'MVALLE_ID'
-        GROUP BY PROYECTO, `id usuario` , Usuario  having TMP_INGRESADO > 0 order by PROYECTO,Usuario";
-
-        $data_consolidado_proyectos2 = DB::select($sql, array($fecha_inicial, $fecha_final));*/
         $data_consolidado_proyectos2 = null;
 
-        //dd($data_categorias);
-        //dd($data_estado_proyectos);
+        //grafico de bitacora de rendimiento
+       /* $result = DB::table('bitacora_rendimiento_base_datos')->select(DB::raw('MIN(fecha_ymd) as min_fecha, MAX(fecha_ymd) as max_fecha'))->get();
+
+        $minFecha = $result->first()->min_fecha;
+        $maxFecha = $result->first()->max_fecha;
+        */
+
+        /*$minFecha = Carbon::now()->firstOfYear();
+        $maxFecha = Carbon::now();
+
+        $arregloFechas = $this->generarArregloFechas($minFecha, $maxFecha);
 
 
+        $resultados = DB::table('bitacora_rendimiento_base_datos as b')
+            ->join('estados_rendimiento_bda as e', 'b.estado_rendimiento_id', '=', 'e.id')
+            ->select(
+                DB::raw('DATE_FORMAT(b.fecha_ymd, "%Y") as anio'),
+                DB::raw('DATE_FORMAT(b.fecha_ymd, "%m") as mes'),
+                'e.nombre',
+                'e.id as estado_id',
+                DB::raw('COUNT(*) as total')
+            )
+            ->whereBetween('DATE_FORMAT(b.fecha_ymd, "%Y")',[])
+            ->groupBy('anio', 'mes', 'e.nombre')
+            ->orderBy('anio')
+            ->orderBy('mes')
+            ->get();
 
+        foreach ($resultados as $resultado) {
+            $indiceEncontrado = array_search($resultado->mes, array_column($arregloFechas[$resultado->anio], 'mes'));
+            $estado = $resultado->estado_id;
 
+            switch ($estado) {
+                case 1:
+                    $arregloFechas[$resultado->anio][$indiceEncontrado]['InterrupcionTotal'] = $resultado->total;
+                    break;
+                case 2:
+                    $arregloFechas[$resultado->anio][$indiceEncontrado]['InterrupcionParcial'] = $resultado->total;
+                    break;
+                case 3:
+                    $arregloFechas[$resultado->anio][$indiceEncontrado]['Caida'] = $resultado->total;
+                    break;
+                case 4:
+                    $arregloFechas[$resultado->anio][$indiceEncontrado]['Lentitud'] = $resultado->total;
+                    break;
+                case 5:
+                    $arregloFechas[$resultado->anio][$indiceEncontrado]['SinAfectacion'] = $resultado->total;
+                    break;
+                default:
+                    // Código para el caso por defecto (si $estado no es 1, 2, 3, 4, ni 5)
+            }
+        }
 
+        dd($arregloFechas);
 
 
         return view(
@@ -775,7 +1141,34 @@ class HomeController extends Controller
                 'url_codigo_9' => $url_codigo_9,
             ]
         ); //listado
+        */
+    }
 
+
+    function generarArregloFechas($fechaInicio, $fechaFinal)
+    {
+        /*$fechaInicio = Carbon::parse($fechaInicio);
+        $fechaFinal = Carbon::parse($fechaFinal);*/
+
+        $arregloFechas = [];
+
+        while ($fechaInicio->lte($fechaFinal)) {
+            $anio = $fechaInicio->year;
+            $mes = $fechaInicio->format('m');
+
+            $arregloFechas[$anio][] = [
+                'mes' => $mes,
+                'InterrupcionTotal' => 0,
+                'InterrupcionParcial' => 0,
+                'Caida' => 0,
+                'Lentitud' => 0,
+                'SinAfectacion' => 0
+            ];
+
+            $fechaInicio->addMonth(); // Avanza al siguiente mes
+        }
+
+        return $arregloFechas;
     }
 
     public function unidad($id)

@@ -163,7 +163,7 @@
                                         <div class="form-group">
                                             <label class="form-label col-md-3"><strong>Estado</strong></label>
                                             <div class="col-12">
-                                                <select id="estado_id" name="estado_id" required class="form-control">
+                                                <select id="estado_id" name="estado_id" required class="form-select">
                                                     @foreach ($estados as $obj)
                                                         @if ($obj->id == $bitacora->estado_rendimiento_id)
                                                             <option value="{{ $obj->id }}" selected>

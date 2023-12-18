@@ -5,254 +5,6 @@
 @section('content')
 
 
-    <?php
-
-    $cantidad_codigo_3_1 = 0;
-    $cantidad_codigo_3_2 = 0;
-    $cantidad_codigo_3_3 = 0;
-    $cantidad_codigo_3_4 = 0;
-    $cantidad_codigo_3_5 = 0;
-    $cantidad_codigo_3_6 = 0;
-    $cantidad_codigo_3_7 = 0;
-    $cantidad_codigo_3_8 = 0;
-    $cantidad_codigo_3_9 = 0;
-    $cantidad_codigo_3_10 = 0;
-    $cantidad_codigo_3_11 = 0;
-    $cantidad_codigo_3_12 = 0;
-
-    $cantidad_codigo_8_1 = 0;
-    $cantidad_codigo_8_2 = 0;
-    $cantidad_codigo_8_3 = 0;
-    $cantidad_codigo_8_4 = 0;
-    $cantidad_codigo_8_5 = 0;
-    $cantidad_codigo_8_6 = 0;
-    $cantidad_codigo_8_7 = 0;
-    $cantidad_codigo_8_8 = 0;
-    $cantidad_codigo_8_9 = 0;
-    $cantidad_codigo_8_10 = 0;
-    $cantidad_codigo_8_11 = 0;
-    $cantidad_codigo_8_12 = 0;
-
-    $cantidad_codigo_9_1 = 0;
-    $cantidad_codigo_9_2 = 0;
-    $cantidad_codigo_9_3 = 0;
-    $cantidad_codigo_9_4 = 0;
-    $cantidad_codigo_9_5 = 0;
-    $cantidad_codigo_9_6 = 0;
-    $cantidad_codigo_9_7 = 0;
-    $cantidad_codigo_9_8 = 0;
-    $cantidad_codigo_9_9 = 0;
-    $cantidad_codigo_9_10 = 0;
-    $cantidad_codigo_9_11 = 0;
-    $cantidad_codigo_9_12 = 0;
-
-    foreach ($dsb_tot_actividades_categorias as $dsb_actividad_categoria) {
-        if ($dsb_actividad_categoria->id == '3') {
-            $nombre_codigo_3 = $dsb_actividad_categoria->nombre;
-            $url_codigo_3 = $dsb_actividad_categoria->url;
-
-            if ($dsb_actividad_categoria->mes == '1') {
-                $cantidad_codigo_3_1 = $dsb_actividad_categoria->cantidad;
-            }
-
-            if ($dsb_actividad_categoria->mes == '2') {
-                $cantidad_codigo_3_2 = $dsb_actividad_categoria->cantidad;
-            }
-
-            if ($dsb_actividad_categoria->mes == '3') {
-                $cantidad_codigo_3_3 = $dsb_actividad_categoria->cantidad;
-            }
-
-            if ($dsb_actividad_categoria->mes == '4') {
-                $cantidad_codigo_3_4 = $dsb_actividad_categoria->cantidad;
-            }
-
-            if ($dsb_actividad_categoria->mes == '5') {
-                $cantidad_codigo_3_5 = $dsb_actividad_categoria->cantidad;
-            }
-
-            if ($dsb_actividad_categoria->mes == '6') {
-                $cantidad_codigo_3_6 = $dsb_actividad_categoria->cantidad;
-            }
-
-            if ($dsb_actividad_categoria->mes == '7') {
-                $cantidad_codigo_3_7 = $dsb_actividad_categoria->cantidad;
-            }
-
-            if ($dsb_actividad_categoria->mes == '8') {
-                $cantidad_codigo_3_8 = $dsb_actividad_categoria->cantidad;
-            }
-
-            if ($dsb_actividad_categoria->mes == '9') {
-                $cantidad_codigo_3_9 = $dsb_actividad_categoria->cantidad;
-            }
-
-            if ($dsb_actividad_categoria->mes == '10') {
-                $cantidad_codigo_3_10 = $dsb_actividad_categoria->cantidad;
-            }
-
-            if ($dsb_actividad_categoria->mes == '11') {
-                $cantidad_codigo_3_11 = $dsb_actividad_categoria->cantidad;
-            }
-
-            if ($dsb_actividad_categoria->mes == '12') {
-                $cantidad_codigo_3_12 = $dsb_actividad_categoria->cantidad;
-            }
-        }
-
-        if ($dsb_actividad_categoria->id == '8') {
-            $nombre_codigo_8 = $dsb_actividad_categoria->nombre;
-            $url_codigo_8 = $dsb_actividad_categoria->url;
-
-            if ($dsb_actividad_categoria->mes == '1') {
-                $cantidad_codigo_8_1 = $dsb_actividad_categoria->cantidad;
-            }
-
-            if ($dsb_actividad_categoria->mes == '2') {
-                $cantidad_codigo_8_2 = $dsb_actividad_categoria->cantidad;
-            }
-
-            if ($dsb_actividad_categoria->mes == '3') {
-                $cantidad_codigo_8_3 = $dsb_actividad_categoria->cantidad;
-            }
-
-            if ($dsb_actividad_categoria->mes == '4') {
-                $cantidad_codigo_8_4 = $dsb_actividad_categoria->cantidad;
-            }
-
-            if ($dsb_actividad_categoria->mes == '5') {
-                $cantidad_codigo_8_5 = $dsb_actividad_categoria->cantidad;
-            }
-
-            if ($dsb_actividad_categoria->mes == '6') {
-                $cantidad_codigo_8_6 = $dsb_actividad_categoria->cantidad;
-            }
-
-            if ($dsb_actividad_categoria->mes == '7') {
-                $cantidad_codigo_8_7 = $dsb_actividad_categoria->cantidad;
-            }
-
-            if ($dsb_actividad_categoria->mes == '8') {
-                $cantidad_codigo_8_8 = $dsb_actividad_categoria->cantidad;
-            }
-
-            if ($dsb_actividad_categoria->mes == '9') {
-                $cantidad_codigo_8_9 = $dsb_actividad_categoria->cantidad;
-            }
-
-            if ($dsb_actividad_categoria->mes == '10') {
-                $cantidad_codigo_8_10 = $dsb_actividad_categoria->cantidad;
-            }
-
-            if ($dsb_actividad_categoria->mes == '11') {
-                $cantidad_codigo_8_11 = $dsb_actividad_categoria->cantidad;
-            }
-
-            if ($dsb_actividad_categoria->mes == '12') {
-                $cantidad_codigo_8_12 = $dsb_actividad_categoria->cantidad;
-            }
-        }
-
-        if ($dsb_actividad_categoria->id == '9') {
-            $nombre_codigo_9 = $dsb_actividad_categoria->nombre;
-            $url_codigo_9 = $dsb_actividad_categoria->url;
-
-            if ($dsb_actividad_categoria->mes == '1') {
-                $cantidad_codigo_9_1 = $dsb_actividad_categoria->cantidad;
-            }
-
-            if ($dsb_actividad_categoria->mes == '2') {
-                $cantidad_codigo_9_2 = $dsb_actividad_categoria->cantidad;
-            }
-
-            if ($dsb_actividad_categoria->mes == '3') {
-                $cantidad_codigo_9_3 = $dsb_actividad_categoria->cantidad;
-            }
-
-            if ($dsb_actividad_categoria->mes == '4') {
-                $cantidad_codigo_9_4 = $dsb_actividad_categoria->cantidad;
-            }
-
-            if ($dsb_actividad_categoria->mes == '5') {
-                $cantidad_codigo_9_5 = $dsb_actividad_categoria->cantidad;
-            }
-
-            if ($dsb_actividad_categoria->mes == '6') {
-                $cantidad_codigo_9_6 = $dsb_actividad_categoria->cantidad;
-            }
-
-            if ($dsb_actividad_categoria->mes == '7') {
-                $cantidad_codigo_9_7 = $dsb_actividad_categoria->cantidad;
-            }
-
-            if ($dsb_actividad_categoria->mes == '8') {
-                $cantidad_codigo_9_8 = $dsb_actividad_categoria->cantidad;
-            }
-
-            if ($dsb_actividad_categoria->mes == '9') {
-                $cantidad_codigo_9_9 = $dsb_actividad_categoria->cantidad;
-            }
-
-            if ($dsb_actividad_categoria->mes == '10') {
-                $cantidad_codigo_9_10 = $dsb_actividad_categoria->cantidad;
-            }
-
-            if ($dsb_actividad_categoria->mes == '11') {
-                $cantidad_codigo_9_11 = $dsb_actividad_categoria->cantidad;
-            }
-
-            if ($dsb_actividad_categoria->mes == '12') {
-                $cantidad_codigo_9_12 = $dsb_actividad_categoria->cantidad;
-            }
-        }
-    }
-
-    $array_cantidad_codigo_3 = [];
-
-    array_push($array_cantidad_codigo_3, $cantidad_codigo_3_3);
-    array_push($array_cantidad_codigo_3, $cantidad_codigo_3_4);
-    array_push($array_cantidad_codigo_3, $cantidad_codigo_3_5);
-    array_push($array_cantidad_codigo_3, $cantidad_codigo_3_6);
-    array_push($array_cantidad_codigo_3, $cantidad_codigo_3_7);
-    array_push($array_cantidad_codigo_3, $cantidad_codigo_3_8);
-    array_push($array_cantidad_codigo_3, $cantidad_codigo_3_9);
-    array_push($array_cantidad_codigo_3, $cantidad_codigo_3_10);
-    array_push($array_cantidad_codigo_3, $cantidad_codigo_3_11);
-    array_push($array_cantidad_codigo_3, $cantidad_codigo_3_12);
-    array_push($array_cantidad_codigo_3, $cantidad_codigo_3_1);
-    array_push($array_cantidad_codigo_3, $cantidad_codigo_3_2);
-
-    $array_cantidad_codigo_8 = [];
-
-    array_push($array_cantidad_codigo_8, $cantidad_codigo_8_3);
-    array_push($array_cantidad_codigo_8, $cantidad_codigo_8_4);
-    array_push($array_cantidad_codigo_8, $cantidad_codigo_8_5);
-    array_push($array_cantidad_codigo_8, $cantidad_codigo_8_6);
-    array_push($array_cantidad_codigo_8, $cantidad_codigo_8_7);
-    array_push($array_cantidad_codigo_8, $cantidad_codigo_8_8);
-    array_push($array_cantidad_codigo_8, $cantidad_codigo_8_9);
-    array_push($array_cantidad_codigo_8, $cantidad_codigo_8_10);
-    array_push($array_cantidad_codigo_8, $cantidad_codigo_8_11);
-    array_push($array_cantidad_codigo_8, $cantidad_codigo_8_12);
-    array_push($array_cantidad_codigo_8, $cantidad_codigo_8_1);
-    array_push($array_cantidad_codigo_8, $cantidad_codigo_8_2);
-
-    $array_cantidad_codigo_9 = [];
-
-    array_push($array_cantidad_codigo_9, $cantidad_codigo_9_3);
-    array_push($array_cantidad_codigo_9, $cantidad_codigo_9_4);
-    array_push($array_cantidad_codigo_9, $cantidad_codigo_9_5);
-    array_push($array_cantidad_codigo_9, $cantidad_codigo_9_6);
-    array_push($array_cantidad_codigo_9, $cantidad_codigo_9_7);
-    array_push($array_cantidad_codigo_9, $cantidad_codigo_9_8);
-    array_push($array_cantidad_codigo_9, $cantidad_codigo_9_9);
-    array_push($array_cantidad_codigo_9, $cantidad_codigo_9_10);
-    array_push($array_cantidad_codigo_9, $cantidad_codigo_9_11);
-    array_push($array_cantidad_codigo_9, $cantidad_codigo_9_12);
-    array_push($array_cantidad_codigo_9, $cantidad_codigo_9_1);
-    array_push($array_cantidad_codigo_9, $cantidad_codigo_9_2);
-
-    ?>
 
 
 
@@ -494,7 +246,7 @@
                                             <div class="card-body ">
                                                 <i class="icofont-stopwatch fs-3"></i>
                                                 <h6 class="mt-3 mb-0 fw-bold small-14">En Desarrollo</h6>
-                                                <span style="font-size:46px">{{ $numero_proyectos_desarrollo }}</span>
+                                                <span style="font-size:46px">{{ $data_estado_proyectos_value[0] }}</span>
                                             </div>
                                         </div>
                                     </div>
@@ -504,7 +256,7 @@
                                             <div class="card-body ">
                                                 <i class="icofont-beach-bed fs-3"></i>
                                                 <h6 class="mt-3 mb-0 fw-bold small-14">En Pausa</h6>
-                                                <span style="font-size:46px">{{ $numero_proyectos_pausa }}</span>
+                                                <span style="font-size:46px">{{ $data_estado_proyectos_value[1] }}</span>
                                             </div>
                                         </div>
                                     </div>
@@ -514,7 +266,7 @@
                                             <div class="card-body ">
                                                 <i class="icofont-stopwatch fs-3"></i>
                                                 <h6 class="mt-3 mb-0 fw-bold small-14">En Certificacion</h6>
-                                                <span style="font-size:46px">{{ $numero_proyectos_certificacion }}</span>
+                                                <span style="font-size:46px">{{ $data_estado_proyectos_value[2] }}</span>
                                             </div>
                                         </div>
                                     </div>
@@ -525,7 +277,7 @@
                                                 <i class="icofont-beach-bed fs-3"></i>
                                                 <h6 class="mt-3 mb-0 fw-bold small-14">Total</h6>
                                                 <span
-                                                    style="font-size:46px">{{ $numero_proyectos_desarrollo + $numero_proyectos_certificacion + $numero_proyectos_pausa }}</span>
+                                                    style="font-size:46px">{{ $data_estado_proyectos_value[0] + $data_estado_proyectos_value[1] + $data_estado_proyectos_value[2] }}</span>
                                             </div>
                                         </div>
                                     </div>
@@ -577,33 +329,6 @@
             </div>
         </div>
     </div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
     <!-- Body: Body -->
@@ -695,6 +420,7 @@
 
 
 
+
                 </div>
 
 
@@ -702,6 +428,65 @@
         </div>
     </div>
     <!-- Jquery Page Js -->
+
+    <div class="body d-flex py-3">
+        <div class="container-xxl" style="display: {{ $visibility }}">
+            <div class="row clearfix g-3">
+                <div class="col-xl-12 col-lg-12 col-md-12 flex-column">
+                    <div class="row g-3">
+                        <div class="col-md-12">
+                            <div class="card">
+                                <div
+                                    class="card-header py-3 d-flex justify-content-between bg-transparent border-bottom-0">
+                                    <h5 class="mb-0 fw-bold ">Rendimiento base de datos</h5>
+                                    <select id="anio" onchange="load_rendimiento_db()">
+                                        @for ($i = date('Y'); $i >= 2010; $i--)
+                                            <option value="{{ $i }}">{{ $i }}</option>
+                                        @endfor
+                                    </select>
+                                </div>
+                                <div id="div_rendimiento_bd"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Modal Fullscreen -->
+    <div class="modal fade" id="modalRendimientoBD">
+        <div class="modal-dialog modal-lg">
+
+            <div class="modal-content">
+
+                <div class="modal-header">
+                </div>
+                <div class="modal-body">
+                    <div class="tab-content">
+
+                        <div class="tab-pane fade show active" id="list-view">
+
+                            <div class="row clearfix g-3" id="modal-content">
+
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+
     <script src="{{ asset('assets/bundles/libscripts.bundle.js') }}"></script>
     <script src="{{ asset('assets/bundles/apexcharts.bundle.js') }}"></script>
     <script src="{{ asset('js/template.js') }}"></script>
@@ -709,6 +494,35 @@
 
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script>
+
+
+    <script src="https://code.highcharts.com/highcharts.js"></script>
+    <script src="https://code.highcharts.com/modules/exporting.js"></script>
+    <script src="https://code.highcharts.com/modules/export-data.js"></script>
+    <script src="https://code.highcharts.com/modules/accessibility.js"></script>
+
+
+    <script>
+        $(document).ready(function() {
+            load_rendimiento_db();
+        });
+
+        function load_rendimiento_db() {
+            var anio = document.getElementById('anio').value;
+            $.ajax({
+                url: "{{ url('/home/charts/get_rendimiento_bd') }}/" + anio,
+                method: 'GET',
+                success: function(data) {
+                    console.log(data);
+                    $('#div_rendimiento_bd').html(data);
+                },
+                error: function(error) {
+                    console.error('Error en la solicitud:', error);
+                }
+            });
+        }
+    </script>
 
     <script>
         const ctx = document.getElementById('char_actividades_finalizadas');
@@ -732,6 +546,7 @@
             }
         });
 
+
         const ctx2 = document.getElementById('char_estado_proyectos');
         new Chart(ctx2, {
             type: 'doughnut',
@@ -752,6 +567,7 @@
             }
         });
 
+
         const ctx3 = document.getElementById('char_actividades_finalizadas_analista');
 
         new Chart(ctx3, {
@@ -761,6 +577,38 @@
                 datasets: [{
                     label: '',
                     data: @json($data_users_end_value),
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                },
+                plugins: {
+                    datalabels: {
+                        anchor: 'end',
+                        align: 'end',
+                        formatter: function(value, context) {
+                            return value; // Display the actual value on the bar
+                        }
+                    }
+                }
+            }
+        });
+
+
+
+        const ctx5 = document.getElementById('char_actividades_finalizadas_analista5');
+
+        new Chart(ctx5, {
+            type: 'bar',
+            data: {
+                labels: @json($data_users_week_end_label),
+                datasets: [{
+                    label: '',
+                    data: @json($data_users_week_end_value),
                     borderWidth: 1
                 }]
             },
@@ -796,26 +644,7 @@
         });
 
 
-        const ctx5 = document.getElementById('char_actividades_finalizadas_analista5');
 
-        new Chart(ctx5, {
-            type: 'bar',
-            data: {
-                labels: @json($data_users_week_end_label),
-                datasets: [{
-                    label: '',
-                    data: @json($data_users_week_end_value),
-                    borderWidth: 1
-                }]
-            },
-            options: {
-                scales: {
-                    y: {
-                        beginAtZero: true
-                    }
-                }
-            }
-        });
 
 
         const ctx6 = document.getElementById('char_bolson_horas_operatoria_diaria');
@@ -840,7 +669,6 @@
         });
 
 
-
         const ctx7 = document.getElementById('char_actividades_finalizadas_mes');
 
         new Chart(ctx7, {
@@ -861,6 +689,7 @@
                 }
             }
         });
+
 
 
         const ctx8 = document.getElementById('char_indice_error_meses_2021');
@@ -888,6 +717,8 @@
                 }
             }
         });
+
+
 
 
 
@@ -1011,5 +842,6 @@
             }
         });
     </script>
+
 
 @endsection

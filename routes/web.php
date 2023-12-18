@@ -35,6 +35,8 @@ Route::get('/home/soporte_activos/get_data_banco/{sucursal}', 'HomeController@ge
 
 Route::get('/home/soporte_activos/get_data/{sucursal}', 'HomeController@get_data')->name('get_data');
 
+Route::get('/home/charts/get_rendimiento_bd/{anio}', 'HomeController@get_data_rendimiento_bd')->name('get_data_rendimiento_bd');
+Route::get('/home/charts/get_modal_rendimiento_bd/{anio}/{categoria}/{mes}', 'HomeController@get_modal_rendimiento_bd')->name('get_modal_rendimiento_bd');
 
 Route::get('/home/soporte_activos/get_data_mantenimiento/{sucursal}', 'HomeController@get_data_mantenimiento')->name('get_data_mantenimiento');
 Route::get('/home', 'HomeController@index')->name('home');

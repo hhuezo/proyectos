@@ -89,7 +89,7 @@
                                         <div class="form-group">
                                             <label class="form-label col-md-3"><strong>Estado</strong></label>
                                             <div class="col-12">
-                                                 <select id="estado_id" name="estado_id" class="form-control">
+                                                 <select id="estado_id" name="estado_id" class="form-select">
                                                      @foreach ($estados as $obj)
                                                          <option value="{{ $obj->id }}">
                                                             {{ $obj->nombre }}
