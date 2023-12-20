@@ -351,9 +351,77 @@ class HomeController extends Controller
             ->get();
 
 
-        return view('graficas.rendimiento_bd_modal', compact('resultados','anio', 'categoria','mes'));
-
+        return view('graficas.rendimiento_bd_modal', compact('resultados', 'anio', 'categoria', 'mes'));
     }
+
+    public function get_tiempo_invertido($anio)
+    {
+        $meses = array("Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre");
+
+        $resultados = DB::table('vw_tiempo_x_propietario')
+            ->select(
+                'propietario',
+                'Año',
+                'mes',
+                DB::raw("CAST(tiempo / 60 AS SIGNED) AS tiempo"),
+                DB::raw("CASE mes
+                    WHEN 1 THEN 'Enero'
+                    WHEN 2 THEN 'Febrero'
+                    WHEN 3 THEN 'Marzo'
+                    WHEN 4 THEN 'Abril'
+                    WHEN 5 THEN 'Mayo'
+                    WHEN 6 THEN 'Junio'
+                    WHEN 7 THEN 'Julio'
+                    WHEN 8 THEN 'Agosto'
+                    WHEN 9 THEN 'Septiembre'
+                    WHEN 10 THEN 'Octubre'
+                    WHEN 11 THEN 'Noviembre'
+                    WHEN 12 THEN 'Diciembre'
+                    ELSE 'Mes no válido' END AS nombre_mes")
+            )
+            ->where('Año', $anio)
+            ->get();
+
+        $propietarios = $resultados->pluck('propietario')->unique()->values()->toArray();
+
+        $records = [];
+
+
+
+        foreach ($propietarios as $propietario) {
+            $array_data = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+            foreach ($resultados->where('propietario', '=', $propietario) as $resultado) {
+                $posicion = $resultado->mes - 1;
+                $array_data[$posicion] = $resultado->tiempo + 0;
+            }
+            $array = ["name" => $propietario, "data" => $array_data];
+            array_push($records, $array);
+        }
+
+        return view('graficas.tiempo_invertido_cliente', compact('meses', 'records',));
+    }
+
+    public function get_tiempo_invertido_anual($anio)
+    {
+
+        $data_anual = [];
+
+        $resultados = DB::table('vw_tiempo_x_propietario')
+            ->select('propietario', DB::raw('ROUND(SUM(tiempo) / 60) AS entero'))
+            ->where('Año', $anio)
+            ->groupBy('propietario')
+            ->get();
+
+        foreach($resultados as $resultado)
+        {
+            $array = ["name"=> $resultado->propietario, "y" => $resultado->entero +0];
+            array_push($data_anual, $array);
+        }
+
+        return view('graficas.tiempo_invertido_cliente_anual',compact('data_anual'));
+    }
+
+
 
     public function index(Request $request)
     {

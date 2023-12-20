@@ -35,6 +35,8 @@ Route::get('/home/soporte_activos/get_data_banco/{sucursal}', 'HomeController@ge
 
 Route::get('/home/soporte_activos/get_data/{sucursal}', 'HomeController@get_data')->name('get_data');
 
+Route::get('/home/charts/get_tiempo_invertido_anual/{anio}', 'HomeController@get_tiempo_invertido_anual')->name('get_tiempo_invertido_anual');
+Route::get('/home/charts/get_tiempo_invertido/{anio}', 'HomeController@get_tiempo_invertido')->name('get_tiempo_invertido');
 Route::get('/home/charts/get_rendimiento_bd/{anio}', 'HomeController@get_data_rendimiento_bd')->name('get_data_rendimiento_bd');
 Route::get('/home/charts/get_modal_rendimiento_bd/{anio}/{categoria}/{mes}', 'HomeController@get_modal_rendimiento_bd')->name('get_modal_rendimiento_bd');
 
