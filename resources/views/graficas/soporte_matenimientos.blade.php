@@ -29,7 +29,7 @@
             type: 'column'
         },
         title: {
-            text: 'Mantenimientos frecuentes'
+            text: 'Mantenimientos programados frecuentes Desktop'
         },
         subtitle: {
             text:

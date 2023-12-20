@@ -259,7 +259,26 @@ class HomeController extends Controller
                 return $query->where('nombre_activo', '=', $mtto_activos);
             })->get();
 
-        return view('home_soporte_matenimientos', compact('frecuencia_mtto'));
+        return view('graficas.soporte_matenimientos', compact('frecuencia_mtto'));
+    }
+
+    public function soporte_mantenimientos_auditoria($mtto_sucursales, $mtto_areas, $mtto_activos)
+    {
+
+        $frecuencia_mtto = DB::connection('mysql2')
+            ->table('vw_frecuencia_auditorias')
+            ->when($mtto_sucursales != '0', function ($query) use ($mtto_sucursales) {
+                return $query->where('sucursal', '=', $mtto_sucursales);
+            })
+            ->when($mtto_areas != '0', function ($query) use ($mtto_areas) {
+                return $query->where('area', '=', $mtto_areas);
+            })
+            ->when($mtto_activos != '0', function ($query) use ($mtto_activos) {
+                return $query->where('nombre_activo', '=', $mtto_activos);
+            })
+            ->get();
+
+        return view('graficas.soporte_matenimientos_auditoria', compact('frecuencia_mtto'));
     }
 
     public function get_data_mantenimiento($sucursal)
@@ -412,13 +431,12 @@ class HomeController extends Controller
             ->groupBy('propietario')
             ->get();
 
-        foreach($resultados as $resultado)
-        {
-            $array = ["name"=> $resultado->propietario, "y" => $resultado->entero +0];
+        foreach ($resultados as $resultado) {
+            $array = ["name" => $resultado->propietario, "y" => $resultado->entero + 0];
             array_push($data_anual, $array);
         }
 
-        return view('graficas.tiempo_invertido_cliente_anual',compact('data_anual'));
+        return view('graficas.tiempo_invertido_cliente_anual', compact('data_anual'));
     }
 
 

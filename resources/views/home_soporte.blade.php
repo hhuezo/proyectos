@@ -246,63 +246,99 @@
         </div>
 
         <br>
-        <div class="row col-12">
-            <div class="col-9 card" id="container_mantenimientos">
+
+        <ul class="nav nav-tabs tab-body-header rounded d-inline-flex" role="tablist">
+            <li class="nav-item"><a class="nav-link active" data-bs-toggle="tab" href="#nav-mantenimientos-frecuentes"
+                    role="tab">Mantenimientos</a></li>
+            <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#nav-auditoria" role="tab">Auditoria</a>
+            </li>
+        </ul>
+
+
+        <div class="tab-content mt-2">
+            <div>
+                <div class="row g-3">
+                    <div class="col-md-12">
+                        <div class="card">
+                            <div class="row col-12">
+                                <div class="col-9 tab-content mt-2">
+                                    <div class="col-12  tab-pane fade show active" id="nav-mantenimientos-frecuentes"
+                                        role="tabpanel">
+                                        <div id="container_mantenimientos"></div>
+                                    </div>
+
+                                    <div class="col-12  tab-pane fade" id="nav-auditoria" role="tabpanel">
+                                        <div id="container_mantenimientos_auditoria">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-3 card">
+                                    <form method="GET" id="form_mantenimientos">
+                                        <div class="col-md-12">&nbsp; </div>
+                                        <div class="col-md-12">
+                                            <div class="form-group">
+                                                <label class="form-label" align="right"><strong>Sucursal</strong></label>
+                                                <div>
+                                                    <select id="mtto_sucursales" onchange="get_area_activo(this.value)"
+                                                        class="form-control">
+                                                        <option value="0">SELECCIONE</option>
+                                                        @foreach ($mtto_sucursales as $sucursal)
+                                                            <option value="{{ $sucursal }}">{{ $sucursal }}
+                                                            </option>
+                                                        @endforeach
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-12">&nbsp; </div>
+                                        <div class="col-md-12">
+                                            <div class="form-group">
+                                                <label class="form-label" align="right"><strong>Areas</strong></label>
+                                                <div>
+                                                    <select id="mtto_areas" onchange="get_data_activos(this.value)"
+                                                        class="form-control">
+                                                        <option value="0">SELECCIONE</option>
+                                                        @foreach ($mtto_areas as $area)
+                                                            <option value="{{ $area }}">{{ $area }}
+                                                            </option>
+                                                        @endforeach
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-12">&nbsp; </div>
+                                        <div class="col-md-12">
+                                            <div class="form-group">
+                                                <label class="form-label" align="right"><strong>Activos</strong></label>
+                                                <div>
+                                                    <select id="mtto_activos" class="form-control">
+                                                        <option value="0">SELECCIONE</option>
+                                                        @foreach ($mtto_activos as $activo)
+                                                            <option value="{{ $activo }}">{{ $activo }}
+                                                            </option>
+                                                        @endforeach
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-12">&nbsp; </div>
+                                        <div class="col-md-12" style="text-align: right">
+                                            <button type="button" class="btn btn-primary"
+                                                onclick="get_mantenimientos()">Aceptar</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div class="col-3 card">
-                <form method="GET" id="form_mantenimientos">
-                    <div class="col-md-12">&nbsp; </div>
-                    <div class="col-md-12">
-                        <div class="form-group">
-                            <label class="form-label" align="right"><strong>Sucursal</strong></label>
-                            <div>
-                                <select id="mtto_sucursales" onchange="get_area_activo(this.value)" class="form-control">
-                                    <option value="0">SELECCIONE</option>
-                                    @foreach ($mtto_sucursales as $sucursal)
-                                        <option value="{{ $sucursal }}">{{ $sucursal }}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                        </div>
-                    </div>
 
-                    <div class="col-md-12">&nbsp; </div>
-                    <div class="col-md-12">
-                        <div class="form-group">
-                            <label class="form-label" align="right"><strong>Areas</strong></label>
-                            <div>
-                                <select id="mtto_areas" onchange="get_data_activos(this.value)" class="form-control">
-                                    <option value="0">SELECCIONE</option>
-                                    @foreach ($mtto_areas as $area)
-                                        <option value="{{ $area }}">{{ $area }}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="col-md-12">&nbsp; </div>
-                    <div class="col-md-12">
-                        <div class="form-group">
-                            <label class="form-label" align="right"><strong>Activos</strong></label>
-                            <div>
-                                <select id="mtto_activos" class="form-control">
-                                    <option value="0">SELECCIONE</option>
-                                    @foreach ($mtto_activos as $activo)
-                                        <option value="{{ $activo }}">{{ $activo }}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="col-md-12">&nbsp; </div>
-                    <div class="col-md-12" style="text-align: right">
-                        <button type="button" class="btn btn-primary" onclick="get_mantenimientos()">Aceptar</button>
-                    </div>
-                </form>
-            </div>
         </div>
+
 
         <br>
 
@@ -559,6 +595,20 @@
                 success: function(data) {
                     console.log(data);
                     $('#container_mantenimientos').html(data);
+                },
+                error: function(error) {
+                    console.error('Error en la solicitud:', error);
+                }
+            });
+
+            $.ajax({
+                url: "{{ url('/home/soporte_mantenimientos_auditoria') }}/" + mtto_sucursales + "/" + mtto_areas +
+                    "/" +
+                    mtto_activos,
+                method: 'GET',
+                success: function(data) {
+                    console.log(data);
+                    $('#container_mantenimientos_auditoria').html(data);
                 },
                 error: function(error) {
                     console.error('Error en la solicitud:', error);
