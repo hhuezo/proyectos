@@ -17,7 +17,7 @@ use Carbon\Carbon;
 class Proyectos extends Component
 {
     public $id_proyecto = 0, $estado_id = 2, $nombre, $descripcion, $busqueda, $busqueda_actividad, $ponderacion_proyecto, $avance_proyecto;
-    public $proyectos, $id_unidad, $actividades,$historial, $tipo = 1, $finalizado = 0, $modificado = 0;
+    public $proyectos, $id_unidad, $actividades,$historial, $tipo = 1, $finalizado = 0, $modificado = 0,$fecha_inicio_proyecto,$fecha_fin_proyecto;
 
     public $id_actividad, $numero_ticket = 0, $ponderacion = 0.01, $descripcion_actividad,
         $fecha_inicio, $categoria_id, $estado_actividad_id, $prioridad_id, $prioridad, $fecha_fin, $forma = "NO APLICA", $users_id, $avance, $propietario_id = 1;
@@ -76,7 +76,6 @@ class Proyectos extends Component
             ->orderBy('proyectos.id', 'desc')
             ->get();
          //   dd($this->proyectos);
-
 
         if ($this->id_proyecto != 0) {
             $this->actividades = Actividad::where('proyecto_id', '=', $this->id_proyecto)
@@ -196,8 +195,8 @@ class Proyectos extends Component
         $this->finalizado = $proyecto->finalizado;
         $this->prioridad = $proyecto->prioridad;
 
-        $this->fecha_inicio = $proyecto->fecha_inicio;
-        $this->fecha_fin = $proyecto->fecha_fin;
+        $this->fecha_inicio_proyecto = $proyecto->fecha_inicio;
+        $this->fecha_fin_proyecto = $proyecto->fecha_fin;
 
         $this->modificado = 0;
     }
@@ -356,12 +355,12 @@ class Proyectos extends Component
         $historial->nombre = $proyecto->nombre;
         $historial->descripcion = $proyecto->descripcion;
         $historial->prioridad = $proyecto->prioridad;
-        if ($proyecto->fecha_inicio != null) {
-            $historial->fecha_inicio = $proyecto->fecha_inicio;
+        if ($proyecto->fecha_inicio_proyecto != null) {
+            $historial->fecha_inicio = $proyecto->fecha_inicio_proyecto;
         }
 
-        if ($proyecto->fecha_fin != null) {
-            $historial->fecha_fin = $proyecto->fecha_fin;
+        if ($proyecto->fecha_fin_proyecto != null) {
+            $historial->fecha_fin = $proyecto->fecha_fin_proyecto;
         }
         $historial->users_id = auth()->user()->id;
         $historial->avance = $proyecto->avance;
@@ -396,8 +395,8 @@ class Proyectos extends Component
         $proyecto->descripcion = $this->descripcion;
         $proyecto->estado_id = $this->estado_id;
         $proyecto->prioridad = $this->prioridad;
-        $proyecto->fecha_inicio = $this->fecha_inicio;
-        $proyecto->fecha_fin = $this->fecha_fin;
+        $proyecto->fecha_inicio = $this->fecha_inicio_proyecto;
+        $proyecto->fecha_fin = $this->fecha_fin_proyecto;
         $proyecto->propietario_id = $this->propietario_id;
         $proyecto->update();
 
@@ -408,8 +407,8 @@ class Proyectos extends Component
         $historial->nombre = $this->nombre;
         $historial->descripcion = $this->descripcion;
         $historial->prioridad = $this->prioridad;
-        $historial->fecha_inicio = $this->fecha_inicio;
-        $historial->fecha_fin = $this->fecha_fin;
+        $historial->fecha_inicio = $this->fecha_inicio_proyecto;
+        $historial->fecha_fin = $this->fecha_fin_proyecto;
         $historial->users_id = auth()->user()->id;
         $historial->avance = $proyecto->avance;
         $historial->unidad_id = auth()->user()->unidad_id;
