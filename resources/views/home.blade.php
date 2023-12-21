@@ -568,26 +568,28 @@
     </div>
 
 
+    <div style="display: {{ $visibility }}">
+        <div class="card-header py-3 d-flex justify-content-between bg-transparent border-bottom-0">
+            <h5 class="mb-0 fw-bold ">Tiempo invertido por tipo cliente</h5>
+            <select id="anio_tiempo_invertido" onchange="load_tiempo_invertido_cliente()">
+                @for ($i = date('Y'); $i >= 2021; $i--)
+                    <option value="{{ $i }}">{{ $i }}</option>
+                @endfor
+            </select>
+        </div>
 
-    <div class="card-header py-3 d-flex justify-content-between bg-transparent border-bottom-0">
-        <h5 class="mb-0 fw-bold ">Tiempo invertido por tipo cliente</h5>
-        <select id="anio_tiempo_invertido" onchange="load_tiempo_invertido_cliente()">
-            @for ($i = date('Y'); $i >= 2021; $i--)
-                <option value="{{ $i }}">{{ $i }}</option>
-            @endfor
-        </select>
+        <ul class="nav nav-tabs tab-body-header rounded d-inline-flex" role="tablist"
+            style="display: {{ $visibility }}">
+            <li class="nav-item"><a class="nav-link active" data-bs-toggle="tab" href="#nav-tiempoInvertido"
+                    role="tab">Mesual</a></li>
+            <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#nav-tiempoInvertidoAnual"
+                    role="tab">Anual</a>
+            </li>
+        </ul>
     </div>
 
-    <ul class="nav nav-tabs tab-body-header rounded d-inline-flex" role="tablist">
-        <li class="nav-item"><a class="nav-link active" data-bs-toggle="tab" href="#nav-tiempoInvertido"
-                role="tab">Mesual</a></li>
-        <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#nav-tiempoInvertidoAnual" role="tab">Anual</a>
-        </li>
-    </ul>
 
-
-
-    <div class="tab-content mt-2">
+    <div class="tab-content mt-2" style="display: {{ $visibility }}">
         <div class="tab-pane fade show active" id="nav-tiempoInvertido" role="tabpanel">
             <div class="row g-3">
                 <div class="col-md-8">
