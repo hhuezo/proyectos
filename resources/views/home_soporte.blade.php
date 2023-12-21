@@ -694,6 +694,12 @@
 
         function get_dispositivos() {
 
+            //$('#container_dispositivos').html('<div><img src="../../public/img/ajax-loader.gif"/></div>');
+            $('#container_dispositivos').html('<div align="center" style="margin-top:50px;"><img src="{{ asset("img/ajax-loader.gif") }}" /></div>');
+
+
+
+
             var sucursal = document.getElementById('disp_sucursales').value;
             var banco = document.getElementById('disp_bancos').value;
             console.log(sucursal, banco);

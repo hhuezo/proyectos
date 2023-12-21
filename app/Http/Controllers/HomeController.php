@@ -91,6 +91,7 @@ class HomeController extends Controller
             ->orderBy('s.eds_cantidad_restante', 'asc')
             ->get();
 
+
         $disp_sucursales = $dispositivos_suc->pluck('sucursal')->unique();
         $disp_bancos = $dispositivos_suc->pluck('banco')->unique();
 
@@ -202,9 +203,21 @@ class HomeController extends Controller
                 ->get();
         }
 
+
         $data = array();
 
+
         foreach ($dispositivos_suc as $dispositivo) {
+
+            $fecha_aprox = DB::select("SELECT fun_prox_mnt($dispositivo->serial) AS resultado")[0]->resultado;
+            if ($fecha_aprox) {
+                $fecha_carbon = Carbon::parse($fecha_aprox);
+
+                $fecha_formateada = $fecha_carbon->format('d/m/Y');
+            } else {
+                $fecha_formateada ="";
+            }
+
             if ($dispositivo->restante < 300) {
                 $color = "red";
             } else  if ($dispositivo->restante < 700) {
@@ -212,7 +225,7 @@ class HomeController extends Controller
             } else {
                 $color = "green";
             }
-            $array_dispositivo = array("name" => $dispositivo->sucursal . ' - ' . $dispositivo->serial, "y" => $dispositivo->restante, "drilldown" =>  $dispositivo->sucursal . ' - ' . $dispositivo->serial, "color" =>  $color);
+            $array_dispositivo = array("name" => $dispositivo->sucursal . ' - ' . $dispositivo->serial. ' ('.$fecha_formateada.')', "y" => $dispositivo->restante, "drilldown" =>  $dispositivo->sucursal . ' - ' . $dispositivo->serial, "color" =>  $color);
             array_push($data, $array_dispositivo);
         }
 
