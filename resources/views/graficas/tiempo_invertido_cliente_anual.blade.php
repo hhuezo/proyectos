@@ -1,6 +1,6 @@
 
 <figure class="highcharts-figure">
-    aaaaa
+
     <div id="container_tiempo_invertido_cliente_anual"></div>
     <p class="highcharts-description">
     </p>
