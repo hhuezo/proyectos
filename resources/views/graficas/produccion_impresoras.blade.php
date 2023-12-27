@@ -6,10 +6,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gráfica de stock de armas nucleares de EE. UU. y la
         URSS/Rusia</title>
-    {{-- <script src="https://code.highcharts.com/highcharts.js"></script>
+    <script src="https://code.highcharts.com/highcharts.js"></script>
     <script src="https://code.highcharts.com/modules/exporting.js"></script>
     <script src="https://code.highcharts.com/modules/export-data.js"></script>
-    <script src="https://code.highcharts.com/modules/accessibility.js"></script> --}}
+    <script src="https://code.highcharts.com/modules/accessibility.js"></script>
 </head>
 
 <body>
@@ -43,6 +43,7 @@
             },
 
             yAxis: {
+                //visible: false, // Oculta el eje Y
                 title: {
                     text: ''
                 }
@@ -59,10 +60,9 @@
             },
 
             legend: {
-                layout: 'vertical',
-                align: 'right',
-                verticalAlign: 'middle'
+                enabled: false, // Desactiva la leyenda
             },
+
 
             plotOptions: {
                 series: {
@@ -134,6 +134,7 @@
                     }
                 }]
             }
+
 
         });
     </script>

@@ -507,8 +507,11 @@ class HomeController extends Controller
         }
 
 
-        $seriales = $produccion->pluck('serial')->unique()->toArray();
+        //$seriales = $produccion->pluck('serial')->unique()->toArray();
 
+        $seriales = DB::table('vw_produccion_impresoras')
+        ->select(DB::raw("DISTINCT sucursal,  serial"))
+        ->get();
 
 
         $data = [];
@@ -517,7 +520,7 @@ class HomeController extends Controller
 
             $data_array = [];
             foreach ($date_range as $date) {
-                $produccion_diaria = $produccion->where('serial', $serial)->where('fecha', $date)->first();
+                $produccion_diaria = $produccion->where('serial', $serial->serial)->where('fecha', $date)->first();
                 if ($produccion_diaria) {
                     array_push($data_array, (int)$produccion_diaria->prod_diaria);
                 } else {
@@ -525,7 +528,7 @@ class HomeController extends Controller
                 }
             }
 
-            $registro_array = ["name" => $serial, "data" => $data_array];
+            $registro_array = ["name" => $serial->sucursal.' - '.$serial->serial, "data" => $data_array];
 
             array_push($data, $registro_array);
         }
