@@ -176,9 +176,10 @@ class HomeController extends Controller
 
             $dispositivos_suc = DB::table('estadisticas_dispositivos_suc as s')
             ->join('bancos as b', 's.ed_soc_codigo', '=', 'b.cod_sucursal')
-            ->join('produccion_impresoras as prod', 's.eds_serial_impresora','=','prod.serial')
+            //->join('produccion_impresoras as prod', 's.eds_serial_impresora','=','prod.serial')
             ->select('b.descripcion as sucursal', 's.eds_serial_impresora as serial', 's.eds_cantidad_restante as restante',
-             DB::raw("date_format(prod.mantenimiento_proximo, '%d/%m/%Y') as fecha"))
+             DB::raw("(SELECT ifnull(date_format(max(prod.mantenimiento_proximo), '%d/%m/%Y'),'')
+             as fecha from produccion_impresoras as prod where prod.serial = s.eds_serial_impresora ) as fecha"))
             ->where('s.eds_id', '=', function ($query) {
                 $query->select(DB::raw('max(i.eds_id)'))
                     ->from('estadisticas_dispositivos_suc as i')
@@ -192,7 +193,8 @@ class HomeController extends Controller
                 ->join('bancos as b', 's.ed_soc_codigo', '=', 'b.cod_sucursal')
                 ->join('produccion_impresoras as prod', 's.eds_serial_impresora','=','prod.serial')
                 ->select('b.descripcion as sucursal', 's.eds_serial_impresora as serial', 's.eds_cantidad_restante as restante',
-                DB::raw("date_format(prod.mantenimiento_proximo, '%d/%m/%Y') as fecha"))
+                DB::raw("(SELECT ifnull(date_format(max(prod.mantenimiento_proximo), '%d/%m/%Y'),'')
+                as fecha from produccion_impresoras as prod where prod.serial = s.eds_serial_impresora ) as fecha"))
                 ->where('s.eds_id', '=', function ($query) {
                     $query->select(DB::raw('max(i.eds_id)'))
                         ->from('estadisticas_dispositivos_suc as i')
@@ -206,7 +208,8 @@ class HomeController extends Controller
                 ->join('bancos as b', 's.ed_soc_codigo', '=', 'b.cod_sucursal')
                 ->join('produccion_impresoras as prod', 's.eds_serial_impresora','=','prod.serial')
                 ->select('b.descripcion as sucursal', 's.eds_serial_impresora as serial', 's.eds_cantidad_restante as restante',
-             DB::raw("date_format(prod.mantenimiento_proximo, '%d/%m/%Y') as fecha"))
+                DB::raw("(SELECT ifnull(date_format(max(prod.mantenimiento_proximo), '%d/%m/%Y'),'')
+                as fecha from produccion_impresoras as prod where prod.serial = s.eds_serial_impresora ) as fecha"))
                 ->where('s.eds_id', '=', function ($query) {
                     $query->select(DB::raw('max(i.eds_id)'))
                         ->from('estadisticas_dispositivos_suc as i')
