@@ -90,9 +90,6 @@
         </div>
 
 
-
-
-
         <div class="row col-12">
             <div class="col-9 card">
                 <div id="container"></div>
@@ -302,7 +299,8 @@
                                 <div class="form-group">
                                     <label class="form-label" align="right"><strong>Areas</strong></label>
                                     <div>
-                                        <select id="mtto_areas" onchange="get_data_activos(this.value)" class="form-control">
+                                        <select id="mtto_areas" onchange="get_data_activos(this.value)"
+                                            class="form-control">
                                             <option value="0">SELECCIONE</option>
                                             @foreach ($mtto_areas as $area)
                                                 <option value="{{ $area }}">{{ $area }}
@@ -331,7 +329,8 @@
 
                             <div class="col-md-12">&nbsp; </div>
                             <div class="col-md-12" style="text-align: right">
-                                <button type="button" class="btn btn-primary" onclick="get_mantenimientos()">Aceptar</button>
+                                <button type="button" class="btn btn-primary"
+                                    onclick="get_mantenimientos()">Aceptar</button>
                             </div>
                         </div>
                     </div>
@@ -396,7 +395,8 @@
 
                             <div class="col-md-12">&nbsp; </div>
                             <div class="col-md-12" style="text-align: right">
-                                <button type="button" class="btn btn-primary" onclick="get_mantenimientos_auditoria()">Aceptar</button>
+                                <button type="button" class="btn btn-primary"
+                                    onclick="get_mantenimientos_auditoria()">Aceptar</button>
                             </div>
                         </div>
                     </div>
@@ -451,6 +451,24 @@
         </div>
 
 
+        <br>
+
+
+
+        <div class="row col-12">
+            <input type="hidden"  id="seriales">
+            <div class="col-9 card" id="container_produccion_impresoras">
+            </div>
+            <div class="col-3 card " style="max-height: 600px; overflow-y: auto;">
+                <div class="col-12">&nbsp;</div>
+                <ul class="list-group">
+                    @foreach ($uniqueProduccion as $obj)
+                        <li class="list-group-item"><input type="checkbox"
+                                onclick="array_produccion_impresoras({{ $obj->serial }})"> {{ $obj->sucursal }} - {{ $obj->serial }} </li>
+                    @endforeach
+                </ul>
+            </div>
+        </div>
 
     </figure>
 
@@ -472,6 +490,7 @@
             get_mantenimientos();
             get_mantenimientos_auditoria();
             get_dispositivos();
+            get_produccion_impresoras();
         });
 
         Highcharts.chart('container', {
@@ -626,7 +645,7 @@
                 url: "{{ url('home/soporte_activos/get_data') }}/" + sucursal,
                 method: 'GET',
                 success: function(data) {
-                    console.log(data);
+                    //console.log(data);
                     var _select = '<option value="0">SELECCIONE</option>';
                     for (var i = 0; i < data.categorias.length; i++) {
                         _select += '<option value="' + data.categorias[i] + '" >' + data.categorias[i] +
@@ -659,7 +678,7 @@
                     mtto_activos,
                 method: 'GET',
                 success: function(data) {
-                    console.log(data);
+                    //console.log(data);
                     $('#container_mantenimientos').html(data);
                 },
                 error: function(error) {
@@ -682,7 +701,7 @@
                     mtto_activos,
                 method: 'GET',
                 success: function(data) {
-                    console.log(data);
+                    //console.log(data);
                     $('#container_mantenimientos_auditoria').html(data);
                 },
                 error: function(error) {
@@ -695,20 +714,21 @@
         function get_dispositivos() {
 
             //$('#container_dispositivos').html('<div><img src="../../public/img/ajax-loader.gif"/></div>');
-            $('#container_dispositivos').html('<div align="center" style="margin-top:50px;"><img src="{{ asset("img/ajax-loader.gif") }}" /></div>');
+            $('#container_dispositivos').html(
+                '<div align="center" style="margin-top:50px;"><img src="{{ asset('img/ajax-loader.gif') }}" /></div>');
 
 
 
 
             var sucursal = document.getElementById('disp_sucursales').value;
             var banco = document.getElementById('disp_bancos').value;
-            console.log(sucursal, banco);
+            //console.log(sucursal, banco);
 
             $.ajax({
                 url: "{{ url('/home/soporte_dispositivos') }}/" + sucursal + "/" + banco,
                 method: 'GET',
                 success: function(data) {
-                    console.log(data);
+                    //console.log(data);
                     $('#container_dispositivos').html(data);
                 },
                 error: function(error) {
@@ -773,7 +793,7 @@
                 url: "{{ url('home/soporte_activos/get_data_banco') }}/" + sucursal,
                 method: 'GET',
                 success: function(data) {
-                    console.log(data);
+                  //  console.log(data);
                     var _select = '<option value="0">SELECCIONE</option>';
                     for (var i = 0; i < data.bancos.length; i++) {
                         _select += '<option value="' + data.bancos[i] + '" >' + data.bancos[i] +
@@ -787,6 +807,53 @@
                     console.error('Error en la solicitud:', error);
                 }
             });
+        }
+
+        function get_produccion_impresoras() {
+            var serialString = $("#seriales").val().split(",");
+            if(serialString == "")
+            {
+                serialString = ["0"];
+            }
+
+            $.ajax({
+               // url: "{{ url('home/soporte/get_produccion_impresoras') }}"+ "/".serialString,
+                url: "{{ url('home/soporte/get_produccion_impresoras') }}/" + serialString,
+                method: 'GET',
+                success: function(data) {
+                    console.log(data);
+                    $("#container_produccion_impresoras").html(data);
+                },
+                error: function(error) {
+                    console.error('Error en la solicitud:', error);
+                }
+            });
+        }
+
+        function array_produccion_impresoras(serial) {
+            // Convertir serial a cadena (string)
+            var serialString = String(serial);
+
+            var array_data = $("#seriales").val().split(",");
+            var index = array_data.indexOf(serialString);
+
+            if (index !== -1) {
+                // El serial ya existe, eliminarlo
+                array_data.splice(index, 1);
+            } else {
+                // El serial no existe, agregarlo
+                array_data.push(serialString);
+            }
+
+            // Filtrar elementos vacíos del array
+            array_data = array_data.filter(function(element) {
+                return element.trim() !== '';
+            });
+
+            // Actualizar el valor del campo oculto con el nuevo array_data
+            $("#seriales").val(array_data.join(","));
+            get_produccion_impresoras();
+            //console.log(array_data);
         }
     </script>
 

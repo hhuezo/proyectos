@@ -25,10 +25,14 @@ Auth::routes();
 
 Route::get('/', 'TestController@welcome')->name('welcome');
 
+
+Route::get('/home/soporte/get_produccion_impresoras/{serial}', 'HomeController@get_produccion_impresoras')->name('get_produccion_impresoras');
 Route::get('/home/{axo}/{month}', 'HomeController@home_soporte')->name('home_soporte');
+
 Route::get('home/soporte_activos/get_data_activos/{sucursal}/{area}', 'HomeController@get_data_activos');
 Route::get('/home/soporte_activos/{sucursal}/{estado}/{categoria}', 'HomeController@soporte_activos')->name('soporte_activos');
 Route::get('/home/soporte_mantenimientos_auditoria/{sucursal}/{area}/{activo}', 'HomeController@soporte_mantenimientos_auditoria')->name('soporte_mantenimientos_auditoria');
+
 
 Route::get('/home/soporte_mantenimientos/{sucursal}/{area}/{activo}', 'HomeController@soporte_mantenimientos')->name('soporte_mantenimientos');
 Route::get('/home/soporte_dispositivos/{sucursal}/{banco}', 'HomeController@soporte_dispositivos')->name('soporte_dispositivos');

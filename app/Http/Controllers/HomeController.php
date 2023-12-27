@@ -95,6 +95,15 @@ class HomeController extends Controller
         $disp_sucursales = $dispositivos_suc->pluck('sucursal')->unique();
         $disp_bancos = $dispositivos_suc->pluck('banco')->unique();
 
+
+        $twoWeeksAgo = Carbon::now()->subWeeks(2)->toDateString();
+        $uniqueProduccion = DB::table('vw_produccion_impresoras')
+        ->select('sucursal', 'serial')
+        ->where('fecha', '>', $twoWeeksAgo)
+        ->distinct()
+        ->get();
+
+
         return view('home_soporte', compact(
             'meses',
             'resultados',
@@ -111,7 +120,8 @@ class HomeController extends Controller
             'mtto_sucursales',
             'mtto_areas',
             'disp_sucursales',
-            'disp_bancos'
+            'disp_bancos',
+            'uniqueProduccion'
         ));
     }
 
@@ -165,21 +175,24 @@ class HomeController extends Controller
         if ($sucursal == "0" && $banco == "0") {
 
             $dispositivos_suc = DB::table('estadisticas_dispositivos_suc as s')
-                ->join('bancos as b', 's.ed_soc_codigo', '=', 'b.cod_sucursal')
-                ->selectRaw("SUBSTRING(s.ed_soc_codigo, 1, 3) as banco")
-                ->select('b.descripcion as sucursal', 's.eds_serial_impresora as serial', 's.eds_cantidad_restante as restante')
-                ->where('s.eds_id', '=', function ($query) {
-                    $query->select(DB::raw('max(i.eds_id)'))
-                        ->from('estadisticas_dispositivos_suc as i')
-                        ->whereRaw('s.eds_serial_impresora = i.eds_serial_impresora ');
-                })
-                ->orderBy('s.eds_cantidad_restante', 'asc')
-                ->get();
+            ->join('bancos as b', 's.ed_soc_codigo', '=', 'b.cod_sucursal')
+            ->join('produccion_impresoras as prod', 's.eds_serial_impresora','=','prod.serial')
+            ->select('b.descripcion as sucursal', 's.eds_serial_impresora as serial', 's.eds_cantidad_restante as restante',
+             DB::raw("date_format(prod.mantenimiento_proximo, '%d/%m/%Y') as fecha"))
+            ->where('s.eds_id', '=', function ($query) {
+                $query->select(DB::raw('max(i.eds_id)'))
+                    ->from('estadisticas_dispositivos_suc as i')
+                    ->whereRaw('s.eds_serial_impresora = i.eds_serial_impresora');
+            })
+            ->orderBy('s.eds_cantidad_restante', 'asc')
+            ->get();
+
         } else if ($sucursal != "0" && $banco == "0") {
             $dispositivos_suc = DB::table('estadisticas_dispositivos_suc as s')
                 ->join('bancos as b', 's.ed_soc_codigo', '=', 'b.cod_sucursal')
-                ->selectRaw("SUBSTRING(s.ed_soc_codigo, 1, 3) as banco")
-                ->select('b.descripcion as sucursal', 's.eds_serial_impresora as serial', 's.eds_cantidad_restante as restante')
+                ->join('produccion_impresoras as prod', 's.eds_serial_impresora','=','prod.serial')
+                ->select('b.descripcion as sucursal', 's.eds_serial_impresora as serial', 's.eds_cantidad_restante as restante',
+                DB::raw("date_format(prod.mantenimiento_proximo, '%d/%m/%Y') as fecha"))
                 ->where('s.eds_id', '=', function ($query) {
                     $query->select(DB::raw('max(i.eds_id)'))
                         ->from('estadisticas_dispositivos_suc as i')
@@ -191,8 +204,9 @@ class HomeController extends Controller
         } else if ($sucursal == "0" && $banco != "0") {
             $dispositivos_suc = DB::table('estadisticas_dispositivos_suc as s')
                 ->join('bancos as b', 's.ed_soc_codigo', '=', 'b.cod_sucursal')
-                ->selectRaw("SUBSTRING(s.ed_soc_codigo, 1, 3) as banco")
-                ->select('b.descripcion as sucursal', 's.eds_serial_impresora as serial', 's.eds_cantidad_restante as restante')
+                ->join('produccion_impresoras as prod', 's.eds_serial_impresora','=','prod.serial')
+                ->select('b.descripcion as sucursal', 's.eds_serial_impresora as serial', 's.eds_cantidad_restante as restante',
+             DB::raw("date_format(prod.mantenimiento_proximo, '%d/%m/%Y') as fecha"))
                 ->where('s.eds_id', '=', function ($query) {
                     $query->select(DB::raw('max(i.eds_id)'))
                         ->from('estadisticas_dispositivos_suc as i')
@@ -209,15 +223,6 @@ class HomeController extends Controller
 
         foreach ($dispositivos_suc as $dispositivo) {
 
-            $fecha_aprox = DB::select("SELECT fun_prox_mnt($dispositivo->serial) AS resultado")[0]->resultado;
-            if ($fecha_aprox) {
-                $fecha_carbon = Carbon::parse($fecha_aprox);
-
-                $fecha_formateada = $fecha_carbon->format('d/m/Y');
-            } else {
-                $fecha_formateada ="";
-            }
-
             if ($dispositivo->restante < 300) {
                 $color = "red";
             } else  if ($dispositivo->restante < 700) {
@@ -225,7 +230,7 @@ class HomeController extends Controller
             } else {
                 $color = "green";
             }
-            $array_dispositivo = array("name" => $dispositivo->sucursal . ' - ' . $dispositivo->serial. ' ('.$fecha_formateada.')', "y" => $dispositivo->restante, "drilldown" =>  $dispositivo->sucursal . ' - ' . $dispositivo->serial, "color" =>  $color);
+            $array_dispositivo = array("name" => $dispositivo->sucursal . ' - ' . $dispositivo->serial . ' (' . $dispositivo->fecha . ')', "y" => $dispositivo->restante, "drilldown" =>  $dispositivo->sucursal . ' - ' . $dispositivo->serial, "color" =>  $color);
             array_push($data, $array_dispositivo);
         }
 
@@ -233,7 +238,7 @@ class HomeController extends Controller
 
 
 
-        return view('home_soporte_dispositivos', compact('dispositivos_suc', 'data'));
+        return view('graficas.home_soporte_dispositivos', compact('dispositivos_suc', 'data'));
     }
 
     public function get_data_banco($sucursal)
@@ -452,7 +457,77 @@ class HomeController extends Controller
         return view('graficas.tiempo_invertido_cliente_anual', compact('data_anual'));
     }
 
+    public function get_produccion_impresoras(Request $request, $seriales)
+    {
+        if ($seriales != 0) {
+            $arraySeriales = explode(",", $seriales);
+        } else {
+            $arraySeriales = [];
+        }
 
+        $twoWeeksAgo = Carbon::now()->subWeeks(2)->toDateString();
+
+        //$seriales = ["0"];
+        if (!empty($arraySeriales)) {
+            $result = DB::table('vw_produccion_impresoras')
+                ->select(DB::raw('MIN(fecha) as fecha_inicio, MAX(fecha) as fecha_final'))
+                ->whereIn('serial', $arraySeriales)
+                ->where('fecha', '>', $twoWeeksAgo)
+                ->first();
+
+            $produccion = DB::table('vw_produccion_impresoras')->whereIn('serial', $arraySeriales)->get();
+
+
+        } else {
+            $result = DB::table('vw_produccion_impresoras')
+                ->select(DB::raw('MIN(fecha) as fecha_inicio, MAX(fecha) as fecha_final'))
+                ->where('fecha', '>', $twoWeeksAgo)
+                ->first();
+
+            $produccion = DB::table('vw_produccion_impresoras')->get();
+
+
+        }
+
+        $fecha_inicio = $result->fecha_inicio;
+        $fecha_final = $result->fecha_final;
+
+        // Parse the start and end dates as Carbon instances
+        $start_date = Carbon::parse($fecha_inicio);
+        $end_date = Carbon::parse($fecha_final);
+
+        // Generate an array of dates between $start_date and $end_date
+        $date_range = [];
+        while ($start_date->lte($end_date)) {
+            $date_range[] = $start_date->toDateString();
+            $start_date->addDay(); // Increment by one day
+        }
+
+
+        $seriales = $produccion->pluck('serial')->unique()->toArray();
+
+
+
+        $data = [];
+
+        foreach ($seriales as $serial) {
+
+            $data_array = [];
+            foreach ($date_range as $date) {
+                $produccion_diaria = $produccion->where('serial', $serial)->where('fecha', $date)->first();
+                if ($produccion_diaria) {
+                    array_push($data_array, (int)$produccion_diaria->prod_diaria);
+                } else {
+                    array_push($data_array, 0);
+                }
+            }
+
+            $registro_array = ["name" => $serial, "data" => $data_array];
+
+            array_push($data, $registro_array);
+        }
+        return view('graficas.produccion_impresoras', compact('fecha_inicio', 'fecha_final', 'data'));
+    }
 
     public function index(Request $request)
     {
@@ -1284,10 +1359,6 @@ class HomeController extends Controller
         $response = ["categorias" => $categorias, "estados" => $estados];
         return $response;
     }
-
-
-
-
 
     public function load_unidades()
     {
