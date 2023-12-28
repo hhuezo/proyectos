@@ -35,6 +35,7 @@ Route::get('/home/soporte_mantenimientos_auditoria/{sucursal}/{area}/{activo}', 
 
 
 Route::get('/home/soporte_mantenimientos/{sucursal}/{area}/{activo}', 'HomeController@soporte_mantenimientos')->name('soporte_mantenimientos');
+Route::get('/home/soporte_ribbon/{sucursal}/{banco}', 'HomeController@soporte_ribbon')->name('soporte_ribbon');
 Route::get('/home/soporte_dispositivos/{sucursal}/{banco}', 'HomeController@soporte_dispositivos')->name('soporte_dispositivos');
 Route::get('/home/soporte_activos/get_data_banco/{sucursal}', 'HomeController@get_data_banco')->name('get_data_banco');
 

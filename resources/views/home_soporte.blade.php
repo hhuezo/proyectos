@@ -407,46 +407,86 @@
 
         <br>
 
+
+
+
+        <ul class="nav nav-tabs tab-body-header rounded d-inline-flex" role="tablist">
+            <li class="nav-item"><a class="nav-link active" data-bs-toggle="tab" href="#nav-impresiones-restantes"
+                    role="tab">Impresiones restantes</a></li>
+            <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#nav-ribbon" role="tab">Ribbon
+                    restante</a>
+            </li>
+        </ul>
+
+        <div class="tab-content mt-2">
+            <div class="tab-pane fade show active" id="nav-impresiones-restantes" role="tabpanel">
+                <div class="card g-3">
+                    <div class="row col-12">
+                        <div class="col-9 card" id="container_dispositivos">
+                        </div>
+                        <div class="col-3 card">
+                            <form method="GET" id="form_dispositivos">
+                                <div class="col-md-12">&nbsp; </div>
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label class="form-label" align="right"><strong>Sucursal</strong></label>
+                                        <div>
+                                            <select id="disp_sucursales" onchange="get_banco(this.value)"
+                                                class="form-control">
+                                                <option value="0">SELECCIONE</option>
+                                                @foreach ($disp_sucursales as $sucursal)
+                                                    <option value="{{ $sucursal }}">{{ $sucursal }}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-12">&nbsp; </div>
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label class="form-label" align="right"><strong>Bancos</strong></label>
+                                        <div>
+                                            <select id="disp_bancos" class="form-control">
+                                                <option value="0">SELECCIONE</option>
+                                                @foreach ($disp_bancos as $area)
+                                                    <option value="{{ $area }}">{{ $area }}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-12">&nbsp; </div>
+                                <div class="col-md-12" style="text-align: right">
+                                    <button type="button" class="btn btn-primary"
+                                        onclick="get_dispositivos()">Aceptar</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-pane fade" id="nav-ribbon" role="tabpanel">
+                <div class="card g-3">
+                    <div class="row">
+                        <div class="row col-12">
+                            <div id="container_ribbon"></div>
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <br>
+
         <div class="row col-12">
             <div class="col-9 card" id="container_dispositivos">
             </div>
             <div class="col-3 card">
-                <form method="GET" id="form_dispositivos">
-                    <div class="col-md-12">&nbsp; </div>
-                    <div class="col-md-12">
-                        <div class="form-group">
-                            <label class="form-label" align="right"><strong>Sucursal</strong></label>
-                            <div>
-                                <select id="disp_sucursales" onchange="get_banco(this.value)" class="form-control">
-                                    <option value="0">SELECCIONE</option>
-                                    @foreach ($disp_sucursales as $sucursal)
-                                        <option value="{{ $sucursal }}">{{ $sucursal }}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                        </div>
-                    </div>
 
-                    <div class="col-md-12">&nbsp; </div>
-                    <div class="col-md-12">
-                        <div class="form-group">
-                            <label class="form-label" align="right"><strong>Bancos</strong></label>
-                            <div>
-                                <select id="disp_bancos" class="form-control">
-                                    <option value="0">SELECCIONE</option>
-                                    @foreach ($disp_bancos as $area)
-                                        <option value="{{ $area }}">{{ $area }}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="col-md-12">&nbsp; </div>
-                    <div class="col-md-12" style="text-align: right">
-                        <button type="button" class="btn btn-primary" onclick="get_dispositivos()">Aceptar</button>
-                    </div>
-                </form>
             </div>
         </div>
 
@@ -456,7 +496,7 @@
 
 
         <div class="row col-12">
-            <input type="hidden"  id="seriales">
+            <input type="hidden" id="seriales">
             <div class="col-9 card" id="container_produccion_impresoras">
             </div>
             <div class="col-3 card " style="max-height: 600px; overflow-y: auto;">
@@ -464,7 +504,8 @@
                 <ul class="list-group">
                     @foreach ($uniqueProduccion as $obj)
                         <li class="list-group-item"><input type="checkbox"
-                                onclick="array_produccion_impresoras({{ $obj->serial }})"> {{ $obj->sucursal }} - {{ $obj->serial }} </li>
+                                onclick="array_produccion_impresoras({{ $obj->serial }})"> {{ $obj->sucursal }} -
+                            {{ $obj->serial }} </li>
                     @endforeach
                 </ul>
             </div>
@@ -491,6 +532,7 @@
             get_mantenimientos_auditoria();
             get_dispositivos();
             get_produccion_impresoras();
+            get_ribbon();
         });
 
         Highcharts.chart('container', {
@@ -737,6 +779,32 @@
             });
         }
 
+        function get_ribbon() {
+
+            //$('#container_dispositivos').html('<div><img src="../../public/img/ajax-loader.gif"/></div>');
+            $('#container_dispositivos').html(
+                '<div align="center" style="margin-top:50px;"><img src="{{ asset('img/ajax-loader.gif') }}" /></div>');
+
+
+
+
+            var sucursal = document.getElementById('disp_sucursales').value;
+            var banco = document.getElementById('disp_bancos').value;
+            //console.log(sucursal, banco);
+
+            $.ajax({
+                url: "{{ url('/home/soporte_ribbon') }}/" + sucursal + "/" + banco,
+                method: 'GET',
+                success: function(data) {
+                    //console.log(data);
+                    $('#container_ribbon').html(data);
+                },
+                error: function(error) {
+                    console.error('Error en la solicitud:', error);
+                }
+            });
+        }
+
 
         function get_area_activo(sucursal) {
             $.ajax({
@@ -793,7 +861,7 @@
                 url: "{{ url('home/soporte_activos/get_data_banco') }}/" + sucursal,
                 method: 'GET',
                 success: function(data) {
-                  //  console.log(data);
+                    //  console.log(data);
                     var _select = '<option value="0">SELECCIONE</option>';
                     for (var i = 0; i < data.bancos.length; i++) {
                         _select += '<option value="' + data.bancos[i] + '" >' + data.bancos[i] +
@@ -811,13 +879,12 @@
 
         function get_produccion_impresoras() {
             var serialString = $("#seriales").val().split(",");
-            if(serialString == "")
-            {
+            if (serialString == "") {
                 serialString = ["0"];
             }
 
             $.ajax({
-               // url: "{{ url('home/soporte/get_produccion_impresoras') }}"+ "/".serialString,
+                // url: "{{ url('home/soporte/get_produccion_impresoras') }}"+ "/".serialString,
                 url: "{{ url('home/soporte/get_produccion_impresoras') }}/" + serialString,
                 method: 'GET',
                 success: function(data) {

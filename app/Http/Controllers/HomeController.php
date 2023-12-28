@@ -98,10 +98,10 @@ class HomeController extends Controller
 
         $twoWeeksAgo = Carbon::now()->subWeeks(2)->toDateString();
         $uniqueProduccion = DB::table('vw_produccion_impresoras')
-        ->select('sucursal', 'serial')
-        ->where('fecha', '>', $twoWeeksAgo)
-        ->distinct()
-        ->get();
+            ->select('sucursal', 'serial')
+            ->where('fecha', '>', $twoWeeksAgo)
+            ->distinct()
+            ->get();
 
 
         return view('home_soporte', compact(
@@ -175,26 +175,33 @@ class HomeController extends Controller
         if ($sucursal == "0" && $banco == "0") {
 
             $dispositivos_suc = DB::table('estadisticas_dispositivos_suc as s')
-            ->join('bancos as b', 's.ed_soc_codigo', '=', 'b.cod_sucursal')
-            //->join('produccion_impresoras as prod', 's.eds_serial_impresora','=','prod.serial')
-            ->select('b.descripcion as sucursal', 's.eds_serial_impresora as serial', 's.eds_cantidad_restante as restante',
-             DB::raw("(SELECT ifnull(date_format(max(prod.mantenimiento_proximo), '%d/%m/%Y'),'')
-             as fecha from produccion_impresoras as prod where prod.serial = s.eds_serial_impresora ) as fecha"))
-            ->where('s.eds_id', '=', function ($query) {
-                $query->select(DB::raw('max(i.eds_id)'))
-                    ->from('estadisticas_dispositivos_suc as i')
-                    ->whereRaw('s.eds_serial_impresora = i.eds_serial_impresora');
-            })
-            ->orderBy('s.eds_cantidad_restante', 'asc')
-            ->get();
-
+                ->join('bancos as b', 's.ed_soc_codigo', '=', 'b.cod_sucursal')
+                //->join('produccion_impresoras as prod', 's.eds_serial_impresora','=','prod.serial')
+                ->select(
+                    'b.descripcion as sucursal',
+                    's.eds_serial_impresora as serial',
+                    's.eds_cantidad_restante as restante',
+                    DB::raw("(SELECT ifnull(date_format(max(prod.mantenimiento_proximo), '%d/%m/%Y'),'')
+             as fecha from produccion_impresoras as prod where prod.serial = s.eds_serial_impresora ) as fecha")
+                )
+                ->where('s.eds_id', '=', function ($query) {
+                    $query->select(DB::raw('max(i.eds_id)'))
+                        ->from('estadisticas_dispositivos_suc as i')
+                        ->whereRaw('s.eds_serial_impresora = i.eds_serial_impresora');
+                })
+                ->orderBy('s.eds_cantidad_restante', 'asc')
+                ->get();
         } else if ($sucursal != "0" && $banco == "0") {
             $dispositivos_suc = DB::table('estadisticas_dispositivos_suc as s')
                 ->join('bancos as b', 's.ed_soc_codigo', '=', 'b.cod_sucursal')
-                ->join('produccion_impresoras as prod', 's.eds_serial_impresora','=','prod.serial')
-                ->select('b.descripcion as sucursal', 's.eds_serial_impresora as serial', 's.eds_cantidad_restante as restante',
-                DB::raw("(SELECT ifnull(date_format(max(prod.mantenimiento_proximo), '%d/%m/%Y'),'')
-                as fecha from produccion_impresoras as prod where prod.serial = s.eds_serial_impresora ) as fecha"))
+                ->join('produccion_impresoras as prod', 's.eds_serial_impresora', '=', 'prod.serial')
+                ->select(
+                    'b.descripcion as sucursal',
+                    's.eds_serial_impresora as serial',
+                    's.eds_cantidad_restante as restante',
+                    DB::raw("(SELECT ifnull(date_format(max(prod.mantenimiento_proximo), '%d/%m/%Y'),'')
+                as fecha from produccion_impresoras as prod where prod.serial = s.eds_serial_impresora ) as fecha")
+                )
                 ->where('s.eds_id', '=', function ($query) {
                     $query->select(DB::raw('max(i.eds_id)'))
                         ->from('estadisticas_dispositivos_suc as i')
@@ -206,10 +213,14 @@ class HomeController extends Controller
         } else if ($sucursal == "0" && $banco != "0") {
             $dispositivos_suc = DB::table('estadisticas_dispositivos_suc as s')
                 ->join('bancos as b', 's.ed_soc_codigo', '=', 'b.cod_sucursal')
-                ->join('produccion_impresoras as prod', 's.eds_serial_impresora','=','prod.serial')
-                ->select('b.descripcion as sucursal', 's.eds_serial_impresora as serial', 's.eds_cantidad_restante as restante',
-                DB::raw("(SELECT ifnull(date_format(max(prod.mantenimiento_proximo), '%d/%m/%Y'),'')
-                as fecha from produccion_impresoras as prod where prod.serial = s.eds_serial_impresora ) as fecha"))
+                ->join('produccion_impresoras as prod', 's.eds_serial_impresora', '=', 'prod.serial')
+                ->select(
+                    'b.descripcion as sucursal',
+                    's.eds_serial_impresora as serial',
+                    's.eds_cantidad_restante as restante',
+                    DB::raw("(SELECT ifnull(date_format(max(prod.mantenimiento_proximo), '%d/%m/%Y'),'')
+                as fecha from produccion_impresoras as prod where prod.serial = s.eds_serial_impresora ) as fecha")
+                )
                 ->where('s.eds_id', '=', function ($query) {
                     $query->select(DB::raw('max(i.eds_id)'))
                         ->from('estadisticas_dispositivos_suc as i')
@@ -238,11 +249,47 @@ class HomeController extends Controller
         }
 
 
-
-
-
         return view('graficas.home_soporte_dispositivos', compact('dispositivos_suc', 'data'));
     }
+
+    public function soporte_ribbon($sucursal, $banco)
+    {
+
+        $resultados = DB::table('estadisticas_dispositivos_suc as s')
+            ->select([
+                DB::raw('SUBSTRING(s.ed_soc_codigo, 1, 3) as banco'),
+                'b.descripcion as sucursal',
+                's.eds_serial_impresora as serial',
+                's.eds_uso_ribbon as ribbon',
+            ])
+            ->join('bancos as b', 's.ed_soc_codigo', '=', 'b.cod_sucursal')
+            ->where('s.eds_id', function ($query) {
+                $query->select(DB::raw('max(i.eds_id)'))
+                    ->from('estadisticas_dispositivos_suc as i')
+                    ->whereRaw('s.eds_serial_impresora = i.eds_serial_impresora');
+            })
+            ->orderBy('s.eds_uso_ribbon')
+            ->get();
+
+        $data = array();
+
+        foreach ($resultados as $resultado) {
+            if ($resultado->ribbon < 500) {
+                $color = "red";
+            } else  if ($resultado->ribbon < 1000) {
+                $color = "orange";
+            } else {
+                $color = "green";
+            }
+            $array_ribbon= array("name" => $resultado->sucursal . ' - ' . $resultado->serial, "y" => $resultado->ribbon, "drilldown" =>  $resultado->sucursal . ' - ' . $resultado->serial, "color" =>  $color);
+            array_push($data, $array_ribbon);
+        }
+
+
+        return view('graficas.ribbon_restante',compact('data'));
+    }
+
+
 
     public function get_data_banco($sucursal)
     {
@@ -479,8 +526,6 @@ class HomeController extends Controller
                 ->first();
 
             $produccion = DB::table('vw_produccion_impresoras')->whereIn('serial', $arraySeriales)->get();
-
-
         } else {
             $result = DB::table('vw_produccion_impresoras')
                 ->select(DB::raw('MIN(fecha) as fecha_inicio, MAX(fecha) as fecha_final'))
@@ -488,8 +533,6 @@ class HomeController extends Controller
                 ->first();
 
             $produccion = DB::table('vw_produccion_impresoras')->get();
-
-
         }
 
         $fecha_inicio = $result->fecha_inicio;
@@ -510,8 +553,8 @@ class HomeController extends Controller
         //$seriales = $produccion->pluck('serial')->unique()->toArray();
 
         $seriales = DB::table('vw_produccion_impresoras')
-        ->select(DB::raw("DISTINCT sucursal,  serial"))
-        ->get();
+            ->select(DB::raw("DISTINCT sucursal,  serial"))
+            ->get();
 
 
         $data = [];
@@ -528,7 +571,7 @@ class HomeController extends Controller
                 }
             }
 
-            $registro_array = ["name" => $serial->sucursal.' - '.$serial->serial, "data" => $data_array];
+            $registro_array = ["name" => $serial->sucursal . ' - ' . $serial->serial, "data" => $data_array];
 
             array_push($data, $registro_array);
         }
