@@ -2,11 +2,6 @@
 <figure class="highcharts-figure">
 
     <div id="container_ribbon"></div>
-    <p class="highcharts-description">
-        Chart showing browser market shares. Clicking on individual columns
-        brings up more detailed data. This chart makes use of the drilldown
-        feature in Highcharts to easily switch between datasets.
-    </p>
 </figure>
 
 <script>
@@ -17,7 +12,7 @@
         },
         title: {
             align: 'left',
-            text: 'Impresiones restantes'
+            text: 'Ribbon restantes'
         },
         subtitle: {
             align: 'left',
