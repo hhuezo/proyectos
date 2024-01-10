@@ -15,14 +15,20 @@ class CalendarizacionController extends Controller
         $this->middleware('auth');
     }
 
-    public function index()
+    public function index(Request $request)
     {
 
-        $year = Carbon::now()->year;
+        if ($request->anio) {
+            $year = $request->anio;
+        } else {
+            $year = Carbon::now()->year;
+        }
+
         $pending = Maintenances::selectRaw('count(*) as count,MONTH(start_date) -1 AS mes, DAY(start_date) AS dia,
          YEAR(start_date) AS axo, "red"  as color, "Pendientes"  as label')
             ->whereYear('start_date', '=', $year)
             ->whereRaw('(notes = "" or notes is null)')
+            ->where('deleted_at','=',null)
             ->groupBy('start_date')
             ->get();
 
@@ -30,11 +36,35 @@ class CalendarizacionController extends Controller
             YEAR(start_date) AS axo, "blue" as color, "Realizados"  as label')
             ->whereYear('start_date', '=', $year)
             ->whereRaw('(notes != "" or notes is not null)')
+            ->where('deleted_at','=',null)
             ->groupBy('start_date')
             ->get();
 
-        return view('produccion.calendarizacion.index', compact('pending', 'done'));
+        return view('produccion.calendarizacion.index', compact('pending', 'done','year'));
     }
+
+    public function get_data_year($year)
+    {
+        $pending = Maintenances::selectRaw('count(*) as count,MONTH(start_date) -1 AS mes, DAY(start_date) AS dia,
+         YEAR(start_date) AS axo, "red"  as color, "Pendientes"  as label')
+            ->whereYear('start_date', '=', $year)
+            ->whereRaw('(notes = "" or notes is null)')
+            ->where('deleted_at','=',null)
+            ->groupBy('start_date')
+            ->get();
+
+        $done = Maintenances::selectRaw('count(*) as count,MONTH(start_date) -1 AS mes, DAY(start_date) AS dia,
+            YEAR(start_date) AS axo, "blue" as color, "Realizados"  as label')
+            ->whereYear('start_date', '=', $year)
+            ->whereRaw('(notes != "" or notes is not null)')
+            ->where('deleted_at','=',null)
+            ->groupBy('start_date')
+            ->get();
+
+        return view('produccion.calendarizacion.index', compact('pending', 'done','year'));
+    }
+
+
 
     public function get_data($date)
     {

@@ -89,9 +89,6 @@ Route::get('prueba/resultado/{usuario}/{fecha}', 'TestController@resultado');
 Route::resource('catalogo/propietario', 'catalogo\PropietarioController');
 
 Route::get('calendarizacion/get_data/{fecha}', 'produccion\CalendarizacionController@get_data');
-Route::resource('calendarizacion','produccion\CalendarizacionController');
+Route::get('calendarizacion/{year}', 'produccion\CalendarizacionController@get_data_year');
+Route::resource('calendarizacion', 'produccion\CalendarizacionController');
 Route::resource('inventario_despliegues', 'catalogo\InventarioDespliegueController');
-
-
-
-

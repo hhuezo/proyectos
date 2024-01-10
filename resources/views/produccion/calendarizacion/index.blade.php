@@ -9,15 +9,28 @@
     <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.js" defer></script>
 
 
+    <div class="card-body flex flex-col p-6">
+        <div class="flex-1">
+            @php
+                $selectedAnio = $year;
+            @endphp
 
+            <select id="anio" class="form-select" onchange="get_anio(this.value)">
+                @for ($i = date('Y'); $i >= 2022; $i--)
+                    <option value="{{ $i }}" {{ $selectedAnio == $i ? 'selected' : '' }}>{{ $i }}
+                    </option>
+                @endfor
+            </select>
+        </div>
+    </div>
 
     <div x-data="app()" x-init="[initDate(), getNoOfDays()]" x-cloak>
         <div class="container mx-auto px-4 py-2 md:py-24">
 
             <!-- <div class="font-bold text-gray-800 text-xl mb-4">
-                                                                                                                            Schedule Tasks
+                                                                                                                                Schedule Tasks
 
-                                                                                                                        </div> -->
+                                                                                                                            </div> -->
 
             <div class="bg-white rounded-lg shadow overflow-hidden">
 
@@ -81,9 +94,9 @@
                                 </a>
                                 <div style="height: 80px;" class="overflow-y-auto mt-1">
                                     <!-- <div
-                                                                                                                                                    class="absolute top-0 right-0 mt-2 mr-2 inline-flex items-center justify-center rounded-full text-sm w-6 h-6 bg-gray-700 text-white leading-none"
-                                                                                                                                                    x-show="events.filter(e => e.event_date === new Date(year, month, date).toDateString()).length"
-                                                                                                                                                    x-text="events.filter(e => e.event_date === new Date(year, month, date).toDateString()).length"></div> -->
+                                                                                                                                                        class="absolute top-0 right-0 mt-2 mr-2 inline-flex items-center justify-center rounded-full text-sm w-6 h-6 bg-gray-700 text-white leading-none"
+                                                                                                                                                        x-show="events.filter(e => e.event_date === new Date(year, month, date).toDateString()).length"
+                                                                                                                                                        x-text="events.filter(e => e.event_date === new Date(year, month, date).toDateString()).length"></div> -->
 
                                     <template
                                         x-for="event in events.filter(e => new Date(e.event_date).toDateString() ===  new Date(year, month, date).toDateString() )">
@@ -122,6 +135,19 @@
     <script src="{{ asset('assets/bundles/libscripts.bundle.js') }}"></script>
     <script src="{{ asset('assets/bundles/dataTables.bundle.js') }}"></script>
     <script src="{{ asset('js/template.js') }}"></script>
+
+
+
+    <script type="text/javascript">
+        $(document).ready(function() {
+
+
+        });
+
+        function get_anio(anio) {
+            window.location.href = '{{ url('calendarizacion') }}/' + anio;
+        }
+    </script>
 
     <script type="text/javascript">
         record = [];
@@ -165,8 +191,17 @@
                 initDate() {
 
                     let today = new Date();
+
+                    // Verifica si existe el parámetro "anio" en la URL
+                    let anioParam = {{ $year}};
+
+                    // Asigna el año basado en la URL o en la fecha actual
+                    this.year = anioParam !== null ? parseInt(anioParam) : today.getFullYear();
+
+
+
                     this.month = today.getMonth();
-                    this.year = today.getFullYear();
+                    //this.year = today.getFullYear();
                     this.datepickerValue = new Date(this.year, this.month, today.getDate()).toDateString();
                 },
 
