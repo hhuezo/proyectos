@@ -261,6 +261,7 @@ class HomeController extends Controller
                 'b.descripcion as sucursal',
                 's.eds_serial_impresora as serial',
                 's.eds_uso_ribbon as ribbon',
+                DB::raw('DATE_FORMAT(s.eds_fecha_ingreso, "%d/%m/%Y") as fecha')
             ])
             ->join('bancos as b', 's.ed_soc_codigo', '=', 'b.cod_sucursal')
             ->where('s.eds_id', function ($query) {
@@ -268,7 +269,7 @@ class HomeController extends Controller
                     ->from('estadisticas_dispositivos_suc as i')
                     ->whereRaw('s.eds_serial_impresora = i.eds_serial_impresora');
             })
-            ->orderBy('s.eds_uso_ribbon')
+            ->orderBy('s.eds_uso_ribbon', 'asc')  // Puedes cambiar a 'desc' si necesitas orden descendente
             ->get();
 
         $data = array();
@@ -281,12 +282,12 @@ class HomeController extends Controller
             } else {
                 $color = "green";
             }
-            $array_ribbon= array("name" => $resultado->sucursal . ' - ' . $resultado->serial, "y" => $resultado->ribbon, "drilldown" =>  $resultado->sucursal . ' - ' . $resultado->serial, "color" =>  $color);
+            $array_ribbon = array("name" => $resultado->sucursal . ' - ' . $resultado->serial. ' (' . $resultado->fecha.')', "y" => $resultado->ribbon, "drilldown" =>  $resultado->sucursal . ' - ' . $resultado->serial, "color" =>  $color);
             array_push($data, $array_ribbon);
         }
 
 
-        return view('graficas.ribbon_restante',compact('data'));
+        return view('graficas.ribbon_restante', compact('data'));
     }
 
 
@@ -728,7 +729,7 @@ class HomeController extends Controller
             ->select('users.user_name', DB::raw('COUNT(actividades.id) as numero_actividades'))
             ->where('actividades.porcentaje', '<', '100')
             ->where('users.unidad_id', $id_unidad)
-            ->where('actividades.estado_id', '<>',7)
+            ->where('actividades.estado_id', '<>', 7)
             ->groupBy('users.user_name')
             ->orderBy('numero_actividades')
             ->get();
