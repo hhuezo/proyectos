@@ -348,58 +348,72 @@
     </div>
 
     <br>
-    <div class="col-xxl-12 col-xl-12 col-lg-12 col-md-12" style="display: {{ $visibility }}">
-        <ul class="nav nav-tabs tab-body-header rounded d-inline-flex" role="tablist">
-            <li class="nav-item"><a class="nav-link active" data-bs-toggle="tab" href="#nav-ActividadesFinalizadas"
-                    role="tab">Actividades finalizadas por analista</a></li>
-            <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#nav-ActividadesFinalizadas15"
-                    role="tab">Actividades finalizadas por analista (Ultimos 15 dias)</a></li>
-            <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#nav-ActividadesAsignadas"
-                    role="tab">Actividades asignadas por analista</a></li>
-        </ul>
+
+    @if (auth()->user()->unidad_id == 1)
+        @if (auth()->user()->rol_id == 1 ||
+                auth()->user()->rol_id == 2 ||
+                auth()->user()->rol_id == 4 ||
+                auth()->user()->rol_id == 5 ||
+                auth()->user()->rol_id == 6)
+            <div class="col-xxl-12 col-xl-12 col-lg-12 col-md-12">
+                <ul class="nav nav-tabs tab-body-header rounded d-inline-flex" role="tablist">
+                    <li class="nav-item"><a class="nav-link active" data-bs-toggle="tab"
+                            href="#nav-ActividadesFinalizadas" role="tab">Actividades finalizadas por analista</a>
+                    </li>
+                    <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#nav-ActividadesFinalizadas15"
+                            role="tab">Actividades finalizadas por analista (Ultimos 15 dias)</a></li>
+                    <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#nav-ActividadesAsignadas"
+                            role="tab">Actividades asignadas por analista</a></li>
+                </ul>
 
 
-        <div class="tab-content mt-2">
-            <div class="tab-pane fade show active" id="nav-ActividadesFinalizadas" role="tabpanel">
-                <div class="row col-8 g-3">
-                    <div class="card">
-                        <div class="card-header py-3 d-flex justify-content-between bg-transparent border-bottom-0">
-                            <h6 class="mb-0 fw-bold ">Actividades finalizadas por analista</h6>
+                <div class="tab-content mt-2">
+                    <div class="tab-pane fade show active" id="nav-ActividadesFinalizadas" role="tabpanel">
+                        <div class="row col-8 g-3">
+                            <div class="card">
+                                <div
+                                    class="card-header py-3 d-flex justify-content-between bg-transparent border-bottom-0">
+                                    <h6 class="mb-0 fw-bold ">Actividades finalizadas por analista</h6>
+                                </div>
+                                <canvas id="char_actividades_finalizadas_analista"></canvas>
+                            </div>
                         </div>
-                        <canvas id="char_actividades_finalizadas_analista"></canvas>
                     </div>
-                </div>
-            </div>
 
-            <div class="tab-pane fade" id="nav-ActividadesFinalizadas15" role="tabpanel">
-                <div class="row col-8 g-3">
-                    <div class="card">
-                        <div class="card-header py-3 d-flex justify-content-between bg-transparent border-bottom-0">
-                            <h6 class="mb-0 fw-bold ">Actividades finalizadas por analista (Ultimos 15 dias)</h6>
+                    <div class="tab-pane fade" id="nav-ActividadesFinalizadas15" role="tabpanel">
+                        <div class="row col-8 g-3">
+                            <div class="card">
+                                <div
+                                    class="card-header py-3 d-flex justify-content-between bg-transparent border-bottom-0">
+                                    <h6 class="mb-0 fw-bold ">Actividades finalizadas por analista (Ultimos 15 dias)</h6>
+                                </div>
+                                <canvas id="char_actividades_finalizadas_analista5"></canvas>
+                            </div>
                         </div>
-                        <canvas id="char_actividades_finalizadas_analista5"></canvas>
                     </div>
-                </div>
-            </div>
 
-            <div class="tab-pane fade" id="nav-ActividadesAsignadas" role="tabpanel">
-                <div class="row col-8 g-3">
-                    <div class="card">
-                        <div class="card-header py-3 d-flex justify-content-between bg-transparent border-bottom-0">
-                            <h6 class="mb-0 fw-bold ">Actividades asignadas por analista</h6>
+                    <div class="tab-pane fade" id="nav-ActividadesAsignadas" role="tabpanel">
+                        <div class="row col-8 g-3">
+                            <div class="card">
+                                <div
+                                    class="card-header py-3 d-flex justify-content-between bg-transparent border-bottom-0">
+                                    <h6 class="mb-0 fw-bold ">Actividades asignadas por analista</h6>
+                                </div>
+                                <canvas id="char_actividades_finalizadas_analista4"></canvas>
+                            </div>
                         </div>
-                        <canvas id="char_actividades_finalizadas_analista4"></canvas>
                     </div>
+
                 </div>
+
+
+
+
+
             </div>
+        @endif
+    @endif
 
-        </div>
-
-
-
-
-
-    </div>
 
 
 

@@ -728,9 +728,11 @@ class HomeController extends Controller
             ->select('users.user_name', DB::raw('COUNT(actividades.id) as numero_actividades'))
             ->where('actividades.porcentaje', '<', '100')
             ->where('users.unidad_id', $id_unidad)
+            ->where('actividades.estado_id', '<>',7)
             ->groupBy('users.user_name')
             ->orderBy('numero_actividades')
             ->get();
+
 
         $data_users_dev_label = $result->pluck('user_name')->toArray();
         $data_users_dev_value = $result->pluck('numero_actividades')->toArray();
