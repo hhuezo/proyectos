@@ -68,9 +68,6 @@ class HomeController extends Controller
             ->groupBy('sucursal')
             ->get();
 
-        $categorias = ActivosIso::distinct('categoria')->orderBy('categoria')->pluck('categoria');
-        $sucursales = ActivosIso::distinct('sucursal_std')->orderBy('sucursal_std')->pluck('sucursal_std');
-        $estados = ActivosIso::distinct('status')->orderBy('status')->pluck('status');
 
         $frecuencia_mtto = VmFrecuenciaMantenimiento::get();
         $mtto_activos = $frecuencia_mtto->pluck('nombre_activo')->unique();
@@ -112,9 +109,6 @@ class HomeController extends Controller
             'month',
             'resultados_correctivos',
             'resultados_sucursal_correctivos',
-            'categorias',
-            'sucursales',
-            'estados',
             'frecuencia_mtto',
             'mtto_activos',
             'mtto_sucursales',
@@ -128,7 +122,7 @@ class HomeController extends Controller
     public function soporte_activos(Request $request)
     {
 
-        if ($request->sucursal != '0' || $request->estado != '0' || $request->categoria != '0') {
+        if ($request->sucursal != '0' || $request->estado != '0' || $request->categoria != '0' || $request->area != '0') {
             $string_sucursal  = "";
 
             if ($request->sucursal != '0') {
@@ -156,16 +150,119 @@ class HomeController extends Controller
 
                 $string_sucursal  = $string_sucursal . " categoria = '$request->categoria'";
             }
+
+
+            if ($request->area != '0') {
+                if ($string_sucursal == '') {
+                    $string_sucursal = "where ";
+                } else {
+                    $string_sucursal =  $string_sucursal . ' and ';
+                }
+
+
+                $string_sucursal  = $string_sucursal . " area = '$request->area'";
+            }
+
             $sql = "select sucursal_std, count(*) as conteo from activos_iso " . $string_sucursal . " group by sucursal_std";
         } else {
             $sql = "select sucursal_std, count(*) as conteo from activos_iso group by sucursal_std";
         }
 
 
+        $activos_iso = DB::connection('mysql2')->select($sql);
+
+        return view('graficas.container_activos_iso', compact('activos_iso'));
+    }
+
+    public function soporte_activos_sucursal(Request $request)
+    {
+
+        if ($request->sucursal != '0' || $request->estado != '0' || $request->categoria != '0' || $request->area != '0') {
+            $string_sucursal  = "";
+
+            if ($request->sucursal != '0') {
+
+                $string_sucursal  = $string_sucursal . " where sucursal_std = '$request->sucursal'";
+            }
+
+            if ($request->estado != '0') {
+                if ($string_sucursal == '') {
+                    $string_sucursal = "where ";
+                } else {
+                    $string_sucursal =  $string_sucursal . ' and ';
+                }
+
+
+                $string_sucursal  = $string_sucursal . " status = '$request->estado'";
+            }
+
+            if ($request->categoria != '0') {
+                if ($string_sucursal == '') {
+                    $string_sucursal = "where ";
+                } else {
+                    $string_sucursal =  $string_sucursal . ' and ';
+                }
+
+                $string_sucursal  = $string_sucursal . " categoria = '$request->categoria'";
+            }
+
+
+            if ($request->area != '0') {
+                if ($string_sucursal == '') {
+                    $string_sucursal = "where ";
+                } else {
+                    $string_sucursal =  $string_sucursal . ' and ';
+                }
+
+
+                $string_sucursal  = $string_sucursal . " area = '$request->area'";
+            }
+
+            $sql = "select categoria, count(*) as conteo from activos_iso " . $string_sucursal . " group by categoria";
+        } else {
+            $sql = "select categoria, count(*) as conteo from activos_iso group by categoria";
+        }
+
+
         $activos = DB::connection('mysql2')->select($sql);
 
-        return view('home_soporte_activos', compact('activos'));
+        return view('graficas.container_activos_categorias', compact('activos'));
     }
+
+
+
+    public function soporte_activos_iso()
+    {
+
+        $categorias = ActivosIso::distinct('categoria')->orderBy('categoria')->pluck('categoria');
+        $sucursales = ActivosIso::distinct('sucursal_std')->orderBy('sucursal_std')->pluck('sucursal_std');
+        $estados = ActivosIso::distinct('status')->orderBy('status')->pluck('status');
+        $areas = ActivosIso::distinct('area')->orderBy('status')->pluck('area');
+
+        $activos_iso = DB::connection('mysql2')
+            ->table('activos_iso')
+            ->select('sucursal_std', DB::raw('count(*) as conteo'))
+            ->groupBy('sucursal_std')
+            ->get();
+
+        $activos = DB::connection('mysql2')
+            ->table('activos_iso')
+            ->select('categoria', DB::raw('count(*) as conteo'))
+            ->groupBy('categoria')
+            ->get();
+
+        return view('graficas.home_soporte_activos', compact(
+            'activos',
+            'activos_iso',
+            'categorias',
+            'sucursales',
+            'estados',
+            'areas'
+        ));
+    }
+
+
+
 
 
     public function soporte_dispositivos($sucursal, $banco)
@@ -176,13 +273,12 @@ class HomeController extends Controller
 
             $dispositivos_suc = DB::table('estadisticas_dispositivos_suc as s')
                 ->join('bancos as b', 's.ed_soc_codigo', '=', 'b.cod_sucursal')
-                //->join('produccion_impresoras as prod', 's.eds_serial_impresora','=','prod.serial')
                 ->select(
                     'b.descripcion as sucursal',
                     's.eds_serial_impresora as serial',
                     's.eds_cantidad_restante as restante',
-                    DB::raw("(SELECT ifnull(date_format(max(prod.mantenimiento_proximo), '%d/%m/%Y'),'')
-             as fecha from produccion_impresoras as prod where prod.serial = s.eds_serial_impresora ) as fecha")
+                    DB::raw("(SELECT ifnull(date_format(prod.mantenimiento_proximo, '%d/%m/%Y'),'')
+             as fecha from produccion_impresoras as prod where prod.serial = s.eds_serial_impresora order by  prod.id desc limit 1) as fecha")
                 )
                 ->where('s.eds_id', '=', function ($query) {
                     $query->select(DB::raw('max(i.eds_id)'))
@@ -199,8 +295,8 @@ class HomeController extends Controller
                     'b.descripcion as sucursal',
                     's.eds_serial_impresora as serial',
                     's.eds_cantidad_restante as restante',
-                    DB::raw("(SELECT ifnull(date_format(max(prod.mantenimiento_proximo), '%d/%m/%Y'),'')
-                as fecha from produccion_impresoras as prod where prod.serial = s.eds_serial_impresora ) as fecha")
+                    DB::raw("(SELECT ifnull(date_format(prod.mantenimiento_proximo, '%d/%m/%Y'),'')
+             as fecha from produccion_impresoras as prod where prod.serial = s.eds_serial_impresora order by  prod.id desc limit 1) as fecha")
                 )
                 ->where('s.eds_id', '=', function ($query) {
                     $query->select(DB::raw('max(i.eds_id)'))
@@ -218,8 +314,8 @@ class HomeController extends Controller
                     'b.descripcion as sucursal',
                     's.eds_serial_impresora as serial',
                     's.eds_cantidad_restante as restante',
-                    DB::raw("(SELECT ifnull(date_format(max(prod.mantenimiento_proximo), '%d/%m/%Y'),'')
-                as fecha from produccion_impresoras as prod where prod.serial = s.eds_serial_impresora ) as fecha")
+                    DB::raw("(SELECT ifnull(date_format(prod.mantenimiento_proximo, '%d/%m/%Y'),'')
+             as fecha from produccion_impresoras as prod where prod.serial = s.eds_serial_impresora order by  prod.id desc limit 1) as fecha")
                 )
                 ->where('s.eds_id', '=', function ($query) {
                     $query->select(DB::raw('max(i.eds_id)'))
@@ -282,7 +378,7 @@ class HomeController extends Controller
             } else {
                 $color = "green";
             }
-            $array_ribbon = array("name" => $resultado->sucursal . ' - ' . $resultado->serial. ' (' . $resultado->fecha.')', "y" => $resultado->ribbon, "drilldown" =>  $resultado->sucursal . ' - ' . $resultado->serial, "color" =>  $color);
+            $array_ribbon = array("name" => $resultado->sucursal . ' - ' . $resultado->serial , "y" => $resultado->ribbon, "drilldown" =>  $resultado->sucursal . ' - ' . $resultado->serial, "color" =>  $color);
             array_push($data, $array_ribbon);
         }
 
@@ -928,446 +1024,6 @@ class HomeController extends Controller
             'nombre_codigo_9',
             'meses'
         ));
-
-
-
-        /*    $data_categorias = array();
-        $array_cantidad_codigo_3 = array();
-        $array_cantidad_codigo_8 = array();
-        $array_cantidad_codigo_9 = array();
-
-
-        $dsb_actividades_finalizadas = DB::select("call dashboardActividadesFinalizadas('" . $id_unidad . "')");
-
-        //$dsb_tot_actividades_finalizadas = TmpTotDsbActividadFinalizada::all();
-        $dsb_tot_actividades_finalizadas = DB::table('tmp_tot_dsb_actividades_finalizadas')->orderBy('tmp_tot_dsb_actividades_finalizadas.numero_actividades');
-        $usuarios = $dsb_tot_actividades_finalizadas->pluck('user_name');
-        $numero_actividades = $dsb_tot_actividades_finalizadas->pluck('numero_actividades');
-
-        $data_users_end_label = array();
-        $data_users_end_value = array();
-
-        for ($i = 0; $i < count($usuarios); $i++) {
-            //$array_user_end = array("name" => $usuarios[$i], "y" => $numero_actividades[$i], "color" => "#4670C0");
-            array_push($data_users_end_label, $usuarios[$i]);
-            array_push($data_users_end_value, $numero_actividades[$i]);
-        }
-
-
-        //dd($data_users_end);
-
-        //$dsb_actividades_desarrollo = DB::select('call dashboardActividadesEnDesarrollo()');
-        $dsb_actividades_desarrollo = DB::select("call dashboardActividadesEnDesarrollo('" . $id_unidad . "')");
-
-        //$dsb_tot_actividades_desarrollo = TmpTotDsbActividadDesarrollo::all();
-
-        $dsb_tot_actividades_desarrollo = DB::table('tmp_dsb_actividades_desarrollo')->orderBy('tmp_dsb_actividades_desarrollo.numero_actividades');
-        $usuarios = $dsb_tot_actividades_desarrollo->pluck('user_name');
-        $numero_actividades = $dsb_tot_actividades_desarrollo->pluck('numero_actividades');
-
-        $data_users_dev_label = array();
-        $data_users_dev_value = array();
-
-        for ($i = 0; $i < count($usuarios); $i++) {
-            //$array_user_dev = array("name" => $usuarios[$i], "y" => $numero_actividades[$i], "color" => "#4670C0");
-
-            array_push($data_users_dev_label, $usuarios[$i]);
-            array_push($data_users_dev_value, $numero_actividades[$i]);
-        }
-
-
-
-        $meses = array('', 'Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre');
-
-        $fecha_actual = \Carbon::now()->addMonths(-11);
-        $fecha_inicial = $fecha_actual->format('Y-m-') . '01 00:00:00';
-        $fecha_final = \Carbon::now()->format('Y-m-d') . ' 23:59:00';
-
-        $actividades_finalizadas_mes = Actividad::join('users', 'users.id', '=', 'actividades.users_id')
-            ->where('actividades.porcentaje', '=', 100)
-            ->where('actividades.fecha_inicio', '>', $fecha_inicial)
-            ->where('users.unidad_id', '=', $id_unidad)
-            ->select(\DB::raw('count(actividades.id) as conteo,month(actividades.fecha_inicio) as mes,year(actividades.fecha_inicio) as anio'))
-            ->groupBy(\DB::raw('year(actividades.fecha_inicio),month(actividades.fecha_inicio)'))
-            ->get();
-
-        //$data_meses_end = array();
-
-        $data_meses_end_mes_anio_label = array();
-        $data_meses_end_mes_anio_value = array();
-
-        foreach ($actividades_finalizadas_mes as $registro) {
-            //array_push($data_meses_end, array("name" => $meses[$registro->mes + 0] . " " . $registro->anio, "y" => intval($registro->conteo), "color" => "#4670C0"));
-            array_push($data_meses_end_mes_anio_label, array($meses[$registro->mes + 0] . " " . $registro->anio));
-            array_push($data_meses_end_mes_anio_value, array(intval($registro->conteo)));
-        }
-
-
-
-
-
-        $actividades_categoria = Actividad::join('categoria_tickets', 'categoria_tickets.id', '=', 'actividades.categoria_id')
-            ->whereBetween('actividades.fecha_liberacion', [$fecha_inicial, $fecha_final])
-            ->whereIn('actividades.categoria_id', [3, 8, 9])
-            ->where('actividades.numero_ticket', '<>', 1234)
-            ->where('actividades.fecha_liberacion', '<>', null)
-            ->select(
-                'categoria_tickets.id',
-                'categoria_tickets.codigo',
-                'categoria_tickets.nombre',
-                DB::raw('month(actividades.fecha_liberacion) as mes,year(actividades.fecha_liberacion) as anio,COUNT(actividades.id) as conteo')
-            )
-            ->groupBy(DB::raw('categoria_tickets.id,categoria_tickets.codigo,categoria_tickets.nombre,month(actividades.fecha_liberacion),year(actividades.fecha_liberacion)'))
-            ->orderBy(DB::raw('year(actividades.fecha_liberacion),month(actividades.fecha_liberacion)'))
-            ->get();
-
-        $data_categorias = "";
-        $array_cantidad_codigo_3 = array();
-        $array_cantidad_codigo_8 = array();
-        $array_cantidad_codigo_9 = array();
-
-        //$localizacion = array();
-        $j = 0;
-        for ($i = $fecha_actual->format('m') + 0; $i <= 12; $i++) {
-            $data_categorias = $data_categorias . "'" . $meses[$i] . " " . $fecha_actual->format('Y') . "',";
-            array_push($array_cantidad_codigo_3, 0);
-            array_push($array_cantidad_codigo_8, 0);
-            array_push($array_cantidad_codigo_9, 0);
-            $localizacion[$i . $fecha_actual->format('Y')] = $j;
-            $j++;
-        }
-
-        for ($i = 1; $i <= $fecha_actual->format('m') + 0; $i++) {
-            $data_categorias = $data_categorias . "'" . $meses[$i] . " " . Carbon::now()->format('Y') . "',";
-            array_push($array_cantidad_codigo_3, 0);
-            array_push($array_cantidad_codigo_8, 0);
-            array_push($array_cantidad_codigo_9, 0);
-            $localizacion[$i . Carbon::now()->format('Y')] = $j;
-            $j++;
-        }
-
-        //dd($actividades_categoria);
-
-        foreach ($actividades_categoria as $actividad) {
-            $posicion = $localizacion[$actividad->mes . $actividad->anio];
-
-            if ($actividad->id == 3) {
-                $array_cantidad_codigo_3[$posicion] = $actividad->conteo;
-                if ($actividad->nombre != null) $nombre_codigo_3 = $actividad->nombre;
-                else $nombre_codigo_3 = '';
-
-                //dd($nombre_codigo_3);
-
-                $url_codigo_3 = "http://localhost:8000/home";
-            } else  if ($actividad->id == 8) {
-                $array_cantidad_codigo_8[$posicion] = $actividad->conteo;
-                $nombre_codigo_8 = $actividad->nombre;
-                if ($actividad->nombre != null) $nombre_codigo_8 = $actividad->nombre;
-                else $nombre_codigo_8 = '';
-
-                $url_codigo_8 = "http://localhost:8000/home";
-            } else  if ($actividad->id == 9) {
-                $array_cantidad_codigo_9[$posicion] = $actividad->conteo;
-                $nombre_codigo_9 = $actividad->nombre;
-                if ($actividad->nombre != null) $nombre_codigo_9 = $actividad->nombre;
-                else $nombre_codigo_9 = '';
-
-                $url_codigo_9 = "http://localhost:8000/home";
-            }
-        }
-
-
-
-        $dsb_obtener_datos = DB::select("call dashboardObtenerDatos('" . $id_unidad . "')");
-
-        //dd($dsb_obtener_datos);
-
-        //$numero_tickets_anterior = TmpDsbDato::all()->get()->first()->numero_tickets_anterior;
-        $numero_tickets_anterior = DB::table('tmp_dsb_datos')->where('unidad_id', '=', $id_unidad)->get()->first()->numero_tickets_anterior;
-        $numero_tickets_actual = DB::table('tmp_dsb_datos')->where('unidad_id', '=', $id_unidad)->get()->first()->numero_tickets_actual;
-        $numero_incremento_prod = DB::table('tmp_dsb_datos')->where('unidad_id', '=', $id_unidad)->get()->first()->numero_incremento_prod;
-        $numero_proyectos_desarrollo = DB::table('tmp_dsb_datos')->where('unidad_id', '=', $id_unidad)->get()->first()->numero_proyectos_desarrollo;
-
-        //dd($numero_tickets_anterior);
-
-        //$dsb_actividades_diarias = DB::select('call dashboardActividadesDiarias()');
-        $dsb_actividades_diarias = DB::select("call dashboardActividadesDiarias('" . $id_unidad . "')");
-        //$dsb_tot_actividades_diarias = TmpDsbActividadDiaria::all();
-        $dsb_tot_actividades_diarias = DB::table('tmp_tot_dsb_actividades_diarias')->orderBy('tmp_tot_dsb_actividades_diarias.dia');
-
-        //$usuarios=$dsb_tot_actividades_semanales_actuales->pluck('user_name');
-        $dias = $dsb_tot_actividades_diarias->pluck('dia');
-        $numero_actividades = $dsb_tot_actividades_diarias->pluck('numero_actividades');
-
-        $valMin = $dsb_tot_actividades_diarias->pluck('dia')->min();
-        $valMax = $dsb_tot_actividades_diarias->pluck('dia')->max();
-
-
-
-
-        //$data_actividades_diarias = array();
-
-        $actividades_finalizadas_label = array();
-        $actividades_finalizadas_value = array();
-
-        for ($i = 0; $i < count($dias); $i++) {
-            //$array_actividades_diarias = array("name" => $dias[$i], "y" => $numero_actividades[$i], "color" => "#4670C0");
-            array_push($actividades_finalizadas_label, $dias[$i]);
-            array_push($actividades_finalizadas_value, $numero_actividades[$i]);
-        }
-
-        //dd($actividades_finalizadas_label,$actividades_finalizadas_value );
-
-
-        //$dsb_estado_proyectos = DB::select('call dashboardEstadoProyectos()');
-        $dsb_estado_proyectos = DB::select("call dashboardEstadoProyectos('" . $id_unidad . "')");
-
-        //$numero_tickets_anterior = TmpDsbDato::all()->get()->first()->numero_tickets_anterior;
-        $numero_proyectos_asignados = DB::table('tmp_dsb_proyectos_estados')->get()->first()->numero_proyectos_asignados;
-        $numero_proyectos_pausa = DB::table('tmp_dsb_proyectos_estados')->get()->first()->numero_proyectos_pausa;
-        $numero_proyectos_desarrollo = DB::table('tmp_dsb_proyectos_estados')->get()->first()->numero_proyectos_desarrollo;
-        $numero_proyectos_certificacion = DB::table('tmp_dsb_proyectos_estados')->get()->first()->numero_proyectos_certificacion;
-        $numero_proyectos_creados = DB::table('tmp_dsb_proyectos_estados')->get()->first()->numero_proyectos_creados;
-
-
-        $data_estado_proyectos_label = ["En Desarrollo (" . $numero_proyectos_desarrollo . ")", "En Certificacion (" . $numero_proyectos_certificacion . ")", "En Pausa (" . $numero_proyectos_pausa . ")"];
-        $data_estado_proyectos_value = [$numero_proyectos_desarrollo, $numero_proyectos_certificacion, $numero_proyectos_pausa];
-
-        //$dsb_proyectos_desa_tiempo = DB::select('call dashboardTiempoProyectosDesarrollo()');
-        $dsb_proyectos_desa_tiempo = DB::select("call dashboardTiempoProyectosDesarrollo('" . $id_unidad . "')");
-
-        $proyectos_avance = DB::table('tmp_tot_dsb_proyectos_desarrollo_tiempo')
-            ->select('tmp_tot_dsb_proyectos_desarrollo_tiempo.id', 'tmp_tot_dsb_proyectos_desarrollo_tiempo.nombre', 'tmp_tot_dsb_proyectos_desarrollo_tiempo.avance', 'tmp_tot_dsb_proyectos_desarrollo_tiempo.tiempo')
-            ->where('id', '<>', '9')
-            ->where('id', '<>', '11')
-            ->where('id', '<>', '28')
-            ->where('avance', '>', '0')
-            //->where('finalizado','=','0')
-            ->orderBy('tmp_tot_dsb_proyectos_desarrollo_tiempo.avance', 'desc')
-            ->get();
-        //dd($proyectos_avance);
-
-
-
-
-
-        //$dsb_proyectos_tiempo = DB::select('call dashboardTiempoProyectos()');
-        $dsb_proyectos_tiempo = DB::select("call dashboardTiempoProyectos('" . $id_unidad . "')");
-        //$dsb_tot_proyectos_tiempo = TmpDsbActividadDiaria::all();
-        $dsb_tot_proyectos_tiempo = DB::table('tmp_tot_dsb_proyectos_tiempo')->orderBy('tmp_tot_dsb_proyectos_tiempo.tiempo');
-
-
-
-        $data_proyectos_tiempo = DB::table('tmp_tot_dsb_proyectos_tiempo')
-            ->select('tmp_tot_dsb_proyectos_tiempo.id', 'tmp_tot_dsb_proyectos_tiempo.proyecto', 'tmp_tot_dsb_proyectos_tiempo.tiempo')
-            ->orderBy('tmp_tot_dsb_proyectos_tiempo.tiempo', 'desc')
-            ->get();
-
-
-        //$usuarios=$dsb_tot_actividades_semanales_actuales->pluck('user_name');
-        $proyectos_fin = $dsb_tot_proyectos_tiempo->pluck('proyecto');
-        $tiempos_fin = $dsb_tot_proyectos_tiempo->pluck('tiempo');
-
-
-        //$dsb_actividades_finalizadas_usuario_semana = DB::select('call dashboardActividadesFinalizadasUsuarioSemana()');
-        $dsb_actividades_finalizadas_usuario_semana = DB::select("call dashboardActividadesFinalizadasUsuarioSemana('" . $id_unidad . "')");
-
-        $dsb_tot_actividades_finalizadas_usuario_semana = DB::table('tmp_tot_actividades_finalizadas_usuario_semana')->orderBy('tmp_tot_actividades_finalizadas_usuario_semana.numero_actividades');
-        $users = $dsb_tot_actividades_finalizadas_usuario_semana->pluck('user_name');
-        $numero_actividades = $dsb_tot_actividades_finalizadas_usuario_semana->pluck('numero_actividades');
-
-        //$data_users_week_end = array();
-        $data_users_week_end_label = array();
-        $data_users_week_end_value = array();
-
-        for ($i = 0; $i < count($users); $i++) {
-            //$array_user_week_end = array("name" => $users[$i], "y" => $numero_actividades[$i], "color" => "#4670C0");
-            array_push($data_users_week_end_label, $users[$i]);
-            array_push($data_users_week_end_value, $numero_actividades[$i]);
-        }
-
-        //$dsb_actividades_finalizadas_horas_mes = DB::select('call dashboardActividadesFinalizadasHorasMes()');
-        $dsb_actividades_finalizadas_horas_mes = DB::select("call dashboardActividadesFinalizadasHorasMes('" . $id_unidad . "')");
-
-        $dsb_tot_actividades_finalizadas = DB::table('tmp_tot_dsb_actividades_finalizadas_horas_mes')
-            ->select(
-                'tmp_tot_dsb_actividades_finalizadas_horas_mes.mes',
-                'tmp_tot_dsb_actividades_finalizadas_horas_mes.mes_str',
-                'tmp_tot_dsb_actividades_finalizadas_horas_mes.tiempo_horas'
-            )
-            ->orderBy('tmp_tot_dsb_actividades_finalizadas_horas_mes.anio', 'asc')
-            ->orderBy('tmp_tot_dsb_actividades_finalizadas_horas_mes.mes', 'asc')
-            ->get();
-
-        $meses = $dsb_tot_actividades_finalizadas->pluck('mes_str');
-        $tiempo_horas = $dsb_tot_actividades_finalizadas->pluck('tiempo_horas');
-
-
-
-        //$data_users_week_end = array();
-        $data_horas_meses_end_label = array();
-        $data_horas_meses_end_value = array();
-
-        for ($i = 0; $i < count($meses); $i++) {
-            //$array_user_week_end = array("name" => $users[$i], "y" => $numero_actividades[$i], "color" => "#4670C0");
-            array_push($data_horas_meses_end_label, $meses[$i]);
-            array_push($data_horas_meses_end_value, $tiempo_horas[$i]);
-        }
-
-
-
-
-
-
-        //$dsb_actividades_desarrollo = DB::select('call dashboardActividadesEnDesarrollo()');
-        $dsb_actividades_categorias = DB::select("call spGeneraNumeroActividadesCategorias()");
-
-        //$dsb_tot_actividades_desarrollo = TmpTotDsbActividadDesarrollo::all();
-
-        $dsb_tot_actividades_categorias = DB::table('tmp_dsb_actividades_categorias')
-            ->select(
-                'tmp_dsb_actividades_categorias.id',
-                'tmp_dsb_actividades_categorias.codigo',
-                'tmp_dsb_actividades_categorias.nombre',
-                'tmp_dsb_actividades_categorias.mes',
-                'tmp_dsb_actividades_categorias.cantidad',
-                'tmp_dsb_actividades_categorias.url'
-            )
-            //->orderBy('tmp_dsb_actividades_categorias.anio', 'asc')
-            ->orderBy('tmp_dsb_actividades_categorias.mes', 'asc')
-            ->get();
-
-
-        $fecha_actual = \Carbon::now()->addMonths(-1);
-        $fecha_inicial = $fecha_actual->format('Y-m-d') . ' 00:00:00';
-        $fecha_final = \Carbon::now()->format('Y-m-d') . ' 23:59:00';
-
-        $data_consolidado_proyectos = null;
-        $data_consolidado_proyectos2 = null;
-
-        //grafico de bitacora de rendimiento
-       /* $result = DB::table('bitacora_rendimiento_base_datos')->select(DB::raw('MIN(fecha_ymd) as min_fecha, MAX(fecha_ymd) as max_fecha'))->get();
-
-        $minFecha = $result->first()->min_fecha;
-        $maxFecha = $result->first()->max_fecha;
-        */
-
-        /*$minFecha = Carbon::now()->firstOfYear();
-        $maxFecha = Carbon::now();
-
-        $arregloFechas = $this->generarArregloFechas($minFecha, $maxFecha);
-
-
-        $resultados = DB::table('bitacora_rendimiento_base_datos as b')
-            ->join('estados_rendimiento_bda as e', 'b.estado_rendimiento_id', '=', 'e.id')
-            ->select(
-                DB::raw('DATE_FORMAT(b.fecha_ymd, "%Y") as anio'),
-                DB::raw('DATE_FORMAT(b.fecha_ymd, "%m") as mes'),
-                'e.nombre',
-                'e.id as estado_id',
-                DB::raw('COUNT(*) as total')
-            )
-            ->whereBetween('DATE_FORMAT(b.fecha_ymd, "%Y")',[])
-            ->groupBy('anio', 'mes', 'e.nombre')
-            ->orderBy('anio')
-            ->orderBy('mes')
-            ->get();
-
-        foreach ($resultados as $resultado) {
-            $indiceEncontrado = array_search($resultado->mes, array_column($arregloFechas[$resultado->anio], 'mes'));
-            $estado = $resultado->estado_id;
-
-            switch ($estado) {
-                case 1:
-                    $arregloFechas[$resultado->anio][$indiceEncontrado]['InterrupcionTotal'] = $resultado->total;
-                    break;
-                case 2:
-                    $arregloFechas[$resultado->anio][$indiceEncontrado]['InterrupcionParcial'] = $resultado->total;
-                    break;
-                case 3:
-                    $arregloFechas[$resultado->anio][$indiceEncontrado]['Caida'] = $resultado->total;
-                    break;
-                case 4:
-                    $arregloFechas[$resultado->anio][$indiceEncontrado]['Lentitud'] = $resultado->total;
-                    break;
-                case 5:
-                    $arregloFechas[$resultado->anio][$indiceEncontrado]['SinAfectacion'] = $resultado->total;
-                    break;
-                default:
-                    // Código para el caso por defecto (si $estado no es 1, 2, 3, 4, ni 5)
-            }
-        }
-
-        dd($arregloFechas);
-
-
-        return view(
-            'home',
-            [
-                'proyectos' => $proyectos,
-                //'data_users_end' => $data_users_end,
-                'data_users_end_label' => $data_users_end_label,
-                'data_users_end_value' => $data_users_end_value,
-
-                'data_users_dev_label' => $data_users_dev_label,
-                'data_users_dev_value' => $data_users_dev_value,
-
-                'numero_tickets_anterior' => $numero_tickets_anterior,
-                'numero_tickets_actual' => $numero_tickets_actual,
-                'numero_incremento_prod' => $numero_incremento_prod,
-                'numero_proyectos_desarrollo' => $numero_proyectos_desarrollo,
-                'numero_proyectos_certificacion' => $numero_proyectos_certificacion,
-                'numero_proyectos_pausa' => $numero_proyectos_pausa,
-
-                //  $actividades_finalizadas_label = array();
-                // $actividades_finalizadas_value = array();
-
-                'actividades_finalizadas_label' => $actividades_finalizadas_label,
-                'actividades_finalizadas_value' => $actividades_finalizadas_value,
-                'data_estado_proyectos_label' => $data_estado_proyectos_label,
-                'data_estado_proyectos_value' => $data_estado_proyectos_value,
-
-                // $data_estado_proyectos_label = ["En Desarrollo","En Certificacion","En Pausa"];
-                //$data_estado_proyectos_value = [$numero_proyectos_desarrollo,$numero_proyectos_certificacion,$numero_proyectos_pausa];
-
-
-                'proyectos_avance' => $proyectos_avance,
-                'data_meses_end_mes_anio_label' => $data_meses_end_mes_anio_label,
-                'data_meses_end_mes_anio_value' => $data_meses_end_mes_anio_value,
-
-                'data_proyectos_tiempo' => $data_proyectos_tiempo,
-
-                'proyectos_fin' => $proyectos_fin,
-                'tiempos_fin' => $tiempos_fin,
-
-                'data_users_week_end_label' => $data_users_week_end_label,
-                'data_users_week_end_value' => $data_users_week_end_value,
-
-                'data_horas_meses_end_label' => $data_horas_meses_end_label,
-                'data_horas_meses_end_value' => $data_horas_meses_end_value,
-
-                'dsb_tot_actividades_categorias' => $dsb_tot_actividades_categorias,
-
-                'data_categorias' => substr($data_categorias, 0, -1),
-                'array_cantidad_codigo_3' => $array_cantidad_codigo_3,
-                'array_cantidad_codigo_8' => $array_cantidad_codigo_8,
-                'array_cantidad_codigo_9' => $array_cantidad_codigo_9,
-                'data_consolidado_proyectos' => $data_consolidado_proyectos,
-                'data_consolidado_proyectos2' => $data_consolidado_proyectos2,
-                'fecha_inicial' => $fecha_inicial,
-                'fecha_final' => $fecha_final,
-
-                'nombre_codigo_3' => $nombre_codigo_3,
-                'url_codigo_3' => $url_codigo_3,
-
-                'nombre_codigo_8' => $nombre_codigo_8,
-                'url_codigo_8' => $url_codigo_8,
-
-                'nombre_codigo_9' => $nombre_codigo_9,
-                'url_codigo_9' => $url_codigo_9,
-            ]
-        ); //listado
-        */
     }
 
 
@@ -1407,10 +1063,24 @@ class HomeController extends Controller
     {
         $categorias = ActivosIso::distinct('categoria')->where('sucursal_std', '=', $sucursal)->orderBy('categoria')->pluck('categoria');
         $estados = ActivosIso::distinct('status')->where('sucursal_std', '=', $sucursal)->orderBy('status')->pluck('status');
+        $areas = ActivosIso::distinct('area')->where('sucursal_std', '=', $sucursal)->orderBy('area')->pluck('area');
 
-        $response = ["categorias" => $categorias, "estados" => $estados];
+        $response = ["categorias" => $categorias, "estados" => $estados, "areas" => $areas];
         return $response;
     }
+
+    public function get_data_categoria($sucursal)
+    {
+        $categorias = ActivosIso::distinct('categoria')->where('sucursal_std', '=', $sucursal)->orderBy('categoria')->pluck('categoria');
+        $estados = ActivosIso::distinct('status')->where('sucursal_std', '=', $sucursal)->orderBy('status')->pluck('status');
+        $areas = ActivosIso::distinct('area')->where('sucursal_std', '=', $sucursal)->orderBy('area')->pluck('area');
+
+        $response = ["categorias" => $categorias, "estados" => $estados, "areas" => $areas];
+        return $response;
+    }
+
+
+
 
     public function load_unidades()
     {

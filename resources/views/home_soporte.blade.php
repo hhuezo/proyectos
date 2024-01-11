@@ -6,7 +6,7 @@
 
     <style>
         #container {
-            height: 400px;
+            height: 1000px;
         }
 
         .highcharts-figure,
@@ -88,6 +88,11 @@
             @endforeach
 
         </div>
+
+
+        <br>
+
+
 
 
         <div class="row col-12">
@@ -203,64 +208,12 @@
 
         <div>&nbsp;</div>
 
-        <div class="row col-12">
-            <div class="col-9 card" id="container_activos">
-            </div>
-            <div class="col-3 card">
-                <form method="GET" id="form_activos">
-                    <div class="col-md-12">&nbsp; </div>
-                    <div class="col-md-12">
-                        <div class="form-group">
-                            <label class="form-label" align="right"><strong>Sucursal</strong></label>
-                            <div>
-                                <select id="sucursal" onchange="get_estado_categoria(this.value)" class="form-control">
-                                    <option value="0">SELECCIONE</option>
-                                    @foreach ($sucursales as $sucursal)
-                                        <option value="{{ $sucursal }}">{{ $sucursal }}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-12">&nbsp; </div>
-                    <div class="col-md-12">
-                        <div class="form-group">
-                            <label class="form-label" align="right"><strong>Estados</strong></label>
-                            <div>
-                                <select id="estado" class="form-control">
-                                    <option value="0">SELECCIONE</option>
-                                    @foreach ($estados as $estado)
-                                        <option value="{{ $estado }}">{{ $estado }}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-12">&nbsp; </div>
-                    <div class="col-md-12">
-                        <div class="form-group">
-                            <label class="form-label" align="right"><strong>Categoria</strong></label>
-                            <div>
-                                <select id="categoria" class="form-control">
-                                    <option value="0">SELECCIONE</option>
-                                    @foreach ($categorias as $catagoria)
-                                        <option value="{{ $catagoria }}">{{ $catagoria }}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                        </div>
-                    </div>
 
-                    <div class="col-md-12">&nbsp; </div>
-                    <div class="col-md-12" style="text-align: right">
-                        <button type="button" class="btn btn-primary" onclick="get_activos()">Aceptar</button>
-                    </div>
-                </form>
-            </div>
+
+        <div id="container_activos">
+
         </div>
-
         <br>
-
 
         <ul class="nav nav-tabs tab-body-header rounded d-inline-flex" role="tablist">
             <li class="nav-item"><a class="nav-link active" data-bs-toggle="tab" href="#nav-mantenimientos-frecuentes"
@@ -527,7 +480,7 @@
 
     <script>
         $(document).ready(function() {
-            get_activos();
+            get_activos_iso();
             get_mantenimientos();
             get_mantenimientos_auditoria();
             get_dispositivos();
@@ -665,16 +618,51 @@
             }
         });
 
+        function get_activos_iso() {
+            $.ajax({
+                url: "{{ url('/home/soporte_activos_iso') }}",
+                method: 'GET',
+                success: function(data) {
+                    $('#container_activos').html(data);
+                },
+                error: function(error) {
+                    console.error('Error en la solicitud:', error);
+                }
+            });
+
+        }
+
         function get_activos() {
             var sucursal = document.getElementById('sucursal').value;
             var estado = document.getElementById('estado').value;
             var categoria = document.getElementById('categoria').value;
+            var area = document.getElementById('area').value;
 
             $.ajax({
-                url: "{{ url('/home/soporte_activos') }}/" + sucursal + "/" + estado + "/" + categoria,
+                url: "{{ url('/home/soporte_activos') }}/" + sucursal + "/" + estado + "/" + categoria + "/" +
+                    area,
                 method: 'GET',
                 success: function(data) {
-                    $('#container_activos').html(data);
+                    $('#container_activos_iso').html(data);
+                },
+                error: function(error) {
+                    console.error('Error en la solicitud:', error);
+                }
+            });
+        }
+
+        function get_activos_categoria() {
+            var sucursal = document.getElementById('sucursal_categoria').value;
+            var estado = document.getElementById('estado_categoria').value;
+            var categoria = document.getElementById('categoria_categoria').value;
+            var area = document.getElementById('area_categoria').value;
+
+            $.ajax({
+                url: "{{ url('/home/soporte_activos_categoria') }}/" + sucursal + "/" + estado + "/" + categoria + "/" +
+                    area,
+                method: 'GET',
+                success: function(data) {
+                    $('#container_activos_categorias').html(data);
                 },
                 error: function(error) {
                     console.error('Error en la solicitud:', error);
@@ -700,6 +688,13 @@
                         _select += '<option value="' + data.estados[i] + '" >' + data.estados[i] + '</option>';
                     }
                     $("#estado").html(_select);
+
+
+                    var _select = '<option value="0">SELECCIONE</option>';
+                    for (var i = 0; i < data.areas.length; i++) {
+                        _select += '<option value="' + data.areas[i] + '" >' + data.areas[i] + '</option>';
+                    }
+                    $("#area").html(_select);
                 },
                 error: function(error) {
                     console.error('Error en la solicitud:', error);
@@ -855,6 +850,39 @@
                 }
             });
         }
+
+        function get_data_categoria(sucursal) {
+            $.ajax({
+                url: "{{ url('home/soporte_activos_categoria/get_data') }}/" + sucursal,
+                method: 'GET',
+                success: function(data) {
+                    //console.log(data);
+                    var _select = '<option value="0">SELECCIONE</option>';
+                    for (var i = 0; i < data.categorias.length; i++) {
+                        _select += '<option value="' + data.categorias[i] + '" >' + data.categorias[i] +
+                            '</option>';
+                    }
+                    $("#categoria_categoria").html(_select);
+
+                    var _select = '<option value="0">SELECCIONE</option>';
+                    for (var i = 0; i < data.estados.length; i++) {
+                        _select += '<option value="' + data.estados[i] + '" >' + data.estados[i] + '</option>';
+                    }
+                    $("#estado_categoria").html(_select);
+
+
+                    var _select = '<option value="0">SELECCIONE</option>';
+                    for (var i = 0; i < data.areas.length; i++) {
+                        _select += '<option value="' + data.areas[i] + '" >' + data.areas[i] + '</option>';
+                    }
+                    $("#area_categoria").html(_select);
+                },
+                error: function(error) {
+                    console.error('Error en la solicitud:', error);
+                }
+            });
+        }
+
 
         function get_banco(sucursal) {
             $.ajax({

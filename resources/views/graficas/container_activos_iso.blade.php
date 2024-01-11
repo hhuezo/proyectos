@@ -1,24 +1,21 @@
-<div id="container_activos_iso"></div>
 
-<div style="display: none">
-    <table id="datatable_activos_iso" class="table">
-        <thead>
+<table id="datatable_activos_iso" class="table" style="display: none">
+    <thead>
+        <tr>
+            <th>Sucursal</th>
+            <th>Conteo</th>
+        </tr>
+    </thead>
+    <tbody>
+
+        @foreach ($activos_iso as $resultado)
             <tr>
-                <th>Sucursal</th>
-                <th>Conteo</th>
+                <th>{{ $resultado->sucursal_std }}</th>
+                <td>{{ $resultado->conteo }}</td>
             </tr>
-        </thead>
-        <tbody>
-
-            @foreach ($activos as $resultado)
-                <tr>
-                    <th>{{ $resultado->sucursal_std }}</th>
-                    <td>{{ $resultado->conteo }}</td>
-                </tr>
-            @endforeach
-        </tbody>
-    </table>
-</div>
+        @endforeach
+    </tbody>
+</table>
 
 <script>
     Highcharts.chart('container_activos_iso', {
@@ -57,4 +54,5 @@
             }
         }
     });
-</script>
+
+    </script>
