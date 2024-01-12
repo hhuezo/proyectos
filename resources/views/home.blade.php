@@ -12,6 +12,11 @@
         @php($visibility = 'block')
     @endif
 
+
+
+
+
+
     <div class="body d-flex py-3">
         <div class="container-xxl" style="display: {{ $visibility }}">
             <div class="row clearfix g-3">
@@ -437,9 +442,11 @@
                 <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#nav-Errores2023"
                         role="tab">Indice
                         errores 2023</a></li>
+                <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#nav-emergentes"
+                        role="tab">Act. emergentes 2023</a></li>
 
-                <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#nav-Categoria"
-                        role="tab">Actividades por Categoria Finalizadas por Mes</a></li>
+                <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#nav-Categoria" role="tab">Act.
+                        por Categoria Finalizadas por Mes</a></li>
             @endif
         </ul>
 
@@ -501,6 +508,19 @@
                                 MODIFICADOS 2023</h5>
                         </div>
                         <canvas id="char_indice_error_meses_2023"></canvas>
+                    </div>
+                </div>
+            </div>
+
+
+
+            <div class="tab-pane fade" id="nav-emergentes" role="tabpanel">
+                <div class="col-md-8">
+                    <div class="card">
+                        <div class="card-header py-3 d-flex justify-content-between bg-transparent border-bottom-0">
+                            <h5 class="mb-0 fw-bold ">Actividades emergentes 2023</h5>
+                        </div>
+                        <canvas id="char_emergentes"></canvas>
                     </div>
                 </div>
             </div>
@@ -627,6 +647,10 @@
             </div>
         </div>
     </div>
+
+
+
+
 
 
     <script src="{{ asset('assets/bundles/libscripts.bundle.js') }}"></script>
@@ -1011,7 +1035,27 @@
                 }
             }
         });
+
+
+        const ctx12 = document.getElementById('char_emergentes');
+
+        new Chart(ctx12, {
+            type: 'bar',
+            data: {
+                labels: @json($meses_emergente),
+                datasets: @json($data_emergente),
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
     </script>
+
+
 
 
 @endsection

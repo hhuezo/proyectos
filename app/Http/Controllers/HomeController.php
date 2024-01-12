@@ -378,7 +378,7 @@ class HomeController extends Controller
             } else {
                 $color = "green";
             }
-            $array_ribbon = array("name" => $resultado->sucursal . ' - ' . $resultado->serial , "y" => $resultado->ribbon, "drilldown" =>  $resultado->sucursal . ' - ' . $resultado->serial, "color" =>  $color);
+            $array_ribbon = array("name" => $resultado->sucursal . ' - ' . $resultado->serial, "y" => $resultado->ribbon, "drilldown" =>  $resultado->sucursal . ' - ' . $resultado->serial, "color" =>  $color);
             array_push($data, $array_ribbon);
         }
 
@@ -987,12 +987,66 @@ class HomeController extends Controller
                 $url_codigo_9 = "http://localhost:8000/home";
             }
         }
-        //fin Actividades por Categoria Finalizadas por Mes
 
 
+        $resultados = DB::table(DB::raw('(SELECT 1 AS mes UNION SELECT 2 UNION SELECT 3 UNION SELECT 4 UNION SELECT 5 UNION SELECT 6 UNION SELECT 7 UNION SELECT 8 UNION SELECT 9 UNION SELECT 10 UNION SELECT 11 UNION SELECT 12) meses'))
+        ->crossJoin(DB::raw('(SELECT DISTINCT tipo FROM emergentes_por_tipo_2023 WHERE tipo IS NOT NULL) tipos'))
+        ->leftJoin('emergentes_por_tipo_2023 as emergentes', function ($join) {
+            $join->on(DB::raw('meses.mes'), '=', DB::raw('MONTH(emergentes.fecha_creacion)'))
+                ->on('tipos.tipo', '=', 'emergentes.tipo');
+        })
+        ->groupBy('meses.mes', 'tipos.tipo')
+        ->where('meses.mes', '>', 6) // Filtra los meses mayores a 6
+        ->orderBy('meses.mes')
+        ->orderBy('tipos.tipo')
+        ->selectRaw('
+            CASE meses.mes
+                WHEN 1 THEN "enero"
+                WHEN 2 THEN "febrero"
+                WHEN 3 THEN "marzo"
+                WHEN 4 THEN "abril"
+                WHEN 5 THEN "mayo"
+                WHEN 6 THEN "junio"
+                WHEN 7 THEN "julio"
+                WHEN 8 THEN "agosto"
+                WHEN 9 THEN "septiembre"
+                WHEN 10 THEN "octubre"
+                WHEN 11 THEN "noviembre"
+                WHEN 12 THEN "diciembre"
+            END AS mes_nombre,
+            tipos.tipo,
+            COALESCE(COUNT(emergentes.id), 0) AS total')
+        ->get();
 
 
+        $tipos_emergente = $resultados->pluck('tipo')->unique()->values()->toArray();
 
+        $data_emergente = [];
+        foreach ($tipos_emergente as $tipo) {
+            $data_resultado = $resultados->where('tipo', $tipo)->pluck('total')->toArray();
+            $array_resultado =  [
+                "label" => $tipo, "data" => $data_resultado,
+
+                /*"backgroundColor" => ['rgba(255,99,132,0.2)' ],
+            "borderColor"=> [
+                'rgba(255,99,132,1)',
+                'rgba(54,162,235,1)',
+                'rgba(255,206,86,1)',
+                'rgba(75,192,192,1)',
+                'rgba(153,102,255,1)',
+                'rgba(255,159,64,1)',
+            ], "borderWidth"=> 1 */
+            ];
+
+            array_push($data_emergente, $array_resultado);
+        }
+
+       $meses_emergente =  array('Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre');
+
+       $validacion_tickets = DB::table('validacion_tickets')
+       ->selectRaw('YEAR(fecha_creacion) as anio, MONTH(fecha_creacion) as mes, resultado, tipo, COUNT(*) as total')
+       ->groupBy('anio', 'mes', 'resultado', 'tipo')
+       ->get();
 
 
         return view('home', compact(
@@ -1022,7 +1076,10 @@ class HomeController extends Controller
             'nombre_codigo_3',
             'nombre_codigo_8',
             'nombre_codigo_9',
-            'meses'
+            'meses',
+            'data_emergente',
+            'meses_emergente',
+            'validacion_tickets'
         ));
     }
 
