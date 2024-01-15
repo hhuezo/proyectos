@@ -95,3 +95,8 @@ Route::get('calendarizacion/get_data/{fecha}', 'produccion\CalendarizacionContro
 Route::get('calendarizacion/{year}', 'produccion\CalendarizacionController@get_data_year');
 Route::resource('calendarizacion', 'produccion\CalendarizacionController');
 Route::resource('inventario_despliegues', 'catalogo\InventarioDespliegueController');
+
+
+
+//graficas
+Route::resource('dashboard','DashboardController');
