@@ -606,7 +606,8 @@
                 right: 0px;
                 bottom: 0px;">
 
-            <button class="botonF1" wire:click="create()" data-bs-toggle="modal" data-bs-target="#create_actividad"
+{{-- wire:click="create()" data-bs-toggle="modal" data-bs-target="#create_actividad" --}}
+            <a href="{{url('actividades/create')}}"><button class="botonF1"
                 style=" width: 60px;
                 height: 60px;
                 border-radius: 100%;
@@ -623,7 +624,7 @@
                 box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
                 transition: .3s;">
                 <span>+</span>
-            </button>
+            </button></a>
 
         </div>
 

@@ -5,271 +5,20 @@
 @section('content')
 
 
-    <?php
-
-    $cantidad_codigo_3_1 = 0;
-    $cantidad_codigo_3_2 = 0;
-    $cantidad_codigo_3_3 = 0;
-    $cantidad_codigo_3_4 = 0;
-    $cantidad_codigo_3_5 = 0;
-    $cantidad_codigo_3_6 = 0;
-    $cantidad_codigo_3_7 = 0;
-    $cantidad_codigo_3_8 = 0;
-    $cantidad_codigo_3_9 = 0;
-    $cantidad_codigo_3_10 = 0;
-    $cantidad_codigo_3_11 = 0;
-    $cantidad_codigo_3_12 = 0;
-
-    $cantidad_codigo_8_1 = 0;
-    $cantidad_codigo_8_2 = 0;
-    $cantidad_codigo_8_3 = 0;
-    $cantidad_codigo_8_4 = 0;
-    $cantidad_codigo_8_5 = 0;
-    $cantidad_codigo_8_6 = 0;
-    $cantidad_codigo_8_7 = 0;
-    $cantidad_codigo_8_8 = 0;
-    $cantidad_codigo_8_9 = 0;
-    $cantidad_codigo_8_10 = 0;
-    $cantidad_codigo_8_11 = 0;
-    $cantidad_codigo_8_12 = 0;
-
-    $cantidad_codigo_9_1 = 0;
-    $cantidad_codigo_9_2 = 0;
-    $cantidad_codigo_9_3 = 0;
-    $cantidad_codigo_9_4 = 0;
-    $cantidad_codigo_9_5 = 0;
-    $cantidad_codigo_9_6 = 0;
-    $cantidad_codigo_9_7 = 0;
-    $cantidad_codigo_9_8 = 0;
-    $cantidad_codigo_9_9 = 0;
-    $cantidad_codigo_9_10 = 0;
-    $cantidad_codigo_9_11 = 0;
-    $cantidad_codigo_9_12 = 0;
-
-    foreach ($dsb_tot_actividades_categorias as $dsb_actividad_categoria) {
-        if ($dsb_actividad_categoria->id == '3') {
-            $nombre_codigo_3 = $dsb_actividad_categoria->nombre;
-            $url_codigo_3 = $dsb_actividad_categoria->url;
-
-            if ($dsb_actividad_categoria->mes == '1') {
-                $cantidad_codigo_3_1 = $dsb_actividad_categoria->cantidad;
-            }
-
-            if ($dsb_actividad_categoria->mes == '2') {
-                $cantidad_codigo_3_2 = $dsb_actividad_categoria->cantidad;
-            }
-
-            if ($dsb_actividad_categoria->mes == '3') {
-                $cantidad_codigo_3_3 = $dsb_actividad_categoria->cantidad;
-            }
-
-            if ($dsb_actividad_categoria->mes == '4') {
-                $cantidad_codigo_3_4 = $dsb_actividad_categoria->cantidad;
-            }
-
-            if ($dsb_actividad_categoria->mes == '5') {
-                $cantidad_codigo_3_5 = $dsb_actividad_categoria->cantidad;
-            }
-
-            if ($dsb_actividad_categoria->mes == '6') {
-                $cantidad_codigo_3_6 = $dsb_actividad_categoria->cantidad;
-            }
-
-            if ($dsb_actividad_categoria->mes == '7') {
-                $cantidad_codigo_3_7 = $dsb_actividad_categoria->cantidad;
-            }
-
-            if ($dsb_actividad_categoria->mes == '8') {
-                $cantidad_codigo_3_8 = $dsb_actividad_categoria->cantidad;
-            }
-
-            if ($dsb_actividad_categoria->mes == '9') {
-                $cantidad_codigo_3_9 = $dsb_actividad_categoria->cantidad;
-            }
-
-            if ($dsb_actividad_categoria->mes == '10') {
-                $cantidad_codigo_3_10 = $dsb_actividad_categoria->cantidad;
-            }
-
-            if ($dsb_actividad_categoria->mes == '11') {
-                $cantidad_codigo_3_11 = $dsb_actividad_categoria->cantidad;
-            }
-
-            if ($dsb_actividad_categoria->mes == '12') {
-                $cantidad_codigo_3_12 = $dsb_actividad_categoria->cantidad;
-            }
-        }
-
-        if ($dsb_actividad_categoria->id == '8') {
-            $nombre_codigo_8 = $dsb_actividad_categoria->nombre;
-            $url_codigo_8 = $dsb_actividad_categoria->url;
-
-            if ($dsb_actividad_categoria->mes == '1') {
-                $cantidad_codigo_8_1 = $dsb_actividad_categoria->cantidad;
-            }
-
-            if ($dsb_actividad_categoria->mes == '2') {
-                $cantidad_codigo_8_2 = $dsb_actividad_categoria->cantidad;
-            }
-
-            if ($dsb_actividad_categoria->mes == '3') {
-                $cantidad_codigo_8_3 = $dsb_actividad_categoria->cantidad;
-            }
-
-            if ($dsb_actividad_categoria->mes == '4') {
-                $cantidad_codigo_8_4 = $dsb_actividad_categoria->cantidad;
-            }
-
-            if ($dsb_actividad_categoria->mes == '5') {
-                $cantidad_codigo_8_5 = $dsb_actividad_categoria->cantidad;
-            }
-
-            if ($dsb_actividad_categoria->mes == '6') {
-                $cantidad_codigo_8_6 = $dsb_actividad_categoria->cantidad;
-            }
-
-            if ($dsb_actividad_categoria->mes == '7') {
-                $cantidad_codigo_8_7 = $dsb_actividad_categoria->cantidad;
-            }
-
-            if ($dsb_actividad_categoria->mes == '8') {
-                $cantidad_codigo_8_8 = $dsb_actividad_categoria->cantidad;
-            }
-
-            if ($dsb_actividad_categoria->mes == '9') {
-                $cantidad_codigo_8_9 = $dsb_actividad_categoria->cantidad;
-            }
-
-            if ($dsb_actividad_categoria->mes == '10') {
-                $cantidad_codigo_8_10 = $dsb_actividad_categoria->cantidad;
-            }
-
-            if ($dsb_actividad_categoria->mes == '11') {
-                $cantidad_codigo_8_11 = $dsb_actividad_categoria->cantidad;
-            }
-
-            if ($dsb_actividad_categoria->mes == '12') {
-                $cantidad_codigo_8_12 = $dsb_actividad_categoria->cantidad;
-            }
-        }
-
-        if ($dsb_actividad_categoria->id == '9') {
-            $nombre_codigo_9 = $dsb_actividad_categoria->nombre;
-            $url_codigo_9 = $dsb_actividad_categoria->url;
-
-            if ($dsb_actividad_categoria->mes == '1') {
-                $cantidad_codigo_9_1 = $dsb_actividad_categoria->cantidad;
-            }
-
-            if ($dsb_actividad_categoria->mes == '2') {
-                $cantidad_codigo_9_2 = $dsb_actividad_categoria->cantidad;
-            }
-
-            if ($dsb_actividad_categoria->mes == '3') {
-                $cantidad_codigo_9_3 = $dsb_actividad_categoria->cantidad;
-            }
-
-            if ($dsb_actividad_categoria->mes == '4') {
-                $cantidad_codigo_9_4 = $dsb_actividad_categoria->cantidad;
-            }
-
-            if ($dsb_actividad_categoria->mes == '5') {
-                $cantidad_codigo_9_5 = $dsb_actividad_categoria->cantidad;
-            }
-
-            if ($dsb_actividad_categoria->mes == '6') {
-                $cantidad_codigo_9_6 = $dsb_actividad_categoria->cantidad;
-            }
-
-            if ($dsb_actividad_categoria->mes == '7') {
-                $cantidad_codigo_9_7 = $dsb_actividad_categoria->cantidad;
-            }
-
-            if ($dsb_actividad_categoria->mes == '8') {
-                $cantidad_codigo_9_8 = $dsb_actividad_categoria->cantidad;
-            }
-
-            if ($dsb_actividad_categoria->mes == '9') {
-                $cantidad_codigo_9_9 = $dsb_actividad_categoria->cantidad;
-            }
-
-            if ($dsb_actividad_categoria->mes == '10') {
-                $cantidad_codigo_9_10 = $dsb_actividad_categoria->cantidad;
-            }
-
-            if ($dsb_actividad_categoria->mes == '11') {
-                $cantidad_codigo_9_11 = $dsb_actividad_categoria->cantidad;
-            }
-
-            if ($dsb_actividad_categoria->mes == '12') {
-                $cantidad_codigo_9_12 = $dsb_actividad_categoria->cantidad;
-            }
-        }
-    }
-
-    $array_cantidad_codigo_3 = [];
-
-    array_push($array_cantidad_codigo_3, $cantidad_codigo_3_3);
-    array_push($array_cantidad_codigo_3, $cantidad_codigo_3_4);
-    array_push($array_cantidad_codigo_3, $cantidad_codigo_3_5);
-    array_push($array_cantidad_codigo_3, $cantidad_codigo_3_6);
-    array_push($array_cantidad_codigo_3, $cantidad_codigo_3_7);
-    array_push($array_cantidad_codigo_3, $cantidad_codigo_3_8);
-    array_push($array_cantidad_codigo_3, $cantidad_codigo_3_9);
-    array_push($array_cantidad_codigo_3, $cantidad_codigo_3_10);
-    array_push($array_cantidad_codigo_3, $cantidad_codigo_3_11);
-    array_push($array_cantidad_codigo_3, $cantidad_codigo_3_12);
-    array_push($array_cantidad_codigo_3, $cantidad_codigo_3_1);
-    array_push($array_cantidad_codigo_3, $cantidad_codigo_3_2);
-
-    $array_cantidad_codigo_8 = [];
-
-    array_push($array_cantidad_codigo_8, $cantidad_codigo_8_3);
-    array_push($array_cantidad_codigo_8, $cantidad_codigo_8_4);
-    array_push($array_cantidad_codigo_8, $cantidad_codigo_8_5);
-    array_push($array_cantidad_codigo_8, $cantidad_codigo_8_6);
-    array_push($array_cantidad_codigo_8, $cantidad_codigo_8_7);
-    array_push($array_cantidad_codigo_8, $cantidad_codigo_8_8);
-    array_push($array_cantidad_codigo_8, $cantidad_codigo_8_9);
-    array_push($array_cantidad_codigo_8, $cantidad_codigo_8_10);
-    array_push($array_cantidad_codigo_8, $cantidad_codigo_8_11);
-    array_push($array_cantidad_codigo_8, $cantidad_codigo_8_12);
-    array_push($array_cantidad_codigo_8, $cantidad_codigo_8_1);
-    array_push($array_cantidad_codigo_8, $cantidad_codigo_8_2);
-
-    $array_cantidad_codigo_9 = [];
-
-    array_push($array_cantidad_codigo_9, $cantidad_codigo_9_3);
-    array_push($array_cantidad_codigo_9, $cantidad_codigo_9_4);
-    array_push($array_cantidad_codigo_9, $cantidad_codigo_9_5);
-    array_push($array_cantidad_codigo_9, $cantidad_codigo_9_6);
-    array_push($array_cantidad_codigo_9, $cantidad_codigo_9_7);
-    array_push($array_cantidad_codigo_9, $cantidad_codigo_9_8);
-    array_push($array_cantidad_codigo_9, $cantidad_codigo_9_9);
-    array_push($array_cantidad_codigo_9, $cantidad_codigo_9_10);
-    array_push($array_cantidad_codigo_9, $cantidad_codigo_9_11);
-    array_push($array_cantidad_codigo_9, $cantidad_codigo_9_12);
-    array_push($array_cantidad_codigo_9, $cantidad_codigo_9_1);
-    array_push($array_cantidad_codigo_9, $cantidad_codigo_9_2);
-
-    ?>
-
-
-
-    {{-- 1 13 32 14 22 20 --}}
-    {{-- @foreach ($data_actividades_diarias as $data_actividad_diaria)
-        {{ $data_actividad_diaria }}
-    @endforeach --}}
-
-
 
     @if (auth()->user()->rol_id != 1)
         @php($visibility = 'none')
-        @else
+    @else
         @php($visibility = 'block')
     @endif
+
+
+
+
+
+
     <div class="body d-flex py-3">
-        <div class="container-xxl" style="display: {{$visibility}}">
+        <div class="container-xxl" style="display: {{ $visibility }}">
             <div class="row clearfix g-3">
                 <div class="col-xl-12 col-lg-12 col-md-12 flex-column">
                     <div class="row g-3">
@@ -403,135 +152,261 @@
         </div>
     </div>
 
-    <div class="body d-flex g-3">
 
 
 
-        <div class="row">
 
-            <div class="col-md-12 col-lg-6 col-xl-6 col-xxl-6" style="display: {{$visibility}}">
-                <div class="card">
-                    <div class="card-header py-3">
-                        <h6 class="mb-0 fw-bold ">Avance de Proyectos</h6>
-                    </div>
-                    <div class="card-body">
-                        @foreach ($proyectos_avance as $proyecto_avance)
-                            <div class="progress-count mb-4">
-                                <div class="d-flex justify-content-between align-items-center mb-1">
-                                    <h6 class="mb-0 fw-bold d-flex align-items-center">{{ $proyecto_avance->nombre }}</h6>
-                                    <span class="small text-muted"><strong>{{ $proyecto_avance->tiempo }}
-                                            dias</strong></span>
-                                </div>
-                                <div class="progress" style="height: 10px;">
-                                    @if ($proyecto_avance->avance < 50)
-                                        <div class="progress-bar light-danger-bg " role="progressbar"
-                                            style="width: {{ $proyecto_avance->avance }}%"
-                                            aria-valuenow="{{ $proyecto_avance->avance }}" aria-valuemin="0"
-                                            aria-valuemax="100"></div>
-                                    @elseif ($proyecto_avance->avance < 70)
-                                        <div class="progress-bar bg-lightyellow" role="progressbar"
-                                            style="width: {{ $proyecto_avance->avance }}%"
-                                            aria-valuenow="{{ $proyecto_avance->avance }}" aria-valuemin="0"
-                                            aria-valuemax="100"></div>
-                                    @else
-                                        <div class="progress-bar success-bg" role="progressbar"
-                                            style="width: {{ $proyecto_avance->avance }}%"
-                                            aria-valuenow="{{ $proyecto_avance->avance }}" aria-valuemin="0"
-                                            aria-valuemax="100"></div>
-                                    @endif
 
-                                </div>
-                                <div class="d-flex justify-content-between align-items-center mb-1">
-                                    <h6 class="mb-0 fw-bold d-flex align-items-center"></h6>
-                                    <span
-                                        class="small text-muted float-right"><strong>{{ $proyecto_avance->avance }}%</strong></span>
-                                </div>
-                            </div>
-                        @endforeach
 
-                    </div>
-                </div>
-            </div>
 
-            <div class="col-md-12 col-lg-6 col-xl-6 col-xxl-6">
 
-                <div class="col-xxl-12 col-xl-12 col-lg-12 col-md-12" style="display: {{$visibility}}">
-                    <div class="card">
+
+
+
+
+
+    <div class="col-xxl-12 col-xl-12 col-lg-12 col-md-12">
+        <div class="body d-flex g-3">
+
+
+
+            <div class="row">
+
+                <div class="col-md-6" style="display: {{ $visibility }}">
+                    <div class="card" style="max-height: 1000px;">
                         <div class="card-header py-3">
-                            <h6 class="mb-0 fw-bold ">Actividades finalizadas por día</h6>
+                            <h6 class="mb-0 fw-bold ">Avance de Proyectos</h6>
                         </div>
-                        <div class="card-body">
-                            <canvas id="char_actividades_finalizadas"></canvas>
+                        <div class="card-body overflow-auto">
+                            @foreach ($proyectos_avance as $proyecto_avance)
+                                <div class="progress-count mb-4">
+                                    <div class="d-flex justify-content-between align-items-center mb-1">
+                                        <h6 class="mb-0 fw-bold d-flex align-items-center">{{ $proyecto_avance->nombre }}
+                                        </h6>
+                                        <span class="small text-muted"><strong>{{ $proyecto_avance->tiempo }}
+                                                dias</strong></span>
+                                    </div>
+                                    <div class="progress" style="height: 10px;">
+                                        @if ($proyecto_avance->avance < 50)
+                                            <div class="progress-bar light-danger-bg " role="progressbar"
+                                                style="width: {{ $proyecto_avance->avance }}%"
+                                                aria-valuenow="{{ $proyecto_avance->avance }}" aria-valuemin="0"
+                                                aria-valuemax="100"></div>
+                                        @elseif ($proyecto_avance->avance < 70)
+                                            <div class="progress-bar bg-lightyellow" role="progressbar"
+                                                style="width: {{ $proyecto_avance->avance }}%"
+                                                aria-valuenow="{{ $proyecto_avance->avance }}" aria-valuemin="0"
+                                                aria-valuemax="100"></div>
+                                        @else
+                                            <div class="progress-bar success-bg" role="progressbar"
+                                                style="width: {{ $proyecto_avance->avance }}%"
+                                                aria-valuenow="{{ $proyecto_avance->avance }}" aria-valuemin="0"
+                                                aria-valuemax="100"></div>
+                                        @endif
+
+                                    </div>
+                                    <div class="d-flex justify-content-between align-items-center mb-1">
+                                        <h6 class="mb-0 fw-bold d-flex align-items-center"></h6>
+                                        <span
+                                            class="small text-muted float-right"><strong>{{ $proyecto_avance->avance }}%</strong></span>
+                                    </div>
+                                </div>
+                            @endforeach
+
                         </div>
                     </div>
                 </div>
 
 
 
-                <div class="row" style="display: {{$visibility}}">
-                    <div class="col-xxl-6 col-xl-6 col-lg-6 col-md-6">
+                <div class="col-md-6">
+
+                    <div class="col-xxl-12 col-xl-12 col-lg-12 col-md-12" style="display: {{ $visibility }}">
                         <div class="card">
-                            <div class="card-header py-3 d-flex justify-content-between bg-transparent border-bottom-0">
-                                <h6 class="mb-0 fw-bold ">Estado de proyectos</h6>
+                            <div class="card-header py-3">
+                                <h6 class="mb-0 fw-bold ">Actividades finalizadas por día</h6>
                             </div>
-                            <canvas id="char_estado_proyectos"></canvas>
+                            <div class="card-body">
+                                <canvas id="char_actividades_finalizadas"></canvas>
+                            </div>
                         </div>
                     </div>
 
 
-                    <div class="col-xxl-6 col-xl-6 col-lg-6 col-md-6">
-                        <div class="card">
-                            <div class="card-header py-3 d-flex justify-content-between bg-transparent border-bottom-0">
-                                <h6 class="mb-0 fw-bold ">Numero de proyectos</h6>
-                            </div>
+                    <div class="row col-xxl-12 col-xl-12 col-lg-12 col-md-12" style="display: {{ $visibility }}">
 
 
+                        <div class="col-xxl-12 col-xl-12 col-lg-12 col-md-12 g-3" style="display: {{ $visibility }}">
+                            <div class="body d-flex g-3">
+                                <div class="row">
 
-                            <div class="card-body">
-                                <div class="row g-2 row-deck">
-                                    <div class="col-md-6 col-sm-6 col-6">
+                                    <div class="col-xxl-6 col-xl-6 col-lg-6 col-md-6">
                                         <div class="card">
-                                            <div class="card-body ">
-                                                <i class="icofont-stopwatch fs-3"></i>
-                                                <h6 class="mt-3 mb-0 fw-bold small-14">En Desarrollo</h6>
-                                                <span style="font-size:46px">{{ $numero_proyectos_desarrollo }}</span>
+                                            <div class="card-header py-3">
+                                                <h6 class="mb-0 fw-bold ">Estado de proyectos</h6>
+                                            </div>
+                                            <div class="card-body">
+                                                <canvas id="char_estado_proyectos"></canvas>
                                             </div>
                                         </div>
                                     </div>
-
-                                    <div class="col-md-6 col-sm-6 col-6">
+                                    <div class="col-xxl-6 col-xl-6 col-lg-6 col-md-6">
                                         <div class="card">
-                                            <div class="card-body ">
-                                                <i class="icofont-beach-bed fs-3"></i>
-                                                <h6 class="mt-3 mb-0 fw-bold small-14">En Pausa</h6>
-                                                <span style="font-size:46px">{{ $numero_proyectos_pausa }}</span>
+                                            <div class="card-header py-3">
+                                                <h6 class="mb-0 fw-bold ">Número de proyectos</h6>
                                             </div>
-                                        </div>
-                                    </div>
+                                            <div class="card-body">
+                                                <div class="row g-2 row-deck">
+                                                    <div class="col-md-6 col-sm-6 col-6">
+                                                        <div class="card">
+                                                            <div class="card-body ">
+                                                                <i class="icofont-stopwatch fs-3"></i>
+                                                                <h6 class="mt-3 mb-0 fw-bold small-14">En Desarrollo</h6>
+                                                                <span
+                                                                    style="font-size:46px">{{ $data_estado_proyectos_value[0] }}</span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
 
-                                    <div class="col-md-6 col-sm-6 col-6">
-                                        <div class="card">
-                                            <div class="card-body ">
-                                                <i class="icofont-stopwatch fs-3"></i>
-                                                <h6 class="mt-3 mb-0 fw-bold small-14">En Certificacion</h6>
-                                                <span style="font-size:46px">{{ $numero_proyectos_certificacion }}</span>
-                                            </div>
-                                        </div>
-                                    </div>
+                                                    <div class="col-md-6 col-sm-6 col-6">
+                                                        <div class="card">
+                                                            <div class="card-body ">
+                                                                <i class="icofont-beach-bed fs-3"></i>
+                                                                <h6 class="mt-3 mb-0 fw-bold small-14">En Pausa</h6>
+                                                                <span
+                                                                    style="font-size:46px">{{ $data_estado_proyectos_value[1] }}</span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
 
-                                    <div class="col-md-6 col-sm-6 col-6">
-                                        <div class="card">
-                                            <div class="card-body ">
-                                                <i class="icofont-beach-bed fs-3"></i>
-                                                <h6 class="mt-3 mb-0 fw-bold small-14">Total</h6>
-                                                <span
-                                                    style="font-size:46px">{{ $numero_proyectos_desarrollo + $numero_proyectos_certificacion + $numero_proyectos_pausa }}</span>
+                                                    <div class="col-md-6 col-sm-6 col-6">
+                                                        <div class="card">
+                                                            <div class="card-body ">
+                                                                <i class="icofont-stopwatch fs-3"></i>
+                                                                <h6 class="mt-3 mb-0 fw-bold small-14">En Certificacion
+                                                                </h6>
+                                                                <span
+                                                                    style="font-size:46px">{{ $data_estado_proyectos_value[2] }}</span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="col-md-6 col-sm-6 col-6">
+                                                        <div class="card">
+                                                            <div class="card-body ">
+                                                                <i class="icofont-beach-bed fs-3"></i>
+                                                                <h6 class="mt-3 mb-0 fw-bold small-14">Total</h6>
+                                                                <span
+                                                                    style="font-size:46px">{{ $data_estado_proyectos_value[0] + $data_estado_proyectos_value[1] + $data_estado_proyectos_value[2] }}</span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
+
+                    </div>
+
+
+
+
+
+
+
+
+
+                    {{-- <div class="col-xxl-12 col-xl-12 col-lg-12 col-md-12" style="display: {{ $visibility }}">
+                        <div class="card">
+                            <div class="card-header py-3 d-flex justify-content-between bg-transparent border-bottom-0">
+                                <h6 class="mb-0 fw-bold ">Actividades finalizadas por analista</h6>
+                            </div>
+                            <canvas id="char_actividades_finalizadas_analista"></canvas>
+                        </div>
+                    </div>
+
+
+                    <div class="col-xxl-12 col-xl-12 col-lg-12 col-md-12">
+                        <div class="card">
+                            <div class="card-header py-3 d-flex justify-content-between bg-transparent border-bottom-0">
+                                <h6 class="mb-0 fw-bold ">Actividades finalizadas por analista (Ultimos 15 dias)</h6>
+                            </div>
+                            <canvas id="char_actividades_finalizadas_analista5"></canvas>
+                        </div>
+                    </div>
+
+                    <div class="col-xxl-12 col-xl-12 col-lg-12 col-md-12">
+                        <div class="card">
+                            <div class="card-header py-3 d-flex justify-content-between bg-transparent border-bottom-0">
+                                <h6 class="mb-0 fw-bold ">Actividades asignadas por analista</h6>
+                            </div>
+                            <canvas id="char_actividades_finalizadas_analista4"></canvas>
+                        </div>
+                    </div> --}}
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <br>
+
+    @if (auth()->user()->unidad_id == 1)
+        @if (auth()->user()->rol_id == 1 ||
+                auth()->user()->rol_id == 2 ||
+                auth()->user()->rol_id == 4 ||
+                auth()->user()->rol_id == 5 ||
+                auth()->user()->rol_id == 6)
+            <div class="col-xxl-12 col-xl-12 col-lg-12 col-md-12">
+                <ul class="nav nav-tabs tab-body-header rounded d-inline-flex" role="tablist">
+                    <li class="nav-item"><a class="nav-link active" data-bs-toggle="tab"
+                            href="#nav-ActividadesFinalizadas" role="tab">Actividades finalizadas por analista</a>
+                    </li>
+                    <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#nav-ActividadesFinalizadas15"
+                            role="tab">Actividades finalizadas por analista (Ultimos 15 dias)</a></li>
+                    <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#nav-ActividadesAsignadas"
+                            role="tab">Actividades asignadas por analista</a></li>
+                </ul>
+
+
+                <div class="tab-content mt-2">
+                    <div class="tab-pane fade show active" id="nav-ActividadesFinalizadas" role="tabpanel">
+                        <div class="row col-8 g-3">
+                            <div class="card">
+                                <div
+                                    class="card-header py-3 d-flex justify-content-between bg-transparent border-bottom-0">
+                                    <h6 class="mb-0 fw-bold ">Actividades finalizadas por analista</h6>
+                                </div>
+                                <canvas id="char_actividades_finalizadas_analista"></canvas>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="tab-pane fade" id="nav-ActividadesFinalizadas15" role="tabpanel">
+                        <div class="row col-8 g-3">
+                            <div class="card">
+                                <div
+                                    class="card-header py-3 d-flex justify-content-between bg-transparent border-bottom-0">
+                                    <h6 class="mb-0 fw-bold ">Actividades finalizadas por analista (Ultimos 15 dias)</h6>
+                                </div>
+                                <canvas id="char_actividades_finalizadas_analista5"></canvas>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="tab-pane fade" id="nav-ActividadesAsignadas" role="tabpanel">
+                        <div class="row col-8 g-3">
+                            <div class="card">
+                                <div
+                                    class="card-header py-3 d-flex justify-content-between bg-transparent border-bottom-0">
+                                    <h6 class="mb-0 fw-bold ">Actividades asignadas por analista</h6>
+                                </div>
+                                <canvas id="char_actividades_finalizadas_analista4"></canvas>
+                            </div>
+                        </div>
                     </div>
 
                 </div>
@@ -540,40 +415,125 @@
 
 
 
+            </div>
+        @endif
+    @endif
 
 
 
 
+    <div class="col-xxl-12 col-xl-12 col-lg-12 col-md-12">&nbsp;</div>
 
+    <div class="col-xxl-12 col-xl-12 col-lg-12 col-md-12" style="display: {{ $visibility }}">
+        <ul class="nav nav-tabs tab-body-header rounded d-inline-flex" role="tablist">
+            <li class="nav-item"><a class="nav-link active" data-bs-toggle="tab" href="#nav-Bolson"
+                    role="tab">Bolson
+                    Horas Operatoria Diaria</a></li>
+            <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#nav-Finalizadas"
+                    role="tab">Actividades
+                    Finalizadas por Mes</a></li>
+            @if (auth()->user()->unidadId() == 1)
+                <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#nav-Errores" role="tab">Indice
+                        errores 2021</a></li>
+                <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#nav-Errores2023"
+                        role="tab">Indice
+                        errores 2022</a></li>
 
-                <div class="col-xxl-12 col-xl-12 col-lg-12 col-md-12" style="display: {{$visibility}}">
+                <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#nav-Errores2023"
+                        role="tab">Indice
+                        errores 2023</a></li>
+                <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#nav-emergentes"
+                        role="tab">Act. emergentes 2023</a></li>
+
+                <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#nav-Categoria" role="tab">Act.
+                        por Categoria Finalizadas por Mes</a></li>
+            @endif
+        </ul>
+
+        <div class="tab-content mt-2">
+            <div class="tab-pane fade show active" id="nav-Bolson" role="tabpanel">
+                <div class="row g-3">
+                    <div class="col-md-8">
+                        <div class="card">
+                            <div class="card-header py-3 d-flex justify-content-between bg-transparent border-bottom-0">
+                                <h5 class="mb-0 fw-bold ">Bolson Horas Operatoria Diaria</h5>
+                                <h6>Numero de horas operatoria diaria</h6>
+                            </div>
+                            <canvas id="char_bolson_horas_operatoria_diaria"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-pane fade" id="nav-Finalizadas" role="tabpanel">
+                <div class="col-md-8">
                     <div class="card">
                         <div class="card-header py-3 d-flex justify-content-between bg-transparent border-bottom-0">
-                            <h6 class="mb-0 fw-bold ">Actividades finalizadas por analista</h6>
+                            <h5 class="mb-0 fw-bold ">Actividades Finalizadas por Mes</h5>
+                            <h6>Numero de actividades resueltas por Mes</h6>
                         </div>
-                        <canvas id="char_actividades_finalizadas_analista"></canvas>
+                        <canvas id="char_actividades_finalizadas_mes"></canvas>
                     </div>
                 </div>
+            </div>
 
-
-                <div class="col-xxl-12 col-xl-12 col-lg-12 col-md-12">
+            <div class="tab-pane fade" id="nav-Errores" role="tabpanel">
+                <div class="col-md-8">
                     <div class="card">
                         <div class="card-header py-3 d-flex justify-content-between bg-transparent border-bottom-0">
-                            <h6 class="mb-0 fw-bold ">Actividades finalizadas por analista (Ultimos 15 dias)</h6>
+                            <h5 class="mb-0 fw-bold ">INDICE DE ERROR SOBRE TOTAL DE PROGRAMAS CREADOS Y
+                                MODIFICADOS 2021</h5>
                         </div>
-                        <canvas id="char_actividades_finalizadas_analista5"></canvas>
+                        <canvas id="char_indice_error_meses_2021"></canvas>
                     </div>
                 </div>
+            </div>
 
-                <div class="col-xxl-12 col-xl-12 col-lg-12 col-md-12">
+            <div class="tab-pane fade" id="nav-Errores2022" role="tabpanel">
+                <div class="col-md-8">
                     <div class="card">
                         <div class="card-header py-3 d-flex justify-content-between bg-transparent border-bottom-0">
-                            <h6 class="mb-0 fw-bold ">Actividades asignadas por analista</h6>
+                            <h5 class="mb-0 fw-bold ">INDICE DE ERROR SOBRE TOTAL DE PROGRAMAS CREADOS Y
+                                MODIFICADOS 2022</h5>
                         </div>
-                        <canvas id="char_actividades_finalizadas_analista4"></canvas>
+                        <canvas id="char_indice_error_meses_2022"></canvas>
                     </div>
                 </div>
+            </div>
 
+            <div class="tab-pane fade" id="nav-Errores2023" role="tabpanel">
+                <div class="col-md-8">
+                    <div class="card">
+                        <div class="card-header py-3 d-flex justify-content-between bg-transparent border-bottom-0">
+                            <h5 class="mb-0 fw-bold ">INDICE DE ERROR SOBRE TOTAL DE PROGRAMAS CREADOS Y
+                                MODIFICADOS 2023</h5>
+                        </div>
+                        <canvas id="char_indice_error_meses_2023"></canvas>
+                    </div>
+                </div>
+            </div>
+
+
+
+            <div class="tab-pane fade" id="nav-emergentes" role="tabpanel">
+                <div class="col-md-8">
+                    <div class="card">
+                        <div class="card-header py-3 d-flex justify-content-between bg-transparent border-bottom-0">
+                            <h5 class="mb-0 fw-bold ">Actividades emergentes 2023</h5>
+                        </div>
+                        <canvas id="char_emergentes"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <div class="tab-pane fade" id="nav-Categoria" role="tabpanel">
+                <div class="col-md-8">
+                    <div class="card">
+                        <div class="card-header py-3 d-flex justify-content-between bg-transparent border-bottom-0">
+                            <h5 class="mb-0 fw-bold ">Actividades por Categoria Finalizadas por Mes</h5>
+                        </div>
+                        <canvas id="char_actividades_finalizadas_categoria_mes"></canvas>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -587,107 +547,112 @@
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    <!-- Body: Body -->
-    <div class="body d-flex py-3" >
-        <div class="container-xxl" style="display: {{$visibility}}">
+    <div class="body d-flex py-3">
+        <div class="container-xxl" style="display: {{ $visibility }}">
             <div class="row clearfix g-3">
-                <div class="col-xl-8 col-lg-12 col-md-12 flex-column">
+                <div class="col-xl-12 col-lg-12 col-md-12 flex-column">
                     <div class="row g-3">
                         <div class="col-md-12">
                             <div class="card">
                                 <div
                                     class="card-header py-3 d-flex justify-content-between bg-transparent border-bottom-0">
-                                    <h5 class="mb-0 fw-bold ">Bolson Horas Operatoria Diaria</h5>
-                                    <h6>Numero de horas operatoria diaria</h6>
+                                    <h5 class="mb-0 fw-bold ">Rendimiento base de datos</h5>
+                                    <select id="anio" onchange="load_rendimiento_db()">
+                                        @for ($i = date('Y'); $i >= 2010; $i--)
+                                            <option value="{{ $i }}">{{ $i }}</option>
+                                        @endfor
+                                    </select>
                                 </div>
-                                <canvas id="char_bolson_horas_operatoria_diaria"></canvas>
+                                <div id="div_rendimiento_bd"></div>
                             </div>
                         </div>
                     </div>
-
-                    <div class="row g-3">
-                        <div class="col-md-12">
-                            <div class="card">
-                                <div
-                                    class="card-header py-3 d-flex justify-content-between bg-transparent border-bottom-0">
-                                    <h5 class="mb-0 fw-bold ">Actividades Finalizadas por Mes</h5>
-                                    <h6>Numero de actividades resueltas por Mes</h6>
-                                </div>
-                                <canvas id="char_actividades_finalizadas_mes"></canvas>
-                            </div>
-                        </div>
-                    </div>
-
-
-                    @if (Session::get('id_unidad') == 1)
-                        <div class="row g-3">
-                            <div class="col-md-12">
-                                <div class="card">
-                                    <div
-                                        class="card-header py-3 d-flex justify-content-between bg-transparent border-bottom-0">
-                                        <h5 class="mb-0 fw-bold ">INDICE DE ERROR SOBRE TOTAL DE PROGRAMAS CREADOS Y
-                                            MODIFICADOS 2021</h5>
-                                    </div>
-                                    <canvas id="char_indice_error_meses_2021"></canvas>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="row g-3">
-                            <div class="col-md-12">
-                                <div class="card">
-                                    <div
-                                        class="card-header py-3 d-flex justify-content-between bg-transparent border-bottom-0">
-                                        <h5 class="mb-0 fw-bold ">INDICE DE ERROR SOBRE TOTAL DE PROGRAMAS CREADOS Y
-                                            MODIFICADOS 2022</h5>
-                                    </div>
-                                    <canvas id="char_indice_error_meses_2022"></canvas>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="row g-3">
-                            <div class="col-md-12">
-                                <div class="card">
-                                    <div
-                                        class="card-header py-3 d-flex justify-content-between bg-transparent border-bottom-0">
-                                        <h5 class="mb-0 fw-bold ">Actividades por Categoria Finalizadas por Mes</h5>
-                                    </div>
-                                    <canvas id="char_actividades_finalizadas_categoria_mes"></canvas>
-                                </div>
-                            </div>
-                        </div>
-                    @endif
-
-
-
-
                 </div>
-
-
-            </div><!-- Row End -->
+            </div>
         </div>
     </div>
-    <!-- Jquery Page Js -->
+
+
+    <!-- Modal Fullscreen -->
+    <div class="modal fade" id="modalRendimientoBD">
+        <div class="modal-dialog modal-lg">
+
+            <div class="modal-content">
+
+                <div class="modal-header">
+                </div>
+                <div class="modal-body">
+                    <div class="tab-content">
+
+                        <div class="tab-pane fade show active" id="list-view">
+
+                            <div class="row clearfix g-3" id="modal-content">
+
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div style="display: {{ $visibility }}">
+        <div class="card-header py-3 d-flex justify-content-between bg-transparent border-bottom-0">
+            <h5 class="mb-0 fw-bold ">Tiempo invertido por tipo cliente</h5>
+            <select id="anio_tiempo_invertido" onchange="load_tiempo_invertido_cliente()">
+                @for ($i = date('Y'); $i >= 2021; $i--)
+                    <option value="{{ $i }}">{{ $i }}</option>
+                @endfor
+            </select>
+        </div>
+
+        <ul class="nav nav-tabs tab-body-header rounded d-inline-flex" role="tablist"
+            style="display: {{ $visibility }}">
+            <li class="nav-item"><a class="nav-link active" data-bs-toggle="tab" href="#nav-tiempoInvertido"
+                    role="tab">Mesual</a></li>
+            <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#nav-tiempoInvertidoAnual"
+                    role="tab">Anual</a>
+            </li>
+        </ul>
+    </div>
+
+
+    <div class="tab-content mt-2" style="display: {{ $visibility }}">
+        <div class="tab-pane fade show active" id="nav-tiempoInvertido" role="tabpanel">
+            <div class="row g-3">
+                <div class="col-md-8">
+                    <div class="card">
+                        <div class="card-header py-3 d-flex justify-content-between bg-transparent border-bottom-0">
+                            <h5 class="mb-0 fw-bold ">Mensual</h5>
+                        </div>
+                        <div id="div_tiempo_invertido"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="tab-pane fade" id="nav-tiempoInvertidoAnual" role="tabpanel">
+            <div class="col-md-8">
+                <div class="card">
+                    <div class="card-header py-3 d-flex justify-content-between bg-transparent border-bottom-0">
+                        <h5 class="mb-0 fw-bold ">Anual</h5>
+                    </div>
+                    <div id="div_tiempo_invertido_anual"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+
     <script src="{{ asset('assets/bundles/libscripts.bundle.js') }}"></script>
     <script src="{{ asset('assets/bundles/apexcharts.bundle.js') }}"></script>
     <script src="{{ asset('js/template.js') }}"></script>
@@ -695,6 +660,63 @@
 
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script>
+
+
+    <script src="https://code.highcharts.com/highcharts.js"></script>
+    <script src="https://code.highcharts.com/modules/exporting.js"></script>
+    <script src="https://code.highcharts.com/modules/export-data.js"></script>
+    <script src="https://code.highcharts.com/modules/accessibility.js"></script>
+
+
+    <script>
+        $(document).ready(function() {
+            load_rendimiento_db();
+            load_tiempo_invertido_cliente();
+        });
+
+        function load_rendimiento_db() {
+            var anio = document.getElementById('anio').value;
+            $.ajax({
+                url: "{{ url('/home/charts/get_rendimiento_bd') }}/" + anio,
+                method: 'GET',
+                success: function(data) {
+                    console.log(data);
+                    $('#div_rendimiento_bd').html(data);
+                },
+                error: function(error) {
+                    console.error('Error en la solicitud:', error);
+                }
+            });
+        }
+
+        function load_tiempo_invertido_cliente() {
+            var anio = document.getElementById('anio_tiempo_invertido').value;
+            $.ajax({
+                url: "{{ url('/home/charts/get_tiempo_invertido') }}/" + anio,
+                method: 'GET',
+                success: function(data) {
+                    console.log(data);
+                    $('#div_tiempo_invertido').html(data);
+                },
+                error: function(error) {
+                    console.error('Error en la solicitud:', error);
+                }
+            });
+
+            $.ajax({
+                url: "{{ url('/home/charts/get_tiempo_invertido_anual') }}/" + anio,
+                method: 'GET',
+                success: function(data) {
+                    console.log(data);
+                    $('#div_tiempo_invertido_anual').html(data);
+                },
+                error: function(error) {
+                    console.error('Error en la solicitud:', error);
+                }
+            });
+        }
+    </script>
 
     <script>
         const ctx = document.getElementById('char_actividades_finalizadas');
@@ -718,6 +740,7 @@
             }
         });
 
+
         const ctx2 = document.getElementById('char_estado_proyectos');
         new Chart(ctx2, {
             type: 'doughnut',
@@ -738,6 +761,7 @@
             }
         });
 
+
         const ctx3 = document.getElementById('char_actividades_finalizadas_analista');
 
         new Chart(ctx3, {
@@ -747,6 +771,38 @@
                 datasets: [{
                     label: '',
                     data: @json($data_users_end_value),
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                },
+                plugins: {
+                    datalabels: {
+                        anchor: 'end',
+                        align: 'end',
+                        formatter: function(value, context) {
+                            return value; // Display the actual value on the bar
+                        }
+                    }
+                }
+            }
+        });
+
+
+
+        const ctx5 = document.getElementById('char_actividades_finalizadas_analista5');
+
+        new Chart(ctx5, {
+            type: 'bar',
+            data: {
+                labels: @json($data_users_week_end_label),
+                datasets: [{
+                    label: '',
+                    data: @json($data_users_week_end_value),
                     borderWidth: 1
                 }]
             },
@@ -782,26 +838,7 @@
         });
 
 
-        const ctx5 = document.getElementById('char_actividades_finalizadas_analista5');
 
-        new Chart(ctx5, {
-            type: 'bar',
-            data: {
-                labels: @json($data_users_week_end_label),
-                datasets: [{
-                    label: '',
-                    data: @json($data_users_week_end_value),
-                    borderWidth: 1
-                }]
-            },
-            options: {
-                scales: {
-                    y: {
-                        beginAtZero: true
-                    }
-                }
-            }
-        });
 
 
         const ctx6 = document.getElementById('char_bolson_horas_operatoria_diaria');
@@ -826,7 +863,6 @@
         });
 
 
-
         const ctx7 = document.getElementById('char_actividades_finalizadas_mes');
 
         new Chart(ctx7, {
@@ -847,6 +883,7 @@
                 }
             }
         });
+
 
 
         const ctx8 = document.getElementById('char_indice_error_meses_2021');
@@ -877,6 +914,8 @@
 
 
 
+
+
         const ctx9 = document.getElementById('char_indice_error_meses_2022');
 
         new Chart(ctx9, {
@@ -889,6 +928,34 @@
                     type: 'line',
                     label: 'Line Dataset',
                     data: [5.00, 5.00, 5.00, 5.00, 5.00, 5.00, 5.00, 5.00, 5.00, 5.00, 5.00, 5.00]
+                }],
+                labels: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre',
+                    'Octubre', 'Noviembre', 'Diciembre'
+                ]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+
+
+        const ctx11 = document.getElementById('char_indice_error_meses_2023');
+
+        new Chart(ctx11, {
+            data: {
+                datasets: [{
+                    type: 'bar',
+                    label: 'LINEA DE DEFECTOS',
+
+                    data: [0.0, 0.0, 0.0, 0.0, 0.0, 4.76, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00]
+                }, {
+                    type: 'line',
+                    label: 'LINEA ESTANDAR ESTABLECIDO',
+                    data: [3.0, 3.0, 3.0, 3.0, 3.0, 3.0, 3.0, 3.0, 3.0, 3.0, 3.0, 3.0]
                 }],
                 labels: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre',
                     'Octubre', 'Noviembre', 'Diciembre'
@@ -968,6 +1035,27 @@
                 }
             }
         });
+
+
+        const ctx12 = document.getElementById('char_emergentes');
+
+        new Chart(ctx12, {
+            type: 'bar',
+            data: {
+                labels: @json($meses_emergente),
+                datasets: @json($data_emergente),
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
     </script>
+
+
+
 
 @endsection

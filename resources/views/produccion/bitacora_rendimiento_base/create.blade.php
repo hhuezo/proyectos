@@ -45,14 +45,14 @@
                                         <div class="form-group">
                                             <label class="form-label col-md-3"><strong>Fecha</strong></label>
                                             <div class="col-12">
-                                                <input type="text" name="fecha" value="{{old('fecha')}}" required class="form-control">
+                                                <input type="date" name="fecha_ymd" value="{{old('fecha_ymd')}}" required class="form-control">
                                             </div>
                                         </div>
                                         <br>
                                         <div class="form-group">
                                             <label class="form-label col-md-3"><strong>Hora</strong></label>
                                             <div class="col-12">
-                                                <input type="text" name="hora" value="{{old('hora')}}" required
+                                                <input type="time" name="hora" value="{{old('hora')}}" required
                                                     class="form-control">
                                             </div>
                                         </div>
@@ -85,7 +85,19 @@
                                                 <input type="text" name="uso_negocio" value="{{old('uso_negocio')}}" required class="form-control">
                                             </div>
                                         </div>
-
+                                        <br>
+                                        <div class="form-group">
+                                            <label class="form-label col-md-3"><strong>Estado</strong></label>
+                                            <div class="col-12">
+                                                 <select id="estado_id" name="estado_id" class="form-select">
+                                                     @foreach ($estados as $obj)
+                                                         <option value="{{ $obj->id }}">
+                                                            {{ $obj->nombre }}
+                                                         </option>
+                                                     @endforeach
+                                                 </select>
+                                             </div>
+                                    </div>
 
 
 
@@ -152,11 +164,10 @@
                                                 <input type="text" name="responsable" value="{{old('responsable')}}" required class="form-control">
                                             </div>
                                         </div>
+
                                     </div>
 
 
-
-                                </div>
                                 <br>
                                 <div class="col-md-12">
                                     <div class="form-group">

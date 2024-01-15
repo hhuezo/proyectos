@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Hash;
 
 class Usuario extends Component
 {
-    public $busqueda, $user_id, $name, $user_name, $email, $password, $rol_id, $unidad_id;
+    public $busqueda, $user_id, $name, $user_name, $email, $password, $rol_id, $unidad_id,$usuario_base_datos;
     public function render()
     {
         $usuarios = User::where('name', 'LIKE', '%' . $this->busqueda . '%')
@@ -28,6 +28,7 @@ class Usuario extends Component
 
     public function store()
     {
+        //dd($this->usuario_base_datos);
         $messages = [
             'name.required' => 'El nombre es requerido',
             'user_name.required' => 'El usuario es requerido',
@@ -71,6 +72,7 @@ class Usuario extends Component
         $this->email =  $usuario->email;
         $this->rol_id =  $usuario->rol_id;
         $this->unidad_id =  $usuario->unidad_id;
+        $this->usuario_base_datos =  $usuario->usuario_base_datos;
     }
 
     public function update()
@@ -96,6 +98,7 @@ class Usuario extends Component
         $usuario->email = $this->email;
         $usuario->rol_id = $this->rol_id;
         $usuario->unidad_id = $this->unidad_id;
+        $usuario->usuario_base_datos = $this->usuario_base_datos;
         $usuario->update();
 
 

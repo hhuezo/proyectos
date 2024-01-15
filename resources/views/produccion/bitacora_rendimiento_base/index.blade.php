@@ -36,6 +36,7 @@
                                                 <th>FECHA</th>
                                                 <th>HORA</th>
                                                 <th>TIPO REPORTE</th>
+                                                <th>ESTADO</th>
                                                 <th>UNIDAD</th>
                                                 <th>PROGRAMA</th>
                                                 <th>Opciones</th>
@@ -46,9 +47,18 @@
                                                 <tr>
                                                     <td>{{ $obj->id }}</td>
                                                     <td>{{ $obj->id_excell }}</td>
-                                                    <td>{{ $obj->fecha }}</td>
+                                                    <td> {{ date('Y-m-d', strtotime($obj->fecha_ymd)) }}  </td>
                                                     <td>{{ $obj->hora }}</td>
                                                     <td>{{ $obj->tipo_reporte }}</td>
+                                                    <td>
+                                                        @foreach ( $estados as $estado)
+                                                        @if ($obj->estado_rendimiento_id ==  $estado->id)
+                                                        <option value="{{ $estado->id }}" selected>
+                                                            {{ $estado->nombre }}
+                                                        </option>
+                                                        @endif
+                                                        @endforeach
+                                                    </td>
                                                     <td>{{ $obj->unidad }}</td>
                                                     <td>{{ $obj->programa }}</td>
                                                     <td>
@@ -102,7 +112,7 @@
                         }]
                     });
 
-                $('#myProjectTable').DataTable().order([1, 'desc']).draw();
+               // $('#myProjectTable').DataTable().order([1, 'desc']).draw();
                 $('.deleterow').on('click', function() {
                     var tablename = $(this).closest('table').DataTable();
                     tablename

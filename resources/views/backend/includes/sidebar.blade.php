@@ -154,6 +154,21 @@
                             href="{{ url('iso/matriz_riesgo2022') }}">
                             <i class="icofont-notepad"></i><span>Iso 2022</span></a>
                     </li>
+
+                    @if (auth()->user()->usuario_base_datos)
+                    <li><a class="ms-link {{ Request::is('admin/auth/user') ? 'active' : '' }}"
+                            href="{{ url('bitacora_rendimiento_base') }}">ESA-ID-P13-F2 BITACORA REPORTES
+                            SOBRE
+                            RENDIMIENTO DE BASE DE DATOS</a></li>
+                    <li><a class="ms-link {{ Request::is('admin/auth/user') ? 'active' : '' }}"
+                            href="{{ url('bitacora_cambio_base') }}">ESA-ID-P13-F1 BITACORA DE CAMBIOS EN BDs
+                        </a>
+                    </li>
+                    <li><a class="ms-link {{ Request::is('admin/auth/user') ? 'active' : '' }}"
+                            href="{{ url('creacion_objetos_base_datos') }}">ESA-ID-P1-F3 CREACION DE OBJETOS
+                            DE BASE DE DATOS</a>
+                    </li>
+                    @endif
                 @endif
 
                 @if (auth()->user()->rol_id == 1 || auth()->user()->rol_id == 4)
@@ -181,11 +196,16 @@
                                     href="{{ url('iso/matriz_riesgo2022') }}">Documentos 2022</a></li>
 
                             <li><a class="ms-link {{ Request::is('admin/auth/user') ? 'active' : '' }}"
-                                    href="{{ url('bitacora_rendimiento_base') }}">ESA-ID-P13-F2 BITACORA REPORTES SOBRE
+                                    href="{{ url('bitacora_rendimiento_base') }}">ESA-ID-P13-F2 BITACORA REPORTES
+                                    SOBRE
                                     RENDIMIENTO DE BASE DE DATOS</a></li>
                             <li><a class="ms-link {{ Request::is('admin/auth/user') ? 'active' : '' }}"
-                                    href="{{ url('bitacora_cambio_base') }}">ESA-ID-P13-F1 BITACORA DE CAMBIOS EN BDs </a>
+                                    href="{{ url('bitacora_cambio_base') }}">ESA-ID-P13-F1 BITACORA DE CAMBIOS EN BDs
+                                </a>
                             </li>
+                            <li><a class="ms-link {{ Request::is('admin/auth/user') ? 'active' : '' }}"
+                                    href="{{ url('creacion_objetos_base_datos') }}">ESA-ID-P1-F3 CREACION DE OBJETOS
+                                    DE BASE DE DATOS</a></li>
                         </ul>
                     </li>
                 @endif
@@ -195,6 +215,11 @@
                         <a class="m-link {{ Request::segment(2) == 'project' ? 'active' : '' }}"
                             href="{{ url('calendarizacion') }}">
                             <i class="icofont-notepad"></i><span>Calendarización de mantenimientos</span></a>
+                    </li>
+                    <li class="collapsed">
+                        <a class="m-link {{ Request::segment(2) == 'project' ? 'active' : '' }}"
+                            href="{{ url('inventario_despliegues') }}">
+                            <i class="icofont-notepad"></i><span>Inventario despliegues</span></a>
                     </li>
                 @endif
                 <?php
