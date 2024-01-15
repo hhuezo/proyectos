@@ -4,18 +4,22 @@ namespace App\Http\Controllers\produccion;
 
 use App\Actividad;
 use App\Http\Controllers\Controller;
-use App\Proyecto;
 use Illuminate\Http\Request;
+use App\Proyecto;
 
-class ProyectoController extends Controller
+class ProyectoFinalController extends Controller
 {
-    public function __construct()
-    {
-          $this->middleware('auth');
-    }
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
     public function index()
     {
-        return view('produccion.proyecto.index');
+
+         $proyecto =Proyecto::where('estado_id','=','8')->get();
+        return view('produccion.proyecto_facturado.index',compact('proyecto'));
+
     }
 
     /**
@@ -48,9 +52,10 @@ class ProyectoController extends Controller
     public function show($id)
     {
 
-        session(['id_proyecto' => $id]);
-        return view('produccion.proyecto.show');
 
+        $proyecto =Proyecto::findorfail($id);
+        $actividades =Actividad::where('proyecto_id','=',$proyecto->id)->get();
+        return view('produccion.proyecto_facturado.show',compact('proyecto','actividades'));
     }
 
     /**
