@@ -1026,7 +1026,6 @@ class HomeController extends Controller
             $data_resultado = $resultados->where('tipo', $tipo)->pluck('total')->toArray();
             $array_resultado =  [
                 "label" => $tipo, "data" => $data_resultado,
-
                 /*"backgroundColor" => ['rgba(255,99,132,0.2)' ],
             "borderColor"=> [
                 'rgba(255,99,132,1)',
@@ -1042,11 +1041,6 @@ class HomeController extends Controller
         }
 
        $meses_emergente =  array('Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre');
-
-       $validacion_tickets = DB::table('validacion_tickets')
-       ->selectRaw('YEAR(fecha_creacion) as anio, MONTH(fecha_creacion) as mes, resultado, tipo, COUNT(*) as total')
-       ->groupBy('anio', 'mes', 'resultado', 'tipo')
-       ->get();
 
 
         return view('home', compact(
@@ -1078,8 +1072,7 @@ class HomeController extends Controller
             'nombre_codigo_9',
             'meses',
             'data_emergente',
-            'meses_emergente',
-            'validacion_tickets'
+            'meses_emergente'
         ));
     }
 

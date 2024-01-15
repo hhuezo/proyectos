@@ -445,8 +445,8 @@
                 <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#nav-emergentes"
                         role="tab">Act. emergentes 2023</a></li>
 
-                <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#nav-Categoria" role="tab">Act.
-                        por Categoria Finalizadas por Mes</a></li>
+                <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#nav-Categoria"
+                        role="tab">Act. por Categoria Finalizadas por Mes</a></li>
             @endif
         </ul>
 
@@ -1046,6 +1046,15 @@
                 datasets: @json($data_emergente),
             },
             options: {
+                plugins: {
+                    datalabels: {
+                        anchor: 'end',
+                        align: 'end',
+                        formatter: function(value, context) {
+                            return value; // Mostrará el valor en la parte superior de la barra
+                        }
+                    }
+                },
                 scales: {
                     y: {
                         beginAtZero: true

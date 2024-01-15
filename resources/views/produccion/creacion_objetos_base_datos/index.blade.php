@@ -13,9 +13,9 @@
                     <div class="border-0 mb-4">
                         <div
                             class="card-header py-3 no-bg bg-transparent d-flex align-items-center px-0 justify-content-between border-bottom flex-wrap">
-                            <h3 class="fw-bold mb-0">Bitacora cambio base de datos</h3>
+                            <h3 class="fw-bold mb-0">Creacion de objetos de base de datos</h3>
                             <div class="col-auto d-flex w-sm-100">
-                                <a href="{{ url('bitacora_cambio_base/create') }}">
+                                <a href="{{ url('creacion_objetos_base_datos/create') }}">
                                     {{-- data-bs-toggle="modal" data-bs-target="#tickadd" --}}
                                     <button type="button" class="btn btn-dark btn-set-task w-sm-100"><i
                                             class="icofont-plus-circle me-2 fs-6"></i>Nuevo</button>
@@ -32,36 +32,36 @@
                                         <thead>
                                             <tr>
                                                 <th>Id</th>
-                                                <th>NUM EXCELL</th>
-                                                <th>ESQUEMA</th>
-                                                <th>ORIGEN CAMBIO</th>
-                                                <th>USO NEGOCIO</th>
-                                                {{-- <th>ACCION</th> --}}
-                                                <th>FECHA IMPLEMENTACION</th>
+                                                <th>NOMBRE ESPECIALISTA</th>
+                                                <th>NUM FORMULARIO</th>
+                                                <th>TIPO OBJETO</th>
+                                                <th>FUNCIONES</th>
+                                                <th>NOMBRE OBJETO ASIGNAR</th>
+                                                <th>BASE DE DATOS</th>
+                                                <th>PROYECTO RELACIONADO</th>
                                                 <th>Opciones</th>
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            @foreach ($bitacora as $obj)
+                                            @foreach ($objetos_bd as $obj)
                                                 <tr>
                                                     <td>{{ $obj->id }}</td>
-                                                    <td>{{ $obj->num_excell }}</td>
-                                                    <td>{{ $obj->esquema }}</td>
-                                                    <td>{{ $obj->origen_cambio }}</td>
-                                                    <td>{{ $obj->uso_negocio }}</td>
-                                                    {{-- <td>{{ $obj->accion }}</td> --}}
-                                                    <td>{{ $obj->fecha_implementacion }}</td>
+                                                    <td>{{ $obj->nombre_especialista }}</td>
+                                                    <td>{{ $obj->num_formulario }}</td>
+                                                    <td>{{ $obj->tipo_objeto }}</td>
+                                                    <td>{{ $obj->funciones }}</td>
+                                                    <td>{{ $obj->nombre_objeto_asignar }}</td>
+                                                    <td>{{ $obj->base_datos }}</td>
+                                                    <td>{{ $obj->proyecto_relacionado }}</td>
                                                     <td>
                                                         <div class="btn-group" role="group"
                                                             aria-label="Basic outlined example">
                                                             <a
-                                                                href="{{ url('bitacora_cambio_base') }}/{{ $obj->id }}/edit">
+                                                                href="{{ url('creacion_objetos_base_datos') }}/{{ $obj->id }}/edit">
                                                                 <button class="btn btn-success"><i
                                                                         class="icofont-edit btn-lg"></i></button>
                                                             </a>
                                                             &nbsp;&nbsp;
-                                                            {{-- data-bs-toggle="modal" data-bs-target="#edittickit"
-                                                        <button type="button" class="btn "><i class="icofont-edit text-success btn-lg"></i></button> --}}
 
                                                             <button type="button" data-bs-toggle="modal"
                                                                 data-bs-target="#modal-delete-{{ $obj->id }}"
@@ -73,7 +73,7 @@
 
                                                     </td>
                                                 </tr>
-                                                @include('produccion.bitacora_cambio_base.modal')
+                                                @include('produccion.creacion_objetos_base_datos.modal')
                                             @endforeach
 
                                         </tbody>
