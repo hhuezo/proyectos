@@ -22,7 +22,7 @@
                 <li class="collapsed">
                     <a class="m-link {{ Request::segment(2) == 'hr-dashboard' || Request::segment(2) == 'project-dashboard' ? 'active' : '' }}"
                         href="{{ url('home') }}">
-                        <i class="icofont-home fs-5"></i> <span>Inicio</span> </a>
+                        <i class="icofont-home fs-5"></i> <span>Inicio </span> </a>
                     <!-- Menu: Sub menu ul -->
 
                 </li>
@@ -171,6 +171,9 @@
                     @endif
                 @endif
 
+
+
+
                 @if (auth()->user()->rol_id == 1 || auth()->user()->rol_id == 4)
                     <li class="collapsed">
                         <a class="m-link {{ Request::segment(2) == 'project' ? 'active' : '' }}"
@@ -179,6 +182,10 @@
                     </li>
 
 
+                @endif
+
+
+                @if (auth()->user()->rol_id == 1)
                     <li
                         class=" {{ Request::is('admin/auth/user') || Request::is('admin/auth/role') || Request::is('admin/auth/role/create') ? '' : ' collapsed' }}">
                         <a class="m-link {{ Request::is('admin/auth/user') || Request::is('admin/auth/role') || Request::is('admin/auth/role/create') ? 'collapse show active' : '' }}{{ Request::is('admin/auth/role') ? 'collapse show active' : '' }}"
@@ -192,8 +199,8 @@
 
                             <li><a class="ms-link {{ Request::is('admin/auth/user') ? 'active' : '' }}"
                                     href="{{ url('iso/matriz_riesgo') }}">Documentos</a></li>
-                            <li><a class="ms-link {{ Request::is('admin/auth/role') || Request::is('admin/auth/role/create') ? 'active' : '' }}"
-                                    href="{{ url('iso/matriz_riesgo2022') }}">Documentos 2022</a></li>
+                            {{-- <li><a class="ms-link {{ Request::is('admin/auth/role') || Request::is('admin/auth/role/create') ? 'active' : '' }}"
+                                    href="{{ url('iso/matriz_riesgo2022') }}">Documentos 2022</a></li> --}}
 
                             <li><a class="ms-link {{ Request::is('admin/auth/user') ? 'active' : '' }}"
                                     href="{{ url('bitacora_rendimiento_base') }}">ESA-ID-P13-F2 BITACORA REPORTES
@@ -210,7 +217,9 @@
                     </li>
                 @endif
 
-                @if (auth()->user()->rol_id == 1 || auth()->user()->rol_id == 4 || auth()->user()->unidad_id == 6)
+
+                @if (auth()->user()->rol_id == 1 && auth()->user()->unidad_id == 1)
+
                     <li class="collapsed">
                         <a class="m-link {{ Request::segment(2) == 'project' ? 'active' : '' }}"
                             href="{{ url('calendarizacion') }}">
@@ -222,6 +231,36 @@
                             <i class="icofont-notepad"></i><span>Inventario despliegues</span></a>
                     </li>
                 @endif
+
+                @if (auth()->user()->rol_id == 4 && auth()->user()->unidad_id == 1)
+
+                <li class="collapsed">
+                    <a class="m-link {{ Request::segment(2) == 'project' ? 'active' : '' }}"
+                        href="{{ url('calendarizacion') }}">
+                        <i class="icofont-notepad"></i><span>Calendarización de mantenimientos</span></a>
+                </li>
+                <li class="collapsed">
+                    <a class="m-link {{ Request::segment(2) == 'project' ? 'active' : '' }}"
+                        href="{{ url('inventario_despliegues') }}">
+                        <i class="icofont-notepad"></i><span>Inventario despliegues</span></a>
+                </li>
+            @endif
+
+                @if (auth()->user()->rol_id == 4 && auth()->user()->unidad_id == 6)
+
+                    <li class="collapsed">
+                        <a class="m-link {{ Request::segment(2) == 'project' ? 'active' : '' }}"
+                            href="{{ url('calendarizacion') }}">
+                            <i class="icofont-notepad"></i><span>Calendarización de mantenimientos</span></a>
+                    </li>
+                    <li class="collapsed">
+                        <a class="m-link {{ Request::segment(2) == 'project' ? 'active' : '' }}"
+                            href="{{ url('inventario_despliegues') }}">
+                            <i class="icofont-notepad"></i><span>Inventario despliegues</span></a>
+                    </li>
+                @endif
+
+
                 <?php
                 /*
             <li class=" {{ Request::is('admin/auth/user') || Request::is('admin/auth/role')  || Request::is('admin/auth/role/create') ? '' : ' collapsed' }}">
