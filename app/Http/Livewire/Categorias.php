@@ -33,10 +33,12 @@ class Categorias extends Component
             'nombre' => 'required',
         ], $messages);
 
+        $this->unidad_id = auth()->user()->unidadId();
+
         CategoriaTicket::create([
             'codigo' => $this->codigo,
             'nombre' => $this->nombre,
-            'unidad_id' => $this->unidad_id
+            'unidad_id' => $this->unidad_id,
         ]);
 
 
@@ -52,7 +54,8 @@ class Categorias extends Component
         $this->id_categoria =  $categoria->id;
         $this->codigo =  $categoria->codigo;
         $this->nombre =  $categoria->nombre;
-        $this->unidad_id =  $categoria->unidad_id;
+        //$this->unidad_id =  $categoria->unidad_id;
+        $this->unidad_id = auth()->user()->unidadId();
 
     }
 
