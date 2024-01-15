@@ -62,7 +62,7 @@
 
                                 <td>
                                     <div class="progress" style="height: 20px;"
-                                        wire:click="load_actividad({{ $actividad->id }})"
+                                       
                                         @if ($actividad->estado_id == 3) onclick="modal_avance()" @endif>
                                         <div class="progress-bar progress-bar-warning" role="progressbar"
                                             aria-valuenow="40" aria-valuemin="0" aria-valuemax="100"

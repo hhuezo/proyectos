@@ -20,15 +20,17 @@ class ActividadActual extends Component
 
         foreach($this->registros as $obj)
         {
-            $actividad = Actividad::where('users_id','=',$obj->id)->where('estado_id','=',3)->first();
+            $actividad = Actividad::with('proyecto')->where('users_id','=',$obj->id)->where('estado_id','=',3)->first();
             if($actividad )
             {
                 $obj->actividad = $actividad->descripcion;
                 $obj->porcentaje = $actividad->porcentaje;
+                $obj->proyecto = $actividad->proyecto->nombre;
             }
             else{
                 $obj->actividad = "";
                 $obj->porcentaje = "";
+                $obj->proyecto = "";
             }
         }
 

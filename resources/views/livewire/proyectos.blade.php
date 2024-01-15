@@ -20,7 +20,8 @@
                                     <div class="progress-bar bg-danger" role="progressbar" style="width: 50%"
                                         aria-valuenow="60" aria-valuemin="0" aria-valuemax="100">
                                         {{ number_format($avance_proyecto, 2, '.', '') }}% de
-                                        {{ $ponderacion_proyecto }}</div>
+                                        {{ $ponderacion_proyecto }}
+                                    </div>
                                 </div>
                             @elseif($avance_proyecto < 70)
                                 <div class="progress" style="height: 20px; width: 250px;">
@@ -28,7 +29,8 @@
                                         style="width: {{ $avance_proyecto }}%" aria-valuenow="60" aria-valuemin="0"
                                         aria-valuemax="100">
                                         {{ number_format($avance_proyecto, 2, '.', '') }}% de
-                                        {{ $ponderacion_proyecto }}</div>
+                                        {{ $ponderacion_proyecto }}
+                                    </div>
                                 </div>
                             @else
                                 <div class="progress" style="height: 20px; width: 250px;">
@@ -36,7 +38,8 @@
                                         style="width: {{ $avance_proyecto }}%" aria-valuenow="60" aria-valuemin="0"
                                         aria-valuemax="100">
                                         {{ number_format($avance_proyecto, 2, '.', '') }}% de
-                                        {{ $ponderacion_proyecto }}</div>
+                                        {{ $ponderacion_proyecto }}
+                                    </div>
                                 </div>
                             @endif
                         </div>
@@ -97,14 +100,14 @@
 
                                                     <div class="col-sm-12" style="text-align: left;">
                                                         <label for="depone" class="form-label">Fecha inicio</label>
-                                                        <input type="date" wire:model.defer="fecha_inicio"
+                                                        <input type="date" wire:model.defer="fecha_inicio_proyecto"
                                                             class="form-control">
                                                     </div>
 
 
                                                     <div class="col-sm-12" style="text-align: left;">
                                                         <label for="depone" class="form-label">Fecha final</label>
-                                                        <input type="date" wire:model.defer="fecha_fin"
+                                                        <input type="date" wire:model.defer="fecha_fin_proyecto"
                                                             class="form-control">
                                                     </div>
                                                 </div>
@@ -116,6 +119,25 @@
                                                         @foreach ($estados as $obj)
                                                             @if (auth()->user()->unidad_id == 1 && $obj->id == 4)
                                                                 <option value="{{ $obj->id }}">CERTIFICACIÓN
+                                                                </option>
+                                                            @else
+                                                                <option value="{{ $obj->id }}">
+                                                                    {{ $obj->nombre }}
+                                                                </option>
+                                                            @endif
+                                                        @endforeach
+                                                    </select>
+                                                </div>
+
+                                                <div class="mb-3" style="text-align: left;">
+                                                    <input type="hidden" wire:model.defer="id_proyecto">
+                                                    <label class="form-label">Propietario</label>
+                                                    <select class="form-select" wire:model.defer="propietario_id"
+                                                        aria-label="Default select Project Category">
+                                                        @foreach ($propietarios as $obj)
+                                                            @if ($obj->id == $propietario_id)
+                                                                <option value="{{ $obj->id }}" selected>
+                                                                    {{ $obj->nombre }}
                                                                 </option>
                                                             @else
                                                                 <option value="{{ $obj->id }}">
@@ -156,13 +178,14 @@
                                     <div class="card" data-plugin="nestable">
                                         <a data-bs-toggle="collapse" href="#tab-1" role="button"
                                             aria-expanded="false" aria-controls="collapseExample">
-                                            <h6 class="fw-bold py-3 mb-0"  style="text-align: left; border-top-color: coral">
+                                            <h6 class="fw-bold py-3 mb-0"
+                                                style="text-align: left; border-top-color: coral">
 
                                                 <span class="text-blue">&nbsp;&nbsp;
 
 
-                                                        <i id="icon-right-1" class="icofont-circled-right fa-lg"></i>
-                                                        {{-- @if ($tab1 == 1)
+                                                    <i id="icon-right-1" class="icofont-circled-right fa-lg"></i>
+                                                    {{-- @if ($tab1 == 1)
                                                     @else
                                                        <i id="icon-down-1" class="icofont-circled-down fa-lg"></i>
                                                     @endif --}}
@@ -170,7 +193,7 @@
                                                 </span>
                                             </h6>
                                         </a>
-                                        <div id="tab-1"  class="accordion-collapse collapse show">
+                                        <div id="tab-1" class="accordion-collapse collapse show">
 
                                             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 row">
                                                 <div class="col-lg-11 col-md-11 col-sm-12 col-xs-12">
@@ -199,6 +222,8 @@
                                                         <th>Descripción</th>
                                                         <th>Avance</th>
                                                         <th>Ponderación</th>
+                                                        <th>Fecha inicio</th>
+                                                        <th>Fecha final</th>
                                                         <th>Estado</th>
                                                         <th>Opciones</th>
                                                     </tr>
@@ -239,6 +264,10 @@
                                                                     </div>
                                                                 </td>
                                                                 <td>{{ $actividad->ponderacion }}</td>
+                                                                <td>{{ $actividad->fecha_inicio ? date('d/m/Y', strtotime($actividad->fecha_inicio)) : '' }}
+                                                                </td>
+                                                                <td>{{ $actividad->fecha_fin ? date('d/m/Y', strtotime($actividad->fecha_fin)) : '' }}
+                                                                </td>
                                                                 <td><span class="badge bg-info">
                                                                         @if ($actividad->estado)
                                                                             {{ $actividad->estado->nombre }}
@@ -283,22 +312,20 @@
                                                 style="text-align: left; border-top-color: coral">
                                                 &nbsp;&nbsp;
 
-                                              <span class="text-blue">
+                                                <span class="text-blue">
                                                     <i id="icon-right-2" class="icofont-circled-right fa-lg"></i>
-                                                    {{--   @if ($tab2 == 1)
+                                                    {{-- @if ($tab2 == 1)
                                                         <i id="icon-down-2" class="icofont-circled-down fa-lg"></i>
                                                     @else
 
-                                                    @endif--}}
+                                                    @endif --}}
                                                     Historial de movimientos
                                                 </span>
                                             </h6>
                                         </a>
-                                        <div id="tab-2"
-                                            class="accordion-collapse collapse">
+                                        <div id="tab-2" class="accordion-collapse collapse">
 
-                                            <table  class="table table-hover align-middle mb-0"
-                                                style="width:100%">
+                                            <table class="table table-hover align-middle mb-0" style="width:100%">
                                                 <thead>
                                                     <tr>
                                                         <th>Fecha registro</th>
@@ -311,7 +338,8 @@
                                                     @if ($historial)
                                                         @foreach ($historial as $obj)
                                                             <tr>
-                                                                <td>{{ date('d/m/Y', strtotime($obj->created_at)) }}</td>
+                                                                <td>{{ date('d/m/Y', strtotime($obj->created_at)) }}
+                                                                </td>
                                                                 @if ($obj->estado)
                                                                     <td>{{ $obj->estado->nombre }}</td>
                                                                 @else
@@ -694,6 +722,16 @@
                         <label for="exampleFormControlTextarea786" class="form-label">Fecha aproximada de
                             finalización</label>
                         <input type="date" wire:model.defer="fecha_fin" class="form-control">
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Propietario</label>
+                        <select class="form-select" wire:model.defer="propietario_id"
+                            aria-label="Default select Project Category">
+                            @foreach ($propietarios as $obj)
+                                <option value="{{ $obj->id }}">{{ $obj->nombre }}</option>
+                            @endforeach
+                        </select>
                     </div>
                 </div>
                 <div class="modal-footer">

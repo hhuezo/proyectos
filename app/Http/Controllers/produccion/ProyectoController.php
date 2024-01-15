@@ -15,6 +15,9 @@ class ProyectoController extends Controller
     }
     public function index()
     {
+        //$proyecto = Proyecto::findOrFail(264);
+
+
         return view('produccion.proyecto.index');
     }
 

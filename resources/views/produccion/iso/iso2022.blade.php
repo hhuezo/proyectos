@@ -54,7 +54,7 @@
                                 class="icofont-check fa-lg"></i></span>
                         <div class="flex-fill ms-3">
                             <div class="mb-1"><strong><a
-                                        href="{{ asset('iso/formatos/ESA-SGC-P5-F4-FODA+ANALISIS DE RIESGO DE INNOVACION Y DESARROLLO.xlsx') }}">ESA-SGC-P5-F4-FODA+ANALISIS
+                                        href="{{ asset('iso/formatos/FODA+ANALISIS DE RIESGO DE INNOVACION Y DESARROLLO I+D.xlsx') }}">ESA-SGC-P5-F4-FODA+ANALISIS
                                         DE RIESGO DE INNOVACION Y DESARROLLO</a></strong></div>
                         </div>
                     </div>
@@ -63,7 +63,7 @@
         </div>
 
         <br>
-        <div class="card">
+        {{-- <div class="card">
             <div class="card-header py-3">
                 <h6 class="mb-0 fw-bold ">SFG-153 MATRIZ DE RIESGO I+D COVID19</h6>
             </div>
@@ -106,7 +106,7 @@
             </div>
         </div>
 
-        <br>
+        <br>--}}
         <div class="card">
             <div class="card-header py-3">
                 <h6 class="mb-0 fw-bold "></h6>

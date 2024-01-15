@@ -286,6 +286,13 @@
                     </div>
 
 
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                        <div class="mb-3" style="text-align: left">
+                            <input type="checkbox" wire:model.defer="usuario_base_datos" {{$usuario_base_datos == 1 ? 'checked':''}}>
+                            <label class="form-label">Usuario de base de datos</label>
+                        </div>
+                    </div>
+
                 </div>
 
                 <div class="modal-footer">

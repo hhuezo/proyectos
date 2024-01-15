@@ -3,6 +3,7 @@
 namespace App\Http\Livewire;
 
 use App\Actividad;
+use App\catalogo\Propietario;
 use App\CategoriaTicket;
 use Livewire\Component;
 use App\Estado;
@@ -16,10 +17,10 @@ use Carbon\Carbon;
 class Proyectos extends Component
 {
     public $id_proyecto = 0, $estado_id = 2, $nombre, $descripcion, $busqueda, $busqueda_actividad, $ponderacion_proyecto, $avance_proyecto;
-    public $proyectos, $id_unidad, $actividades,$historial, $tipo = 1, $finalizado = 0, $modificado = 0;
+    public $proyectos, $id_unidad, $actividades,$historial, $tipo = 1, $finalizado = 0, $modificado = 0,$fecha_inicio_proyecto,$fecha_fin_proyecto;
 
     public $id_actividad, $numero_ticket = 0, $ponderacion = 0.01, $descripcion_actividad,
-        $fecha_inicio, $categoria_id, $estado_actividad_id, $prioridad_id, $prioridad, $fecha_fin, $forma = "NO APLICA", $users_id, $avance;
+        $fecha_inicio, $categoria_id, $estado_actividad_id, $prioridad_id, $prioridad, $fecha_fin, $forma = "NO APLICA", $users_id, $avance, $propietario_id = 1;
 
 
     public $tab1 = 1, $tab2 = 0;
@@ -61,6 +62,7 @@ class Proyectos extends Component
                 'proyectos.prioridad',
                 'proyectos.fecha_inicio',
                 'proyectos.fecha_fin',
+                'proyectos.propietario_id',
                 \DB::raw('(select ifnull(sum((act.porcentaje/100) * act.ponderacion),0) from actividades act where act.proyecto_id = proyectos.id) as avance')
             )
             ->where('proyectos.unidad_id', '=', $this->id_unidad)
@@ -73,7 +75,7 @@ class Proyectos extends Component
             ->orderBy('proyectos.prioridad')
             ->orderBy('proyectos.id', 'desc')
             ->get();
-
+         //   dd($this->proyectos);
 
         if ($this->id_proyecto != 0) {
             $this->actividades = Actividad::where('proyecto_id', '=', $this->id_proyecto)
@@ -85,6 +87,8 @@ class Proyectos extends Component
             $this->historial = ProyectoHistorial::where('proyecto_id','=',$this->id_proyecto)->get();
         }
 
+        $propietarios = Propietario::where('activo','=',1)->get();
+
         $categorias = CategoriaTicket::where('unidad_id', '=', $this->id_unidad)->get();
         $prioridades = PrioridadTicket::get();
         $usuarios = User::where('id', '>', 1)->where('unidad_id', '=', $this->id_unidad)->get();
@@ -92,7 +96,7 @@ class Proyectos extends Component
 
         $colors = ["", "#0dcaf0", "#F19828", "#0dcaf0", "#198754", "##0d6efd",  "#0d6efd", "#dc3545", "#dc3545"];
 
-        return view('livewire.proyectos', compact('estados', 'colors', 'unidad', 'categorias', 'prioridades', 'usuarios', 'estados_actividad'));
+        return view('livewire.proyectos', compact('estados', 'colors', 'unidad', 'categorias', 'prioridades', 'usuarios', 'estados_actividad','propietarios'));
     }
 
 
@@ -122,6 +126,7 @@ class Proyectos extends Component
             'descripcion.required' => 'La descripcion es requerida',
             'fecha_inicio.required' => 'La fecha de inicio es requerida',
             'fecha_fin.required' => 'La fecha final es requerida',
+            'propietario_id. required' => 'El Propietario es requerido',
         ];
         $validateData = $this->validate([
             'estado_id' => 'required',
@@ -129,6 +134,7 @@ class Proyectos extends Component
             'descripcion' => 'required',
             'fecha_inicio' => 'required',
             'fecha_fin' => 'required',
+            'propietario_id' => 'required',
         ], $messages);
 
         $proyecto = new Proyecto();
@@ -139,6 +145,7 @@ class Proyectos extends Component
         $proyecto->avance = 0;
         $proyecto->fecha_inicio = $this->fecha_inicio;
         $proyecto->fecha_fin = $this->fecha_fin;
+        $proyecto->propietario_id = $this->propietario_id;
         $proyecto->save();
         session()->flash('message', 'Registro creado correctamente');
 
@@ -163,7 +170,7 @@ class Proyectos extends Component
 
     public function edit($id)
     {
-        $proyecto = Proyecto::select('id', 'nombre', 'descripcion', 'estado_id', 'prioridad', 'fecha_inicio', 'fecha_fin')->findOrFail($id);
+        $proyecto = Proyecto::select('id', 'nombre', 'descripcion', 'estado_id', 'prioridad', 'fecha_inicio', 'fecha_fin','propietario_id')->findOrFail($id);
 
         $this->actividades = Actividad::where('proyecto_id', '=', $id)->where('estado_id', '<>', 7)->get();
 
@@ -181,14 +188,15 @@ class Proyectos extends Component
         $this->nombre = $proyecto->nombre;
         $this->descripcion = $proyecto->descripcion;
         $this->estado_id = $proyecto->estado_id;
+        $this->propietario_id = $proyecto->propietario_id;
 
         $this->avance_proyecto = $porcentaje;
         $this->busqueda_actividad = "";
         $this->finalizado = $proyecto->finalizado;
         $this->prioridad = $proyecto->prioridad;
 
-        $this->fecha_inicio = $proyecto->fecha_inicio;
-        $this->fecha_fin = $proyecto->fecha_fin;
+        $this->fecha_inicio_proyecto = $proyecto->fecha_inicio;
+        $this->fecha_fin_proyecto = $proyecto->fecha_fin;
 
         $this->modificado = 0;
     }
@@ -347,12 +355,12 @@ class Proyectos extends Component
         $historial->nombre = $proyecto->nombre;
         $historial->descripcion = $proyecto->descripcion;
         $historial->prioridad = $proyecto->prioridad;
-        if ($proyecto->fecha_inicio != null) {
-            $historial->fecha_inicio = $proyecto->fecha_inicio;
+        if ($proyecto->fecha_inicio_proyecto != null) {
+            $historial->fecha_inicio = $proyecto->fecha_inicio_proyecto;
         }
 
-        if ($proyecto->fecha_fin != null) {
-            $historial->fecha_fin = $proyecto->fecha_fin;
+        if ($proyecto->fecha_fin_proyecto != null) {
+            $historial->fecha_fin = $proyecto->fecha_fin_proyecto;
         }
         $historial->users_id = auth()->user()->id;
         $historial->avance = $proyecto->avance;
@@ -387,8 +395,9 @@ class Proyectos extends Component
         $proyecto->descripcion = $this->descripcion;
         $proyecto->estado_id = $this->estado_id;
         $proyecto->prioridad = $this->prioridad;
-        $proyecto->fecha_inicio = $this->fecha_inicio;
-        $proyecto->fecha_fin = $this->fecha_fin;
+        $proyecto->fecha_inicio = $this->fecha_inicio_proyecto;
+        $proyecto->fecha_fin = $this->fecha_fin_proyecto;
+        $proyecto->propietario_id = $this->propietario_id;
         $proyecto->update();
 
 
@@ -398,11 +407,12 @@ class Proyectos extends Component
         $historial->nombre = $this->nombre;
         $historial->descripcion = $this->descripcion;
         $historial->prioridad = $this->prioridad;
-        $historial->fecha_inicio = $this->fecha_inicio;
-        $historial->fecha_fin = $this->fecha_fin;
+        $historial->fecha_inicio = $this->fecha_inicio_proyecto;
+        $historial->fecha_fin = $this->fecha_fin_proyecto;
         $historial->users_id = auth()->user()->id;
         $historial->avance = $proyecto->avance;
         $historial->unidad_id = auth()->user()->unidad_id;
+        $historial->propietario_id = $this->propietario_id;
         $historial->save();
 
 
