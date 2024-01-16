@@ -10,11 +10,11 @@ class DashboardController extends Controller
     public function index()
     {
 
+
+
         $data = Grafica::findOrFail(1);
         $jsonData  = $data->valor;
         $grafica = json_decode($jsonData, true);
-
-
 
 
         $encabezados = [];
@@ -49,7 +49,7 @@ class DashboardController extends Controller
 
                     // Agregar el valor al arreglo de la fila actual si no es nulo
                     if ($valor !== null) {
-                        $filaActual["data"][] = $valor +0;
+                        $filaActual["data"][] = $valor + 0;
                     }
                 }
 
@@ -59,7 +59,7 @@ class DashboardController extends Controller
         }
 
 
-        return view('dashboard.index', compact('grafica', 'data_grafico', 'encabezados'));
+        return view('dashboard.index', compact('data','grafica', 'data_grafico', 'encabezados'));
     }
 
     public function create()
@@ -113,7 +113,11 @@ class DashboardController extends Controller
 
     public function show($id)
     {
-        //
+        $data = Grafica::findOrFail(1);
+        $jsonData  = $data->valor;
+        $grafica = json_decode($jsonData, true);
+
+        return view('dashboard.show', compact('grafica'));
     }
 
     public function edit($id)
