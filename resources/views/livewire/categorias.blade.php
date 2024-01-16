@@ -107,6 +107,25 @@
 
                         </div>
 
+                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                            <div class="mb-3" style="text-align: left">
+                                <label class="form-label">Unidad</label>
+                                <select wire:model.defer="unidad_id" class="form-select">
+                                    <option value="">Seleccione</option>
+                                    @foreach ($unidades as $obj)
+                                        <option value="{{ $obj->id }}">{{ $obj->nombre }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+
+
+
+
+
+
+
+
 
 
                     </div>
@@ -150,6 +169,18 @@
                                 <input type="text" wire:model.defer="nombre" class="form-control">
                             </div>
 
+                        </div>
+
+                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                            <div class="mb-3" style="text-align: left">
+                                <label class="form-label">Unidad</label>
+                                <select wire:model.defer="unidad_id" class="form-select">
+                                    <option value="">Seleccione</option>
+                                    @foreach ($unidades as $obj)
+                                        <option value="{{ $obj->id }}">{{ $obj->nombre }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
                         </div>
 
 

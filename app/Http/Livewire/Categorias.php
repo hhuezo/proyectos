@@ -3,6 +3,7 @@
 namespace App\Http\Livewire;
 
 use App\CategoriaTicket;
+use App\Unidad;
 use Livewire\Component;
 
 class Categorias extends Component
@@ -13,7 +14,8 @@ class Categorias extends Component
     public function render()
     {
         $categorias = CategoriaTicket::where('nombre', 'LIKE', '%' . $this->busqueda . '%')->get();
-        return view('livewire.categorias',compact('categorias'));
+        $unidades = Unidad::whereNotIn('id', [0,7,8])->get();
+        return view('livewire.categorias',compact('categorias','unidades'));
     }
 
     public function create()
@@ -33,7 +35,7 @@ class Categorias extends Component
             'nombre' => 'required',
         ], $messages);
 
-        $this->unidad_id = auth()->user()->unidadId();
+        //$this->unidad_id = auth()->user()->unidadId();
 
         CategoriaTicket::create([
             'codigo' => $this->codigo,
@@ -54,8 +56,8 @@ class Categorias extends Component
         $this->id_categoria =  $categoria->id;
         $this->codigo =  $categoria->codigo;
         $this->nombre =  $categoria->nombre;
-        //$this->unidad_id =  $categoria->unidad_id;
-        $this->unidad_id = auth()->user()->unidadId();
+        $this->unidad_id =  $categoria->unidad_id;
+        //$this->unidad_id = auth()->user()->unidadId();
 
     }
 
