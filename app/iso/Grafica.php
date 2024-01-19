@@ -14,8 +14,11 @@ class Grafica extends Model
 
 
     protected $fillable = [
-        'grafica_id',
-        'codigo',
-        'valor'
+        'tipo_grafica_id',
+        'titulo',
+        'valor',
+        'descripcion',
+        'unidades_id',
+        'linia_estandar'
     ];
 }

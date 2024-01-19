@@ -259,8 +259,13 @@
                             <i class="icofont-notepad"></i><span>Inventario despliegues</span></a>
                     </li>
                 @endif
-
-
+                @if (auth()->user()->rol_id == 1 || auth()->user()->unidad_id == 4)
+                <li class="collapsed">
+                    <a class="m-link {{ Request::segment(2) == 'project' ? 'active' : '' }}"
+                        href="{{ url('dashboard') }}">
+                        <i class="fa fa-line-chart"></i><span>Indicadores</span></a>
+                </li>
+                @endif
                 <?php
                 /*
             <li class=" {{ Request::is('admin/auth/user') || Request::is('admin/auth/role')  || Request::is('admin/auth/role/create') ? '' : ' collapsed' }}">
@@ -382,12 +387,15 @@
                         <label class="form-check-label" for="theme-rtl">Enable RTL Mode!</label>
                     </div>
                 </li>
-            </ul>-->
+            </ul>
 
-            <!-- Menu: menu collepce btn -->
-            <button type="button" class="btn btn-link sidebar-mini-btn text-light">
+           <button type="button" class="btn btn-link sidebar-mini-btn text-light">
                 <span class="ms-2"><i class="icofont-bubble-right"></i></span>
             </button>
+        -->
+
+            <!-- Menu: menu collepce btn -->
+
 
         </div>
     </div>

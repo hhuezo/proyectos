@@ -60,22 +60,6 @@
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     <figure>
         <div class='buttons'>
             {{-- recorrido de botones de meses --}}
@@ -96,7 +80,7 @@
 
 
         <div class="row col-12">
-            <div class="col-9 card">
+            <div class="col-9 card"  style="max-height: 600px; overflow-y: auto;">
                 <div id="container"></div>
             </div>
             <div class="col-3 card">
@@ -467,7 +451,15 @@
     </figure>
 
 
-
+    @foreach ($graficas as $grafica)
+        <div class="tab-pane fade show active" id="nav-dashboard" role="tabpanel">
+            <div class="row col-12 g-3">
+                <div class="card">
+                    <div id="container{{ $grafica->id }}"></div>
+                </div>
+            </div>
+        </div>
+    @endforeach
 
 
 
@@ -658,7 +650,8 @@
             var area = document.getElementById('area_categoria').value;
 
             $.ajax({
-                url: "{{ url('/home/soporte_activos_categoria') }}/" + sucursal + "/" + estado + "/" + categoria + "/" +
+                url: "{{ url('/home/soporte_activos_categoria') }}/" + sucursal + "/" + estado + "/" + categoria +
+                    "/" +
                     area,
                 method: 'GET',
                 success: function(data) {
@@ -952,7 +945,92 @@
         }
     </script>
 
+    <script>
+        var graficas = @json($graficas);
 
+        for (var i = 0; i < graficas.length; i++) {
+
+
+
+
+            var plotOptions = {};
+
+
+            if (graficas[i].tipo_grafico === "column") {
+                console.log(graficas[i].tipo_grafico);
+                plotOptions = {
+                    column: {
+                        pointPadding: 0.2,
+                        borderWidth: 0,
+                        dataLabels: {
+                            enabled: true,
+                            format: '{point.y}', // Muestra el valor de 'y' en la columna
+                            style: {
+                                fontWeight: 'bold'
+                            }
+                        }
+                    }
+                };
+            } else {
+                plotOptions = {
+                    pie: {
+                        allowPointSelect: true,
+                        cursor: 'pointer',
+                        dataLabels: {
+                            enabled: true,
+                            format: graficas[i].encabezado[i] +
+                            ' - {point.y}', // Muestra el valor de 'y' seguido por el nombre de la columna
+                            style: {
+                                color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black'
+                            }
+                        }
+                    }
+                };
+            }
+
+
+
+
+
+
+
+            Highcharts.chart('container' + graficas[i].id, {
+                chart: {
+                    //type: 'column'
+                    type: graficas[i].tipo_grafico
+                },
+                title: {
+                    text: graficas[i].titulo,
+                    align: 'left'
+                },
+                subtitle: {
+                    text: '',
+                    align: 'left'
+                },
+                xAxis: {
+                    categories: graficas[i].encabezado,
+                    crosshair: true,
+                    accessibility: {
+                        description: 'Countries'
+                    }
+                },
+                yAxis: {
+                    min: 0,
+                    title: {
+                        text: graficas[i].descripcion
+                    }
+                },
+                tooltip: {
+                    valueSuffix: ''
+
+                },
+                plotOptions: plotOptions,
+
+
+                series: graficas[i].data_grafico
+            });
+        }
+    </script>
 
 
     <!-- Jquery Page Js -->

@@ -99,4 +99,5 @@ Route::resource('inventario_despliegues', 'catalogo\InventarioDespliegueControll
 
 
 //graficas
+Route::post('dashboard/update_grafica','DashboardController@update_grafica');
 Route::resource('dashboard','DashboardController');

@@ -102,8 +102,7 @@
                             <div class="col-lg-4 col-md-4 col-sm-12 col-sx-12">
                                 <div class="form-group">
                                     <label class="form-label"><strong>Fecha inicio</strong></label>
-                                    <input type="date" name="fecha_inicio" value="{{ date('Y-m-d') }}"
-                                        class="form-control">
+                                    <input type="date" name="fecha_inicio" value="{{date('Y-m-d')}}" class="form-control">
                                 </div>
                             </div>
                             <div class="col-lg-4 col-md-4 col-sm-12 col-sx-12">

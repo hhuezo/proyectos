@@ -4,243 +4,286 @@
 
 @section('content')
 
-    <link rel="stylesheet" href="{{ asset('jqwidgets/jqwidgets/styles/jqx.base.css') }}" type="text/css" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
-    <meta name="viewport" content="width=device-width, initial-scale=1 maximum-scale=1 minimum-scale=1" />
-
-    <script type="text/javascript" src="{{ asset('jqwidgets/jqwidgets/jqxcore.js') }}"></script>
-    <script type="text/javascript" src="{{ asset('jqwidgets/jqwidgets/jqxdata.js') }}"></script>
-    <script type="text/javascript" src="{{ asset('jqwidgets/jqwidgets/jqxdata.export.js') }}"></script>
-    <script type="text/javascript" src="{{ asset('jqwidgets/jqwidgets/jqxbuttons.js') }}"></script>
-    <script type="text/javascript" src="{{ asset('jqwidgets/jqwidgets/jqxscrollbar.js') }}"></script>
-    <script type="text/javascript" src="{{ asset('jqwidgets/jqwidgets/jqxmenu.js') }}"></script>
-    <script type="text/javascript" src="{{ asset('jqwidgets/jqwidgets/jqxgrid.js') }}"></script>
-    <script type="text/javascript" src="{{ asset('jqwidgets/jqwidgets/jqxgrid.edit.js') }}"></script>
-    <script type="text/javascript" src="{{ asset('jqwidgets/jqwidgets/jqxgrid.selection.js') }}"></script>
-    <script type="text/javascript" src="{{ asset('jqwidgets/jqwidgets/jqxgrid.columnsresize.js') }}"></script>
-    <script type="text/javascript" src="{{ asset('jqwidgets/jqwidgets/jqxgrid.export.js') }}"></script>
-    <script type="text/javascript" src="{{ asset('jqwidgets/scripts/demos.js') }}"></script>
-
-
     <style>
-        .highcharts-figure,
-        .highcharts-data-table table {
-            min-width: 310px;
-            max-width: 800px;
-            margin: 1em auto;
-        }
-
-        #container {
-            height: 400px;
-        }
-
-        .highcharts-data-table table {
-            font-family: Verdana, sans-serif;
-            border-collapse: collapse;
-            border: 1px solid #ebebeb;
-            margin: 10px auto;
-            text-align: center;
-            width: 100%;
-            max-width: 500px;
-        }
-
-        .highcharts-data-table caption {
-            padding: 1em 0;
-            font-size: 1.2em;
-            color: #555;
-        }
-
-        .highcharts-data-table th {
-            font-weight: 600;
-            padding: 0.5em;
-        }
-
-        .highcharts-data-table td,
-        .highcharts-data-table th,
-        .highcharts-data-table caption {
-            padding: 0.5em;
-        }
-
-        .highcharts-data-table thead tr,
-        .highcharts-data-table tr:nth-child(even) {
-            background: #f8f8f8;
-        }
-
-        .highcharts-data-table tr:hover {
-            background: #f1f7ff;
+        .highcharts-credits {
+            display: none;
         }
     </style>
 
+    <div class="mb-3">
+        <div class="body d-flex py-3">
+            <div class="container-xxl">
 
-    <script type="text/javascript">
-        $(document).ready(function() {
+                <div class="row align-item-center">
 
-
-
-            $("#enviarDatos").jqxButton({
-                theme: theme
-            });
-
-            // Manejar clic del botón "Enviar Datos"
-            $("#enviarDatos").click(function() {
-                $.ajax({
-                    url: "{{ url('dashboard') }}",
-                    type: "POST",
-                    data: {
-                        "_token": "{{ csrf_token() }}",
-                        "cellValues": cellValues
-                    },
-                    success: function(response) {
-                        console.log(response);
-                    },
-                    error: function(error) {
-                        console.error(error);
-                    }
-                    // No es necesario el bloque 'complete' aquí, ya que no estamos actualizando la cuadrícula
-                });
-            });
+                    @if ($graficas->count() > 0)
 
 
+                        @foreach ($graficas as $grafica)
+                            <div class="col-xxl-12 col-xl-12 col-lg-12 col-md-12">
 
 
+                                <div class="tab-content mt-2">
+                                    <div
+                                        class="card-header py-3 no-bg bg-transparent d-flex align-items-center px-0 justify-content-between border-bottom flex-wrap">
+                                        <button class="btn btn-primary"
+                                            onclick="sendGetRequest({{ $grafica->id }})">configuracion</button>
+                                        <div class="col-auto d-flex w-sm-100">
+                                                <button class="btn btn-primary  float-right"  data-bs-toggle="modal" onclick="get_edit_grafico({{$grafica->id}})"
+                                                data-bs-target="#modal-edit-grafico"><i
+                                                        class="fa fa-edit"></i></button>
+
+                                            &nbsp;&nbsp;
+                                            <button class="btn btn-danger  float-right" data-bs-toggle="modal"
+                                                data-bs-target="#modal-delete-{{ $grafica->id }}"><i
+                                                    class="fa fa-trash"></i></button>
+
+                                        </div>
+                                    </div>
 
 
 
-            var datos = <?php echo json_encode($grafica); ?>;
-            //console.log("hola", @json($grafica));
-            var cellValues = {}; // Cambié a un objeto en lugar de un array
-
-            // renderer for grid cells.
-            var numberrenderer = function(row, column, value) {
-                return '<div style="text-align: center; margin-top: 5px;">' + (1 + value) + '</div>';
-            }
-
-            // Function to update cell value and store in the object
-            var updateCellValue = function(rowid, column, value) {
-                var cellKey = rowid + '-' + column;
-                cellValues[cellKey] = value;
-                //console.log("hola ",cellValues);
-            }
-
-            // create Grid datafields and columns arrays.
-            var datafields = [];
-            var columns = [];
-            for (var i = 0; i < 26; i++) {
-                var text = String.fromCharCode(65 + i);
-                if (i == 0) {
-                    var cssclass = 'jqx-widget-header';
-                    if (theme != '') cssclass += ' jqx-widget-header-' + theme;
-                    columns[columns.length] = {
-                        pinned: true,
-                        exportable: false,
-                        text: "",
-                        columntype: 'number',
-                        cellclassname: cssclass,
-                        cellsrenderer: numberrenderer
-                    };
-                }
-                datafields[datafields.length] = {
-                    name: text
-                };
-                columns[columns.length] = {
-                    text: text,
-                    datafield: text,
-                    width: 60,
-                    align: 'center'
-                };
-            }
-
-            var source = {
-                unboundmode: true,
-                totalrecords: 25,
-                datafields: datafields,
-                updaterow: function(rowid, rowdata, commit) {
-                    for (var i = 0; i < columns.length; i++) {
-                        updateCellValue(rowid, columns[i].datafield, rowdata[columns[i].datafield]);
-                    }
-                    commit(true);
-
-                }
-            };
-
-            var dataAdapter = new $.jqx.dataAdapter(source);
-
-            // initialize jqxGrid
-            $("#grid").jqxGrid({
-                width: getWidth('Grid'),
-                source: dataAdapter,
-                editable: true,
-                columnsresize: true,
-                selectionmode: 'multiplecellsadvanced',
-                columns: columns
-            });
-
-            $("#excelExport").jqxButton({
-                theme: theme
-            });
-
-            // Llenar todas las celdas con los valores de datos
-            for (var row = 0; row < 25; row++) {
-                for (var col = 1; col <= 26; col++) {
-                    var columnName = columns[col].datafield;
-                    var cellKey = row + '-' + columnName;
-
-                    // Obtener el valor correspondiente a la celda desde datos
-                    var cellValue = datos[cellKey];
-
-                    // Asignar el valor a la celda en la cuadrícula
-                    $("#grid").jqxGrid('setcellvalue', row, columnName, cellValue);
-                }
-            }
-
-            // Manejar el evento 'bindingcomplete' para llenar las celdas después de la inicialización
-            $("#grid").on('bindingcomplete', function() {
-                console.log("hola");
-            });
 
 
-            $("#excelExport").click(function() {
-                $("#grid").jqxGrid('exportdata', 'xls', 'jqxGrid', false);
-            });
+                                    <div class="tab-pane fade show active" id="nav-dashboard" role="tabpanel">
+                                        <div class="row col-12 g-3">
+                                            <div class="card">
+                                                <div id="container{{ $grafica->id }}"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="tab-pane fade" id="nav-config{{ $grafica->id }}" role="tabpanel">
+                                        <div class="row col-8 g-3">
+                                            <div class="card">
+
+                                            </div>
+                                        </div>
 
 
-        });
-    </script>
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-2FX5PV9DNT">
-        < /> <
-        script >
-            window.dataLayer = window.dataLayer || [];
 
-        function gtag() {
-            dataLayer.push(arguments);
-        }
-        gtag('js', new Date());
-        gtag('config', 'G-2FX5PV9DNT');
-    </script>
+                                    </div>
 
+                                </div>
 
-    <div id='jqxWidget'>
-        <div id="grid"></div>
-        <div style='margin-top: 20px;'>
-            <div style='float: left;'>
-                <input type="button" value="Export to Excel" id='excelExport' />
-            </div>
+                                @include('dashboard.modal')
 
-            <div style='float: left; margin-left: 10px;'>
-                <input type="button" value="Enviar Datos" id='enviarDatos' />
+                            </div>
+                            <div>&nbsp;</div>
+                        @endforeach
+                    @endif
+                </div>
             </div>
         </div>
+
     </div>
-    <figure class="highcharts-figure">
-        <div id="container"></div>
-        <p class="highcharts-description">
-            Chart showing browser market shares. Clicking on individual columns
-            brings up more detailed data. This chart makes use of the drilldown
-            feature in Highcharts to easily switch between datasets.
-        </p>
-    </figure>
 
 
+    <div class="offcanvas offcanvas-end hide" tabindex="-1" id="offcanvas_setting" aria-labelledby="offcanvas_setting"
+        style="visibility: hidden; width:800px">
+        <div class="offcanvas-header">
+            <h5 class="offcanvas-title">Configuración</h5>
+            <button type="button" class="btn-close" onclick="hideToggleOffcanvas()" data-bs-dismiss="offcanvas"
+                aria-label="Close"></button>
+        </div>
+        <div class="offcanvas-body d-flex flex-column">
+
+            <div class="mb-4 flex-grow-1" id="div_config">
+
+            </div>
+
+        </div>
+    </div>
+
+
+    <div class="modal fade" id="modal-nuevo-grafico" tabindex="-1" aria-labelledby="exampleModalLgLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <form method="POST" action="{{ url('dashboard') }}">
+                @csrf
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title  fw-bold" id="leaveaddLabel">Nuevo grafico</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row g-3">
+                            <div class="col-md-12">
+                                <div class="form-group row">
+                                    <label class="form-label col-md-3" align="right"><strong>Tipo
+                                            gráfico</strong></label>
+                                    <div class="col-9">
+                                        <select name="tipo_grafica_id" required class="form-select">
+                                            <option value="1">Barra</option>
+                                            {{-- <option value="2">Pastel</option> --}}
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div>&nbsp;</div>
+                        <div class="row g-3">
+                            <div class="col-md-12">
+                                <div class="form-group row">
+                                    <label class="form-label col-md-3" align="right"><strong>Título</strong></label>
+                                    <div class="col-9">
+                                        <input type="text" name="titulo" required class="form-control">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div>&nbsp;</div>
+                        <div class="row g-3">
+                            <div class="col-md-12">
+                                <div class="form-group row">
+                                    <label class="form-label col-md-3" align="right"><strong>Descripción para eje
+                                            Y</strong></label>
+                                    <div class="col-9">
+                                        <input type="text" name="descripcion" required class="form-control">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div>&nbsp;</div>
+
+                        <div class="row g-3">
+                            <div class="col-md-12">
+                                <div class="form-group row">
+                                    <label class="form-label col-md-3" align="right"><strong>Linea estandar establecida
+                                            Y</strong></label>
+                                    <div class="col-9">
+                                        <input type="number" name="linea_estandar" step="0.01" class="form-control">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div>&nbsp;</div>
+
+                    </div>
+                    <div class="modal-footer">
+                        {{-- <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Done</button> --}}
+                        <button type="submit" class="btn btn-primary">Aceptar</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+
+
+    <div class="modal fade" id="modal-edit-grafico" tabindex="-1" aria-labelledby="exampleModalLgLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <form method="POST"  action="{{ url('dashboard/update_grafica') }}">
+                @csrf
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title  fw-bold" id="leaveaddLabel">Modificar grafico</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row g-3">
+                            <div class="col-md-12">
+                                <div class="form-group row">
+                                    <label class="form-label col-md-3" align="right"><strong>Tipo
+                                            gráfico</strong></label>
+                                    <div class="col-9">
+                                        <select name="tipo_grafica_id" required class="form-select">
+                                            <option value="1">Barra</option>
+                                            {{-- <option value="2">Pastel</option> --}}
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div>&nbsp;</div>
+                        <div class="row g-3">
+                            <div class="col-md-12">
+                                <div class="form-group row">
+                                    <label class="form-label col-md-3" align="right"><strong>Título</strong></label>
+                                    <div class="col-9">
+                                        <input type="hidden" name="id" id="id_grafico" class="form-control">
+                                        <input type="text" name="titulo" id="titulo" required class="form-control">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div>&nbsp;</div>
+                        <div class="row g-3">
+                            <div class="col-md-12">
+                                <div class="form-group row">
+                                    <label class="form-label col-md-3" align="right"><strong>Descripción para eje
+                                            Y</strong></label>
+                                    <div class="col-9">
+                                        <input type="text" name="descripcion" id="descripcion" required class="form-control">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div>&nbsp;</div>
+
+                        <div class="row g-3">
+                            <div class="col-md-12">
+                                <div class="form-group row">
+                                    <label class="form-label col-md-3" align="right"><strong>Linea estandar establecida
+                                            Y</strong></label>
+                                    <div class="col-9">
+                                        <input type="number" name="linea_estandar" id="linea_estandar" step="0.01" class="form-control">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div>&nbsp;</div>
+
+                    </div>
+                    <div class="modal-footer">
+                        {{-- <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Done</button> --}}
+                        <button type="submit" class="btn btn-primary">Aceptar</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+
+
+
+
+
+    <div class="contenedor"
+        style="width: 90px;
+        height: 240px;
+        position: absolute;
+        right: 0px;
+        bottom: 0px;">
+        <button class="botonF1" data-bs-toggle="modal" data-bs-target="#modal-nuevo-grafico"
+            style=" width: 60px;
+        height: 60px;
+        border-radius: 100%;
+        background: #484c7f;
+        right: 0;
+        bottom: 0;
+        position: absolute;
+        margin-right: 16px;
+        margin-bottom: 16px;
+        border: none;
+        outline: none;
+        color: #FFF;
+        font-size: 36px;
+        box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
+        transition: .3s;">
+            <span>+</span>
+        </button>
+
+    </div>
+
+    {{-- <script src="{{ asset('assets/jquery.min.js') }}"></script> --}}
     <script src="https://code.highcharts.com/highcharts.js"></script>
     <script src="https://code.highcharts.com/modules/data.js"></script>
     <script src="https://code.highcharts.com/modules/drilldown.js"></script>
@@ -248,56 +291,171 @@
     <script src="https://code.highcharts.com/modules/export-data.js"></script>
     <script src="https://code.highcharts.com/modules/accessibility.js"></script>
 
+
+
     <script>
-        Highcharts.chart('container', {
-    chart: {
-        type: 'column'
-    },
-    title: {
-        text: 'Corn vs wheat estimated production for 2020',
-        align: 'left'
-    },
-    subtitle: {
-        text:
-            'Source: <a target="_blank" ' +
-            'href="https://www.indexmundi.com/agriculture/?commodity=corn">indexmundi</a>',
-        align: 'left'
-    },
-    xAxis: {
-        categories: @json($encabezados),
-        crosshair: true,
-        accessibility: {
-            description: 'Countries'
-        }
-    },
-    yAxis: {
-        min: 0,
-        title: {
-            text: '1000 metric tons (MT)'
-        }
-    },
-    tooltip: {
-        valueSuffix: ' (1000 MT)'
-    },
-    plotOptions: {
-        column: {
-            pointPadding: 0.2,
-            borderWidth: 0
-        }
-    },
-    series: @json($data_grafico)
+        $(document).ready(function() {
+            hideToggleOffcanvas();
+        });
 
-    // [
-    //     {
-    //         name: 'Corn',
-    //         data: [406292, 260000, 107000, 68300, 27500, 14500]
-    //     },
-    //     {
-    //         name: 'Wheat',
-    //         data: [51086, 136000, 5500, 141000, 107180, 77000]
-    //     }
-    // ]
-});
+        function sendGetRequest(id) {
+            //var div_config = "#div_config" + id;
+            var url = "{{ url('dashboard') }}/" + id;
+            $.get(url, function(data) {
+                //console.log(data);
+                $("#div_config").html(data);
+            });
 
+            // $.get(url, function(data) {
+            //     //console.log(data);
+            //     $("#div_config").html(data);
+            // });
+
+            toggleOffcanvas();
+        }
+
+
+        function get_edit_grafico(id)
+        {
+            var url = "{{ url('dashboard') }}/" + id+'/edit';
+            $.get(url, function(data) {
+                document.getElementById('titulo').value = data.titulo;
+                document.getElementById('id_grafico').value = data.id;
+                document.getElementById('descripcion').value = data.descripcion;
+                document.getElementById('linea_estandar').value = data.linea_estandar;
+            });
+        }
     </script>
+
+
+
+    <script>
+        var graficas = @json($graficas);
+
+        for (var i = 0; i < graficas.length; i++) {
+
+            var plotOptions = {};
+
+
+            if (graficas[i].tipo_grafico === "column") {
+                console.log(graficas[i].tipo_grafico);
+                plotOptions = {
+                    column: {
+                        pointPadding: 0.2,
+                        borderWidth: 0,
+                        dataLabels: {
+                            enabled: true,
+                            format: '{point.y}', // Muestra el valor de 'y' en la columna
+                            style: {
+                                fontWeight: 'bold'
+                            }
+                        }
+                    }
+                };
+            } else {
+                plotOptions = {
+                    pie: {
+                        allowPointSelect: true,
+                        cursor: 'pointer',
+                        dataLabels: {
+                            enabled: true,
+                            format: graficas[i].encabezado[i] +
+                                ' - {point.y}', // Muestra el valor de 'y' seguido por el nombre de la columna
+                            style: {
+                                color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black'
+                            }
+                        }
+                    }
+                };
+            }
+
+
+
+
+
+
+
+            Highcharts.chart('container' + graficas[i].id, {
+                chart: {
+                    //type: 'column'
+                    type: graficas[i].tipo_grafico
+                },
+                title: {
+                    text: graficas[i].titulo,
+                    align: 'left'
+                },
+                subtitle: {
+                    text: '',
+                    align: 'left'
+                },
+                xAxis: {
+                    categories: graficas[i].encabezado,
+                    crosshair: true,
+                    accessibility: {
+                        description: 'Countries'
+                    }
+                },
+                yAxis: {
+                    min: 0,
+                    title: {
+                        text: graficas[i].descripcion
+                    },
+                    plotLines: graficas[i].linea_estandar > 0 ? [{
+                        color: 'red', // Color de la línea
+                        dashStyle: 'solid', // Estilo de la línea (puedes cambiarlo según tus preferencias)
+                        value: graficas[i].linea_estandar, // Valor del máximo permitido
+                        width: 2, // Grosor de la línea
+                        label: {
+                            text: 'Línea estándar establecida', // Etiqueta asociada a la línea
+                            align: 'right',
+                            x: -10
+                        }
+                    }] : undefined
+
+                },
+
+
+                tooltip: {
+                    valueSuffix: ''
+
+                },
+                plotOptions: plotOptions,
+
+
+                series: graficas[i].data_grafico
+            });
+        }
+    </script>
+
+    <script>
+        function toggleOffcanvas() {
+            // Obtén el elemento offcanvas por su id
+            var offcanvasElement = document.getElementById("offcanvas_setting");
+
+            // Agrega la clase "show" al offcanvas
+            offcanvasElement.classList.add("show");
+            if (offcanvasElement) {
+                offcanvasElement.style.display = "block";
+                offcanvasElement.style.visibility = "visible";
+            } else {
+                console.error("El elemento con el ID 'offcanvas_setting' no fue encontrado.");
+            }
+        }
+
+        function hideToggleOffcanvas() {
+            var offcanvasElement = document.getElementById("offcanvas_setting");
+            offcanvasElement.classList.add("hide");
+            if (offcanvasElement) {
+                offcanvasElement.style.display = "none";
+                offcanvasElement.style.visibility = "hide";
+            } else {
+                console.error("El elemento con el ID 'offcanvas_setting' no fue encontrado.");
+            }
+        }
+    </script>
+
+
+    <script src="{{ asset('assets/bundles/libscripts.bundle.js') }}"></script>
+    <script src="{{ asset('assets/bundles/dataTables.bundle.js') }}"></script>
+    <script src="{{ asset('js/template.js') }}"></script>
 @endsection
