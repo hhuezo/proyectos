@@ -46,7 +46,7 @@ class LoginController extends Controller
     }
 
     public function username()
-    {     
+    {
         return 'user_name';
     }
 
@@ -69,7 +69,7 @@ class LoginController extends Controller
         if (session()->has('redirect_to'))
             return session()->pull('redirect_to');
 
-        $usuarios = User::take(10)->get();
+        $usuarios = User::take(10)->where('unidad_id',auth()->user()->id)->get();
         session(['session_usuarios' => $usuarios]);
         return $this->redirectTo;
     }

@@ -3,16 +3,14 @@
 namespace App\Http\Controllers;
 
 use App\Actividad;
+use App\iso\Grafica;
 use App\snipeit\ActivosIso;
 use App\snipeit\VmFrecuenciaMantenimiento;
 use App\snipeit\VmMantenimiento;
-use App\TmpTotDsbActividadFinalizada;
-use App\TmpTotDsbActividadDesarrollo;
-use App\TmpDsbDato;
-use App\TmpDsbActividadDiaria;
 use App\Unidad;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
 
@@ -101,6 +99,81 @@ class HomeController extends Controller
             ->get();
 
 
+
+        //graficas dinamicas
+        $graficas = Grafica::where('unidades_id',6)->get();
+
+        $tipoGrafica = ["","column","pie"];
+
+        foreach ($graficas as $data) {
+
+            //$data = Grafica::findOrFail(1);
+            $jsonData  = $data->valor;
+            $grafica = json_decode($jsonData, true);
+
+
+            $encabezados = [];
+
+
+            // Iterar sobre las columnas B a Z
+            foreach (range('B', 'Z') as $letra) {
+
+                try {
+                    $encabezado = $grafica["0-$letra"];
+                } catch (Exception $e) {
+                }
+
+
+
+                // Verificar si el encabezado no es nulo antes de agregarlo al array
+                if ($encabezado !== null) {
+                    $encabezados[] = $encabezado;
+                }
+            }
+
+            $data_grafico = [];
+
+
+            // Iterar sobre las filas desde la 1
+            for ($fila = 1; $fila <= 24; $fila++) {
+                // Obtener el nombre de la fila actual
+
+                try {
+                    $nombreFila = $grafica["$fila-A"];
+                } catch (Exception $e) {
+                }
+
+                // Continuar solo si el nombre de la fila no es nulo
+                if ($nombreFila !== null) {
+                    // Inicializar un arreglo para la fila actual
+                    $filaActual = ["name" => $nombreFila, "data" => []];
+
+                    // Iterar sobre las columnas B a Z
+                    foreach (range('B', 'Z') as $letra) {
+
+                        try {
+                            // Obtener el valor de la celda actual
+                            $valor = $grafica["$fila-$letra"];
+                        } catch (Exception $e) {
+                        }
+
+                        // Agregar el valor al arreglo de la fila actual si no es nulo
+                        if ($valor !== null) {
+                            $filaActual["data"][] = $valor + 0;
+                        }
+                    }
+
+                    // Agregar la fila al arreglo principal
+                    $data_grafico[] = $filaActual;
+                }
+            }
+
+            $data->data_grafico =  $data_grafico;
+            $data->encabezado =  $encabezados;
+            $data->tipo_grafico =  $tipoGrafica[$data->tipo_grafica_id];
+        }
+
+
         return view('home_soporte', compact(
             'meses',
             'resultados',
@@ -115,7 +188,8 @@ class HomeController extends Controller
             'mtto_areas',
             'disp_sucursales',
             'disp_bancos',
-            'uniqueProduccion'
+            'uniqueProduccion',
+            'graficas'
         ));
     }
 
@@ -1043,6 +1117,88 @@ class HomeController extends Controller
        $meses_emergente =  array('Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre');
 
 
+
+
+
+        //graficas dinamicas
+        $graficas = Grafica::where('unidades_id',1)->get();
+
+        $tipoGrafica = ["","column","pie"];
+
+        foreach ($graficas as $data) {
+
+            //$data = Grafica::findOrFail(1);
+            $jsonData  = $data->valor;
+            $grafica = json_decode($jsonData, true);
+
+
+            $encabezados = [];
+
+
+            // Iterar sobre las columnas B a Z
+            foreach (range('B', 'Z') as $letra) {
+
+                try {
+                    $encabezado = $grafica["0-$letra"];
+                } catch (Exception $e) {
+                }
+
+
+
+                // Verificar si el encabezado no es nulo antes de agregarlo al array
+                if ($encabezado !== null) {
+                    $encabezados[] = $encabezado;
+                }
+            }
+
+            $data_grafico = [];
+
+
+            // Iterar sobre las filas desde la 1
+            for ($fila = 1; $fila <= 24; $fila++) {
+                // Obtener el nombre de la fila actual
+
+                try {
+                    $nombreFila = $grafica["$fila-A"];
+                } catch (Exception $e) {
+                }
+
+                // Continuar solo si el nombre de la fila no es nulo
+                if ($nombreFila !== null) {
+                    // Inicializar un arreglo para la fila actual
+                    $filaActual = ["name" => $nombreFila, "data" => []];
+
+                    // Iterar sobre las columnas B a Z
+                    foreach (range('B', 'Z') as $letra) {
+
+                        try {
+                            // Obtener el valor de la celda actual
+                            $valor = $grafica["$fila-$letra"];
+                        } catch (Exception $e) {
+                        }
+
+                        // Agregar el valor al arreglo de la fila actual si no es nulo
+                        if ($valor !== null) {
+                            $filaActual["data"][] = $valor + 0;
+                        }
+                    }
+
+                    // Agregar la fila al arreglo principal
+                    $data_grafico[] = $filaActual;
+                }
+            }
+
+            $data->data_grafico =  $data_grafico;
+            $data->encabezado =  $encabezados;
+            $data->tipo_grafico =  $tipoGrafica[$data->tipo_grafica_id];
+        }
+
+
+
+
+
+
+
         return view('home', compact(
             'numero_tickets_anterior',
             'numero_tickets_actual',
@@ -1072,7 +1228,8 @@ class HomeController extends Controller
             'nombre_codigo_9',
             'meses',
             'data_emergente',
-            'meses_emergente'
+            'meses_emergente',
+            'graficas'
         ));
     }
 

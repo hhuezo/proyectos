@@ -445,8 +445,8 @@
                 <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#nav-emergentes"
                         role="tab">Act. emergentes 2023</a></li>
 
-                <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#nav-Categoria"
-                        role="tab">Act. por Categoria Finalizadas por Mes</a></li>
+                <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#nav-Categoria" role="tab">Act.
+                        por Categoria Finalizadas por Mes</a></li>
             @endif
         </ul>
 
@@ -647,6 +647,17 @@
             </div>
         </div>
     </div>
+
+
+    @foreach ($graficas as $grafica)
+        <div class="tab-pane fade show active"  style="display: {{ $visibility }}" id="nav-dashboard" role="tabpanel">
+            <div class="row col-12 g-3">
+                <div class="card">
+                    <div id="container{{ $grafica->id }}"></div>
+                </div>
+            </div>
+        </div>
+    @endforeach
 
 
 
@@ -1065,6 +1076,91 @@
     </script>
 
 
+    <script>
+        var graficas = @json($graficas);
 
+        for (var i = 0; i < graficas.length; i++) {
+
+
+
+
+            var plotOptions = {};
+
+
+            if (graficas[i].tipo_grafico === "column") {
+                console.log(graficas[i].tipo_grafico);
+                plotOptions = {
+                    column: {
+                        pointPadding: 0.2,
+                        borderWidth: 0,
+                        dataLabels: {
+                            enabled: true,
+                            format: '{point.y}', // Muestra el valor de 'y' en la columna
+                            style: {
+                                fontWeight: 'bold'
+                            }
+                        }
+                    }
+                };
+            } else {
+                plotOptions = {
+                    pie: {
+                        allowPointSelect: true,
+                        cursor: 'pointer',
+                        dataLabels: {
+                            enabled: true,
+                            format: graficas[i].encabezado[i] +
+                            ' - {point.y}', // Muestra el valor de 'y' seguido por el nombre de la columna
+                            style: {
+                                color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black'
+                            }
+                        }
+                    }
+                };
+            }
+
+
+
+
+
+
+
+            Highcharts.chart('container' + graficas[i].id, {
+                chart: {
+                    //type: 'column'
+                    type: graficas[i].tipo_grafico
+                },
+                title: {
+                    text: graficas[i].titulo,
+                    align: 'left'
+                },
+                subtitle: {
+                    text: '',
+                    align: 'left'
+                },
+                xAxis: {
+                    categories: graficas[i].encabezado,
+                    crosshair: true,
+                    accessibility: {
+                        description: 'Countries'
+                    }
+                },
+                yAxis: {
+                    min: 0,
+                    title: {
+                        text: graficas[i].descripcion
+                    }
+                },
+                tooltip: {
+                    valueSuffix: ''
+
+                },
+                plotOptions: plotOptions,
+
+
+                series: graficas[i].data_grafico
+            });
+        }
+    </script>
 
 @endsection

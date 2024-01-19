@@ -124,9 +124,11 @@
         // Manejar clic del botón "Enviar Datos"
         $("#enviarDatos").click(function() {
 
+            console.log(document.getElementById('id').value);
+            var id = document.getElementById('id').value;
             $.ajax({
-                url: "{{ url('dashboard') }}",
-                type: "POST",
+                url: "{{ url('dashboard') }}/" + id,
+                type: "PUT",
                 data: {
                     "_token": "{{ csrf_token() }}",
                     "cellValues": cellValues
@@ -164,13 +166,15 @@
 
 <div id='jqxWidget'>
     <div id="grid"></div>
+    <input type="hidden" value="{{ $id }}" id="id">
     <div style='margin-top: 20px;'>
         <button style="display: none" class="btn btn-primary" id='excelExport'><i class="fa fa-excel"></i>
             Exportar</button>
     </div>
 
-    <div style='float: right;'>
-        <button type="button" class="btn btn-info" id='enviarDatos'>Guardar</button>
+    <div class="d-flex">
+        <button id='enviarDatos' class="btn w-100 ms-1 py-2 btn-dark">Guardar</button>
     </div>
-</div>
 
+
+</div>
