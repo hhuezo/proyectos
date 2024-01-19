@@ -2,6 +2,7 @@
 
 namespace App\Http\Livewire;
 
+use App\AreaAdministrativa;
 use App\CategoriaTicket;
 use App\Unidad;
 use Livewire\Component;

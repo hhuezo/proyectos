@@ -3,6 +3,7 @@
 namespace App\Http\Livewire;
 
 use App\Actividad;
+use App\AreaActividad;
 use App\CategoriaTicket;
 use App\MovimientoActividad;
 use App\PrioridadTicket;
@@ -17,7 +18,7 @@ class Actividades extends Component
 {
     public $id_proyecto = 9, $proyectos, $catalogo_proyectos, $proyecto_id, $numero_ticket = 0, $ponderacion = 0.01, $descripcion,
         $fecha_inicio, $categoria_id, $estado_id, $prioridad_id = 1, $fecha_fin, $forma = "NO APLICA",  $tipo = 1, $busqueda,
-        $id_actividad, $nombre_actividad, $porcentaje_diario = 0, $porcentaje_actual, $porcentaje_anterior = 0, $tiempo_minutos, $detalle;
+        $id_actividad, $nombre_actividad, $porcentaje_diario = 0, $porcentaje_actual, $porcentaje_anterior = 0, $tiempo_minutos, $detalle, $area_id;
 
 
 
@@ -41,6 +42,8 @@ class Actividades extends Component
 
     public function render()
     {
+
+
         $busqueda_temp = $this->busqueda;
         $this->proyectos =  Actividad::join('proyectos', 'actividades.proyecto_id', '=', 'proyectos.id')
             ->select('proyectos.id as proyecto_id', 'proyectos.nombre', 'proyectos.avance')
@@ -187,6 +190,19 @@ class Actividades extends Component
         $movimientoActividad->tiempo = '0';
 
         $movimientoActividad->save();
+
+
+
+        if (auth()->user()->unidad_id == 9) { //auditoria interna
+            $area_id = $this->area_id;
+
+            $area_actividad = new AreaActividad();
+            $area_actividad->area_id = $area_id;
+            $area_actividad->actividad_id = $actividad->id;
+            $area_actividad->save();
+
+        }
+
 
 
         $this->dispatchBrowserEvent('close-modal');
@@ -448,6 +464,23 @@ class Actividades extends Component
         $actividad->forma = $this->forma;
         $actividad->users_id = $this->users_id;
         $actividad->update();
+
+
+        if (auth()->user()->unidad_id == 9) {
+            $area_actividades = AreaActividad::where('actividad_id', '=', $actividad->id)->get();
+
+            foreach ($area_actividades as $area_actividad) {
+                $area_act = AreaActividad::findOrFail($area_actividad->id);
+                $area_act->area_id = $this->area_id;
+                $area_act->update();
+            }
+        }
+
+
+
+
+
+
 
         $this->dispatchBrowserEvent('close-modal-edit');
     }

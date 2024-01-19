@@ -3,6 +3,8 @@
 namespace App\Http\Livewire;
 
 use App\Actividad;
+use App\AreaActividad;
+use App\AreaAdministrativa;
 use App\CategoriaTicket;
 use App\Estado;
 use App\PrioridadTicket;
@@ -14,8 +16,8 @@ use Carbon\Carbon;
 class ActividadesCoordinador extends Component
 {
 
-    public $id_actividad = 0, $users_id = 0, $busqueda, $tipo = 1, $proyecto_id, $numero_ticket = 0, $ponderacion = 0.01,
-        $descripcion, $fecha_inicio, $categoria_id, $estado_id, $prioridad_id = 1, $fecha_fin, $forma = "NO APLICA";
+    public $id_actividad = 0, $users_id = 0, $busqueda, $tipo = 1, $proyecto_id, $numero_ticket = 0, $ponderacion = 0.01, $id_proyecto,
+        $descripcion, $fecha_inicio, $categoria_id, $estado_id, $prioridad_id = 1, $fecha_fin, $forma = "NO APLICA", $area_id;
     public function mount($id)
     {
         $this->users_id = $id;
@@ -60,10 +62,12 @@ class ActividadesCoordinador extends Component
 
         $categorias = CategoriaTicket::where('categoria_tickets.unidad_id', '=', auth()->user()->unidad_id)->get();
         $prioridades = PrioridadTicket::get();
+        $areas = AreaAdministrativa::where('id', '>', 0)->get();
         $proyectos_unidad = Proyecto::where('unidad_id', '=', $usuario->unidad_id)->get();
         $estados = Estado::get();
         $usuarios = User::where('unidad_id', '=', auth()->user()->unidad_id)->get();
-        return view('livewire.actividades-coordinador', compact('actividades', 'proyectos', 'categorias', 'prioridades', 'usuario', 'proyectos_unidad', 'estados', 'usuarios'));
+
+        return view('livewire.actividades-coordinador', compact('actividades', 'proyectos', 'categorias', 'prioridades', 'usuario', 'proyectos_unidad', 'estados', 'usuarios','areas'));
     }
 
     public function changeType()
@@ -100,6 +104,7 @@ class ActividadesCoordinador extends Component
 
     public function store()
     {
+
         $messages = [
             'numero_ticket.required' => 'El número de ticket es requerido',
             'ponderacion.required' => 'La ponderación es requerida',
@@ -144,6 +149,27 @@ class ActividadesCoordinador extends Component
             'unidad_id' => $user_developer->unidad_id,
             'fecha_asignacion' => $time->toDateTimeString(),
         ]);
+
+
+
+
+        $actividad = new Actividad();
+        $actividad->proyecto_id = $this->id_proyecto;
+        $actividad->numero_ticket = $this->numero_ticket;
+        $actividad->ponderacion = $this->ponderacion;
+        $actividad->descripcion = $this->descripcion;
+        $actividad->fecha_inicio = $this->fecha_inicio;
+        $actividad->categoria_id = $this->categoria_id;
+        $actividad->estado_id = 1;
+        $actividad->porcentaje = 0;
+        $actividad->prioridad_id = $this->prioridad_id;
+        $actividad->fecha_fin = $this->fecha_fin;
+        $actividad->forma = $this->forma;
+        $actividad->users_id = auth()->user()->id;
+        $actividad->unidad_id = auth()->user()->unidad_id;
+        $actividad->fecha_asignacion = $time->toDateTimeString();
+        $actividad->save();
+
 
 
         $this->dispatchBrowserEvent('close-modal');
@@ -196,6 +222,7 @@ class ActividadesCoordinador extends Component
         ], $messages);
 
 
+
         $actividad = Actividad::findOrFail($this->id_actividad);
         $actividad->proyecto_id = $this->proyecto_id;
         $actividad->numero_ticket = $this->numero_ticket;
@@ -209,6 +236,21 @@ class ActividadesCoordinador extends Component
         $actividad->forma = $this->forma;
         $actividad->users_id = $this->users_id;
         $actividad->update();
+
+
+        if (auth()->user()->unidad_id == 9) {
+            $area_actividades = AreaActividad::where('actividad_id', '=', $actividad->id)->get();
+
+            foreach ($area_actividades as $area_actividad) {
+                $area_act = AreaActividad::findOrFail($area_actividad->id);
+                $area_act->area_id = $this->area_id;
+                $area_act->update();
+            }
+        }
+
+
+
+
 
         $this->dispatchBrowserEvent('close-modal-edit');
     }

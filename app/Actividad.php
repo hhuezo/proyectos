@@ -36,5 +36,9 @@ class Actividad extends Model
         return $this->belongsTo('App\User', 'users_id', 'id');
     }
 
+    public function areas()
+    {
+        return $this->hasMany('App\AreaActividad');
+    }
 
 }

@@ -3,6 +3,8 @@
 namespace App\Http\Livewire;
 
 use App\Actividad;
+use App\AreaActividad;
+use App\AreaAdministrativa;
 use App\catalogo\Propietario;
 use App\CategoriaTicket;
 use Livewire\Component;
@@ -20,7 +22,7 @@ class Proyectos extends Component
     public $proyectos, $id_unidad, $actividades,$historial, $tipo = 1, $finalizado = 0, $modificado = 0,$fecha_inicio_proyecto,$fecha_fin_proyecto;
 
     public $id_actividad, $numero_ticket = 0, $ponderacion = 0.01, $descripcion_actividad,
-        $fecha_inicio, $categoria_id, $estado_actividad_id, $prioridad_id, $prioridad, $fecha_fin, $forma = "NO APLICA", $users_id, $avance, $propietario_id = 1;
+        $fecha_inicio, $categoria_id, $estado_actividad_id, $prioridad_id, $prioridad, $fecha_fin, $forma = "NO APLICA", $users_id, $avance, $propietario_id = 1, $area_id;
 
 
     public $tab1 = 1, $tab2 = 0;
@@ -95,8 +97,9 @@ class Proyectos extends Component
 
 
         $colors = ["", "#0dcaf0", "#F19828", "#0dcaf0", "#198754", "##0d6efd",  "#0d6efd", "#dc3545", "#dc3545"];
+        $areas = AreaAdministrativa::where('id', '>', 0)->get();
 
-        return view('livewire.proyectos', compact('estados', 'colors', 'unidad', 'categorias', 'prioridades', 'usuarios', 'estados_actividad','propietarios'));
+        return view('livewire.proyectos', compact('estados', 'colors', 'unidad', 'categorias', 'prioridades', 'usuarios', 'estados_actividad','propietarios','areas'));
     }
 
 
@@ -213,13 +216,14 @@ class Proyectos extends Component
         $this->prioridad_id = 1;
 
 
-
         /*
          public $id_actividad, $numero_ticket = 0, $ponderacion = 0.01, $descripcion_actividad,
         $fecha_inicio, $categoria_id, $estado_actividad_id, $prioridad_id, $fecha_fin, $forma = "NO APLICA", $users_id;*/
     }
     public function store_actividad()
     {
+
+
         $this->dispatchBrowserEvent('error-message-proyecto');
         $messages = [
             'numero_ticket.required' => 'El número de ticket es requerido',
@@ -251,23 +255,52 @@ class Proyectos extends Component
         $time = Carbon::now('America/El_Salvador');
 
 
-        Actividad::create([
-            'proyecto_id' => $this->id_proyecto,
-            'numero_ticket' => $this->numero_ticket,
-            'ponderacion' => $this->ponderacion,
-            'descripcion' => strtoupper($this->descripcion_actividad),
-            'fecha_inicio' => $this->fecha_inicio,
-            'categoria_id' => $this->categoria_id,
-            'estado_id' => $this->estado_actividad_id,
-            'prioridad_id' => $this->prioridad_id,
-            'fecha_fin' => $this->fecha_fin,
-            'forma' => $this->forma,
-            'users_id' => $this->users_id,
-            'porcentaje' => 0.00,
-            'unidad_id' => $this->id_unidad,
-            'fecha_asignacion' => $time->toDateTimeString(),
-        ]);
 
+        // Actividad::create([
+        //     'proyecto_id' => $this->id_proyecto,
+        //     'numero_ticket' => $this->numero_ticket,
+        //     'ponderacion' => $this->ponderacion,
+        //     'descripcion' => strtoupper($this->descripcion_actividad),
+        //     'fecha_inicio' => $this->fecha_inicio,
+        //     'categoria_id' => $this->categoria_id,
+        //     'estado_id' => $this->estado_actividad_id,
+        //     'prioridad_id' => $this->prioridad_id,
+        //     'fecha_fin' => $this->fecha_fin,
+        //     'forma' => $this->forma,
+        //     'users_id' => $this->users_id,
+        //     'porcentaje' => 0.00,
+        //     'unidad_id' => $this->id_unidad,
+        //     'fecha_asignacion' => $time->toDateTimeString(),
+        // ]);
+
+
+        $actividad = new Actividad();
+        $actividad->proyecto_id = $this->id_proyecto;
+        $actividad->numero_ticket = $this->numero_ticket;
+        $actividad->ponderacion = $this->ponderacion;
+        $actividad->descripcion = strtoupper($this->descripcion_actividad);
+        $actividad->fecha_inicio = $this->fecha_inicio;
+        $actividad->categoria_id = $this->categoria_id;
+        $actividad->estado_id = $this->estado_actividad_id;
+        $actividad->prioridad_id = $this->prioridad_id;
+        $actividad->fecha_fin = $this->fecha_fin;
+        $actividad->forma = $this->forma;
+        $actividad->users_id = $this->users_id;
+        $actividad->porcentaje = 0.00;
+        $actividad->unidad_id = $this->id_unidad;
+        $actividad->fecha_asignacion = $time->toDateTimeString();
+        $actividad->save();
+
+
+        if (auth()->user()->unidad_id == 9) { //auditoria interna
+            $area_id = $this->area_id;
+
+            $area_actividad = new AreaActividad();
+            $area_actividad->area_id = $area_id;
+            $area_actividad->actividad_id = $actividad->id;
+            $area_actividad->save();
+
+        }
 
         $this->dispatchBrowserEvent('close-modal-create-actividad');
     }
@@ -330,6 +363,23 @@ class Proyectos extends Component
         $actividad->forma = $this->forma;
         $actividad->users_id = $this->users_id;
         $actividad->update();
+
+
+
+
+        if (auth()->user()->unidad_id == 9) {
+            $area_actividades = AreaActividad::where('actividad_id', '=', $actividad->id)->get();
+
+            foreach ($area_actividades as $area_actividad) {
+                $area_act = AreaActividad::findOrFail($area_actividad->id);
+                $area_act->area_id = $this->area_id;
+                $area_act->update();
+            }
+        }
+
+
+
+
 
 
         $proyecto = Proyecto::select(\DB::raw('(select ifnull(sum((act.porcentaje/100) * act.ponderacion),0) from actividades act where act.proyecto_id = proyectos.id) as porcentaje'))

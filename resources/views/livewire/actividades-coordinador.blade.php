@@ -62,7 +62,9 @@
                                                     <div
                                                         class="task-info d-flex align-items-center justify-content-between">
                                                         <div class="task-priority d-flex flex-column align-items-center justify-content-center"
-                                                        data-bs-toggle="modal"  wire:click="edit({{ $actividad->id }})" data-bs-target="#edit_actividad">
+                                                            data-bs-toggle="modal"
+                                                            wire:click="edit({{ $actividad->id }})"
+                                                            data-bs-target="#edit_actividad">
 
                                                             <h6
                                                                 class="light-success-bg py-1 px-2 rounded-1 d-inline-block fw-bold small-14 mb-0">
@@ -169,7 +171,30 @@
 
                                                                     </div>
                                                                 </li>
+
                                                             </ul>
+                                                            <br>
+
+                                                            @if (auth()->user()->unidad_id == 9)
+                                                                <ul>
+
+                                                                    @if (isset($actividad->areas))
+                                                                        @foreach ($actividad->areas as $area)
+
+                                                                            @if (isset($area->area))
+                                                                            <div class="d-flex align-items-center">
+                                                                                <span
+                                                                                    class="ms-1"><strong>AREA</strong></span>
+                                                                            </div>
+                                                                                <li>{{ $area->area->nombre }}</li>
+                                                                            @endif
+
+                                                                        @endforeach
+                                                                    @endif
+
+
+                                                                </ul>
+                                                            @endif
                                                         </div>
 
                                                     </div>
@@ -353,8 +378,24 @@
                             </div>
 
                             <div class="mb-3">
-                                <label class="form-label">Forma</label>
-                                <input type="text" wire:model.defer="forma" class="form-control">
+                                @if (auth()->user()->unidad_id == 9)
+                                    <label for="multiSelect" class="form-label">Area Administrativa</label>
+                                    <select wire:model.defer="area_id" class="select2 form-control w-full mt-2 py-2">
+                                        <option value="">Seleccione</option>
+                                        @if (isset($areas))
+                                            @foreach ($areas as $obj)
+                                                <option value="{{ $obj->id }}"
+                                                    class=" inline-block font-Inter font-normal text-sm text-slate-600">
+                                                    {{ $obj->nombre }}</option>
+                                            @endforeach
+                                        @endif
+                                    </select>
+                                    <input type="hidden" name="forma" value="NO APLICA" class="form-control">
+                                @else
+                                    <label class="form-label">Forma</label>
+                                    <input type="text" wire:model.defer="forma" class="form-control">
+                                @endif
+
                             </div>
 
 
@@ -481,8 +522,24 @@
                             </div>
 
                             <div class="mb-3">
-                                <label class="form-label">Forma</label>
-                                <input type="text" wire:model.defer="forma" class="form-control">
+                                @if (auth()->user()->unidad_id == 9)
+                                    <label for="multiSelect" class="form-label">Area Administrativa</label>
+                                    <select wire:model.defer="area_id" class="select2 form-control w-full mt-2 py-2">
+                                        <option value="">Seleccione</option>
+                                        @if (isset($areas))
+                                            @foreach ($areas as $obj)
+                                                <option value="{{ $obj->id }}"
+                                                    class=" inline-block font-Inter font-normal text-sm text-slate-600">
+                                                    {{ $obj->nombre }}</option>
+                                            @endforeach
+                                        @endif
+
+                                    </select>
+                                    <input type="hidden" name="forma" value="NO APLICA" class="form-control">
+                                @else
+                                    <label class="form-label">Forma</label>
+                                    <input type="text" wire:model.defer="forma" class="form-control">
+                                @endif
                             </div>
 
 

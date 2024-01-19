@@ -29,7 +29,7 @@
                 <div class="border-0 mb-4">
                     <div class="card-header py-3 no-bg bg-transparent d-flex px-0  border-bottom flex-wrap">
                         <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12" style="text-align: left;">
-                            <h5 class="fw-bold mb-0">
+                            <h5 class="fw-bold  mb-0">
                                 Nueva actividad
                             </h5>
 
@@ -102,15 +102,16 @@
                             <div class="col-lg-4 col-md-4 col-sm-12 col-sx-12">
                                 <div class="form-group">
                                     <label class="form-label"><strong>Fecha inicio</strong></label>
-                                    <input type="date" name="fecha_inicio" value="{{date('Y-m-d')}}" class="form-control">
+                                    <input type="date" name="fecha_inicio" value="{{ date('Y-m-d') }}"
+                                        class="form-control">
                                 </div>
                             </div>
                             <div class="col-lg-4 col-md-4 col-sm-12 col-sx-12">
                                 <div class="form-group">
                                     <label class="form-label"><strong>Fecha final</strong></label>
                                     <div class="col-12">
-                                        <input type="date" name="fecha_fin" value="{{date('Y-m-d')}}" class="form-control"
-                                            >
+                                        <input type="date" name="fecha_fin" value="{{ date('Y-m-d') }}"
+                                            class="form-control">
                                     </div>
                                 </div>
                             </div>
@@ -133,12 +134,38 @@
                                 </div>
                             </div>
                             <div class="col-lg-4 col-md-4 col-sm-12 col-sx-12">
-                                <div class="form-group">
-                                    <label class="form-label"><strong>Forma</strong></label>
-                                    <div class="col-12">
-                                        <input type="text" name="forma" value="NO APLICA" class="form-control">
+
+                                {{-- Auditoria interna --}}
+                                @if (auth()->user()->unidad_id == 9)
+                                    <div class="form-group">
+                                        <div>
+                                            <label for="multiSelect" class="form-label">Area Administrativa</label>
+                                            <select name="area_id" id="area_id"
+                                                class="select2 form-control w-full mt-2 py-2">
+                                                <option value="">Seleccione</option>
+                                                @if (isset($areas))
+                                                    @foreach ($areas as $obj)
+                                                        <option value="{{ $obj->id }}"
+                                                            class=" inline-block font-Inter font-normal text-sm text-slate-600">
+                                                            {{ $obj->nombre }}</option>
+                                                    @endforeach
+                                                @endif
+
+                                            </select>
+                                            <input type="hidden" name="forma" value="NO APLICA" class="form-control">
+                                        </div>
                                     </div>
-                                </div>
+                                @else
+                                    <div class="form-group">
+                                        <label class="form-label"><strong>Forma</strong></label>
+                                        <div class="col-12">
+                                            <input type="text" name="forma" value="NO APLICA" class="form-control">
+                                        </div>
+                                    </div>
+                                @endif
+
+
+
                             </div>
                             <div class="col-lg-4 col-md-4 col-sm-12 col-sx-12">
                                 <div class="form-group">

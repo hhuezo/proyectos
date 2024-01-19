@@ -880,8 +880,25 @@
                         </div>
 
                         <div class="mb-3">
+                            @if (auth()->user()->unidad_id == 9)
+                            <label for="multiSelect" class="form-label">Area Administrativa</label>
+                            <select wire:model.defer="area_id"
+                                class="select2 form-control w-full mt-2 py-2">
+                                <option value="">Seleccione</option>
+                                @if (isset($areas))
+                                    @foreach ($areas as $obj)
+                                        <option value="{{ $obj->id }}"
+                                            class=" inline-block font-Inter font-normal text-sm text-slate-600">
+                                            {{ $obj->nombre }}</option>
+                                    @endforeach
+                                @endif
+
+                            </select>
+                            <input type="hidden" name="forma" value="NO APLICA" class="form-control">
+                        @else
                             <label class="form-label">Forma</label>
                             <input type="text" wire:model.defer="forma" class="form-control">
+                        @endif
                         </div>
 
 
@@ -999,8 +1016,25 @@
                         </div>
 
                         <div class="mb-3">
-                            <label class="form-label">Forma</label>
-                            <input type="text" wire:model.defer="forma" class="form-control">
+                            @if (auth()->user()->unidad_id == 9)
+                                <label for="multiSelect" class="form-label">Area Administrativa</label>
+                                <select wire:model.defer="area_id"
+                                    class="select2 form-control w-full mt-2 py-2">
+                                    <option value="">Seleccione</option>
+                                    @if (isset($areas))
+                                        @foreach ($areas as $obj)
+                                            <option value="{{ $obj->id }}"
+                                                class=" inline-block font-Inter font-normal text-sm text-slate-600">
+                                                {{ $obj->nombre }}</option>
+                                        @endforeach
+                                    @endif
+
+                                </select>
+                                <input type="hidden" name="forma" value="NO APLICA" class="form-control">
+                            @else
+                                <label class="form-label">Forma</label>
+                                <input type="text" wire:model.defer="forma" class="form-control">
+                            @endif
                         </div>
 
 

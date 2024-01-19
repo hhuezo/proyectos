@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\produccion;
 
 use App\Actividad;
+use App\AreaActividad;
+use App\AreaAdministrativa;
 use App\CategoriaTicket;
 use App\Http\Controllers\Controller;
 use App\MovimientoActividad;
@@ -49,7 +51,8 @@ class ActividadController extends Controller
         $proyectos = Proyecto::where('unidad_id', '=', auth()->user()->unidad_id)->whereIn('estado_id', [1, 2, 3,4, 6])->where('finalizado', '<>', 1)->orderBy('nombre')->get();
         $categorias = CategoriaTicket::where('categoria_tickets.unidad_id', '=', auth()->user()->unidad_id)->get();
         $prioridades = PrioridadTicket::get();
-        return view('produccion.actividades.create',compact('proyectos','categorias','prioridades'));
+        $areas = AreaAdministrativa::where('id', '>', 0)->get();
+        return view('produccion.actividades.create',compact('proyectos','categorias','prioridades','areas'));
     }
 
     public function store(Request $request)
@@ -83,6 +86,8 @@ class ActividadController extends Controller
         ], $messages);
 
 
+
+
         $time = Carbon::now('America/El_Salvador');
 
         $actividad = new Actividad();
@@ -113,6 +118,22 @@ class ActividadController extends Controller
         $movimientoActividad->tiempo = '0';
 
         $movimientoActividad->save();
+
+
+
+
+        if (auth()->user()->unidad_id == 9) { //auditoria interna
+            $area_id = $request->get("area_id");
+
+            $area_actividad = new AreaActividad();
+            $area_actividad->area_id = $area_id;
+            $area_actividad->actividad_id = $actividad->id;
+            $area_actividad->save();
+
+        }
+
+
+
 
         alert()->success('El registro ha sido agregado correctamente');
         return redirect('/actividades');
