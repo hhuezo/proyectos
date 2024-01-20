@@ -302,10 +302,13 @@ class Proyectos extends Component
 
         }
 
+        $this->edit($this->id_proyecto);
+
         $this->dispatchBrowserEvent('close-modal-create-actividad');
     }
     public function edit_actividad($id)
     {
+
         $this->dispatchBrowserEvent('error-message-proyecto');
         $actividad = Actividad::findOrFail($id);
         $this->id_actividad = $id;
@@ -320,6 +323,15 @@ class Proyectos extends Component
         $this->fecha_fin = substr($actividad->fecha_fin, 0, 10);
         $this->forma = $actividad->forma;
         $this->users_id = $actividad->users_id;
+
+
+        $area_actividad = AreaActividad::where('actividad_id','=',$id)->get()->first();
+
+        if ($area_actividad) {
+            $this->area_id = $area_actividad->area_id;
+        }
+
+
     }
 
     public function update_actividad()

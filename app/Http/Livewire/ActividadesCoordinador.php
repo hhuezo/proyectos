@@ -93,6 +93,7 @@ class ActividadesCoordinador extends Component
         $this->prioridad_id = 1;
         $this->descripcion = "";
         $this->proyecto_id = "";
+        $this->area_id = "";
 
     }
 
@@ -104,6 +105,7 @@ class ActividadesCoordinador extends Component
 
     public function store()
     {
+
 
         $messages = [
             'numero_ticket.required' => 'El número de ticket es requerido',
@@ -133,28 +135,8 @@ class ActividadesCoordinador extends Component
 
         $user_developer = User::findOrFail($this->users_id);
 
-        Actividad::create([
-            'proyecto_id' => $this->proyecto_id,
-            'numero_ticket' => $this->numero_ticket,
-            'ponderacion' => $this->ponderacion,
-            'descripcion' => $this->descripcion,
-            'fecha_inicio' => $this->fecha_inicio,
-            'categoria_id' => $this->categoria_id,
-            'estado_id' => 1,
-            'porcentaje' => 0,
-            'prioridad_id' => $this->prioridad_id,
-            'fecha_fin' => $this->fecha_fin,
-            'forma' => $this->forma,
-            'users_id' => $this->users_id,
-            'unidad_id' => $user_developer->unidad_id,
-            'fecha_asignacion' => $time->toDateTimeString(),
-        ]);
-
-
-
-
         $actividad = new Actividad();
-        $actividad->proyecto_id = $this->id_proyecto;
+        $actividad->proyecto_id = $this->proyecto_id;
         $actividad->numero_ticket = $this->numero_ticket;
         $actividad->ponderacion = $this->ponderacion;
         $actividad->descripcion = $this->descripcion;
@@ -169,6 +151,18 @@ class ActividadesCoordinador extends Component
         $actividad->unidad_id = auth()->user()->unidad_id;
         $actividad->fecha_asignacion = $time->toDateTimeString();
         $actividad->save();
+
+
+        if (auth()->user()->unidad_id == 9) { //auditoria interna
+            $area_id = $this->area_id;
+
+            $area_actividad = new AreaActividad();
+            $area_actividad->area_id = $area_id;
+            $area_actividad->actividad_id = $actividad->id;
+            $area_actividad->save();
+
+        }
+
 
 
 
