@@ -243,11 +243,19 @@ class ActividadesCoordinador extends Component
         if (auth()->user()->unidad_id == 9) {
             $area_actividades = AreaActividad::where('actividad_id', '=', $actividad->id)->get();
 
-            foreach ($area_actividades as $area_actividad) {
-                $area_act = AreaActividad::findOrFail($area_actividad->id);
-                $area_act->area_id = $this->area_id;
-                $area_act->update();
+            if ($area_actividades->count() > 0) {
+                foreach ($area_actividades as $area_actividad) {
+                    $area_act = AreaActividad::findOrFail($area_actividad->id);
+                    $area_act->area_id = $this->area_id;
+                    $area_act->update();
+                }
+            } else {
+                    $area_new = new AreaActividad();
+                    $area_new->actividad_id = $actividad->id;
+                    $area_new->area_id = $this->area_id;
+                    $area_new->save();
             }
+
         }
 
 
