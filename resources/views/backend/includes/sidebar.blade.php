@@ -29,6 +29,9 @@
                     </li>
                 @endcan
 
+
+
+
                 @can('read menu unidades')
                     <li class="collapsed">
                         <a class="m-link {{ Request::segment(2) == 'hr-dashboard' || Request::segment(2) == 'project-dashboard' ? 'active' : '' }}"
@@ -39,29 +42,28 @@
                     </li>
                 @endcan
 
-                    <li class="collapsed">
-                        <a class="m-link {{ Request::segment(2) == 'project' ? 'active' : '' }}" data-bs-toggle="collapse"
-                            data-bs-target="#project-Components2" href="#">
-                            <i class="icofont-user"></i><span>Seguridad</span> <span
-                                class="arrow icofont-dotted-down ms-auto text-end fs-5"></span></a>
-                        <!-- Menu: Sub menu ul -->
-                        <ul class="sub-menu {{ Request::segment(2) == 'project' ? 'collapsed show' : 'collapse' }}"
+                @can('read menu seguridad')
+                <li class="collapsed">
+                    <a class="m-link {{ Request::segment(2) == 'project' ? 'active' : '' }}" data-bs-toggle="collapse"
+                        data-bs-target="#project-Components2" href="#">
+                        <i class="icofont-user"></i><span>Seguridad</span> <span
+                            class="arrow icofont-dotted-down ms-auto text-end fs-5"></span></a>
+                    <!-- Menu: Sub menu ul -->
+                    <ul class="sub-menu {{ Request::segment(2) == 'project' ? 'collapsed show' : 'collapse' }}"
                         id="project-Components2">
                         <li><a class="ms-link {{ Request::segment(3) == 'index' ? 'active' : '' }}"
                                 href="{{ url('usuario') }}"><span>Usuario</span></a></li>
                         <li><a class="ms-link {{ Request::segment(3) == 'tasks' ? 'active' : '' }}"
                                 href="{{ url('produccion/rol') }}"><span>Roles </span></a></li>
-                                <li><a class="ms-link {{ Request::segment(3) == 'tasks' ? 'active' : '' }}"
-                                    href="{{ url('produccion/permisos') }}"><span>Permisos </span></a></li>
+                        <li><a class="ms-link {{ Request::segment(3) == 'tasks' ? 'active' : '' }}"
+                                href="{{ url('produccion/permisos') }}"><span>Permisos </span></a></li>
 
                     </ul>
-                    </li>
+                </li>
+                @endcan
 
 
-
-                    @can('read menu catalogos')
-
-
+                @can('read menu catalogos')
                     <li class="collapsed">
                         <a class="m-link {{ Request::segment(2) == 'project' ? 'active' : '' }}" data-bs-toggle="collapse"
                             data-bs-target="#project-Components3" href="#">
@@ -83,7 +85,7 @@
 
                         </ul>
                     </li>
-                    @endcan
+                @endcan
 
 
 
@@ -264,7 +266,7 @@
                             <i class="icofont-notepad"></i><span>Inventario despliegues</span></a>
                     </li>
                 @endif
-                @if ((auth()->user()->rol_id == 1 && auth()->user()->unidad_id == 1) || auth()->user()->unidad_id == 4)
+                @if ((auth()->user()->rol_id == 1 && auth()->user()->unidad_id == 1) || auth()->user()->unidad_id == 6)
                     <li class="collapsed">
                         <a class="m-link {{ Request::segment(2) == 'project' ? 'active' : '' }}"
                             href="{{ url('dashboard') }}">

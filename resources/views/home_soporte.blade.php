@@ -1014,11 +1014,23 @@
                         description: 'Countries'
                     }
                 },
-                yAxis: {
+               yAxis: {
                     min: 0,
                     title: {
                         text: graficas[i].descripcion
-                    }
+                    },
+                    plotLines: graficas[i].linea_estandar > 0 ? [{
+                        color: 'red', // Color de la línea
+                        dashStyle: 'solid', // Estilo de la línea (puedes cambiarlo según tus preferencias)
+                        value: graficas[i].linea_estandar, // Valor del máximo permitido
+                        width: 2, // Grosor de la línea
+                        label: {
+                            text: 'Línea estándar establecida', // Etiqueta asociada a la línea
+                            align: 'right',
+                            x: -10
+                        }
+                    }] : undefined
+
                 },
                 tooltip: {
                     valueSuffix: ''

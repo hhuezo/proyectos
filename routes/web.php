@@ -59,7 +59,15 @@ Route::get('/load_unidades', 'HomeController@load_unidades')->name('load_unidade
 
 
 Route::resource('usuario', 'produccion\UsuarioController');
-Route::resource('rol', 'produccion\RolController');
+
+
+//seguridad
+Route::post('produccion/rol/unlink_permission', 'produccion\RolController@unlink_permission');
+Route::post('produccion/rol/link_permission', 'produccion\RolController@link_permission');
+Route::resource('produccion/rol', 'produccion\RolController');
+Route::resource('produccion/permisos', 'produccion\PermissionController');
+
+//Route::resource('rol', 'produccion\RolController');
 
 Route::resource('proyecto', 'produccion\ProyectoController');
 Route::resource('proyecto_finalizado', 'produccion\ProyectoFinalizadoController');
