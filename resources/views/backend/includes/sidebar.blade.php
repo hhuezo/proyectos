@@ -19,15 +19,17 @@
             <!-- Menu: main ul -->
 
             <ul class="menu-list flex-grow-1 mt-3">
-                <li class="collapsed">
-                    <a class="m-link {{ Request::segment(2) == 'hr-dashboard' || Request::segment(2) == 'project-dashboard' ? 'active' : '' }}"
-                        href="{{ url('home') }}">
-                        <i class="icofont-home fs-5"></i> <span>Inicio </span> </a>
-                    <!-- Menu: Sub menu ul -->
+                @can('read menu inicio')
+                    <li class="collapsed">
+                        <a class="m-link {{ Request::segment(2) == 'hr-dashboard' || Request::segment(2) == 'project-dashboard' ? 'active' : '' }}"
+                            href="{{ url('home') }}">
+                            <i class="icofont-home fs-5"></i> <span>Inicio </span> </a>
+                        <!-- Menu: Sub menu ul -->
 
-                </li>
+                    </li>
+                @endcan
 
-                @if (auth()->user()->rol_id == 1 || auth()->user()->rol_id == 6)
+                @can('read menu unidades')
                     <li class="collapsed">
                         <a class="m-link {{ Request::segment(2) == 'hr-dashboard' || Request::segment(2) == 'project-dashboard' ? 'active' : '' }}"
                             href="{{ url('load_unidades') }}">
@@ -35,29 +37,34 @@
                         <!-- Menu: Sub menu ul -->
 
                     </li>
-                @endif
+                @endcan
 
-
-                @if (auth()->user()->rol_id == 1)
                     <li class="collapsed">
-                        <a class="m-link {{ Request::segment(2) == 'project' ? 'active' : '' }}"
-                            data-bs-toggle="collapse" data-bs-target="#project-Components2" href="#">
+                        <a class="m-link {{ Request::segment(2) == 'project' ? 'active' : '' }}" data-bs-toggle="collapse"
+                            data-bs-target="#project-Components2" href="#">
                             <i class="icofont-user"></i><span>Seguridad</span> <span
                                 class="arrow icofont-dotted-down ms-auto text-end fs-5"></span></a>
                         <!-- Menu: Sub menu ul -->
                         <ul class="sub-menu {{ Request::segment(2) == 'project' ? 'collapsed show' : 'collapse' }}"
-                            id="project-Components2">
-                            <li><a class="ms-link {{ Request::segment(3) == 'index' ? 'active' : '' }}"
-                                    href="{{ url('usuario') }}"><span>Usuario</span></a></li>
-                            <li><a class="ms-link {{ Request::segment(3) == 'tasks' ? 'active' : '' }}"
-                                    href="{{ url('rol') }}"><span>Roles </span></a></li>
+                        id="project-Components2">
+                        <li><a class="ms-link {{ Request::segment(3) == 'index' ? 'active' : '' }}"
+                                href="{{ url('usuario') }}"><span>Usuario</span></a></li>
+                        <li><a class="ms-link {{ Request::segment(3) == 'tasks' ? 'active' : '' }}"
+                                href="{{ url('produccion/rol') }}"><span>Roles </span></a></li>
+                                <li><a class="ms-link {{ Request::segment(3) == 'tasks' ? 'active' : '' }}"
+                                    href="{{ url('produccion/permisos') }}"><span>Permisos </span></a></li>
 
-                        </ul>
+                    </ul>
                     </li>
 
+
+
+                    @can('read menu catalogos')
+
+
                     <li class="collapsed">
-                        <a class="m-link {{ Request::segment(2) == 'project' ? 'active' : '' }}"
-                            data-bs-toggle="collapse" data-bs-target="#project-Components3" href="#">
+                        <a class="m-link {{ Request::segment(2) == 'project' ? 'active' : '' }}" data-bs-toggle="collapse"
+                            data-bs-target="#project-Components3" href="#">
                             <i class="icofont-ui-folder"></i><span>Catalogo</span> <span
                                 class="arrow icofont-dotted-down ms-auto text-end fs-5"></span></a>
                         <!-- Menu: Sub menu ul -->
@@ -76,7 +83,10 @@
 
                         </ul>
                     </li>
-                @endif
+                    @endcan
+
+
+
 
                 @if (auth()->user()->rol_id == 1 || auth()->user()->rol_id == 4 || auth()->user()->rol_id == 7)
                     <li class="collapsed">
@@ -131,7 +141,7 @@
                     </li>
                 @endif
 
-                @if (auth()->user()->rol_id == 1 || auth()->user()->rol_id == 4)
+                @if ((auth()->user()->rol_id == 1 && auth()->user()->unidad_id == 1) || auth()->user()->rol_id == 4)
                     <li class="collapsed">
                         <a class="m-link {{ Request::segment(2) == 'project' ? 'active' : '' }}"
                             href="{{ url('actividades/1') }}">
@@ -140,7 +150,7 @@
                 @endif
 
 
-                @if (auth()->user()->rol_id == 1)
+                @if (auth()->user()->rol_id == 1 && auth()->user()->unidad_id == 1)
                     <li class="collapsed">
                         <a class="m-link {{ Request::segment(2) == 'project' ? 'active' : '' }}"
                             href="{{ url('facturar') }}">
@@ -156,18 +166,18 @@
                     </li>
 
                     @if (auth()->user()->usuario_base_datos)
-                    <li><a class="ms-link {{ Request::is('admin/auth/user') ? 'active' : '' }}"
-                            href="{{ url('bitacora_rendimiento_base') }}">ESA-ID-P13-F2 BITACORA REPORTES
-                            SOBRE
-                            RENDIMIENTO DE BASE DE DATOS</a></li>
-                    <li><a class="ms-link {{ Request::is('admin/auth/user') ? 'active' : '' }}"
-                            href="{{ url('bitacora_cambio_base') }}">ESA-ID-P13-F1 BITACORA DE CAMBIOS EN BDs
-                        </a>
-                    </li>
-                    <li><a class="ms-link {{ Request::is('admin/auth/user') ? 'active' : '' }}"
-                            href="{{ url('creacion_objetos_base_datos') }}">ESA-ID-P1-F3 CREACION DE OBJETOS
-                            DE BASE DE DATOS</a>
-                    </li>
+                        <li><a class="ms-link {{ Request::is('admin/auth/user') ? 'active' : '' }}"
+                                href="{{ url('bitacora_rendimiento_base') }}">ESA-ID-P13-F2 BITACORA REPORTES
+                                SOBRE
+                                RENDIMIENTO DE BASE DE DATOS</a></li>
+                        <li><a class="ms-link {{ Request::is('admin/auth/user') ? 'active' : '' }}"
+                                href="{{ url('bitacora_cambio_base') }}">ESA-ID-P13-F1 BITACORA DE CAMBIOS EN BDs
+                            </a>
+                        </li>
+                        <li><a class="ms-link {{ Request::is('admin/auth/user') ? 'active' : '' }}"
+                                href="{{ url('creacion_objetos_base_datos') }}">ESA-ID-P1-F3 CREACION DE OBJETOS
+                                DE BASE DE DATOS</a>
+                        </li>
                     @endif
                 @endif
 
@@ -180,12 +190,10 @@
                             href="{{ url('actividades_coordinador') }}">
                             <i class="icofont-paperclip"></i><span>Coordinador</span></a>
                     </li>
-
-
                 @endif
 
 
-                @if (auth()->user()->rol_id == 1)
+                @if (auth()->user()->rol_id == 1 && auth()->user()->unidad_id == 1)
                     <li
                         class=" {{ Request::is('admin/auth/user') || Request::is('admin/auth/role') || Request::is('admin/auth/role/create') ? '' : ' collapsed' }}">
                         <a class="m-link {{ Request::is('admin/auth/user') || Request::is('admin/auth/role') || Request::is('admin/auth/role/create') ? 'collapse show active' : '' }}{{ Request::is('admin/auth/role') ? 'collapse show active' : '' }}"
@@ -219,7 +227,6 @@
 
 
                 @if (auth()->user()->rol_id == 1 && auth()->user()->unidad_id == 1)
-
                     <li class="collapsed">
                         <a class="m-link {{ Request::segment(2) == 'project' ? 'active' : '' }}"
                             href="{{ url('calendarizacion') }}">
@@ -233,21 +240,6 @@
                 @endif
 
                 @if (auth()->user()->rol_id == 4 && auth()->user()->unidad_id == 1)
-
-                <li class="collapsed">
-                    <a class="m-link {{ Request::segment(2) == 'project' ? 'active' : '' }}"
-                        href="{{ url('calendarizacion') }}">
-                        <i class="icofont-notepad"></i><span>Calendarización de mantenimientos</span></a>
-                </li>
-                <li class="collapsed">
-                    <a class="m-link {{ Request::segment(2) == 'project' ? 'active' : '' }}"
-                        href="{{ url('inventario_despliegues') }}">
-                        <i class="icofont-notepad"></i><span>Inventario despliegues</span></a>
-                </li>
-            @endif
-
-                @if (auth()->user()->rol_id == 4 && auth()->user()->unidad_id == 6)
-
                     <li class="collapsed">
                         <a class="m-link {{ Request::segment(2) == 'project' ? 'active' : '' }}"
                             href="{{ url('calendarizacion') }}">
@@ -259,12 +251,25 @@
                             <i class="icofont-notepad"></i><span>Inventario despliegues</span></a>
                     </li>
                 @endif
-                @if (auth()->user()->rol_id == 1 || auth()->user()->unidad_id == 4)
-                <li class="collapsed">
-                    <a class="m-link {{ Request::segment(2) == 'project' ? 'active' : '' }}"
-                        href="{{ url('dashboard') }}">
-                        <i class="fa fa-line-chart"></i><span>Indicadores</span></a>
-                </li>
+
+                @if (auth()->user()->rol_id == 4 && auth()->user()->unidad_id == 6)
+                    <li class="collapsed">
+                        <a class="m-link {{ Request::segment(2) == 'project' ? 'active' : '' }}"
+                            href="{{ url('calendarizacion') }}">
+                            <i class="icofont-notepad"></i><span>Calendarización de mantenimientos</span></a>
+                    </li>
+                    <li class="collapsed">
+                        <a class="m-link {{ Request::segment(2) == 'project' ? 'active' : '' }}"
+                            href="{{ url('inventario_despliegues') }}">
+                            <i class="icofont-notepad"></i><span>Inventario despliegues</span></a>
+                    </li>
+                @endif
+                @if ((auth()->user()->rol_id == 1 && auth()->user()->unidad_id == 1) || auth()->user()->unidad_id == 4)
+                    <li class="collapsed">
+                        <a class="m-link {{ Request::segment(2) == 'project' ? 'active' : '' }}"
+                            href="{{ url('dashboard') }}">
+                            <i class="fa fa-line-chart"></i><span>Indicadores</span></a>
+                    </li>
                 @endif
                 <?php
                 /*
