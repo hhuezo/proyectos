@@ -820,7 +820,10 @@ class HomeController extends Controller
         //Avance de Proyectos
         $proyectos_avance = DB::table('proyectos')
             ->leftJoin('actividades as a', 'proyectos.id', '=', 'a.proyecto_id')
-            ->select('proyectos.id', 'proyectos.nombre', 'proyectos.avance', DB::raw('IFNULL(SUM(a.tiempo_desarrollo) / 60 / 8, 0) as tiempo'))
+            ->select('proyectos.id', 'proyectos.nombre',
+            //'proyectos.avance',
+            DB::raw('(select ifnull(sum((act.porcentaje/100) * act.ponderacion),0) from actividades act where act.proyecto_id = proyectos.id) as avance'),
+            DB::raw('IFNULL(SUM(a.tiempo_desarrollo) / 60 / 8, 0) as tiempo'))
             ->where('proyectos.finalizado', 0)
             ->where('proyectos.unidad_id', $id_unidad)
             ->whereNotIn('proyectos.id', [9, 11, 28])

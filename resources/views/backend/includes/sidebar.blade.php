@@ -27,7 +27,7 @@
 
                 </li>
 
-                @if (auth()->user()->rol_id == 1 || auth()->user()->rol_id == 6)
+                @if ((auth()->user()->rol_id == 1 && auth()->user()->unidad_id == 1)  || auth()->user()->rol_id == 6)
                     <li class="collapsed">
                         <a class="m-link {{ Request::segment(2) == 'hr-dashboard' || Request::segment(2) == 'project-dashboard' ? 'active' : '' }}"
                             href="{{ url('load_unidades') }}">
@@ -38,7 +38,7 @@
                 @endif
 
 
-                @if (auth()->user()->rol_id == 1)
+                @if (auth()->user()->rol_id == 1 && auth()->user()->unidad_id == 1)
                     <li class="collapsed">
                         <a class="m-link {{ Request::segment(2) == 'project' ? 'active' : '' }}"
                             data-bs-toggle="collapse" data-bs-target="#project-Components2" href="#">
@@ -131,7 +131,7 @@
                     </li>
                 @endif
 
-                @if (auth()->user()->rol_id == 1 || auth()->user()->rol_id == 4)
+                @if ((auth()->user()->rol_id == 1 && auth()->user()->unidad_id == 1)  || auth()->user()->rol_id == 4)
                     <li class="collapsed">
                         <a class="m-link {{ Request::segment(2) == 'project' ? 'active' : '' }}"
                             href="{{ url('actividades/1') }}">
@@ -140,7 +140,7 @@
                 @endif
 
 
-                @if (auth()->user()->rol_id == 1)
+                @if (auth()->user()->rol_id == 1 && auth()->user()->unidad_id == 1)
                     <li class="collapsed">
                         <a class="m-link {{ Request::segment(2) == 'project' ? 'active' : '' }}"
                             href="{{ url('facturar') }}">
@@ -185,7 +185,7 @@
                 @endif
 
 
-                @if (auth()->user()->rol_id == 1)
+                @if (auth()->user()->rol_id == 1 && auth()->user()->unidad_id == 1)
                     <li
                         class=" {{ Request::is('admin/auth/user') || Request::is('admin/auth/role') || Request::is('admin/auth/role/create') ? '' : ' collapsed' }}">
                         <a class="m-link {{ Request::is('admin/auth/user') || Request::is('admin/auth/role') || Request::is('admin/auth/role/create') ? 'collapse show active' : '' }}{{ Request::is('admin/auth/role') ? 'collapse show active' : '' }}"
@@ -259,7 +259,7 @@
                             <i class="icofont-notepad"></i><span>Inventario despliegues</span></a>
                     </li>
                 @endif
-                @if (auth()->user()->rol_id == 1 || auth()->user()->unidad_id == 4)
+                @if ((auth()->user()->rol_id == 1 && auth()->user()->unidad_id == 1) || auth()->user()->unidad_id == 4)
                 <li class="collapsed">
                     <a class="m-link {{ Request::segment(2) == 'project' ? 'active' : '' }}"
                         href="{{ url('dashboard') }}">

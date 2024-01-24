@@ -420,7 +420,7 @@
                             <div class="mb-3">
                                 @if (auth()->user()->unidad_id == 9)
                                     <label for="multiSelect" class="form-label">Area Administrativa</label>
-                                    <select wire:model.defer="area_id"
+                                    <select wire:model.defer="area_id" required
                                         class="select2 form-control w-full mt-2 py-2">
                                         <option value="">Seleccione</option>
 
@@ -555,7 +555,7 @@
                             <div class="mb-3">
                                 @if (auth()->user()->unidad_id == 9)
                                     <label for="multiSelect" class="form-label">Area Administrativa</label>
-                                    <select wire:model.defer="area_id"
+                                    <select wire:model.defer="area_id" required
                                         class="select2 form-control w-full mt-2 py-2">
                                         <option value="">Seleccione</option>
 

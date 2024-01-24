@@ -16,6 +16,7 @@
 
 
 
+
     <div class="body d-flex py-3">
         <div class="container-xxl" style="display: {{ $visibility }}">
             <div class="row clearfix g-3">
@@ -282,16 +283,8 @@
                                                         <div class="card">
                                                             <div class="card-body ">
                                                                 <i class="icofont-stopwatch fs-3"></i>
-
-                                                                @if (auth()->user()->unidad_id == 1)
                                                                 <h6 class="mt-3 mb-0 fw-bold small-14">En Certificacion
                                                                 </h6>
-                                                                @else
-                                                                <h6 class="mt-3 mb-0 fw-bold small-14">Finalizados
-                                                                </h6>
-                                                                @endif
-
-
                                                                 <span
                                                                     style="font-size:46px">{{ $data_estado_proyectos_value[2] }}</span>
                                                             </div>
@@ -431,148 +424,153 @@
 
     <div class="col-xxl-12 col-xl-12 col-lg-12 col-md-12">&nbsp;</div>
 
-    @if (auth()->user()->unidad_id == 1)
-        <div class="col-xxl-12 col-xl-12 col-lg-12 col-md-12" style="display: {{ $visibility }}">
-            <ul class="nav nav-tabs tab-body-header rounded d-inline-flex" role="tablist">
-                <li class="nav-item"><a class="nav-link active" data-bs-toggle="tab" href="#nav-Bolson"
-                        role="tab">Bolson
-                        Horas Operatoria Diaria</a></li>
-                <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#nav-Finalizadas"
-                        role="tab">Actividades
-                        Finalizadas por Mes</a></li>
-                @if (auth()->user()->unidadId() == 1)
-                    <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#nav-Errores"
-                            role="tab">Indice
-                            errores 2021</a></li>
-                    <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#nav-Errores2023"
-                            role="tab">Indice
-                            errores 2022</a></li>
+    <div class="col-xxl-12 col-xl-12 col-lg-12 col-md-12" style="display: {{ $visibility }}">
+        <ul class="nav nav-tabs tab-body-header rounded d-inline-flex" role="tablist">
+            <li class="nav-item"><a class="nav-link active" data-bs-toggle="tab" href="#nav-Bolson"
+                    role="tab">Bolson
+                    Horas Operatoria Diaria</a></li>
+            <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#nav-Finalizadas"
+                    role="tab">Actividades
+                    Finalizadas por Mes</a></li>
+            @if (auth()->user()->unidadId() == 1)
+                <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#nav-Errores" role="tab">Indice
+                        errores 2021</a></li>
+                <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#nav-Errores2023"
+                        role="tab">Indice
+                        errores 2022</a></li>
 
-                    <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#nav-Errores2023"
-                            role="tab">Indice
-                            errores 2023</a></li>
-                    <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#nav-emergentes"
-                            role="tab">Act. emergentes 2023</a></li>
+                <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#nav-Errores2023"
+                        role="tab">Indice
+                        errores 2023</a></li>
+                <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#nav-emergentes"
+                        role="tab">Act. emergentes 2023</a></li>
 
-                    <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#nav-Categoria"
-                            role="tab">Act. por Categoria Finalizadas por Mes</a></li>
-                @endif
-            </ul>
+                <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#nav-Categoria" role="tab">Act.
+                        por Categoria Finalizadas por Mes</a></li>
+            @endif
+        </ul>
 
-            <div class="tab-content mt-2">
-                <div class="tab-pane fade show active" id="nav-Bolson" role="tabpanel">
+        <div class="tab-content mt-2">
+            <div class="tab-pane fade show active" id="nav-Bolson" role="tabpanel">
+                <div class="row g-3">
+                    <div class="col-md-8">
+                        <div class="card">
+                            <div class="card-header py-3 d-flex justify-content-between bg-transparent border-bottom-0">
+                                <h5 class="mb-0 fw-bold ">Bolson Horas Operatoria Diaria</h5>
+                                <h6>Numero de horas operatoria diaria</h6>
+                            </div>
+                            <canvas id="char_bolson_horas_operatoria_diaria"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-pane fade" id="nav-Finalizadas" role="tabpanel">
+                <div class="col-md-8">
+                    <div class="card">
+                        <div class="card-header py-3 d-flex justify-content-between bg-transparent border-bottom-0">
+                            <h5 class="mb-0 fw-bold ">Actividades Finalizadas por Mes</h5>
+                            <h6>Numero de actividades resueltas por Mes</h6>
+                        </div>
+                        <canvas id="char_actividades_finalizadas_mes"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <div class="tab-pane fade" id="nav-Errores" role="tabpanel">
+                <div class="col-md-8">
+                    <div class="card">
+                        <div class="card-header py-3 d-flex justify-content-between bg-transparent border-bottom-0">
+                            <h5 class="mb-0 fw-bold ">INDICE DE ERROR SOBRE TOTAL DE PROGRAMAS CREADOS Y
+                                MODIFICADOS 2021</h5>
+                        </div>
+                        <canvas id="char_indice_error_meses_2021"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <div class="tab-pane fade" id="nav-Errores2022" role="tabpanel">
+                <div class="col-md-8">
+                    <div class="card">
+                        <div class="card-header py-3 d-flex justify-content-between bg-transparent border-bottom-0">
+                            <h5 class="mb-0 fw-bold ">INDICE DE ERROR SOBRE TOTAL DE PROGRAMAS CREADOS Y
+                                MODIFICADOS 2022</h5>
+                        </div>
+                        <canvas id="char_indice_error_meses_2022"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <div class="tab-pane fade" id="nav-Errores2023" role="tabpanel">
+                <div class="col-md-8">
+                    <div class="card">
+                        <div class="card-header py-3 d-flex justify-content-between bg-transparent border-bottom-0">
+                            <h5 class="mb-0 fw-bold ">INDICE DE ERROR SOBRE TOTAL DE PROGRAMAS CREADOS Y
+                                MODIFICADOS 2023</h5>
+                        </div>
+                        <canvas id="char_indice_error_meses_2023"></canvas>
+                    </div>
+                </div>
+            </div>
+
+
+
+            <div class="tab-pane fade" id="nav-emergentes" role="tabpanel">
+                <div class="col-md-8">
+                    <div class="card">
+                        <div class="card-header py-3 d-flex justify-content-between bg-transparent border-bottom-0">
+                            <h5 class="mb-0 fw-bold ">Actividades emergentes 2023</h5>
+                        </div>
+                        <canvas id="char_emergentes"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <div class="tab-pane fade" id="nav-Categoria" role="tabpanel">
+                <div class="col-md-8">
+                    <div class="card">
+                        <div class="card-header py-3 d-flex justify-content-between bg-transparent border-bottom-0">
+                            <h5 class="mb-0 fw-bold ">Actividades por Categoria Finalizadas por Mes</h5>
+                        </div>
+                        <canvas id="char_actividades_finalizadas_categoria_mes"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+
+
+
+
+
+    <div class="body d-flex py-3">
+        <div class="container-xxl" style="display: {{ $visibility }}">
+            <div class="row clearfix g-3">
+                <div class="col-xl-12 col-lg-12 col-md-12 flex-column">
                     <div class="row g-3">
-                        <div class="col-md-8">
+                        <div class="col-md-12">
                             <div class="card">
                                 <div
                                     class="card-header py-3 d-flex justify-content-between bg-transparent border-bottom-0">
-                                    <h5 class="mb-0 fw-bold ">Bolson Horas Operatoria Diaria</h5>
-                                    <h6>Numero de horas operatoria diaria</h6>
+                                    <h5 class="mb-0 fw-bold ">Rendimiento base de datos</h5>
+                                    <select id="anio" onchange="load_rendimiento_db()">
+                                        @for ($i = date('Y'); $i >= 2010; $i--)
+                                            <option value="{{ $i }}">{{ $i }}</option>
+                                        @endfor
+                                    </select>
                                 </div>
-                                <canvas id="char_bolson_horas_operatoria_diaria"></canvas>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="tab-pane fade" id="nav-Finalizadas" role="tabpanel">
-                    <div class="col-md-8">
-                        <div class="card">
-                            <div class="card-header py-3 d-flex justify-content-between bg-transparent border-bottom-0">
-                                <h5 class="mb-0 fw-bold ">Actividades Finalizadas por Mes</h5>
-                                <h6>Numero de actividades resueltas por Mes</h6>
-                            </div>
-                            <canvas id="char_actividades_finalizadas_mes"></canvas>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="tab-pane fade" id="nav-Errores" role="tabpanel">
-                    <div class="col-md-8">
-                        <div class="card">
-                            <div class="card-header py-3 d-flex justify-content-between bg-transparent border-bottom-0">
-                                <h5 class="mb-0 fw-bold ">INDICE DE ERROR SOBRE TOTAL DE PROGRAMAS CREADOS Y
-                                    MODIFICADOS 2021</h5>
-                            </div>
-                            <canvas id="char_indice_error_meses_2021"></canvas>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="tab-pane fade" id="nav-Errores2022" role="tabpanel">
-                    <div class="col-md-8">
-                        <div class="card">
-                            <div class="card-header py-3 d-flex justify-content-between bg-transparent border-bottom-0">
-                                <h5 class="mb-0 fw-bold ">INDICE DE ERROR SOBRE TOTAL DE PROGRAMAS CREADOS Y
-                                    MODIFICADOS 2022</h5>
-                            </div>
-                            <canvas id="char_indice_error_meses_2022"></canvas>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="tab-pane fade" id="nav-Errores2023" role="tabpanel">
-                    <div class="col-md-8">
-                        <div class="card">
-                            <div class="card-header py-3 d-flex justify-content-between bg-transparent border-bottom-0">
-                                <h5 class="mb-0 fw-bold ">INDICE DE ERROR SOBRE TOTAL DE PROGRAMAS CREADOS Y
-                                    MODIFICADOS 2023</h5>
-                            </div>
-                            <canvas id="char_indice_error_meses_2023"></canvas>
-                        </div>
-                    </div>
-                </div>
-
-
-
-                <div class="tab-pane fade" id="nav-emergentes" role="tabpanel">
-                    <div class="col-md-8">
-                        <div class="card">
-                            <div class="card-header py-3 d-flex justify-content-between bg-transparent border-bottom-0">
-                                <h5 class="mb-0 fw-bold ">Actividades emergentes 2023</h5>
-                            </div>
-                            <canvas id="char_emergentes"></canvas>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="tab-pane fade" id="nav-Categoria" role="tabpanel">
-                    <div class="col-md-8">
-                        <div class="card">
-                            <div class="card-header py-3 d-flex justify-content-between bg-transparent border-bottom-0">
-                                <h5 class="mb-0 fw-bold ">Actividades por Categoria Finalizadas por Mes</h5>
-                            </div>
-                            <canvas id="char_actividades_finalizadas_categoria_mes"></canvas>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-
-        <div class="body d-flex py-3">
-            <div class="container-xxl" style="display: {{ $visibility }}">
-                <div class="row clearfix g-3">
-                    <div class="col-xl-12 col-lg-12 col-md-12 flex-column">
-                        <div class="row g-3">
-                            <div class="col-md-12">
-                                <div class="card">
-                                    <div
-                                        class="card-header py-3 d-flex justify-content-between bg-transparent border-bottom-0">
-                                        <h5 class="mb-0 fw-bold ">Rendimiento base de datos</h5>
-                                        <select id="anio" onchange="load_rendimiento_db()">
-                                            @for ($i = date('Y'); $i >= 2010; $i--)
-                                                <option value="{{ $i }}">{{ $i }}</option>
-                                            @endfor
-                                        </select>
-                                    </div>
-                                    <div id="div_rendimiento_bd"></div>
-                                </div>
+                                <div id="div_rendimiento_bd"></div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+    </div>
 
 
     <!-- Modal Fullscreen -->
@@ -601,58 +599,58 @@
                 </div>
             </div>
         </div>
+    </div>
 
 
-        <div style="display: {{ $visibility }}">
-            <div class="card-header py-3 d-flex justify-content-between bg-transparent border-bottom-0">
-                <h5 class="mb-0 fw-bold ">Tiempo invertido por tipo cliente</h5>
-                <select id="anio_tiempo_invertido" onchange="load_tiempo_invertido_cliente()">
-                    @for ($i = date('Y'); $i >= 2021; $i--)
-                        <option value="{{ $i }}">{{ $i }}</option>
-                    @endfor
-                </select>
-            </div>
-
-            <ul class="nav nav-tabs tab-body-header rounded d-inline-flex" role="tablist"
-                style="display: {{ $visibility }}">
-                <li class="nav-item"><a class="nav-link active" data-bs-toggle="tab" href="#nav-tiempoInvertido"
-                        role="tab">Mesual</a></li>
-                <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#nav-tiempoInvertidoAnual"
-                        role="tab">Anual</a>
-                </li>
-            </ul>
+    <div style="display: {{ $visibility }}">
+        <div class="card-header py-3 d-flex justify-content-between bg-transparent border-bottom-0">
+            <h5 class="mb-0 fw-bold ">Tiempo invertido por tipo cliente</h5>
+            <select id="anio_tiempo_invertido" onchange="load_tiempo_invertido_cliente()">
+                @for ($i = date('Y'); $i >= 2021; $i--)
+                    <option value="{{ $i }}">{{ $i }}</option>
+                @endfor
+            </select>
         </div>
 
+        <ul class="nav nav-tabs tab-body-header rounded d-inline-flex" role="tablist"
+            style="display: {{ $visibility }}">
+            <li class="nav-item"><a class="nav-link active" data-bs-toggle="tab" href="#nav-tiempoInvertido"
+                    role="tab">Mesual</a></li>
+            <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#nav-tiempoInvertidoAnual"
+                    role="tab">Anual</a>
+            </li>
+        </ul>
+    </div>
 
-        <div class="tab-content mt-2" style="display: {{ $visibility }}">
-            <div class="tab-pane fade show active" id="nav-tiempoInvertido" role="tabpanel">
-                <div class="row g-3">
-                    <div class="col-md-8">
-                        <div class="card">
-                            <div class="card-header py-3 d-flex justify-content-between bg-transparent border-bottom-0">
-                                <h5 class="mb-0 fw-bold ">Mensual</h5>
-                            </div>
-                            <div id="div_tiempo_invertido"></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="tab-pane fade" id="nav-tiempoInvertidoAnual" role="tabpanel">
+
+    <div class="tab-content mt-2" style="display: {{ $visibility }}">
+        <div class="tab-pane fade show active" id="nav-tiempoInvertido" role="tabpanel">
+            <div class="row g-3">
                 <div class="col-md-8">
                     <div class="card">
                         <div class="card-header py-3 d-flex justify-content-between bg-transparent border-bottom-0">
-                            <h5 class="mb-0 fw-bold ">Anual</h5>
+                            <h5 class="mb-0 fw-bold ">Mensual</h5>
                         </div>
-                        <div id="div_tiempo_invertido_anual"></div>
+                        <div id="div_tiempo_invertido"></div>
                     </div>
                 </div>
             </div>
         </div>
-
+        <div class="tab-pane fade" id="nav-tiempoInvertidoAnual" role="tabpanel">
+            <div class="col-md-8">
+                <div class="card">
+                    <div class="card-header py-3 d-flex justify-content-between bg-transparent border-bottom-0">
+                        <h5 class="mb-0 fw-bold ">Anual</h5>
+                    </div>
+                    <div id="div_tiempo_invertido_anual"></div>
+                </div>
+            </div>
+        </div>
     </div>
 
+
     @foreach ($graficas as $grafica)
-        <div class="tab-pane fade show active" style="display: {{ $visibility }}" id="nav-dashboard" role="tabpanel">
+        <div class="tab-pane fade show active"  style="display: {{ $visibility }}" id="nav-dashboard" role="tabpanel">
             <div class="row col-12 g-3">
                 <div class="card">
                     <div id="container{{ $grafica->id }}"></div>
@@ -660,26 +658,6 @@
             </div>
         </div>
     @endforeach
-
-
-
-
-    @endif
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -1132,7 +1110,7 @@
                         dataLabels: {
                             enabled: true,
                             format: graficas[i].encabezado[i] +
-                                ' - {point.y}', // Muestra el valor de 'y' seguido por el nombre de la columna
+                            ' - {point.y}', // Muestra el valor de 'y' seguido por el nombre de la columna
                             style: {
                                 color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black'
                             }
@@ -1167,11 +1145,23 @@
                         description: 'Countries'
                     }
                 },
-                yAxis: {
+                 yAxis: {
                     min: 0,
                     title: {
                         text: graficas[i].descripcion
-                    }
+                    },
+                    plotLines: graficas[i].linea_estandar > 0 ? [{
+                        color: 'red', // Color de la línea
+                        dashStyle: 'solid', // Estilo de la línea (puedes cambiarlo según tus preferencias)
+                        value: graficas[i].linea_estandar, // Valor del máximo permitido
+                        width: 2, // Grosor de la línea
+                        label: {
+                            text: 'Línea estándar establecida', // Etiqueta asociada a la línea
+                            align: 'right',
+                            x: -10
+                        }
+                    }] : undefined
+
                 },
                 tooltip: {
                     valueSuffix: ''

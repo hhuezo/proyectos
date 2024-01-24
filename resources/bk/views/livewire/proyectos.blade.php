@@ -880,25 +880,8 @@
                         </div>
 
                         <div class="mb-3">
-                            @if (auth()->user()->unidad_id == 9)
-                            <label for="multiSelect" class="form-label">Area Administrativa</label>
-                            <select wire:model.defer="area_id" required
-                                class="select2 form-control w-full mt-2 py-2">
-                                <option value="">Seleccione</option>
-                                @if (isset($areas))
-                                    @foreach ($areas as $obj)
-                                        <option value="{{ $obj->id }}"
-                                            class=" inline-block font-Inter font-normal text-sm text-slate-600">
-                                            {{ $obj->nombre }}</option>
-                                    @endforeach
-                                @endif
-
-                            </select>
-                            <input type="hidden" name="forma" value="NO APLICA" class="form-control">
-                        @else
                             <label class="form-label">Forma</label>
                             <input type="text" wire:model.defer="forma" class="form-control">
-                        @endif
                         </div>
 
 
@@ -933,7 +916,7 @@
         <div class="modal-dialog modal-dialog-centered modal-lg modal-dialog-scrollable">
             <div class="modal-content">
                 <div class="modal-header col">
-                    <h5 class="modal-title  fw-bold" id="createprojectlLabel">Modificar actividad aaa</h5>
+                    <h5 class="modal-title  fw-bold" id="createprojectlLabel">Modificar actividad</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <input type="hidden" wire:model.defer="id_proyecto">
@@ -1016,25 +999,8 @@
                         </div>
 
                         <div class="mb-3">
-                            @if (auth()->user()->unidad_id == 9)
-                                <label for="multiSelect" class="form-label">Area Administrativa</label>
-                                <select wire:model.defer="area_id" required
-                                    class="select2 form-control w-full mt-2 py-2">
-                                    <option value="">Seleccione</option>
-                                    @if (isset($areas))
-                                        @foreach ($areas as $obj)
-                                            <option value="{{ $obj->id }}"
-                                                class=" inline-block font-Inter font-normal text-sm text-slate-600">
-                                                {{ $obj->nombre }}</option>
-                                        @endforeach
-                                    @endif
-
-                                </select>
-                                <input type="hidden" name="forma" value="NO APLICA" class="form-control">
-                            @else
-                                <label class="form-label">Forma</label>
-                                <input type="text" wire:model.defer="forma" class="form-control">
-                            @endif
+                            <label class="form-label">Forma</label>
+                            <input type="text" wire:model.defer="forma" class="form-control">
                         </div>
 
 
