@@ -41,4 +41,13 @@ class Actividad extends Model
         return $this->hasMany('App\AreaActividad');
     }
 
+    public function movimientos()
+    {
+        return $this->hasMany('App\MovimientoActividad');
+    }
+
+    public function categoria(){
+        return $this->belongsTo('App\CategoriaTicket');
+    }
+
 }

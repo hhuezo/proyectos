@@ -306,6 +306,7 @@
                                 <th>Estado</th>
                                 <th>Prioridad</th>
                                 <th>Opciones</th>
+                                <th>Ver detalle</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -351,12 +352,24 @@
                                                     wire:click="pausar({{ $actividad->id }})"></i>
                                             @endif
                                         </div>
+
                                     </td>
+
+                                    <td>
+                                        <div class="btn-group" role="group" aria-label="Basic outlined example">
+                                            <button type="button" class="btn btn-success"><i
+                                                    class="icofont-edit fa-lg" data-bs-toggle="modal"
+                                                    wire:click="detail_actividad({{ $actividad->id }})"
+                                                    data-bs-target="#detail_actividad"></i></button>
+                                        </div>
+                                    </td>
+
                                 </tr>
                             @endforeach
 
                         </tbody>
                     </table>
+
 
 
 
@@ -518,13 +531,14 @@
                             <div class="mb-3">
                                 @if (auth()->user()->unidad_id == 9)
                                     <label for="multiSelect" class="form-label">Area Administrativa</label>
-                                    <select wire:model.defer="area_id" class="select2 form-control w-full mt-2 py-2" required>
+                                    <select wire:model.defer="area_id" class="select2 form-control w-full mt-2 py-2"
+                                        required>
                                         <option value="">Seleccione</option>
                                         @if ($actividad->areas)
-                                            @foreach ($actividad->areas as $obj)
-                                            <option value="{{ $area->area->id }}"
-                                                class=" inline-block font-Inter font-normal text-sm text-slate-600">
-                                                {{ $area->area->nombre }}</option>
+                                            @foreach ($actividad->areas as $area)
+                                                <option value="{{ $area->area->id }}"
+                                                    class=" inline-block font-Inter font-normal text-sm text-slate-600">
+                                                    {{ $area->area->nombre }}</option>
                                             @endforeach
                                         @endif
                                     </select>
@@ -635,6 +649,112 @@
             </div>
         </div>
 
+        <div id="detail_actividad" wire:ignore.self class="modal fade" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-lg modal-dialog-scrollable">
+                <div class="modal-content">
+                    <div class="modal-header col">
+                        <h5 class="modal-title  fw-bold" id="createprojectlLabel">Movimientos de actividad</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                            aria-label="Close"></button>
+                    </div>
+
+                    <div class="modal-body row">
+
+
+                        <!-- BEGIN: Hover Tables -->
+                        <div class="card">
+                            <header class=" card-header noborder">
+                                <h4 class="card-title">
+                                </h4>
+                            </header>
+                            <div class="card-body px-6 pb-6">
+                                <div class="overflow-x-auto -mx-6">
+                                    <div class="inline-block min-w-full align-middle">
+                                        <div class="overflow-hidden ">
+
+
+
+
+
+
+                                            <table id="patient-table" class="table table-hover align-middle mb-0"
+                                                style="width: 100%;">
+                                                <thead>
+                                                    <tr>
+                                                        <th>
+                                                            Id
+                                                        </th>
+
+
+
+                                                        <th>
+                                                            Fecha
+                                                        </th>
+
+                                                        <th>
+                                                            Usuario
+                                                        </th>
+
+                                                        <th>
+                                                            Avance
+                                                        </th>
+
+                                                        <th>
+                                                            Estado
+                                                        </th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    @if ($movimientos_actividad)
+                                                        {{-- @foreach ($movimientos_actividad->orderBy('fecha','desc') as $obj) --}}
+                                                        @foreach ($movimientos_actividad as $obj)
+                                                            <tr>
+                                                                <td>{{ $obj->actividad->id }}</td>
+
+                                                                <td>{{ $obj->fecha }}</td>
+
+                                                                <td>
+                                                                    {{ $obj->actividad->usuario->user_name }}</td>
+
+                                                                    <td>{{ $obj->porcentaje }}</td>
+
+
+
+                                                                <td>
+                                                                    {{ $obj->actividad->estado->nombre }}</td>
+
+                                                            </tr>
+                                                        @endforeach
+                                                    @endif
+                                                </tbody>
+                                            </table>
+
+
+
+
+
+
+
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- END: Hover Tables -->
+
+
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
         <div class="contenedor"
             style="width: 90px;
                 height: 240px;
@@ -705,6 +825,11 @@
         window.addEventListener('close-modal-avance', (e) => {
             $('#create_avance').modal('hide')
         });
+
+
+        function modal_detail_activity(id) {
+            $('#detail_actividad').modal('show')
+        }
     </script>
 
     <script>

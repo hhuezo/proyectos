@@ -2,7 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Events\OrderStatusChangedEvent;
-
+use App\Http\Controllers\HomeController;
 use App\User;
 use App\Notifications\TaskCompleted;
 use Carbon\Carbon;
@@ -101,3 +101,9 @@ Route::resource('inventario_despliegues', 'catalogo\InventarioDespliegueControll
 //graficas
 Route::post('dashboard/update_grafica','DashboardController@update_grafica');
 Route::resource('dashboard','DashboardController');
+
+
+#actividades finalizadas
+Route::get('get_actividades_finalizadas/{id}', [HomeController::class, 'get_actividades_finalizadas']);
+
+

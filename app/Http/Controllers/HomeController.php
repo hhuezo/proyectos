@@ -1297,4 +1297,27 @@ class HomeController extends Controller
         $unidades = Unidad::where('id', '>', 0)->where('id', '<>', 8)->get();
         return view('unidades', compact('unidades'));
     }
+
+
+
+    public function get_actividades_finalizadas($id)
+    {
+        //id=0 semana pasada
+        //id=1 semana actual
+
+
+        $actividades_diarias_finalizadas = DB::select("call spConsultaActividadesDiariasFinalizadas('".auth()->user()->unidad_id."','".$id."')");
+
+        $dsb_actividades_diarias_finalizadas = DB::table('tmp_actividades_diarias_finalizadas')->get();
+
+
+        return response()->json(
+            $dsb_actividades_diarias_finalizadas,
+            200,
+            ['Content-Type' => 'application/json;charset=UTF-8', 'Charset' => 'utf-8'],
+            JSON_UNESCAPED_UNICODE
+        );
+    }
+
+
 }

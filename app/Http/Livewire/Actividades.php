@@ -16,7 +16,7 @@ use Illuminate\Support\Facades\Redirect;
 
 class Actividades extends Component
 {
-    public $id_proyecto = 9, $proyectos, $catalogo_proyectos, $proyecto_id, $numero_ticket = 0, $ponderacion = 0.01, $descripcion,
+    public $id_proyecto = 9, $proyectos, $catalogo_proyectos, $proyecto_id, $numero_ticket = 0, $ponderacion = 0.01, $descripcion, $movimientos_actividad,
         $fecha_inicio, $categoria_id, $estado_id, $prioridad_id = 1, $fecha_fin, $forma = "NO APLICA",  $tipo = 1, $busqueda,
         $id_actividad, $nombre_actividad, $porcentaje_diario = 0, $porcentaje_actual, $porcentaje_anterior = 0, $tiempo_minutos, $detalle, $area_id;
 
@@ -86,6 +86,8 @@ class Actividades extends Component
             ->where('actividades.estado_id', '<>', 4)
             ->where('actividades.users_id', '=', auth()->user()->id)
             ->orderBy('actividades.id', 'desc')->get();
+
+            //dd($actividades);
 
         $categorias = CategoriaTicket::where('categoria_tickets.unidad_id', '=', auth()->user()->unidad_id)->get();
         $prioridades = PrioridadTicket::get();
@@ -493,4 +495,21 @@ class Actividades extends Component
 
         $this->dispatchBrowserEvent('close-modal-edit');
     }
+
+
+    public function detail_actividad($id)
+    {
+
+        $actividad = Actividad::findOrFail($id);
+
+
+        if ($actividad) {
+            $this->movimientos_actividad = $actividad->movimientos->sortByDesc('id');
+        }else{
+            $this->movimientos_actividad = null;
+        }
+
+
+    }
+
 }
