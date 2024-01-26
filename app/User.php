@@ -22,7 +22,7 @@ class User extends Authenticatable
     protected $table = 'users';
 
     protected $fillable = [
-        'name', 'email', 'password', 'user_name', 'rol_id', 'unidad_id',
+        'name', 'email', 'password', 'user_name', 'rol_id', 'unidad_id','estado'
     ];
 
     /**
@@ -52,6 +52,13 @@ class User extends Authenticatable
     {
         return $this->belongsTo('App\Rol', 'rol_id', 'id');
     }
+
+
+    public function user_rol()
+    {
+        return $this->belongsToMany(Rol::class, 'model_has_roles', 'model_id','role_id');
+    }
+
 
     public function unidadId(){
 

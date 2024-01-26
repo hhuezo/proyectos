@@ -43,23 +43,23 @@
                 @endcan
 
                 @can('read menu seguridad')
-                <li class="collapsed">
-                    <a class="m-link {{ Request::segment(2) == 'project' ? 'active' : '' }}" data-bs-toggle="collapse"
-                        data-bs-target="#project-Components2" href="#">
-                        <i class="icofont-user"></i><span>Seguridad</span> <span
-                            class="arrow icofont-dotted-down ms-auto text-end fs-5"></span></a>
-                    <!-- Menu: Sub menu ul -->
-                    <ul class="sub-menu {{ Request::segment(2) == 'project' ? 'collapsed show' : 'collapse' }}"
-                        id="project-Components2">
-                        <li><a class="ms-link {{ Request::segment(3) == 'index' ? 'active' : '' }}"
-                                href="{{ url('usuario') }}"><span>Usuario</span></a></li>
-                        <li><a class="ms-link {{ Request::segment(3) == 'tasks' ? 'active' : '' }}"
-                                href="{{ url('produccion/rol') }}"><span>Roles </span></a></li>
-                        <li><a class="ms-link {{ Request::segment(3) == 'tasks' ? 'active' : '' }}"
-                                href="{{ url('produccion/permisos') }}"><span>Permisos </span></a></li>
+                    <li class="collapsed">
+                        <a class="m-link {{ Request::segment(2) == 'project' ? 'active' : '' }}" data-bs-toggle="collapse"
+                            data-bs-target="#project-Components2" href="#">
+                            <i class="icofont-user"></i><span>Seguridad</span> <span
+                                class="arrow icofont-dotted-down ms-auto text-end fs-5"></span></a>
+                        <!-- Menu: Sub menu ul -->
+                        <ul class="sub-menu {{ Request::segment(2) == 'project' ? 'collapsed show' : 'collapse' }}"
+                            id="project-Components2">
+                            <li><a class="ms-link {{ Request::segment(3) == 'index' ? 'active' : '' }}"
+                                    href="{{ url('usuario') }}"><span>Usuario</span></a></li>
+                            <li><a class="ms-link {{ Request::segment(3) == 'tasks' ? 'active' : '' }}"
+                                    href="{{ url('produccion/rol') }}"><span>Roles </span></a></li>
+                            <li><a class="ms-link {{ Request::segment(3) == 'tasks' ? 'active' : '' }}"
+                                    href="{{ url('produccion/permisos') }}"><span>Permisos </span></a></li>
 
-                    </ul>
-                </li>
+                        </ul>
+                    </li>
                 @endcan
 
 
@@ -90,10 +90,12 @@
 
 
 
-                @if (auth()->user()->rol_id == 1 || auth()->user()->rol_id == 4 || auth()->user()->rol_id == 7)
+                {{-- @if (auth()->user()->rol_id == 1 || auth()->user()->rol_id == 4 || auth()->user()->rol_id == 7)  @endif --}}
+
+                @can('read menu proyectos')
                     <li class="collapsed">
-                        <a class="m-link {{ Request::segment(2) == 'project' ? 'active' : '' }}"
-                            data-bs-toggle="collapse" data-bs-target="#project-Components" href="#">
+                        <a class="m-link {{ Request::segment(2) == 'project' ? 'active' : '' }}" data-bs-toggle="collapse"
+                            data-bs-target="#project-Components" href="#">
                             <i class="icofont-briefcase"></i><span>Proyectos</span> <span
                                 class="arrow icofont-dotted-down ms-auto text-end fs-5"></span></a>
                         <!-- Menu: Sub menu ul -->
@@ -106,7 +108,7 @@
 
                         </ul>
                     </li>
-                @endif
+                @endcan
 
 
                 @if (auth()->user()->rol_id == 6 && session('id_unidad'))
@@ -152,13 +154,14 @@
                 @endif
 
 
-                @if (auth()->user()->rol_id == 1 && auth()->user()->unidad_id == 1)
+                {{-- @if (auth()->user()->rol_id == 1 && auth()->user()->unidad_id == 1) @endif --}}
+                @can('read menu facturar')
                     <li class="collapsed">
                         <a class="m-link {{ Request::segment(2) == 'project' ? 'active' : '' }}"
                             href="{{ url('facturar') }}">
                             <i class="icofont-notepad"></i><span>Facturar</span></a>
                     </li>
-                @endif
+                @endcan
 
                 @if (auth()->user()->rol_id == 2)
                     <li class="collapsed">
@@ -266,13 +269,13 @@
                             <i class="icofont-notepad"></i><span>Inventario despliegues</span></a>
                     </li>
                 @endif
-                @if ((auth()->user()->rol_id == 1 && auth()->user()->unidad_id == 1) || auth()->user()->unidad_id == 6)
+                @can ('read indicadores')
                     <li class="collapsed">
                         <a class="m-link {{ Request::segment(2) == 'project' ? 'active' : '' }}"
                             href="{{ url('dashboard') }}">
                             <i class="fa fa-line-chart"></i><span>Indicadores</span></a>
                     </li>
-                @endif
+                @endcan
                 <?php
                 /*
             <li class=" {{ Request::is('admin/auth/user') || Request::is('admin/auth/role')  || Request::is('admin/auth/role/create') ? '' : ' collapsed' }}">

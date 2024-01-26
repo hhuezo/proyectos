@@ -131,33 +131,32 @@
     </div>
 
     <div class="card mb-3">
-<div class="card-body">
-    <table id="myProjectTable" class="table table-hover align-middle mb-0" style="width:100%">
-        <thead>
-            <tr>
-                <th>#</th>
-                <th>permiso</th>
-                <th>eliminar</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach ($rol->permissions_has_role as $obj)
-                <tr>
-                    <td>{{ $obj->id }}</td>
-                    <td>{{ $obj->name }}</td>
-                    <td> <button type="button" data-bs-toggle="modal"
-                            data-bs-target="#modal-delete-{{ $obj->id }}"
-                            class="btn btn-outline-secondary"><i
-                                class="icofont-ui-delete text-danger btn-lg"></i></button>
-                    </td>
-                </tr>
-                @include('produccion.rol.modal')
-            @endforeach
+        <div class="card-body">
+            <table id="myProjectTable" class="table table-hover align-middle mb-0" style="width:100%">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>permiso</th>
+                        <th>eliminar</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach ($rol->permissions_has_role as $obj)
+                        <tr>
+                            <td>{{ $obj->id }}</td>
+                            <td>{{ $obj->name }}</td>
+                            <td> <button type="button" data-bs-toggle="modal"
+                                    data-bs-target="#modal-delete-{{ $obj->id }}" class="btn btn-outline-secondary"><i
+                                        class="icofont-ui-delete text-danger btn-lg"></i></button>
+                            </td>
+                        </tr>
+                        @include('produccion.rol.modal')
+                    @endforeach
 
-        </tbody>
-    </table>
-</div>
-</div>
+                </tbody>
+            </table>
+        </div>
+    </div>
 
 
     <!-- Jquery Page Js -->
@@ -197,7 +196,7 @@
                     }]
                 });
 
-           // $('#myProjectTable').DataTable().order([1, 'asc']).draw();
+            // $('#myProjectTable').DataTable().order([1, 'asc']).draw();
             $('.deleterow').on('click', function() {
                 var tablename = $(this).closest('table').DataTable();
                 tablename

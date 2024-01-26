@@ -62,7 +62,7 @@ public function link_permission(Request $request)
     $role = Role::findOrFail($request->role_id);
     $permission = Permission::findOrFail($request->permission_id);
     $role->givePermissionTo($permission->name);
-    alert()->success('El registro ha sido eliminado correctamente');
+    alert()->success('El registro ha sido agregado correctamente');
     return back();
 }
 
