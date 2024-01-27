@@ -42,7 +42,7 @@
                                             <td>{{ $obj->nombre }}</td>
 
                                             <td align="center">
-                                            <a data-bs-toggle="modal" data-bs-target="#modal-delete-{{$obj->id}}" class="btn">@if($obj->activo == 1) <iconify-icon icon="line-md:switch-off-filled" style="color: #484c7f;" rotate="180deg"  width="40"></iconify-icon> @else <iconify-icon  width="40" icon="line-md:switch-off" style="color: #484c7f;"></iconify-icon>  @endif</a> 
+                                            <a data-bs-toggle="modal" data-bs-target="#modal-delete-{{$obj->id}}" class="btn">@if($obj->activo == 1) <iconify-icon icon="line-md:switch-off-filled" style="color: #484c7f;" rotate="180deg"  width="40"></iconify-icon> @else <iconify-icon  width="40" icon="line-md:switch-off" style="color: #484c7f;"></iconify-icon>  @endif</a>
                                             </td>
 
 

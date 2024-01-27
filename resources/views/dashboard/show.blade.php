@@ -22,6 +22,7 @@
 
 <script>
     $(document).ready(function() {
+        console.log(<?php echo json_encode($grafica); ?>);
         var datos = <?php echo json_encode($grafica); ?>;
         var cellValues = {}; // Cambié a un objeto en lugar de un array
 

@@ -106,6 +106,10 @@ class DashboardController extends Controller
         $grafica->titulo = $request->titulo;
         $grafica->tipo_grafica_id = $request->tipo_grafica_id;
         $grafica->descripcion = $request->descripcion;
+        if($request->linea_estandar == "")
+        {
+            $request->linea_estandar  = 0.00;
+        }
         $grafica->linea_estandar = $request->linea_estandar;
         $grafica->valor = $jsonData;
         $grafica->unidades_id = auth()->user()->unidad_id;

@@ -178,7 +178,7 @@ return [
         //proveedor sweetalert
         RealRashid\SweetAlert\SweetAlertServiceProvider::class,
 
-
+        Spatie\Permission\PermissionServiceProvider::class,
     ],
 
     /*

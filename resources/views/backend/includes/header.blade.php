@@ -184,8 +184,8 @@
                                 @endif
 
 
-                                <a href="#" class="list-group-item list-group-item-action border-0 "><i
-                                        class="icofont-ui-user fs-6 me-3"></i>Mi perfil</a>
+                                <a href="{{ url('usuario') }}/{{auth()->user()->id}}" class="list-group-item list-group-item-action border-0 "><i
+                                    class="icofont-ui-user fs-6 me-3"></i>Mi perfil</a>
 
                                 <div>
                                     <hr class="dropdown-divider border-dark">

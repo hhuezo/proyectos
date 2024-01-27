@@ -751,10 +751,11 @@ class HomeController extends Controller
 
     public function index(Request $request)
     {
-        if (session('id_unidad')) {
+        if (session()->has('id_unidad')) {
             $id_unidad = session('id_unidad');
         } else {
             $id_unidad = auth()->user()->unidad_id;
+            session(['id_unidad' => auth()->user()->unidad_id]);
         }
 
         //soporte técnico
@@ -768,13 +769,13 @@ class HomeController extends Controller
         }
 
 
-        if (auth()->user()->rol_id == 6 && !session('id_unidad')) {
+        if (auth()->user()->hasRole('Gerente') == 6 && !session()->has('id_unidad')) {
             $unidades = Unidad::where('id', '>', 0)->where('id', '<>', 8)->get();
             return view('unidades', compact('unidades'));
         }
 
 
-        if (auth()->user()->rol_id == 1) {
+        if (auth()->user()->hasRole('Administrador') ) {
             $proyectos = DB::table('actividades')
                 ->select(
                     'proyectos.id',
@@ -987,7 +988,6 @@ class HomeController extends Controller
 
 
 
-
         // fin Actividades Finalizadas por Mes
 
 
@@ -1066,6 +1066,7 @@ class HomeController extends Controller
         }
 
 
+
         $resultados = DB::table(DB::raw('(SELECT 1 AS mes UNION SELECT 2 UNION SELECT 3 UNION SELECT 4 UNION SELECT 5 UNION SELECT 6 UNION SELECT 7 UNION SELECT 8 UNION SELECT 9 UNION SELECT 10 UNION SELECT 11 UNION SELECT 12) meses'))
         ->crossJoin(DB::raw('(SELECT DISTINCT tipo FROM emergentes_por_tipo_2023 WHERE tipo IS NOT NULL) tipos'))
         ->leftJoin('emergentes_por_tipo_2023 as emergentes', function ($join) {
@@ -1118,8 +1119,6 @@ class HomeController extends Controller
         }
 
        $meses_emergente =  array('Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre');
-
-
 
 
 
@@ -1201,7 +1200,6 @@ class HomeController extends Controller
 
 
 
-
         return view('home', compact(
             'numero_tickets_anterior',
             'numero_tickets_actual',
@@ -1236,6 +1234,13 @@ class HomeController extends Controller
         ));
     }
 
+    public function unidad($id)
+    {
+        session(['id_unidad' => $id]);
+
+        return redirect('/home');
+    }
+
 
     function generarArregloFechas($fechaInicio, $fechaFinal)
     {
@@ -1263,11 +1268,7 @@ class HomeController extends Controller
         return $arregloFechas;
     }
 
-    public function unidad($id)
-    {
-        session(['id_unidad' => $id]);
-        return redirect('/home');
-    }
+
 
     public function get_data($sucursal)
     {
