@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Actividad;
 use App\iso\Grafica;
-use App\Proyecto;
 use App\snipeit\ActivosIso;
 use App\snipeit\VmFrecuenciaMantenimiento;
 use App\snipeit\VmMantenimiento;
@@ -776,7 +775,7 @@ class HomeController extends Controller
         }
 
 
-        if (auth()->user()->hasRole('Administrador')) {
+        if (auth()->user()->hasRole('Administrador') ) {
             $proyectos = DB::table('actividades')
                 ->select(
                     'proyectos.id',
@@ -806,64 +805,15 @@ class HomeController extends Controller
                 ->get();
         }
 
-        $lastMonday = Carbon::now()->subWeek()->startOfWeek();
-        $lastSunday = Carbon::now()->subWeek()->endOfWeek();
-
-
-        if($id_unidad == 1)
-        {     //semana actual
-            //$numero_tickets_actual = Actividad::whereIn('proyecto_id',[9,11])->where('estado_id','=',4)->where('unidad_id','=',$id_unidad)
-            $numero_tickets_actual = Actividad::where('estado_id','=',4)->where('unidad_id','=',$id_unidad)
-            ->where('fecha_liberacion','>',$lastSunday->format('Y-m-d 23:59:59'))->get();
-
-
-            //semana anterior
-            //$numero_tickets_anterior = Actividad::whereIn('proyecto_id',[9,11])->where('estado_id','=',4)->where('unidad_id','=',$id_unidad)
-            $numero_tickets_anterior = Actividad::where('estado_id','=',4)->where('unidad_id','=',$id_unidad)
-            ->where('fecha_liberacion','>',$lastMonday->format('Y-m-d'))
-            ->where('fecha_liberacion','<',$lastSunday->format('Y-m-d 23:59:59'))
-            ->get();
-
-        }
-        else{
-            $numero_tickets_actual = Actividad::where('estado_id','=',4)->where('unidad_id','=',$id_unidad)
-            ->where('fecha_liberacion','>',$lastSunday->format('Y-m-d 23:59:59'))->get();
-
-
-        //semana anterior
-            $numero_tickets_anterior = Actividad::where('estado_id','=',4)->where('unidad_id','=',$id_unidad)
-            ->where('fecha_liberacion','>',$lastMonday->format('Y-m-d'))
-            ->where('fecha_liberacion','<',$lastSunday->format('Y-m-d 23:59:59'))
-            ->get();
-        }
-
-        // numero incremento produccion
-        if ($numero_tickets_anterior->count() > 0) {
-            $numero_incremento_prod = round((($numero_tickets_actual->count() * 100) / $numero_tickets_anterior->count()) - 100,2);
-        }else{
-            $numero_incremento_prod = 0;
-        }
-
-        // numero_proyectos_desarrollo
-        $numero_proyectos_desarrollo = Proyecto::
-        where('estado_id','=',3)
-        ->where('unidad_id','=',$id_unidad)
-        ->get()->count();
-
-
-        //dd($numero_proyectos_desarrollo, $id_unidad);
-
-
-
 
 
         //primera fila SEMANA PASADA, SEMANA ACTUAL , DECREMENTO PRODUCCION y PROYECTOS EN DESARROLLO
-        // $tmp_dsb_datos = DB::table('tmp_dsb_datos')->where('unidad_id', '=', $id_unidad)->select(['numero_tickets_anterior', 'numero_tickets_actual', 'numero_incremento_prod', 'numero_proyectos_desarrollo'])->first();
+        $tmp_dsb_datos = DB::table('tmp_dsb_datos')->where('unidad_id', '=', $id_unidad)->select(['numero_tickets_anterior', 'numero_tickets_actual', 'numero_incremento_prod', 'numero_proyectos_desarrollo'])->first();
 
-        // $numero_tickets_anterior = $tmp_dsb_datos->numero_tickets_anterior ?? null;
-        // $numero_tickets_actual = $tmp_dsb_datos->numero_tickets_actual ?? null;
-        // $numero_incremento_prod = $tmp_dsb_datos->numero_incremento_prod ?? null;
-        // $numero_proyectos_desarrollo = $tmp_dsb_datos->numero_proyectos_desarrollo ?? null;
+        $numero_tickets_anterior = $tmp_dsb_datos->numero_tickets_anterior ?? null;
+        $numero_tickets_actual = $tmp_dsb_datos->numero_tickets_actual ?? null;
+        $numero_incremento_prod = $tmp_dsb_datos->numero_incremento_prod ?? null;
+        $numero_proyectos_desarrollo = $tmp_dsb_datos->numero_proyectos_desarrollo ?? null;
 
         // fin primera fila SEMANA PASADA, SEMANA ACTUAL , DECREMENTO PRODUCCION y PROYECTOS EN DESARROLLO
 
@@ -914,15 +864,7 @@ class HomeController extends Controller
             )
             ->first();
 
-            if ($id_unidad == 1) {
-                $data_estado_proyectos_label = ["En Desarrollo (" . $result->numero_proyectos_desarrollo . ")", "En Certificación (" . $result->numero_proyectos_certificacion . ")", "En Pausa (" . $result->numero_proyectos_pausa . ")"];
-            } else {
-                $data_estado_proyectos_label = ["En Desarrollo (" . $result->numero_proyectos_desarrollo . ")", "Finalizados (" . $result->numero_proyectos_certificacion . ")", "En Pausa (" . $result->numero_proyectos_pausa . ")"];
-            }
-
-
-
-
+        $data_estado_proyectos_label = ["En Desarrollo (" . $result->numero_proyectos_desarrollo . ")", "En Certificacion (" . $result->numero_proyectos_certificacion . ")", "En Pausa (" . $result->numero_proyectos_pausa . ")"];
         $data_estado_proyectos_value = [$result->numero_proyectos_desarrollo, $result->numero_proyectos_certificacion, $result->numero_proyectos_pausa];
         //fin Estado de proyectos
 
@@ -1358,74 +1300,16 @@ class HomeController extends Controller
     }
 
 
+
     public function get_actividades_finalizadas($id)
     {
         //id=0 semana pasada
         //id=1 semana actual
-        //dd($id);
-
-        // $actividades_diarias_finalizadas = DB::select("call spConsultaActividadesDiariasFinalizadas('".auth()->user()->unidad_id."','".$id."')");
-
-        // $dsb_actividades_diarias_finalizadas = DB::table('tmp_actividades_diarias_finalizadas')->get();
-
-        $lastMonday = Carbon::now()->subWeek()->startOfWeek();
-        $lastSunday = Carbon::now()->subWeek()->endOfWeek();
 
 
-        //dd($lastMonday, $lastSunday);
+        $actividades_diarias_finalizadas = DB::select("call spConsultaActividadesDiariasFinalizadas('".auth()->user()->unidad_id."','".$id."')");
 
-        if(auth()->user()->unidad_id == 1)
-        {     //semana actual
-            $numero_tickets_actual =DB::table('actividades')
-            ->join('users', 'actividades.users_id', '=', 'users.id')
-            ->select('actividades.id', 'users.user_name', 'users.name', 'actividades.numero_ticket', 'actividades.descripcion', 'actividades.fecha_inicio', 'actividades.fecha_fin')
-            //->whereIn('actividades.proyecto_id',[9,11])->where('actividades.estado_id','=',4)->where('actividades.unidad_id','=',auth()->user()->unidad_id)
-            ->where('actividades.estado_id','=',4)->where('actividades.unidad_id','=',auth()->user()->unidad_id)
-            ->where('actividades.fecha_liberacion','>',$lastSunday->format('Y-m-d 23:59:59'))->get();
-
-
-            //semana anterior
-            $numero_tickets_anterior = DB::table('actividades')
-            ->join('users', 'actividades.users_id', '=', 'users.id')
-            ->select('actividades.id', 'users.user_name', 'users.name', 'actividades.numero_ticket', 'actividades.descripcion', 'actividades.fecha_inicio', 'actividades.fecha_fin')
-            //->whereIn('actividades.proyecto_id',[9,11])->where('actividades.estado_id','=',4)->where('actividades.unidad_id','=',auth()->user()->unidad_id)
-            ->where('actividades.estado_id','=',4)->where('actividades.unidad_id','=',auth()->user()->unidad_id)
-            ->where('actividades.fecha_liberacion','>',$lastMonday->format('Y-m-d'))
-            ->where('actividades.fecha_liberacion','<',$lastSunday->format('Y-m-d 23:59:59'))
-            ->get();
-
-        }
-        else{
-            $numero_tickets_actual = DB::table('actividades')
-            ->join('users', 'actividades.users_id', '=', 'users.id')
-            ->select('actividades.id', 'users.user_name', 'users.name', 'actividades.numero_ticket', 'actividades.descripcion', 'actividades.fecha_inicio', 'actividades.fecha_fin')
-            ->where('actividades.estado_id','=',4)->where('actividades.unidad_id','=',auth()->user()->unidad_id)
-            ->where('actividades.fecha_liberacion','>',$lastSunday->format('Y-m-d 23:59:59'))->get();
-
-
-        //semana anterior
-            $numero_tickets_anterior = DB::table('actividades')
-            ->join('users', 'actividades.users_id', '=', 'users.id')
-            ->select('actividades.id', 'users.user_name', 'users.name', 'actividades.numero_ticket', 'actividades.descripcion', 'actividades.fecha_inicio', 'actividades.fecha_fin')
-            ->where('actividades.estado_id','=',4)->where('actividades.unidad_id','=',auth()->user()->unidad_id)
-            ->where('actividades.fecha_liberacion','>',$lastMonday->format('Y-m-d'))
-            ->where('actividades.fecha_liberacion','<',$lastSunday->format('Y-m-d 23:59:59'))
-            ->get();
-        }
-
-
-        if ($id == 0) {
-            //semana anterior
-            $dsb_actividades_diarias_finalizadas = $numero_tickets_anterior;
-        } else {
-            //semana actual
-            $dsb_actividades_diarias_finalizadas = $numero_tickets_actual;
-        }
-
-
-
-
-        //dd(auth()->user()->unidad_id, $id, $dsb_actividades_diarias_finalizadas);
+        $dsb_actividades_diarias_finalizadas = DB::table('tmp_actividades_diarias_finalizadas')->get();
 
 
         return response()->json(

@@ -266,7 +266,7 @@
                                                                             </div>
 
                                                                             @foreach ($actividad->areas as $area)
-                                                                                <li>{{ $area->area->nombre }}</li>
+                                                                                <li>{{ $area->area ? $area->area->nombre : ''  }}</li>
                                                                             @endforeach
                                                                         @endif
 
@@ -532,10 +532,11 @@
                                     <select wire:model.defer="area_id" class="select2 form-control w-full mt-2 py-2" required>
                                         <option value="">Seleccione</option>
                                         @if ($actividad->areas)
-                                            @foreach ($actividad->areas as $obj)
-                                            <option value="{{ $area->area->id }}"
+                                            @foreach ($actividad->areas as $area)
+
+                                            <option value="{{ $area->area ? $area->area->id : '' }}"
                                                 class=" inline-block font-Inter font-normal text-sm text-slate-600">
-                                                {{ $area->area->nombre }}</option>
+                                                {{ $area->area ? $area->area->nombre : '' }}</option>
                                             @endforeach
                                         @endif
                                     </select>
@@ -650,8 +651,7 @@
             <div class="modal-dialog modal-dialog-centered modal-lg modal-dialog-scrollable">
                 <div class="modal-content">
                     <div class="modal-header col">
-                        <h5 class="modal-title  fw-bold" id="createprojectlLabel">Desea agregar porcentaje de avance a
-                            esta actividad?</h5>
+                        <h5 class="modal-title  fw-bold" id="createprojectlLabel">Detalle de movimientos de esta actividad</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal"
                             aria-label="Close"></button>
                     </div>

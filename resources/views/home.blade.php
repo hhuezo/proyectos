@@ -45,7 +45,7 @@
                                                 <div class="">
                                                     SEMANA PASADA
                                                 </div>
-                                                <h5 class="mb-0 ">{{ $numero_tickets_anterior }}</h5>
+                                                <h5 class="mb-0 ">{{ $numero_tickets_anterior->count() }}</h5>
                                             </div>
                                             <a href="#" title="view-members"
                                                 class="btn btn-link text-decoration-none  rounded-1"><i
@@ -64,7 +64,7 @@
                                                 <div class="">
                                                     SEMANA ACTUAL
                                                 </div>
-                                                <h5 class="mb-0 ">{{ $numero_tickets_actual }}</h5>
+                                                <h5 class="mb-0 ">{{ $numero_tickets_actual->count() }}</h5>
                                             </div>
                                             <a href="#" title="space-used"
                                                 class="btn btn-link text-decoration-none  rounded-1"><i
@@ -272,7 +272,7 @@
                                                                     <i class="icofont-beach-bed fs-3"></i>
                                                                     <h6 class="mt-3 mb-0 fw-bold small-14">En Pausa</h6>
                                                                     <span
-                                                                        style="font-size:46px">{{ $data_estado_proyectos_value[1] }}</span>
+                                                                        style="font-size:46px">{{ $data_estado_proyectos_value[2] }}</span>
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -281,10 +281,17 @@
                                                             <div class="card">
                                                                 <div class="card-body ">
                                                                     <i class="icofont-stopwatch fs-3"></i>
-                                                                    <h6 class="mt-3 mb-0 fw-bold small-14">En Certificacion
-                                                                    </h6>
+                                                                    @if (session('id_unidad') == 1)
+                                                                        <h6 class="mt-3 mb-0 fw-bold small-14">En Certificación
+                                                                        </h6>
+                                                                    @else
+                                                                        <h6 class="mt-3 mb-0 fw-bold small-14">Finalizados
+                                                                        </h6>
+                                                                    @endif
+
+
                                                                     <span
-                                                                        style="font-size:46px">{{ $data_estado_proyectos_value[2] }}</span>
+                                                                        style="font-size:46px">{{ $data_estado_proyectos_value[1] }}</span>
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -1155,6 +1162,9 @@
 
             var selector = "#" + control;
             //console.log(selector);
+
+            //alert("{{ url('get_actividades_finalizadas') }}" + '/' + id);
+
             $.get("{{ url('get_actividades_finalizadas') }}" + '/' + id, function(data) {
 
                 var html =
@@ -1165,7 +1175,7 @@
                             1) + "</td><td class='table-td'>" +
                         data[i].id + "</td><td class='table-td'>" + data[i].user_name +
                         "</td><td class='table-td '>" + data[i].name + "</td><td class='table-td '>" + data[i]
-                        .numero_ticket + "</td><td class='table-td '>" + data[i].actividad +
+                        .numero_ticket + "</td><td class='table-td '>" + data[i].descripcion +
                         "</td><td class='table-td '>" + data[i].fecha_inicio + "</td><td class='table-td '>" + data[
                             i].fecha_fin + "</td></tr>";
                 }

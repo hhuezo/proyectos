@@ -504,7 +504,8 @@ class Actividades extends Component
 
 
         if ($actividad) {
-            $this->movimientos_actividad = $actividad->movimientos->sortByDesc('id');
+            $this->movimientos_actividad = $actividad->movimientos->where('porcentaje_acum','>',0)->sortByDesc('id');
+            //$this->movimientos_actividad = $actividad->movimientos->sortByDesc('id');
         }else{
             $this->movimientos_actividad = null;
         }

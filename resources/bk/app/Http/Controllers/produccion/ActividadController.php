@@ -123,14 +123,12 @@ class ActividadController extends Controller
 
 
         if (auth()->user()->unidad_id == 9) { //auditoria interna
-            $areas_id = $request->get("area_id");
-            foreach ($areas_id as $area_id) {
+            $area_id = $request->get("area_id");
 
-                $area_actividad = new AreaActividad();
-                    $area_actividad->area_id = $area_id;
-                    $area_actividad->actividad_id = $actividad->id;
-                    $area_actividad->save();
-            }
+            $area_actividad = new AreaActividad();
+            $area_actividad->area_id = $area_id;
+            $area_actividad->actividad_id = $actividad->id;
+            $area_actividad->save();
 
         }
 

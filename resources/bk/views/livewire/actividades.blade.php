@@ -259,14 +259,16 @@
 
                                                                 @if (auth()->user()->unidad_id == 9)
                                                                     <ul>
-                                                                        <div class="d-flex align-items-center">
-                                                                            <span
-                                                                                class="ms-1"><strong>AREAS</strong></span>
-                                                                        </div>
+                                                                        @if (isset($actividad->areas))
+                                                                            <div class="d-flex align-items-center">
+                                                                                <span
+                                                                                    class="ms-1"><strong>AREA</strong></span>
+                                                                            </div>
 
-                                                                        @foreach ($actividad->areas as $area)
-                                                                            <li>{{ $area->area->nombre }}</li>
-                                                                        @endforeach
+                                                                            @foreach ($actividad->areas as $area)
+                                                                                <li>{{ $area->area->nombre }}</li>
+                                                                            @endforeach
+                                                                        @endif
 
                                                                     </ul>
                                                                 @endif
@@ -512,9 +514,25 @@
                                 <input type="date" wire:model.defer="fecha_fin" class="form-control">
                             </div>
 
+
                             <div class="mb-3">
-                                <label class="form-label">Forma</label>
-                                <input type="text" wire:model.defer="forma" class="form-control">
+                                @if (auth()->user()->unidad_id == 9)
+                                    <label for="multiSelect" class="form-label">Area Administrativa</label>
+                                    <select wire:model.defer="area_id" class="select2 form-control w-full mt-2 py-2" required>
+                                        <option value="">Seleccione</option>
+                                        @if ($actividad->areas)
+                                            @foreach ($actividad->areas as $obj)
+                                            <option value="{{ $area->area->id }}"
+                                                class=" inline-block font-Inter font-normal text-sm text-slate-600">
+                                                {{ $area->area->nombre }}</option>
+                                            @endforeach
+                                        @endif
+                                    </select>
+                                    <input type="hidden" name="forma" value="NO APLICA" class="form-control">
+                                @else
+                                    <label class="form-label">Forma</label>
+                                    <input type="text" wire:model.defer="forma" class="form-control">
+                                @endif
                             </div>
 
 
