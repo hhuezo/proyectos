@@ -48,7 +48,7 @@
                                                     <td>{{ $obj->user_name }}</td>
                                                     <td>{{ $obj->email }}</td>
                                                     <td>{{ $obj->rol->name }}</td>
-                                                    <td>{{ $obj->unidad->nombre }}</td>
+                                                    <td>{{ $obj->unidad ? $obj->unidad->nombre:''}}</td>
 
                                                     <td>
                                                         <div class="btn-group" role="group"

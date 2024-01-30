@@ -1,11 +1,6 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Events\OrderStatusChangedEvent;
-
-use App\User;
-use App\Notifications\TaskCompleted;
-use Carbon\Carbon;
 
 /*
 |--------------------------------------------------------------------------
@@ -58,6 +53,8 @@ Route::get('/home/{id}', 'HomeController@unidad')->name('unidad');
 Route::get('/load_unidades', 'HomeController@load_unidades')->name('load_unidades');
 
 
+Route::post('usuario/attach_roles','produccion\UsuarioController@attach_roles');
+Route::post('usuario/dettach_roles','produccion\UsuarioController@dettach_roles');
 Route::resource('usuario', 'produccion\UsuarioController');
 
 
@@ -109,3 +106,16 @@ Route::resource('inventario_despliegues', 'catalogo\InventarioDespliegueControll
 //graficas
 Route::post('dashboard/update_grafica','DashboardController@update_grafica');
 Route::resource('dashboard','DashboardController');
+
+Route::post('project/send_data_role','project\ProjectController@send_data_role');
+Route::get('project/set_sesion/{id}','project\ProjectController@set_sesion');
+Route::post('project/summary','project\ProjectController@summary');
+Route::post('project/assumptions','project\ProjectController@assumptions');
+Route::post('project/team_activate','project\ProjectController@team_activate');
+Route::post('project/team_inactivate','project\ProjectController@team_inactivate');
+Route::post('project/team_update','project\ProjectController@team_update');
+Route::post('project/send_data/{id}','project\ProjectController@send_data');
+Route::post('project/send_data_requirement','project\ProjectController@send_data_requirement');
+
+
+Route::resource('project','project\ProjectController');

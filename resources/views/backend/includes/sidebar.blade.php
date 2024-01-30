@@ -269,11 +269,18 @@
                             <i class="icofont-notepad"></i><span>Inventario despliegues</span></a>
                     </li>
                 @endif
-                @can ('read indicadores')
+                @can('read indicadores')
                     <li class="collapsed">
                         <a class="m-link {{ Request::segment(2) == 'project' ? 'active' : '' }}"
                             href="{{ url('dashboard') }}">
                             <i class="fa fa-line-chart"></i><span>Indicadores</span></a>
+                    </li>
+                @endcan
+                @can('read cotizacion')
+                    <li class="collapsed">
+                        <a class="m-link {{ Request::segment(2) == 'project' ? 'active' : '' }}"
+                            href="{{ url('project') }}">
+                            <i class="fa fa-file-text"></i><span>Cotización</span></a>
                     </li>
                 @endcan
                 <?php
