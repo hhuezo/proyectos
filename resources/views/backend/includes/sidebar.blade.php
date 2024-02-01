@@ -283,6 +283,39 @@
                             <i class="fa fa-file-text"></i><span>Cotización</span></a>
                     </li>
                 @endcan
+
+
+
+
+
+
+
+
+                @can('read proveedores')
+                <li class="collapsed">
+                    <a class="m-link {{ Request::segment(2) == 'project' ? 'active' : '' }}"
+                        data-bs-toggle="collapse" data-bs-target="#project-Components22" href="#">
+                        <i class="icofont-briefcase"></i><span>Infraestructura</span> <span
+                            class="arrow icofont-dotted-down ms-auto text-end fs-5"></span></a>
+                    <!-- Menu: Sub menu ul -->
+                    <ul class="sub-menu {{ Request::segment(2) == 'project' ? 'collapsed show' : 'collapse' }}"
+                        id="project-Components22">
+                        <li><a class="ms-link {{ Request::segment(3) == 'index' ? 'active' : '' }}"
+                                href="{{ url('infraestructura/proveedores') }}"><span>Proveedores</span></a></li>
+
+                    </ul>
+                    <ul class="sub-menu {{ Request::segment(2) == 'project' ? 'collapsed show' : 'collapse' }}"
+                        id="project-Components22">
+                        <li><a class="ms-link {{ Request::segment(3) == 'index' ? 'active' : '' }}"
+                                href="{{ url('infraestructura/evaluaciones') }}"><span>Evaluaciones Proveedores</span></a></li>
+
+                    </ul>
+                </li>
+                @endcan
+
+
+
+
                 <?php
                 /*
             <li class=" {{ Request::is('admin/auth/user') || Request::is('admin/auth/role')  || Request::is('admin/auth/role/create') ? '' : ' collapsed' }}">
@@ -418,6 +451,9 @@
     </div>
 
 @endif
+
+
+
 @if (Request::segment(2) == 'ui-components')
     <div class="sidebar px-4 py-2 py-md-4 me-0">
         <div class="d-flex flex-column h-100">

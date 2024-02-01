@@ -119,3 +119,9 @@ Route::post('project/send_data_requirement','project\ProjectController@send_data
 
 
 Route::resource('project','project\ProjectController');
+
+Route::resource('infraestructura/proveedores', 'infraestructura\ProveedoresController');
+Route::post('infraestructura/evaluaciones/updateData/{id}/{criterio}', 'infraestructura\EvalProveedoresController@updateData');
+Route::post('infraestructura/evaluaciones/CrearItem/{id}/{criterio}/{idvealuacion}', 'infraestructura\EvalProveedoresController@CrearItem');
+Route::resource('infraestructura/evaluaciones', 'infraestructura\EvalProveedoresController');
+
