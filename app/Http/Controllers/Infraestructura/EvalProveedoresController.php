@@ -134,8 +134,8 @@ $data_calificacion = DB::table(DB::raw("(SELECT c.nombre as cumplimiento, ca.nom
     ->first();
 
     $califica_obtenida= EvaluacionPuntaje::select('categoria', 'aceptado')
-    ->where('limite_inferior', '<', $data_calificacion->calificacion)
-    ->where('limite_superior', '>', $data_calificacion->calificacion)
+    ->where('limite_inferior', '<=', $data_calificacion->calificacion)
+    ->where('limite_superior', '>=', $data_calificacion->calificacion)
     ->first();
 
 
