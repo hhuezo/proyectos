@@ -57,6 +57,10 @@
                                                                             <td>{{ $obj->estimator }}</td>
                                                                             <td>{{ $obj->version }}</td>
                                                                             <td align="center">
+                                                                              <a href="{{url('project')}}/{{$obj->id}}" target="_blank">
+                                                                                        <button type="button" class="btn btn-outline-secondary"><i
+                                                                                                class="icofont-eye-alt text-success btn-lg"></i></button>
+                                                                                    </a>
                                                                                 <div class="btn-group" role="group" aria-label="Basic outlined example">
                                                                                     <a href="{{url('project')}}/{{$obj->id}}/edit">
                                                                                         <button type="button" class="btn btn-outline-secondary"><i

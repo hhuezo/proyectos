@@ -11,6 +11,7 @@ use App\project\ProjectTeam;
 use App\project\SecurityRequirements;
 use Exception;
 use Illuminate\Http\Request;
+use PDF;
 
 class ProjectController extends Controller
 {
@@ -133,7 +134,37 @@ class ProjectController extends Controller
 
     public function show($id)
     {
-        //
+        $project = Project::findOrFail($id);
+        $levels = ["", "Low", "Medium", "High"];  //background-color:
+
+        $roles = ProjectRole::get();
+        foreach ($roles as $role) {
+            $teamMember = $project->team->where('project_role_id', $role->id)->first();
+
+            if ($teamMember) {
+                $role->number = $teamMember->number;
+                $role->team_id = $teamMember->id;
+            } else {
+                $role->number = null;
+                $role->team_id = null;
+            }
+        }
+
+
+        $security_requirements = SecurityRequirements::where('status', 1)->get();
+
+
+
+        $project->summary = str_replace('background-color:', '', $project->summary);
+
+
+
+        $pdf = PDF::loadView('projects.project.show',compact('project','levels','roles','security_requirements'));
+
+        // $pdf->setPaper('A4', 'portrait');
+        $pdf->setPaper('A4', 'portrait');
+        return $pdf->stream('test_pdf.pdf');
+
     }
 
     public function edit($id)
