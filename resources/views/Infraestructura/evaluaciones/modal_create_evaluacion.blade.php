@@ -1,4 +1,3 @@
-
 <div class="modal fade" id="modal-add" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-md modal-dialog-scrollable">
         <form id="basic-form" method="POST" action="{{ url('infraestructura/evaluaciones') }}">
@@ -15,7 +14,7 @@
                         <label class="form-label"><strong>Proveedor
                             </strong></label>
 
-                        <select name="proveedor_id"  class="form-select" required>
+                        <select name="proveedor_id" class="form-select" required>
                             @foreach ($proveedores as $obj)
                                 <option value="{{ $obj->id }}">{{ $obj->nombre }}</option>
                             @endforeach
@@ -25,7 +24,12 @@
                     <div class="form-group">
                         <label class="form-label"><strong>Periodo
                             </strong></label>
-                      <input type="text" name="periodo" class="form-control" required>
+                        <select name="periodo"  class="form-select" required>
+                            @for ($i = date('Y'); $i >= 2018; $i--)
+                                <option value="{{ $i }}">{{ $i }}</option>
+                            @endfor
+                        </select>
+
                     </div>
                     &nbsp;
 
@@ -37,4 +41,3 @@
         </form>
     </div>
 </div>
-

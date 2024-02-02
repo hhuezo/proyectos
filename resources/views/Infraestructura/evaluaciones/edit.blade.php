@@ -65,21 +65,17 @@
 
 
                             <div class="row g-3">
-                                <table class="table" border="1">
+                                <table class="table" >
                                     <thead>
                                         <tr>
-
                                             <th scope="col" border="1">cumplimiento</th>
                                             <th scope="col" border="1">caracteristicas</th>
                                             <th scope="col" border="1">criterios</th>
-                                            <th scope="col" border="1">Modificar</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         @foreach ($evaluacion->detalles as $detalle)
                                             <tr border="1">
-                                                <th scope="row"> <input type="text" name="detalle_id" id="detalle_id"
-                                                        value="{{ $detalle->id }}" required class="form-control"> </th>
                                                 <th scope="row">
                                                     {{ $detalle->cumplimiento_caracteristica->cumplimiento->nombre }}</th>
                                                 <th scope="row">
@@ -113,7 +109,9 @@
                                 <div class="form-group row">
                                     <label class="form-label col-md-3" align="right"></label>
                                     <div class="col-12" align="right">
-                                        <button type="submit" class="btn btn-primary float-right">Aceptar</button>
+
+                                    <a href="{{url('infraestructura/evaluaciones/guardar_mensaje')}}/{{$evaluacion->id}}">
+                                        <button type="submit" class="btn btn-primary float-right">Aceptar</button></a>
                                     </div>
                                 </div>
                             </div>

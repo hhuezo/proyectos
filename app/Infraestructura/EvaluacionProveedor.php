@@ -20,6 +20,20 @@ class EvaluacionProveedor extends Model
         'user',
         'resultado_id',
         'puntos',
+        'notificado',
+        'codigo',
+        'version',
+        'registro',
+        'nombre_elaborado',
+        'cargo_elaborado',
+        'fecha_elaborado',
+        'nombre_revisado',
+        'cargo_revisado',
+        'fecha_revisado',
+        'nombre_aprobado',
+        'cargo_aprobado',
+        'fecha_aprobado',
+
     ];
     protected $guarded = [];
     public function detalles()

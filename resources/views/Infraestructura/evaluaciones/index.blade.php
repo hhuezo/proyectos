@@ -33,7 +33,8 @@
                                                 <th align="center">Id</th>
                                                 <th align="center">Proveedor</th>
                                                 <th align="center">Periodos</th>
-                                                <th align="center">Reporte</th>
+                                                <th align="center">Fecha Evaluacion</th>
+                                                <th align="center"> Edicion / Reporte</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -42,6 +43,7 @@
                                                     <td>{{ $obj->id }}</td>
                                                     <td>{{ $obj->proveedor ? $obj->proveedor->nombre : '' }}</td>
                                                     <td>{{ $obj->periodo_evaluacion }}</td>
+                                                    <td> {{ date('d/m/Y', strtotime( $obj->fecha_evalua)) }} </td>
                                                     <td>
                                                         <div class="btn-group" role="group" aria-label="Basic outlined example">
                                                             <a href="{{url('infraestructura/evaluaciones')}}/{{$obj->id}}/edit" class="list-group-item list-group-item-action border-0 " >

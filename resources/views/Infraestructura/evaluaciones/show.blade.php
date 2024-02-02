@@ -49,7 +49,7 @@
             <td colspan="3" rowspan="3"><span class="titulo">
                     <center>EVALUACION DE PROVEEDORES</center>
                 </span></td>
-            <td colspan="2"><span class="titulo">Código:</span></td>
+            <td colspan="2"><span class="titulo">Código: {{ $evaluacion->codigo }}</span></td>
         </tr>
         <tr>
             <td colspan="2"><span class="titulo">Versión:</span></td>
@@ -104,7 +104,14 @@
       <tbody>
             <tr class="center-text">
                 <td class="titulo">{{ intval($data_calificacion->calificacion) }}</td>
-                <td class="titulo">{{ $califica_obtenida->aceptado }}</td>
+                <td class="titulo">
+                @if ( $califica_obtenida->aceptado =='S')
+                    SI
+                @else
+                    NO
+                @endif
+
+               </td>
                 <td class="titulo">{{ $califica_obtenida->categoria }}</td>
             </tr>
 
@@ -158,8 +165,8 @@
             <td colspan="2">APROBADO POR</td>
         </tr>
         <tr>
-            <td height="82" colspan="2" class="center-text">Carlos Quinteros</td>
-            <td colspan="2" class="center-text">Reynaldo Ceron</td>
+            <td height="82" colspan="2" class="center-text">{{ $evaluacion->nombre_elaborado }}</td>
+            <td colspan="2" class="center-text">{{ $evaluacion->nombre_revisado }}</td>
             <td colspan="2">&nbsp;</td>
         </tr>
         <tr class="center-text">
@@ -168,8 +175,8 @@
             <td colspan="2">CARGO</td>
         </tr>
         <tr>
-            <td colspan="2" class="center-text">Encargado de IT</td>
-            <td colspan="2" class="center-text">Gerente de Innovacion y desarrollo</td>
+            <td colspan="2" class="center-text"> {{ $evaluacion->cargo_elaborado }}</td>
+            <td colspan="2" class="center-text"> {{ $evaluacion->cargo_revisado }}</td>
             <td colspan="2">&nbsp;</td>
         </tr>
         <tr>

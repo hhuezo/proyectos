@@ -116,13 +116,23 @@ class EvalProveedoresController extends Controller
             ->first();
 
 
+            if ($califica_obtenida->aceptado == 'S') {
+                $evaluacion->resultado_id = 1;
+            }
+            if ($califica_obtenida->aceptado == 'N') {
+                $evaluacion->resultado_id = 0;
+            }
+            $evaluacion->puntos = $data_calificacion->calificacion;
+            $evaluacion->update();
+
+
 
         $pdf = PDF::loadView('infraestructura.evaluaciones.show', compact('resultado', 'evaluacion', 'data_calificacion', 'califica_obtenida', 'rango_evaluacion'));
 
         $pdf->setPaper('A4', 'portrait');
         return $pdf->stream('test_pdf.pdf');
 
-       // return view('infraestructura.evaluaciones.show', compact('resultado', 'evaluacion', 'data_calificacion', 'califica_obtenida', 'rango_evaluacion'));
+        // return view('infraestructura.evaluaciones.show', compact('resultado', 'evaluacion', 'data_calificacion', 'califica_obtenida', 'rango_evaluacion'));
     }
 
     /**
@@ -167,21 +177,54 @@ class EvalProveedoresController extends Controller
 
 
 
-    public function  CrearItem($id, $criterio)
+    public function  guardar_mensaje($id)
     {
 
-        try {
-            $EvaluacionDetalle =  EvaluacionDetalle::Findorfail($id);
-            $EvaluacionDetalle->criterio_caracteristica_id = $criterio;
-            $EvaluacionDetalle->save();
+        $evaluacion = EvaluacionProveedor::findOrfail($id);
+        $rango_evaluacion = EvaluacionPuntaje::get();
+        $resultado = DB::table('evaluacion_proveedores as a')
+            ->join('evaluacion_detalle as ed', 'a.id', '=', 'ed.evaluacion_id')
+            ->join('cumplimientos_x_caracteristicas as cc', 'ed.cumplimiento_car_id', '=', 'cc.id')
+            ->join('criterios_x_carateristica as crca', 'ed.criterio_caracteristica_id', '=', 'crca.id')
+            ->join('cumplimientos as c', 'cc.cumplimiento_id', '=', 'c.id')
+            ->join('caracteristicas as ca', 'cc.caracteristica_id', '=', 'ca.id')
+            ->select('a.id', 'c.nombre as cumplimiento', 'ca.nombre as caracteristica', 'cc.ponderacion', 'crca.nombre as criterio', 'crca.calificacion')
+            ->where('a.id', '=', $id)
+            ->get();
+        //dd($result);
 
-            $result = [$id, $criterio];
-            return $result;
+        $data_calificacion = DB::table(DB::raw("(SELECT c.nombre as cumplimiento, ca.nombre as caracteristica, cc.ponderacion, crca.nombre as criterio, crca.calificacion,
+    (CASE
+        WHEN crca.calificacion > 0 THEN cc.ponderacion
+        ELSE 0
+    END * crca.calificacion) / 100 as puntaje
+    FROM cumplimientos_x_caracteristicas cc
+    JOIN cumplimientos c ON cc.cumplimiento_id = c.id
+    JOIN caracteristicas ca ON cc.caracteristica_id = ca.id
+    JOIN criterios_x_carateristica crca ON ca.id = crca.caracteristica_id
+    JOIN evaluacion_detalle ed ON ed.cumplimiento_car_id = cc.id
+        AND ed.criterio_caracteristica_id = crca.id
+    WHERE ed.evaluacion_id = $id) AS a"))
+            ->selectRaw('ROUND(SUM(a.puntaje) / (1 - (SUM(CASE WHEN a.calificacion = 0 THEN a.ponderacion * 0.1 ELSE 0 END) * 0.1)), 2) as calificacion')
+            ->first();
 
-            // return 1;
-        } catch (Exception $e) {
-            return 0;
+        $califica_obtenida = EvaluacionPuntaje::select('categoria', 'aceptado')
+            ->where('limite_inferior', '<=', $data_calificacion->calificacion)
+            ->where('limite_superior', '>=', $data_calificacion->calificacion)
+            ->first();
+
+
+        $evaluacion = EvaluacionProveedor::findOrfail($id);
+        if ($califica_obtenida->aceptado == 'S') {
+            $evaluacion->resultado_id = 1;
         }
+        if ($califica_obtenida->aceptado == 'N') {
+            $evaluacion->resultado_id = 0;
+        }
+        $evaluacion->puntos = $data_calificacion->calificacion;
+        $evaluacion->update();
+        alert()->success('La Evaluacion ha sido registrada correctamente');
+        return redirect('infraestructura/evaluaciones/');
     }
 
 
