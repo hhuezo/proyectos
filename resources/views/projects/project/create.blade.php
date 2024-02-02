@@ -243,24 +243,11 @@
                                                         </div>
                                                     </div>
                                                 </div>
-
+                                                <input type="hidden" name="estimated_investment"
+                                                value="{{ old('estimated_investment') }}"
+                                                step="1" class="form-control">
                                                 <div>&nbsp;</div>
 
-
-                                                <div class="row g-3">
-                                                    <div class="col-md-12">
-                                                        <div class="form-group row">
-                                                            <label class="form-label col-md-3"
-                                                                align="right"><strong>Estimated
-                                                                    investment</strong></label>
-                                                            <div class="col-9">
-                                                                <input type="number" name="estimated_investment"
-                                                                    value="{{ old('estimated_investment') }}"
-                                                                    step="1" required class="form-control">
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
 
                                                 <div>&nbsp;</div>
                                             </div>

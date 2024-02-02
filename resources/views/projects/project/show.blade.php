@@ -16,19 +16,18 @@
 </style>
 
 <style>
-    table {
-        width: 100%;
-        border-collapse: collapse;
-        border-radius: 16px;
-        /* Set the border-radius for rounded corners */
-        overflow: hidden;
-        /* Ensure rounded corners are applied */
-        border: 2px solid #036;
-    }
+table {
+    width: 100%;
+    border-collapse: collapse;
+   /*border-radius: 20px;  Aumenta el valor para esquinas más redondeadas */
+    overflow: hidden;
+    border: 2px solid rgb(0, 0, 0);
+    background-color: #ffffff; /* Cambia el color de fondo de la tabla si es necesario */
+}
 
     th,
     td {
-        border: 1px solid #036;
+        border: 1px solid rgb(0, 0, 0);
         padding: 8px;
         text-align: left;
     }
@@ -40,7 +39,7 @@
 
 <style>
     .bg_td {
-        background-color: #036
+        background-color: rgb(0, 0, 0);
     }
 </style>
 
@@ -76,17 +75,20 @@
 <table style="width:100%">
     <thead>
         <tr>
-            <th class="bg_td title">Role</th>
-            <th class="bg_td title">HR</th>
-            <th class="bg_td title">HA</th>
-            <th class="bg_td title">amount</th>
+            <th colspan="4" class="bg_td title">Team Summary</th>
+        </tr>
+        <tr>
+            <th>Role</th>
+            <th>Hourly Rate</th>
+            <th>HR/Day</th>
+            <th>Resource</th>
 
             {{-- <th width="25%">Opciones</th> --}}
         </tr>
     </thead>
     <tbody>
 
-        @foreach ($roles as $role)
+        @foreach ($roles->where('number','<>',null) as $role)
             <tr>
 
                 <td>{{ $role->name }}</td>
@@ -110,11 +112,14 @@
 
 <table class="table">
     <thead>
+        <tr>
+            <th colspan="{{ 4 + $project->number_months}}" class="bg_td title">Team Planner</th>
+        </tr>
         <tr align="center">
             <th class="title bg_td">Role</th>
             <th class="title bg_td">Hourly Rate</th>
             <th class="title bg_td">HR/Day</th>
-            <th class="title bg_td">Resourse</th>
+            <th class="title bg_td">Resource</th>
             @for ($i = 1; $i <= $project->number_months; $i++)
                 <th class="title bg_td">Mes{{ $i }}</th>
             @endfor
@@ -168,7 +173,7 @@
         </tr>
 
         <tr align="center">
-            <td align="left" colspan="3"><strong>Ballpark up +</strong></td>
+            <td align="left" colspan="3"><strong>Ballpark up + 25%</strong></td>
             <td align="right"><strong> ${{ number_format($project->getEstimatedInvestment($project->id) * 1.25, 2, '.', ',') }}</strong>
             </td>
             @for ($i = 1; $i <= $project->number_months; $i++)
@@ -178,7 +183,7 @@
         </tr>
 
         <tr align="center" id="totales">
-            <td align="left" colspan="3"><strong>Ballpark down -</strong></td>
+            <td align="left" colspan="3"><strong>Ballpark down - 10%</strong></td>
             <td align="right"><strong> ${{ number_format($project->getEstimatedInvestment($project->id) * 0.9, 2, '.', ',') }}</strong>
             </td>
             @for ($i = 1; $i <= $project->number_months; $i++)

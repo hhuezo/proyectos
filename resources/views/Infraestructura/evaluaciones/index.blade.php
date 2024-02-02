@@ -40,13 +40,17 @@
                                             @foreach ($evaluacion as $obj)
                                                 <tr>
                                                     <td>{{ $obj->id }}</td>
-                                                    <td>{{ $obj->proveedor ? $obj->proveedor->nombre:''}}</td>
+                                                    <td>{{ $obj->proveedor ? $obj->proveedor->nombre : '' }}</td>
                                                     <td>{{ $obj->periodo_evaluacion }}</td>
                                                     <td>
-                                                        <div class="btn-group" role="group"
-                                                            aria-label="Basic outlined example">
+                                                        <div class="btn-group" role="group" aria-label="Basic outlined example">
+                                                            <a href="{{url('infraestructura/evaluaciones')}}/{{$obj->id}}/edit" class="list-group-item list-group-item-action border-0 " >
+                                                                <button type="button" class="btn btn-outline-secondary"><i
+                                                                        class="icofont-edit text-success  btn-lg" ></i></button>
+                                                            </a>
 
-                                <a href="{{ url('infraestructura/evaluaciones') }}/{{$obj->id}}" class="list-group-item list-group-item-action border-0 ">
+                                                            <a href="{{ url('infraestructura/evaluaciones') }}/{{ $obj->id }}" target="_blank"
+                                                                class="list-group-item list-group-item-action border-0 ">
                                                                 <button type="button" class="btn btn-outline-secondary"><i
                                                                         class="icofont-printer text-success btn-lg"></i></button>
                                                             </a>
