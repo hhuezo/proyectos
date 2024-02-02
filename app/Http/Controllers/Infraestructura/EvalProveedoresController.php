@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\infraestructura;
 
 use App\Http\Controllers\Controller;
-use App\infraestructura\Caracteristicas;
 use App\infraestructura\CriteriosCarateristica;
 use App\infraestructura\Cumplimientos;
 use App\infraestructura\CumplimientosCaracteristicas;
@@ -14,6 +13,7 @@ use App\infraestructura\Proveedores;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use PDF;
 
 class EvalProveedoresController extends Controller
 {
@@ -25,40 +25,24 @@ class EvalProveedoresController extends Controller
     public function index()
     {
         $proveedores = Proveedores::where('activo', '=', 'A')->get();
-       // $proveedores = Proveedores::get();
-        $evaluacion=EvaluacionProveedor::get();
-        return view('infraestructura.evaluaciones.index', compact('evaluacion','proveedores'));
+        // $proveedores = Proveedores::get();
+        $evaluacion = EvaluacionProveedor::get();
+        return view('infraestructura.evaluaciones.index', compact('evaluacion', 'proveedores'));
         //return view('infraestructura.evaluaciones.show');
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+
     public function create()
     {
         $criterioscaracteristicas = CriteriosCarateristica::get();
 
         $proveedores = Proveedores::get();
         $cumplimientos = Cumplimientos::get();
-        // $cumplimientocaracteristicas =  CumplimientosCaracteristicas::get();
-        //     $formulariopv = DB::table('cumplimientos_x_caracteristicas as cc')
-        // ->join('cumplimientos as c', 'cc.cumplimiento_id', '=', 'c.id')
-        // ->join('caracteristicas as ca', 'cc.caracteristica_id', '=', 'ca.id')
-        // ->join('criterios_x_carateristica as crca', 'ca.id', '=', 'crca.caracteristica_id')
-        // ->select('c.id as cumplimiento_id','c.nombre as cumplimiento', 'ca.id as caracteristica_id','ca.nombre as caracteristica', 'cc.caracteristica_id','cc.ponderacion', 'crca.id as criterio_id', 'crca.nombre as criterios','crca.calificacion')
-        // ->get();
+
 
         return view('infraestructura.evaluaciones.create', compact('proveedores', 'cumplimientos', 'criterioscaracteristicas'));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(Request $request)
     {
 
@@ -67,13 +51,11 @@ class EvalProveedoresController extends Controller
         $Evaluacion->periodo_evaluacion = $request->periodo;
         $Evaluacion->save();
 
-        // $Evaluacion =  EvaluacionProveedor::findOrfail(6);
 
         $cumplimientos = CumplimientosCaracteristicas::get();
 
         foreach ($cumplimientos as $cumplimiento) {
             $criterio = $cumplimiento->caracteristica->criterios->first();
-            // dd($cumplimiento->id,$criterio->id );
             $Evaluacion_detalle = new EvaluacionDetalle();
 
             $Evaluacion_detalle->evaluacion_id = $Evaluacion->id;
@@ -85,7 +67,7 @@ class EvalProveedoresController extends Controller
 
 
 
-       // dd("");
+        // dd("");
     }
 
 
@@ -97,28 +79,23 @@ class EvalProveedoresController extends Controller
         $Evaluacion->periodo_evaluacion = $request->periodo_evaluacion;
         $Evaluacion->save();
     }
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
+
     public function show($id)
     {
-    $evaluacion=EvaluacionProveedor::findOrfail($id);
-    $rango_evaluacion= EvaluacionPuntaje::get();
-    $resultado = DB::table('evaluacion_proveedores as a')
-    ->join('evaluacion_detalle as ed', 'a.id', '=', 'ed.evaluacion_id')
-    ->join('cumplimientos_x_caracteristicas as cc', 'ed.cumplimiento_car_id', '=', 'cc.id')
-    ->join('criterios_x_carateristica as crca', 'ed.criterio_caracteristica_id', '=', 'crca.id')
-    ->join('cumplimientos as c', 'cc.cumplimiento_id', '=', 'c.id')
-    ->join('caracteristicas as ca', 'cc.caracteristica_id', '=', 'ca.id')
-    ->select('a.id', 'c.nombre as cumplimiento', 'ca.nombre as caracteristica', 'cc.ponderacion', 'crca.nombre as criterio', 'crca.calificacion')
-    ->where('a.id', '=', $id)
-    ->get();
-//dd($result);
+        $evaluacion = EvaluacionProveedor::findOrfail($id);
+        $rango_evaluacion = EvaluacionPuntaje::get();
+        $resultado = DB::table('evaluacion_proveedores as a')
+            ->join('evaluacion_detalle as ed', 'a.id', '=', 'ed.evaluacion_id')
+            ->join('cumplimientos_x_caracteristicas as cc', 'ed.cumplimiento_car_id', '=', 'cc.id')
+            ->join('criterios_x_carateristica as crca', 'ed.criterio_caracteristica_id', '=', 'crca.id')
+            ->join('cumplimientos as c', 'cc.cumplimiento_id', '=', 'c.id')
+            ->join('caracteristicas as ca', 'cc.caracteristica_id', '=', 'ca.id')
+            ->select('a.id', 'c.nombre as cumplimiento', 'ca.nombre as caracteristica', 'cc.ponderacion', 'crca.nombre as criterio', 'crca.calificacion')
+            ->where('a.id', '=', $id)
+            ->get();
+        //dd($result);
 
-$data_calificacion = DB::table(DB::raw("(SELECT c.nombre as cumplimiento, ca.nombre as caracteristica, cc.ponderacion, crca.nombre as criterio, crca.calificacion,
+        $data_calificacion = DB::table(DB::raw("(SELECT c.nombre as cumplimiento, ca.nombre as caracteristica, cc.ponderacion, crca.nombre as criterio, crca.calificacion,
     (CASE
         WHEN crca.calificacion > 0 THEN cc.ponderacion
         ELSE 0
@@ -130,19 +107,22 @@ $data_calificacion = DB::table(DB::raw("(SELECT c.nombre as cumplimiento, ca.nom
     JOIN evaluacion_detalle ed ON ed.cumplimiento_car_id = cc.id
         AND ed.criterio_caracteristica_id = crca.id
     WHERE ed.evaluacion_id = $id) AS a"))
-    ->selectRaw('ROUND(SUM(a.puntaje) / (1 - (SUM(CASE WHEN a.calificacion = 0 THEN a.ponderacion * 0.1 ELSE 0 END) * 0.1)), 2) as calificacion')
-    ->first();
+            ->selectRaw('ROUND(SUM(a.puntaje) / (1 - (SUM(CASE WHEN a.calificacion = 0 THEN a.ponderacion * 0.1 ELSE 0 END) * 0.1)), 2) as calificacion')
+            ->first();
 
-    $califica_obtenida= EvaluacionPuntaje::select('categoria', 'aceptado')
-    ->where('limite_inferior', '<=', $data_calificacion->calificacion)
-    ->where('limite_superior', '>=', $data_calificacion->calificacion)
-    ->first();
+        $califica_obtenida = EvaluacionPuntaje::select('categoria', 'aceptado')
+            ->where('limite_inferior', '<=', $data_calificacion->calificacion)
+            ->where('limite_superior', '>=', $data_calificacion->calificacion)
+            ->first();
 
 
-    //dd($califica_obtenida);
 
-    //dd($data_calificacion->calificacion);
-        return view('infraestructura.evaluaciones.show',compact('resultado','evaluacion','data_calificacion','califica_obtenida','rango_evaluacion'));
+        $pdf = PDF::loadView('infraestructura.evaluaciones.show', compact('resultado', 'evaluacion', 'data_calificacion', 'califica_obtenida', 'rango_evaluacion'));
+
+        $pdf->setPaper('A4', 'portrait');
+        return $pdf->stream('test_pdf.pdf');
+
+       // return view('infraestructura.evaluaciones.show', compact('resultado', 'evaluacion', 'data_calificacion', 'califica_obtenida', 'rango_evaluacion'));
     }
 
     /**
