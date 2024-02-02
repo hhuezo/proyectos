@@ -1,4 +1,5 @@
 <style>
+
     body {
         font-family: 'Open Sans', Arial, Helvetica, sans-serif;
         font-size: 12px;
@@ -42,6 +43,8 @@ table {
         background-color: rgb(0, 0, 0);
     }
 </style>
+
+@if ($opcion == 1)
 
 
 
@@ -105,23 +108,20 @@ table {
     </tbody>
 </table>
 
-<div style="page-break-after: always;"></div>
 
-
-
-
+@elseif ($opcion == 2)
 <table class="table">
     <thead>
         <tr>
             <th colspan="{{ 4 + $project->number_months}}" class="bg_td title">Team Planner</th>
         </tr>
         <tr align="center">
-            <th class="title bg_td">Role</th>
-            <th class="title bg_td">Hourly Rate</th>
-            <th class="title bg_td">HR/Day</th>
-            <th class="title bg_td">Resource</th>
+            <th>Role</th>
+            <th>Hourly Rate</th>
+            <th>HR/Day</th>
+            <th>Resource</th>
             @for ($i = 1; $i <= $project->number_months; $i++)
-                <th class="title bg_td">Mes{{ $i }}</th>
+                <th>Mes{{ $i }}</th>
             @endfor
         </tr>
     </thead>
@@ -193,20 +193,7 @@ table {
 
     </tbody>
 </table>
-
-
-
-<div style="page-break-after: always;"></div>
-
-
-
-
-
-
-
-
-
-
+@elseif ($opcion == 3)
 <table class="table table-striped">
     <thead>
         <tr>
@@ -238,3 +225,4 @@ table {
         <td style="text-align: justify;"><?php echo $project->assumptions; ?></td>
     </tr>
 </table>
+@endif

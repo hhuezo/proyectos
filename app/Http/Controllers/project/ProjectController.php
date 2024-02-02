@@ -12,6 +12,7 @@ use App\project\SecurityRequirements;
 use Exception;
 use Illuminate\Http\Request;
 use PDF;
+use Webklex\PDFMerger\Facades\PDFMergerFacade;
 
 class ProjectController extends Controller
 {
@@ -159,12 +160,41 @@ class ProjectController extends Controller
 
 
 
-        $pdf = PDF::loadView('projects.project.show',compact('project','levels','roles','security_requirements'));
 
-        // $pdf->setPaper('A4', 'portrait');
-        $pdf->setPaper('A4', 'portrait');
-        return $pdf->stream('test_pdf.pdf');
+        try {
+            unlink(public_path('reporte1.pdf'));
+            unlink(public_path('reporte2.pdf'));
+            unlink(public_path('reporte3.pdf'));
+            unlink(public_path('reporte.pdf'));
+        } catch (Exception $e) {
+        }
 
+        $opcion = 1;
+        $pdf = PDF::loadView('projects.project.show', compact('project', 'levels', 'roles', 'security_requirements', 'opcion'));
+        $pdf->save(public_path('reporte1.pdf'));
+
+
+        $opcion = 2;
+        $pdf = PDF::loadView('projects.project.show', compact('project', 'levels', 'roles', 'security_requirements', 'opcion'));
+        if($project->number_months > 7)
+        {
+            $pdf->setPaper('A4', 'landscape');
+        }
+       
+        $pdf->save(public_path('reporte2.pdf'));
+
+
+        $opcion = 3;
+        $pdf = PDF::loadView('projects.project.show', compact('project', 'levels', 'roles', 'security_requirements', 'opcion'));
+        $pdf->save(public_path('reporte3.pdf'));
+
+        $oMerger = PDFMergerFacade::init();
+        $oMerger->addPDF(public_path('reporte1.pdf'), 'all');
+        $oMerger->addPDF(public_path('reporte2.pdf'), 'all');
+        $oMerger->addPDF(public_path('reporte3.pdf'), 'all');
+        $oMerger->merge();
+        $oMerger->save('reporte.pdf');
+        return response()->download(public_path("/reporte.pdf"));
     }
 
     public function edit($id)

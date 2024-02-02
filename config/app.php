@@ -179,6 +179,7 @@ return [
         RealRashid\SweetAlert\SweetAlertServiceProvider::class,
 
         Spatie\Permission\PermissionServiceProvider::class,
+        Webklex\PDFMerger\Providers\PDFMergerServiceProvider::class,
     ],
 
     /*
@@ -233,7 +234,7 @@ return [
         'PDF' => Barryvdh\DomPDF\Facade::class,
         'Alert' => RealRashid\SweetAlert\Facades\Alert::class,
         'Carbon' => Illuminate\Support\Carbon::class,
-
+        'PDFMerger' => Webklex\PDFMerger\Facades\PDFMergerFacade::class,
 
     ],
 
