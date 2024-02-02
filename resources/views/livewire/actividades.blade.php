@@ -256,6 +256,26 @@
 
 
                                                                 </ul>
+
+                                                                @if (auth()->user()->unidad_id == 9)
+                                                                    <ul>
+                                                                        @if (isset($actividad->areas))
+                                                                            <div class="d-flex align-items-center">
+                                                                                <span
+                                                                                    class="ms-1"><strong>AREA</strong></span>
+                                                                            </div>
+
+                                                                            @foreach ($actividad->areas as $area)
+                                                                                <li>{{ $area->area ? $area->area->nombre : ''  }}</li>
+                                                                            @endforeach
+                                                                        @endif
+
+                                                                    </ul>
+                                                                @endif
+
+
+
+
                                                             </div>
 
                                                         </div>
@@ -286,6 +306,7 @@
                                 <th>Estado</th>
                                 <th>Prioridad</th>
                                 <th>Opciones</th>
+                                <th>Ver</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -332,6 +353,16 @@
                                             @endif
                                         </div>
                                     </td>
+
+                                    <td>
+                                        <div class="btn-group" role="group" aria-label="Basic outlined example">
+                                            <button type="button" class="btn btn-success"><i
+                                                    class="icofont-eye fa-lg" data-bs-toggle="modal"
+                                                    wire:click="detail_actividad({{ $actividad->id }})"
+                                                    data-bs-target="#detail_actividad"></i></button>
+                                        </div>
+                                    </td>
+
                                 </tr>
                             @endforeach
 
@@ -439,7 +470,7 @@
                         <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
                             <div class="mb-3">
                                 <label class="form-label">Proyectos</label>
-                                <select class="form-control" wire:model="id_proyecto" >
+                                <select class="form-control" wire:model="id_proyecto">
                                     <option value="">Seleccione</option>
                                     @if ($catalogo_proyectos)
                                         @foreach ($catalogo_proyectos as $obj)
@@ -494,9 +525,26 @@
                                 <input type="date" wire:model.defer="fecha_fin" class="form-control">
                             </div>
 
+
                             <div class="mb-3">
-                                <label class="form-label">Forma</label>
-                                <input type="text" wire:model.defer="forma" class="form-control">
+                                @if (auth()->user()->unidad_id == 9)
+                                    <label for="multiSelect" class="form-label">Area Administrativa</label>
+                                    <select wire:model.defer="area_id" class="select2 form-control w-full mt-2 py-2" required>
+                                        <option value="">Seleccione</option>
+                                        @if ($actividad->areas)
+                                            @foreach ($actividad->areas as $area)
+
+                                            <option value="{{ $area->area ? $area->area->id : '' }}"
+                                                class=" inline-block font-Inter font-normal text-sm text-slate-600">
+                                                {{ $area->area ? $area->area->nombre : '' }}</option>
+                                            @endforeach
+                                        @endif
+                                    </select>
+                                    <input type="hidden" name="forma" value="NO APLICA" class="form-control">
+                                @else
+                                    <label class="form-label">Forma</label>
+                                    <input type="text" wire:model.defer="forma" class="form-control">
+                                @endif
                             </div>
 
 
@@ -599,6 +647,90 @@
             </div>
         </div>
 
+        <div id="detail_actividad" wire:ignore.self class="modal fade" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-lg modal-dialog-scrollable">
+                <div class="modal-content">
+                    <div class="modal-header col">
+                        <h5 class="modal-title  fw-bold" id="createprojectlLabel">Detalle de movimientos de esta actividad</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                            aria-label="Close"></button>
+                    </div>
+                    <input type="hidden" wire:model.defer="id_proyecto">
+                    <div class="modal-body row">
+
+
+
+                        <div class="card">
+
+
+
+                            <table class="table table-hover align-middle mb-0"
+                            style="width: 100%;">
+                            <thead>
+                                <tr>
+                                    <th>
+                                        Id
+                                    </th>
+
+
+
+                                    <th>
+                                        Fecha
+                                    </th>
+
+                                    <th>
+                                        Usuario
+                                    </th>
+
+                                    <th>
+                                        Avance
+                                    </th>
+
+                                    <th>
+                                        Estado
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @if ($movimientos_actividad)
+                                    {{-- @foreach ($movimientos_actividad->orderBy('fecha','desc') as $obj) --}}
+                                    @foreach ($movimientos_actividad as $obj)
+                                        <tr>
+                                            <td>{{ $obj->actividad->id }}</td>
+
+                                            <td>{{ $obj->fecha }}</td>
+
+                                            <td>
+                                                {{ $obj->actividad->usuario->user_name }}</td>
+
+                                                <td>{{ $obj->porcentaje }}</td>
+
+
+
+                                            <td>
+                                                {{ $obj->actividad->estado->nombre }}</td>
+
+                                        </tr>
+                                    @endforeach
+                                @endif
+                            </tbody>
+                        </table>
+
+
+
+
+                        </div>
+
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <div class="contenedor"
             style="width: 90px;
                 height: 240px;
@@ -606,9 +738,9 @@
                 right: 0px;
                 bottom: 0px;">
 
-{{-- wire:click="create()" data-bs-toggle="modal" data-bs-target="#create_actividad" --}}
-            <a href="{{url('actividades/create')}}"><button class="botonF1"
-                style=" width: 60px;
+            {{-- wire:click="create()" data-bs-toggle="modal" data-bs-target="#create_actividad" --}}
+            <a href="{{ url('actividades/create') }}"><button class="botonF1"
+                    style=" width: 60px;
                 height: 60px;
                 border-radius: 100%;
                 background: #484c7f;
@@ -623,8 +755,8 @@
                 font-size: 36px;
                 box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
                 transition: .3s;">
-                <span>+</span>
-            </button></a>
+                    <span>+</span>
+                </button></a>
 
         </div>
 

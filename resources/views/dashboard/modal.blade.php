@@ -9,7 +9,7 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <p> Confirme si desea desactivar el registro
+                    <p> Confirme si desea eliminar el registro
                     </p>
                 </div>
                 <div class="modal-footer">

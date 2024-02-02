@@ -83,7 +83,17 @@ class UsuarioController extends Controller
      */
     public function show($id)
     {
-        //
+        $user = User::findOrFail($id);
+        $rol = Rol::get();
+        $unidad = Unidad::get();
+
+        $roles = $user->user_rol;
+
+        $rolArray =  $roles->pluck('id')->toArray();
+
+        $rol_no_asignados = Role::whereNotIn('id', $rolArray)->get();
+
+        return view('produccion.usuario.show', compact('user', 'rol', 'roles', 'unidad', 'rol_no_asignados'));
     }
 
     /**
@@ -187,5 +197,72 @@ class UsuarioController extends Controller
         $user->user_rol()->detach($request->rol_id);
         alert()->error('El registro ha sido eliminado correctamente');
         return back();
+    }
+
+
+    public function update_perfil(Request $request)
+    {
+
+        $messages = [
+            'name.required' => 'ingresar nombre',
+            'user_name.required' => 'ingresar usuario',
+            'email.required' => 'ingresar correo',
+
+
+        ];
+
+        $request->validate([
+            'name' => 'required',
+            'user_name' => 'required',
+            'email' => 'required',
+
+
+
+        ], $messages);
+
+
+        $user =   User::findorFail(auth()->user()->id);
+
+        // $aplicacionasservidor->id = $request->get('id');
+        $user->name = $request->get('name');
+        $user->user_name = $request->get('user_name');
+        $user->email = $request->get('email');
+
+
+        if ($request->password != "") {
+            $user->password = bcrypt($request->password);
+        }
+
+
+      //  $filename = $archivo->getClientOriginalName();
+      //  $path = $filename;
+       // $destinationPath = public_path('./images/users');
+       // $archivo->move($destinationPath, $path);       // $organizations->logo_url = "./images";       // $organizations->logo = $filename;
+       // $user->image = $filename;
+       // $user->update();
+        //alert()->success('El registro ha sido modificado correctamente');
+        //return back();--}}
+
+         //$file = $request->file('fileInput');
+
+           // $filename = $file->getClientOriginalName();
+           // $path = uniqid() . $filename;
+            //$destinationPath = public_path('./images/users');
+            //$file->move($destinationPath, $path);
+            //$user->image = $filename;
+
+            if ($request->file('fileInput')) {
+                $doc = $request->file('fileInput');
+                $path = uniqid() . $doc->getClientOriginalName();
+                $doc->move(public_path("./images/users"),  $path);
+                $user->image = $path;
+            }
+
+            $user->update();
+
+
+        alert()->success('Registro actualizado correctamente');
+        return back();
+
     }
 }

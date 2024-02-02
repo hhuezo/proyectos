@@ -1,6 +1,11 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Events\OrderStatusChangedEvent;
+use App\Http\Controllers\HomeController;
+use App\User;
+use App\Notifications\TaskCompleted;
+use Carbon\Carbon;
 
 /*
 |--------------------------------------------------------------------------
@@ -53,18 +58,15 @@ Route::get('/home/{id}', 'HomeController@unidad')->name('unidad');
 Route::get('/load_unidades', 'HomeController@load_unidades')->name('load_unidades');
 
 
+//seguridad
 Route::post('usuario/attach_roles','produccion\UsuarioController@attach_roles');
 Route::post('usuario/dettach_roles','produccion\UsuarioController@dettach_roles');
 Route::resource('usuario', 'produccion\UsuarioController');
 
-
-//seguridad
 Route::post('produccion/rol/unlink_permission', 'produccion\RolController@unlink_permission');
 Route::post('produccion/rol/link_permission', 'produccion\RolController@link_permission');
 Route::resource('produccion/rol', 'produccion\RolController');
 Route::resource('produccion/permisos', 'produccion\PermissionController');
-
-//Route::resource('rol', 'produccion\RolController');
 
 Route::resource('proyecto', 'produccion\ProyectoController');
 Route::resource('proyecto_finalizado', 'produccion\ProyectoFinalizadoController');
@@ -124,4 +126,8 @@ Route::resource('infraestructura/proveedores', 'infraestructura\ProveedoresContr
 Route::post('infraestructura/evaluaciones/updateData/{id}/{criterio}', 'infraestructura\EvalProveedoresController@updateData');
 Route::post('infraestructura/evaluaciones/CrearItem/{id}/{criterio}/{idvealuacion}', 'infraestructura\EvalProveedoresController@CrearItem');
 Route::resource('infraestructura/evaluaciones', 'infraestructura\EvalProveedoresController');
+#actividades finalizadas
+Route::get('get_actividades_finalizadas/{id}', [HomeController::class, 'get_actividades_finalizadas']);
+Route::post('usuario/perfil', 'produccion\UsuarioController@update_perfil');
+Route::post('/upload', 'produccion\UsuarioController@store_file')->name('dropzone.store');
 

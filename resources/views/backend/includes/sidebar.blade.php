@@ -270,6 +270,7 @@
                     </li>
                 @endif
                 @can('read indicadores')
+                @if ((auth()->user()->rol_id == 1 && auth()->user()->unidad_id == 1) || auth()->user()->unidad_id == 6)
                     <li class="collapsed">
                         <a class="m-link {{ Request::segment(2) == 'project' ? 'active' : '' }}"
                             href="{{ url('dashboard') }}">
@@ -316,6 +317,7 @@
 
 
 
+                @endif
                 <?php
                 /*
             <li class=" {{ Request::is('admin/auth/user') || Request::is('admin/auth/role')  || Request::is('admin/auth/role/create') ? '' : ' collapsed' }}">
