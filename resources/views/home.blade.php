@@ -1050,47 +1050,25 @@
     @endif
 
 
-    <!-- modal update user -->
-    <div class="modal fade fixed top-0 left-0 hidden w-full h-full outline-none overflow-x-hidden overflow-y-auto"
-        id="modal-actividades-finalizadas" tabindex="-1" aria-labelledby="modal-actividades-finalizadas"
-        aria-hidden="true">
-        <div class="modal-dialog modal-xl relative w-auto pointer-events-none">
-            <div
-                class="modal-content border-none shadow-lg relative flex flex-col w-full pointer-events-auto bg-white bg-clip-padding
-            rounded-md outline-none text-current">
-                <div class="relative bg-white rounded-lg shadow dark:bg-slate-700">
-                    <!-- Modal header -->
-                    <div
-                        class="flex items-center justify-between p-5 border-b rounded-t dark:border-slate-600 bg-black-500">
 
-                        <button type="button"
-                            class="text-slate-400 bg-transparent hover:text-slate-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center
-                            dark:hover:bg-slate-600 dark:hover:text-white"
-                            data-bs-dismiss="modal">
 
-                            <span class="sr-only">Close modal</span>
-                        </button>
-                    </div>
-                    <!-- Modal body -->
-                    <div class="p-6 space-y-4">
 
-                        <p class="text-base text-slate-600 dark:text-slate-400 leading-6">
-                        <div id="detalle"></div>
-                        </p>
-                    </div>
-                    <!-- Modal footer -->
-                    <div
-                        class="flex items-center justify-end p-6 space-x-2 border-t border-slate-200 rounded-b dark:border-slate-600">
-                        <button data-bs-dismiss="modal"
-                            class="btn inline-flex justify-center text-white bg-black-500">Cerrar</button>
-                    </div>
+    <!-- Modal XL -->
+    <div class="modal fade" id="modal-actividades-finalizadas" tabindex="-1" aria-labelledby="exampleModalXlLabel"
+        style="display: none;" aria-hidden="true">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title h4" id="exampleModalXlLabel">Actividades finalizadas</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div id="detalle"></div>
                 </div>
             </div>
         </div>
     </div>
 
-
-    <!-- end modal update user -->
 
 
 
@@ -1168,16 +1146,19 @@
             $.get("{{ url('get_actividades_finalizadas') }}" + '/' + id, function(data) {
 
                 var html =
-                    "<div class='card'><header class=' card-header noborder'><h4 class='card-title'>Actividades Finalizadas</h4></header><div class='card-body px-6 pb-6'><div class='overflow-x-auto -mx-6'><div class='inline-block min-w-full align-middle'><div class='overflow-hidden '><table class='min-w-full divide-y divide-slate-100 table-fixed dark:divide-slate-700'><thead class='bg-slate-200 dark:bg-slate-700'><thead><th scope='col' class=' table-th '>Corr</th><th scope='col' class=' table-th '>Id</th><th scope='col' class=' table-th '>User Name</th><th scope='col' class=' table-th '>Name</th><th scope='col' class=' table-th '>Numero Ticket</th><th scope='col' class=' table-th '>Actividad</th><th scope='col' class=' table-th '>Fecha inicio</th><th scope='col' class=' table-th '>Fecha fin</th></tr></thead>";
+                    "<div class='card'><header class=' card-header noborder'><div class='card-body px-6 pb-6'><div class='overflow-x-auto -mx-6'><div class='inline-block min-w-full align-middle'><div class='overflow-hidden '><table class='min-w-full divide-y divide-slate-100 table-fixed dark:divide-slate-700'><thead class='bg-slate-200 dark:bg-slate-700'><thead><th scope='col' class=' table-th '>Corr</th><th scope='col' class=' table-th '>Id</th><th scope='col' class=' table-th '>User Name</th><th scope='col' class=' table-th '>Name</th><th scope='col' class=' table-th '>Numero Ticket</th><th scope='col' class=' table-th '>Actividad</th><th scope='col' class=' table-th '>Fecha inicio</th><th scope='col' class=' table-th '>Fecha fin</th></tr></thead>";
 
                 for (var i = 0; i < data.length; i++) {
+
+                    fecha_inicio_str = data[i].fecha_inicio.substr(8, 2) +'/'+ data[i].fecha_inicio.substr(5, 2) +'/'+ data[i].fecha_inicio.substr(0, 4);
+                    fecha_fin_str = data[i].fecha_fin.substr(8, 2) +'/'+ data[i].fecha_fin.substr(5, 2) +'/'+ data[i].fecha_fin.substr(0, 4);
+
                     html = html + "<tr class='even:bg-slate-50 dark:even:bg-slate-700'><td class='table-td'>" + (i +
                             1) + "</td><td class='table-td'>" +
                         data[i].id + "</td><td class='table-td'>" + data[i].user_name +
                         "</td><td class='table-td '>" + data[i].name + "</td><td class='table-td '>" + data[i]
                         .numero_ticket + "</td><td class='table-td '>" + data[i].descripcion +
-                        "</td><td class='table-td '>" + data[i].fecha_inicio + "</td><td class='table-td '>" + data[
-                            i].fecha_fin + "</td></tr>";
+                        "</td><td class='table-td '>" + fecha_inicio_str + "</td><td class='table-td '>" + fecha_fin_str + "</td></tr>";
                 }
 
                 html = html + "</tbody></table></div></div></div></div></div>";
