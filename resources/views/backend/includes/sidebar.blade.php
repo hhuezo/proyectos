@@ -154,14 +154,15 @@
                 @endif
 
 
-                {{-- @if (auth()->user()->rol_id == 1 && auth()->user()->unidad_id == 1) @endif --}}
-                @can('read menu facturar')
+                {{--   --}}
+                {{-- @can('read menu facturar')@endcan --}}
+                @if (auth()->user()->rol_id == 1 && auth()->user()->unidad_id == 1)
                     <li class="collapsed">
                         <a class="m-link {{ Request::segment(2) == 'project' ? 'active' : '' }}"
                             href="{{ url('facturar') }}">
                             <i class="icofont-notepad"></i><span>Facturar</span></a>
                     </li>
-                @endcan
+                @endif
 
                 @if (auth()->user()->rol_id == 2)
                     <li class="collapsed">
@@ -269,14 +270,14 @@
                             <i class="icofont-notepad"></i><span>Inventario despliegues</span></a>
                     </li>
                 @endif
-                @can('read indicadores')
                 @if ((auth()->user()->rol_id == 1 && auth()->user()->unidad_id == 1) || auth()->user()->unidad_id == 6)
                     <li class="collapsed">
                         <a class="m-link {{ Request::segment(2) == 'project' ? 'active' : '' }}"
                             href="{{ url('dashboard') }}">
                             <i class="fa fa-line-chart"></i><span>Indicadores</span></a>
                     </li>
-                @endcan
+                @endif
+
                 @can('read cotizacion')
                     <li class="collapsed">
                         <a class="m-link {{ Request::segment(2) == 'project' ? 'active' : '' }}"
@@ -284,12 +285,6 @@
                             <i class="fa fa-file-text"></i><span>Cotización</span></a>
                     </li>
                 @endcan
-
-
-
-
-
-
 
 
                 @can('read proveedores')
@@ -314,10 +309,6 @@
                 </li>
                 @endcan
 
-
-
-
-                @endif
                 <?php
                 /*
             <li class=" {{ Request::is('admin/auth/user') || Request::is('admin/auth/role')  || Request::is('admin/auth/role/create') ? '' : ' collapsed' }}">
@@ -453,9 +444,6 @@
     </div>
 
 @endif
-
-
-
 @if (Request::segment(2) == 'ui-components')
     <div class="sidebar px-4 py-2 py-md-4 me-0">
         <div class="d-flex flex-column h-100">
