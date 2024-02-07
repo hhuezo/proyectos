@@ -344,8 +344,8 @@
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <input type="hidden" name="estimated_investment"
-                                                step="1" required class="form-control">
+                                                <input type="hidden" name="estimated_investment" step="1" required
+                                                    class="form-control">
                                                 <div>&nbsp;</div>
 
 
@@ -404,50 +404,30 @@
                                                 <th>HR</th>
                                                 <th>HA</th>
                                                 <th>amount</th>
-
-                                                {{-- <th width="25%">Opciones</th> --}}
                                             </tr>
                                         </thead>
                                         <tbody>
 
                                             @foreach ($roles as $role)
+                                                @php($hr = $role->getHr($project->id,$role->id ))
+                                                @php($ha = $role->getHA($project->id,$role->id ))
+                                                @php($number = $role->getNumber($project->id,$role->id ))
+                                                @php($team_id = $role->getIdTeam($project->id,$role->id ))
                                                 <tr>
-
                                                     <td>{{ $role->name }}</td>
-                                                    <td>{{ $role->hr }}</td>
-                                                    <td>{{ $role->ha }}</td>
-                                                    {{-- <td>{{ $role->number != null ? $role->number : '' }}</td> --}}
+                                                    <td contenteditable="true" id="{{ $role->id }}-hr"
+                                                        onblur="sendTeamHR({{ $project->id }},{{ $role->id }},this.textContent,{{ $team_id }})"
+                                                        onkeypress="return isDecimalKey(event)">{{ $hr }}</td>
+                                                    <td contenteditable="true" id="{{ $role->id }}-ha"
+                                                        onblur="sendTeamHA({{ $project->id }},{{ $role->id }},this.textContent,{{ $team_id }})"
+                                                        onkeypress="return isDecimalKey(event)">
+                                                        {{ $ha }}</td>
                                                     <td contenteditable="true" id="role{{ $role->id }}"
                                                         onblur="sendRole({{ $project->id }},{{ $role->id }},this.textContent)"
                                                         onkeypress="return isNumberKey(event)">
-                                                        {{ $role->number != null ? $role->number : '' }}
+                                                        {{ $number != null ? $number : '' }}
                                                     </td>
-                                                    {{--
-                                                    <td class=" dt-body-right">
-                                                        <div class="btn-group" role="group"
-                                                            aria-label="Basic outlined example">
-                                                            @if ($role->number != null)
-                                                                <button type="button" class="btn btn-outline-secondary"
-                                                                    data-bs-toggle="modal"
-                                                                    data-bs-target="#modal-edit-{{ $role->id }}"><i
-                                                                        class="icofont-edit text-success"></i></button>
-                                                                <button type="button"
-                                                                    class="btn btn-outline-secondary deleterow"
-                                                                    data-bs-toggle="modal"
-                                                                    data-bs-target="#modal-delete-{{ $role->id }}"><i
-                                                                        class="icofont-close-circled text-danger"></i></button>
-                                                            @else
-                                                                <button type="button" class="btn btn-outline-secondary"
-                                                                    data-bs-toggle="modal"
-                                                                    data-bs-target="#modal-active-{{ $role->id }}"><i
-                                                                        class="icofont-check-circled text-success"></i></button>
-                                                            @endif
-                                                        </div>
-                                                    </td> --}}
-
-
                                                 </tr>
-                                                @include('projects.project.modal_team')
                                             @endforeach
 
                                         </tbody>
@@ -581,7 +561,26 @@
             }
 
             function sendRole(project, role, value) {
-                //console.log(role," ",value," ",project);
+                //console.log(role, " ", value, " ", project);
+                var element_hr = document.getElementById(role + '-hr');
+
+                if (element_hr) {
+                    var hr = element_hr.textContent.trim();
+                    console.log("*", hr);
+                } else {
+                    console.log("Element not found");
+                }
+
+                var element_ha = document.getElementById(role + '-ha');
+
+                if (element_ha) {
+                    var ha = element_ha.textContent.trim();
+                    console.log("*", ha);
+                } else {
+                    console.log("Element not found");
+                }
+
+
                 $.ajax({
                     url: "{{ url('project/send_data_role') }}",
                     type: 'POST',
@@ -590,6 +589,8 @@
                         value: value.trim(),
                         project: project,
                         role: role,
+                        hr: hr,
+                        ha: ha,
                     },
                     success: function(data) {
                         console.log(data);
@@ -598,6 +599,69 @@
                         console.error('Error en la solicitud POST:', error);
                     }
                 });
+            }
+
+            function sendTeamHR(project, role, value, team_id) {
+                console.log(role, value, project, team_id);
+                if (team_id !== undefined) {
+                    $.ajax({
+                        url: "{{ url('project/update_data_role_hr') }}",
+                        type: 'POST',
+                        data: {
+                            _token: '{{ csrf_token() }}',
+                            value: value.trim(),
+                            project: project,
+                            role: role,
+                        },
+                        success: function(data) {
+                            console.log("data: ",data);
+                        },
+                        error: function(error) {
+                            console.error('Error en la solicitud POST:', error);
+                        }
+                    });
+                }
+            }
+
+            function sendTeamHA(project, role, value, team_id) {
+                console.log(role, value, project, team_id);
+
+                if (team_id !== undefined) {
+
+                    $.ajax({
+                        url: "{{ url('project/update_data_role_ha') }}",
+                        type: 'POST',
+                        data: {
+                            _token: '{{ csrf_token() }}',
+                            value: value.trim(),
+                            project: project,
+                            role: role,
+                        },
+                        success: function(data) {
+                            console.log(data);
+                        },
+                        error: function(error) {
+                            console.error('Error en la solicitud POST:', error);
+                        }
+                    });
+                }
+            }
+
+
+            function isDecimalKey(evt) {
+                var charCode = (evt.which) ? evt.which : evt.keyCode;
+
+                // Permitir números del 0 al 9
+                if (charCode >= 48 && charCode <= 57) {
+                    return true;
+                }
+
+                // Permitir solo un punto decimal y verificar si ya hay uno presente
+                if (charCode === 46 && evt.target.value.indexOf('.') === -1) {
+                    return true;
+                }
+
+                return false; // Bloquear cualquier otro carácter
             }
         </script>
 

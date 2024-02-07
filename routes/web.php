@@ -109,7 +109,10 @@ Route::resource('inventario_despliegues', 'catalogo\InventarioDespliegueControll
 Route::post('dashboard/update_grafica','DashboardController@update_grafica');
 Route::resource('dashboard','DashboardController');
 
+Route::get('project/report/{id}/{lang}','project\ProjectController@report');
 Route::post('project/send_data_role','project\ProjectController@send_data_role');
+Route::post('project/update_data_role_hr','project\ProjectController@update_data_role_hr')->name('update_data_role_hr');
+Route::post('project/update_data_role_ha','project\ProjectController@update_data_role_ha')->name('update_data_role_ha');
 Route::get('project/set_sesion/{id}','project\ProjectController@set_sesion');
 Route::post('project/summary','project\ProjectController@summary');
 Route::post('project/assumptions','project\ProjectController@assumptions');

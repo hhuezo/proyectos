@@ -29,12 +29,12 @@
             </tr>
         </thead>
         <tbody>
-            @foreach ($project->team as $team)
+            @foreach ($project->team->sortBy('project_role') as $team)
                 <tr align="center">
                     <td align="left"><strong>{{ $team->project_role->name }}</strong>
                     </td>
-                    <td>{{ $team->project_role->hr }}</td>
-                    <td>{{ $team->project_role->ha }}</td>
+                    <td>{{ $team->hr }}</td>
+                    <td>{{ $team->ha }}</td>
                     <td>{{ $team->number }}</td>
                     @foreach ($team->getData($project->id, $team->project_role_id) as $data)
                         <td contenteditable="true" id="c{{ $data->id }}" onkeypress="return isNumberKey(event)"
@@ -172,6 +172,9 @@
                 maximumFractionDigits: 2
             }).format(number);
         }
+
+
+
     </script>
 
 </div>

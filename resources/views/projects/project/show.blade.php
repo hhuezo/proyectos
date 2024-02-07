@@ -2,12 +2,12 @@
 
     body {
         font-family: 'Open Sans', Arial, Helvetica, sans-serif;
-        font-size: 12px;
+        font-size: 10px;
     }
 
     .title {
         font-weight: bold;
-        font-size: 14px;
+        font-size: 12px;
         color: #FFF;
     }
 

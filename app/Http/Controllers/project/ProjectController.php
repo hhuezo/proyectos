@@ -11,6 +11,7 @@ use App\project\ProjectTeam;
 use App\project\SecurityRequirements;
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use PDF;
 use Webklex\PDFMerger\Facades\PDFMergerFacade;
 
@@ -26,80 +27,6 @@ class ProjectController extends Controller
     {
 
         $projects = Project::get();
-
-
-        // $project = Project::first();
-        // foreach($project->team as $team )
-        // {
-        //     for($i=1;$i<=$project->number_months;$i++)
-        //     {
-
-        //         $data = new ProjectData();
-        //         $data->project_id = $project->id;
-        //         $data->project_role_id = $team->project_role_id;
-        //         $data->mounth = $i;
-        //         $data->save();
-        //     }
-
-
-        // }
-
-
-        /* $project = Project::first();
-        //asignando data al proyecto
-        $meses = $project->number_month;
-
-        //formando encabezados
-        $letras = array_map('chr', range(ord('A'), ord('Z')));
-
-        $array_data = [];
-
-        $array_data = ["0-A" => ""];
-        $count_mes = 1;
-        for ($i = 1; $i < count($letras); $i++) {
-            $combinacion = "0-$letras[$i]";
-            $array_data[$combinacion] = $i <= $meses ? "M" . (($i - 1) % 12 + 1) : null;
-        }
-
-
-        // array_push($array_data, $array_encabezado);
-
-
-        $row = 1;
-        foreach ($project->team as $team) {
-            $array_data["$row-A"] = $team->project_role->name;
-
-            for ($i = 1; $i < count($letras); $i++) {
-                $combinacion = "$row-$letras[$i]";
-                $array_data[$combinacion] =  null;
-            }
-
-            //array_push($array_data, $array);
-            $row++;
-        }
-
-
-
-
-        for ($row; $row <= 24; $row++) {
-            // $array = [];
-            for ($i = 0; $i < count($letras); $i++) {
-                $combinacion = "$row-$letras[$i]";
-                $array_data[$combinacion] =  null;
-            }
-
-            // array_push($array_data, $array);
-        }
-
-
-        $project->data = $array_data;
-        $project->update();*/
-
-
-
-
-
-
 
         $levels = ["", "Low", "Medium", "High"];
 
@@ -176,11 +103,10 @@ class ProjectController extends Controller
 
         $opcion = 2;
         $pdf = PDF::loadView('projects.project.show', compact('project', 'levels', 'roles', 'security_requirements', 'opcion'));
-        if($project->number_months > 7)
-        {
+        if ($project->number_months > 7) {
             $pdf->setPaper('A4', 'landscape');
         }
-       
+
         $pdf->save(public_path('reporte2.pdf'));
 
 
@@ -202,17 +128,23 @@ class ProjectController extends Controller
         $project = Project::findOrFail($id);
 
         $roles = ProjectRole::get();
-        foreach ($roles as $role) {
-            $teamMember = $project->team->where('project_role_id', $role->id)->first();
 
-            if ($teamMember) {
-                $role->number = $teamMember->number;
-                $role->team_id = $teamMember->id;
-            } else {
-                $role->number = null;
-                $role->team_id = null;
-            }
-        }
+       /* $roles = DB::table('project_role as pr')
+            ->leftJoin('project_team as pt', function ($join) use ($id) {
+                $join->on('pr.id', '=', 'pt.project_role_id')
+                    ->where('pt.project_id', '=', $id);
+            })
+            ->select([
+                'pr.id',
+                'pr.name',
+                DB::raw('IF(pt.hr <> 0.00 and pt.hr IS NOT NULL, pt.hr, pr.hr) as hr'),
+                DB::raw('IF(pt.ha <> 0.00 and pt.ha IS NOT NULL, pt.ha, pr.ha) as ha'),
+                'pt.number',
+                'pt.id as team_id'
+            ])
+            ->get();*/
+
+
 
         $security_requirements = SecurityRequirements::where('status', 1)->get();
 
@@ -366,26 +298,81 @@ class ProjectController extends Controller
     {
         try {
 
-            ProjectData::where('project_id', $request->project)->where('project_role_id', $request->role)->delete();
-            ProjectTeam::where('project_id', $request->project)->where('project_role_id', $request->role)->delete();
+            $team = ProjectTeam::where('project_id', $request->project)->where('project_role_id', $request->role)->first();
 
-            if ($request->value > 0) {
-                $team = new ProjectTeam();
-                $team->project_role_id =  $request->role;
+            if ($team) {
                 $team->number =  $request->value;
                 $team->project_id =  $request->project;
-                $team->save();
+                $team->hr =  $request->hr;
+                $team->ha =  $request->ha;
+                $team->update();
+            } else {
+                ProjectData::where('project_id', $request->project)->where('project_role_id', $request->role)->delete();
+                ProjectTeam::where('project_id', $request->project)->where('project_role_id', $request->role)->delete();
 
-                $months = $team->project->number_months;
+                if ($request->value > 0) {
+                    $project_role = ProjectRole::findOrFail($request->role);
+                    $team = new ProjectTeam();
+                    $team->project_role_id =  $request->role;
+                    $team->number =  $request->value;
+                    $team->project_id =  $request->project;
+                    $team->hr =  $project_role->hr;
+                    $team->ha =  $project_role->ha;
+                    $team->save();
 
-                for ($i = 1; $i <= $months; $i++) {
-                    $data = new ProjectData();
-                    $data->project_id = $request->project;
-                    $data->project_role_id = $request->role;
-                    $data->month = $i;
-                    $data->value = 0;
-                    $data->save();
+                    $months = $team->project->number_months;
+
+                    for ($i = 1; $i <= $months; $i++) {
+                        $data = new ProjectData();
+                        $data->project_id = $request->project;
+                        $data->project_role_id = $request->role;
+                        $data->month = $i;
+                        $data->value = 0;
+                        $data->save();
+                    }
                 }
+            }
+
+            return 1;
+        } catch (Exception $e) {
+            return 0;
+        }
+    }
+
+    public function  update_data_role_hr(Request $request)
+    {
+        try {
+
+            $team = ProjectTeam::where('project_id', $request->project)->where('project_role_id', $request->role)->first();
+            if ($team) {
+                $value = 0;
+                if ($request->value != "") {
+                    $value = $request->value;
+                }
+                $team->hr = $value;
+                $team->update();
+                return $value;
+            }
+
+            return 1;
+        } catch (Exception $e) {
+            return 0;
+        }
+    }
+
+    public function update_data_role_ha(Request $request)
+    {
+        try {
+
+            $team = ProjectTeam::where('project_id', $request->project)->where('project_role_id', $request->role)->first();
+            if ($team) {
+                $value = 0;
+                if ($request->value != "") {
+                    $value = $request->value;
+                }
+                $team->ha = $value;
+                $team->update();
+                return $value;
             }
 
             return 1;
