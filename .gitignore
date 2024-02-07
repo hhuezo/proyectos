@@ -1,5 +1,9 @@
 /node_modules
 /public/hot
+/public/reporte.pdf
+/public/reporte1.pdf
+/public/reporte2.pdf
+/public/reporte3.pdf
 /public/storage
 /storage/*.key
 /vendor

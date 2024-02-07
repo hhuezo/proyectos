@@ -16,7 +16,9 @@ class ProjectTeam extends Model
     protected $fillable = [
         'project_role_id',
         'number',
-        'project_id'
+        'project_id',
+        'ha',
+        'hr'
     ];
 
 
