@@ -33,6 +33,7 @@ class EvaluacionProveedor extends Model
         'nombre_aprobado',
         'cargo_aprobado',
         'fecha_aprobado',
+        'observaciones',
 
     ];
     protected $guarded = [];
@@ -45,5 +46,9 @@ class EvaluacionProveedor extends Model
     {
         return $this->belongsTo(Proveedores::class, 'proveedor_id');
       }
+
+
+
+
 
 }

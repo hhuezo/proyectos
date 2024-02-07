@@ -61,29 +61,54 @@
 
 
     <figure>
+
+
+        <div class="row col-12">
+            <div class="col-6 card" style="max-height: 600px; overflow-y: auto;">
+                <label class="form-label" align="left"><strong>Periodo</strong></label>
+                <select id="year" class="form-select" onchange="obtener_data()">
+                    @for ($i = date('Y'); $i >= 2018; $i--)
+                        <option value ="{{ $i }}" {{ $year == $i ? 'selected' : '' }}>{{ $i }}
+                        </option>
+                    @endfor
+                </select>
+            </div>
+            <div class="col-6 card">
+                <label class="form-label" align="left"><strong>Mes</strong></label>
+                <select id="month"  class="form-select"  align="left" onchange="obtener_data()">
+                    @foreach ($meses as $key => $value)
+                        <option value ="{{ $key }}" {{ $month == $key ? 'selected' : '' }}>{{ $value }}
+                        </option>
+                    @endforeach
+                </select>
+            </div>
+        </div>
+
+
+
+        {{--
         <div class='buttons'>
-            {{-- recorrido de botones de meses --}}
+       recorrido de botones de meses
             @foreach ($meses as $key => $value)
-                <a href="{{ url('home') }}/{{ $year }}/{{ $key }}">
-                    <button id='{{ $value }}' class="{{ $month == $key ? 'active' : '' }}">
+            <a href="{{ url('home') }}/{{ $year }}/{{ $key }}">
+                    <button id='{{ $key }}' class="{{ $month == $key ? 'active' : '' }}">
                         {{ $value }}
                     </button>
-                </a>
+                {{-- </a>
             @endforeach
 
-        </div>
+        </div> --}}
 
 
         <br>
 
 
-
-
         <div class="row col-12">
-            <div class="col-9 card"  style="max-height: 600px; overflow-y: auto;">
+            <div class="col-9 card" style="max-height: 600px; overflow-y: auto;">
                 <div id="container"></div>
             </div>
             <div class="col-3 card">
+
                 <table id="datatable" class="table">
                     <thead>
                         <tr>
@@ -106,6 +131,41 @@
             </div>
         </div>
         <div>&nbsp;</div>
+
+
+
+        <div class="row col-12">
+            <div class="col-9 card" style="max-height: 600px; overflow-y: auto;">
+                <div id="container2"></div>
+            </div>
+            <div class="col-3 card">
+
+
+                <table id="datatable" class="table">
+                    <thead>
+                        <tr>
+                            <th>Técnico</th>
+                            <th>Pendiente</th>
+                            <th>Realizado</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                        @foreach ($resultados as $resultado)
+                            <tr>
+                                <th>{{ $resultado->nombre_tecnico }}</th>
+                                <td>{{ $resultado->pendiente }}</td>
+                                <td>{{ $resultado->realizado }}</td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+
+
+            </div>
+        </div>
+        <div>&nbsp;</div>
+        fin nuevo grafico
         <div class="row col-12">
             <div class="col-9 card">
                 <div id="container_sucursal"></div>
@@ -505,6 +565,34 @@
                 }
             }
         });
+
+
+        Highcharts.chart('container2', {
+            data: {
+                table: 'datatable'
+            },
+            chart: {
+                type: 'column'
+            },
+            title: {
+                text: 'Mantenimientos preventivos(Técnicos) Parametros'
+            },
+            subtitle: {
+                text:
+                    //'Source: <a href="https://www.ssb.no/en/statbank/table/04231" target="_blank">SSB</a>'
+                    ''
+            },
+            xAxis: {
+                type: 'category'
+            },
+            yAxis: {
+                allowDecimals: false,
+                title: {
+                    text: 'Mantenimientos2'
+                }
+            }
+        });
+
 
         Highcharts.chart('container_sucursal', {
             data: {
@@ -979,7 +1067,7 @@
                         dataLabels: {
                             enabled: true,
                             format: graficas[i].encabezado[i] +
-                            ' - {point.y}', // Muestra el valor de 'y' seguido por el nombre de la columna
+                                ' - {point.y}', // Muestra el valor de 'y' seguido por el nombre de la columna
                             style: {
                                 color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black'
                             }
@@ -1014,7 +1102,7 @@
                         description: 'Countries'
                     }
                 },
-               yAxis: {
+                yAxis: {
                     min: 0,
                     title: {
                         text: graficas[i].descripcion
@@ -1043,7 +1131,17 @@
             });
         }
     </script>
+    <script>
+        function obtener_data() {
+            var anio = document.getElementById('year').value;
+            var mes = document.getElementById('month').value;
+            console.log(anio, mes);
 
+            // Obtén la URL de Laravel desde PHP y redirige
+            var url = "{!! url('/home') !!}/" + encodeURIComponent(anio) + "/" + encodeURIComponent(mes);
+            window.location.replace(url);
+        }
+    </script>
 
     <!-- Jquery Page Js -->
     <script src="{{ asset('assets/bundles/libscripts.bundle.js') }}"></script>

@@ -27,7 +27,22 @@ class EvalProveedoresController extends Controller
         $proveedores = Proveedores::where('activo', '=', 'A')->get();
         // $proveedores = Proveedores::get();
         $evaluacion = EvaluacionProveedor::get();
-        return view('infraestructura.evaluaciones.index', compact('evaluacion', 'proveedores'));
+        $PeriodosEvaluacion = DB::table('evaluacion_proveedores')
+            ->select('periodo_evaluacion')
+            ->groupBy('periodo_evaluacion')
+            ->orderBy('periodo_evaluacion')
+            ->get();
+
+        $cantidadProveedores = DB::table('proveedores')->count();
+        $evaluacionesPorPeriodo = DB::table('evaluacion_proveedores as a')
+            ->join('proveedores as b', 'a.proveedor_id', '=', 'b.id')
+            ->select('a.periodo_evaluacion', DB::raw('COUNT(a.proveedor_id) as evaluaciones'))
+            ->groupBy('a.periodo_evaluacion')
+            ->get();
+
+
+
+        return view('infraestructura.evaluaciones.index', compact('evaluacionesPorPeriodo', 'cantidadProveedores', 'PeriodosEvaluacion', 'evaluacion', 'proveedores'));
         //return view('infraestructura.evaluaciones.show');
     }
 
@@ -49,6 +64,15 @@ class EvalProveedoresController extends Controller
         $Evaluacion = new EvaluacionProveedor();
         $Evaluacion->proveedor_id = $request->proveedor_id;
         $Evaluacion->periodo_evaluacion = $request->periodo;
+        $Evaluacion->nombre_elaborado = $request->nombre_elaborado;
+        $Evaluacion->nombre_revisado =  $request->nombre_revisado;
+        $Evaluacion->cargo_elaborado  =  $request->cargo_elaborado;
+        $Evaluacion->cargo_revisado  =  $request->cargo_revisado;
+        $Evaluacion->observaciones  =  $request->observaciones;
+        $Evaluacion->notificado = 'S';
+        //$Evaluacion->notificado =  $request->notificado;
+        $Evaluacion->fecha_aprobado  =  $request->fecha_aprobado;
+        $Evaluacion->fecha_revisado  =  $request->fecha_revisado;
         $Evaluacion->save();
 
 
@@ -57,7 +81,6 @@ class EvalProveedoresController extends Controller
         foreach ($cumplimientos as $cumplimiento) {
             $criterio = $cumplimiento->caracteristica->criterios->first();
             $Evaluacion_detalle = new EvaluacionDetalle();
-
             $Evaluacion_detalle->evaluacion_id = $Evaluacion->id;
             $Evaluacion_detalle->cumplimiento_car_id = $cumplimiento->id;
             $Evaluacion_detalle->criterio_caracteristica_id = $criterio->id;
@@ -74,9 +97,20 @@ class EvalProveedoresController extends Controller
 
     public function create_eval(Request $request)
     {
+
         $Evaluacion = new EvaluacionProveedor();
         $Evaluacion->proveedor_id = $request->id;
         $Evaluacion->periodo_evaluacion = $request->periodo_evaluacion;
+        $Evaluacion->nombre_elaborado = $request->nombre_elaborado;
+        $Evaluacion->nombre_revisado =  $request->nombre_revisado;
+        $Evaluacion->nombre_aprobado =  $request->nombre_aprobado;
+        $Evaluacion->cargo_elaborado  =  $request->cargo_elaborado;
+        $Evaluacion->cargo_aprobado  =  $request->cargo_aprobado;
+        $Evaluacion->cargo_revisado  =  $request->cargo_revisado;
+        $Evaluacion->observaciones  =  $request->observaciones;
+        $Evaluacion->fecha_aprobado  =  $request->fecha_aprobado;
+        $Evaluacion->fecha_revisado  =  $request->fecha_revisado;
+        $Evaluacion->notificado = 'S';
         $Evaluacion->save();
     }
 
@@ -110,20 +144,23 @@ class EvalProveedoresController extends Controller
             ->selectRaw('ROUND(SUM(a.puntaje) / (1 - (SUM(CASE WHEN a.calificacion = 0 THEN a.ponderacion * 0.1 ELSE 0 END) * 0.1)), 2) as calificacion')
             ->first();
 
-        $califica_obtenida = EvaluacionPuntaje::select('categoria', 'aceptado')
+
+
+        $califica_obtenida = EvaluacionPuntaje::select('id', 'categoria', 'aceptado')
             ->where('limite_inferior', '<=', $data_calificacion->calificacion)
             ->where('limite_superior', '>=', $data_calificacion->calificacion)
             ->first();
 
 
-            if ($califica_obtenida->aceptado == 'S') {
-                $evaluacion->resultado_id = 1;
-            }
-            if ($califica_obtenida->aceptado == 'N') {
-                $evaluacion->resultado_id = 0;
-            }
-            $evaluacion->puntos = $data_calificacion->calificacion;
-            $evaluacion->update();
+        $evaluacion = EvaluacionProveedor::findOrfail($id);
+        /* if ($califica_obtenida->aceptado == 'S') {
+            $evaluacion->resultado_id = 1;
+        }
+        if ($califica_obtenida->aceptado == 'N') {
+            $evaluacion->resultado_id = 0;
+        }*/
+        $evaluacion->puntos = $data_calificacion->calificacion;
+        $evaluacion->resultado_id = $califica_obtenida->id;
 
 
 
@@ -173,6 +210,33 @@ class EvalProveedoresController extends Controller
         }
     }
 
+    public function  edit_evaluacion($id)
+    {
+
+
+        $evaluacion = EvaluacionProveedor::Findorfail($id);
+        $proveedores = Proveedores::get();
+        return view('infraestructura.evaluaciones.modificar_eval', compact('evaluacion','proveedores'));
+    }
+    public function modificar_evaluacion(Request $request, $id)
+    {
+        $evaluacion_proveedor = EvaluacionProveedor::Findorfail($id);
+        $evaluacion_proveedor->nombre_elaborado = $request->nombre_elaborado;
+        $evaluacion_proveedor->nombre_revisado =  $request->nombre_revisado;
+        $evaluacion_proveedor->nombre_aprobado =  $request->nombre_aprobado;
+        $evaluacion_proveedor->cargo_elaborado  =  $request->cargo_elaborado;
+        $evaluacion_proveedor->cargo_aprobado  =  $request->cargo_aprobado;
+        $evaluacion_proveedor->cargo_revisado  =  $request->cargo_revisado;
+        $evaluacion_proveedor->observaciones  =  $request->observaciones;
+        $evaluacion_proveedor->fecha_aprobado  =  $request->fecha_aprobado;
+        $evaluacion_proveedor->fecha_revisado  =  $request->fecha_revisado;
+        $evaluacion_proveedor->notificado =  $request->notificado;
+        $evaluacion_proveedor->update();
+        alert()->success('La Evaluacion del Proveedor ha sido Modificada correctamente');
+        return back();
+    }
+
+
 
 
 
@@ -208,20 +272,23 @@ class EvalProveedoresController extends Controller
             ->selectRaw('ROUND(SUM(a.puntaje) / (1 - (SUM(CASE WHEN a.calificacion = 0 THEN a.ponderacion * 0.1 ELSE 0 END) * 0.1)), 2) as calificacion')
             ->first();
 
-        $califica_obtenida = EvaluacionPuntaje::select('categoria', 'aceptado')
+        $califica_obtenida = EvaluacionPuntaje::select('id', 'categoria', 'aceptado')
             ->where('limite_inferior', '<=', $data_calificacion->calificacion)
             ->where('limite_superior', '>=', $data_calificacion->calificacion)
             ->first();
 
 
         $evaluacion = EvaluacionProveedor::findOrfail($id);
-        if ($califica_obtenida->aceptado == 'S') {
+        /* if ($califica_obtenida->aceptado == 'S') {
             $evaluacion->resultado_id = 1;
         }
         if ($califica_obtenida->aceptado == 'N') {
             $evaluacion->resultado_id = 0;
-        }
+        }*/
         $evaluacion->puntos = $data_calificacion->calificacion;
+        // $evaluacion->notificado= $califica_obtenida->id;
+        $evaluacion->resultado_id = $califica_obtenida->id;
+
         $evaluacion->update();
         alert()->success('La Evaluacion ha sido registrada correctamente');
         return redirect('infraestructura/evaluaciones/');
@@ -230,7 +297,9 @@ class EvalProveedoresController extends Controller
 
     public function  updateData($id, $criterio)
     {
+
         try {
+
             $EvaluacionDetalle = EvaluacionDetalle::Findorfail($id);
             $EvaluacionDetalle->criterio_caracteristica_id = $criterio;
             $EvaluacionDetalle->update();

@@ -34,6 +34,10 @@ class HomeController extends Controller
             '07' => 'Julio', '08' => 'Agosto', '09' => 'Septiembre', '10' => 'Octubre', '11' => 'Noviembre', '12' => 'Diciembre'
         );
 
+
+
+
+
         $resultados = VmMantenimiento::selectRaw("nombre_tecnico, sum(case when year(fecha_inicio) = $year and month(fecha_inicio) = $month and estado = 'PENDIENTE' then total else 0 end) as pendiente,
             sum(case when year(fecha_inicio) = $year and month(fecha_inicio) = $month and estado = 'REALIZADO' then total else 0 end) as realizado")
             ->whereYear('fecha_inicio', '=', $year)
@@ -41,6 +45,9 @@ class HomeController extends Controller
             ->whereIn('tipo_mantenimiento', ['Maintenance', 'Mantenimiento'])
             ->groupBy('nombre_tecnico')
             ->get();
+
+
+
 
 
         $resultados_sucursal = VmMantenimiento::selectRaw("sucursal, sum(case when year(fecha_inicio) = $year and month(fecha_inicio) = $month and estado = 'PENDIENTE' then total else 0 end) as pendiente,
@@ -175,11 +182,14 @@ class HomeController extends Controller
         }
 
 
+
+
+
         return view('home_soporte', compact(
             'meses',
             'resultados',
             'resultados_sucursal',
-            'year',
+                        'year',
             'month',
             'resultados_correctivos',
             'resultados_sucursal_correctivos',
@@ -501,6 +511,9 @@ class HomeController extends Controller
 
         return view('graficas.soporte_matenimientos', compact('frecuencia_mtto'));
     }
+
+
+
 
     public function soporte_mantenimientos_auditoria($mtto_sucursales, $mtto_areas, $mtto_activos)
     {

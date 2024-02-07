@@ -5,101 +5,245 @@
 @section('content')
     <!-- Body: Body -->
     @include('sweetalert::alert', ['cdn' => 'https://cdn.jsdelivr.net/npm/sweetalert2@9'])
-    <div class="card">
-        <div class="body d-flex py-lg-3 py-md-2">
-            <div class="container-xxl">
-                <div class="row align-items-center">
-                    <div class="border-0 mb-4">
-                        <div
-                            class="card-header py-3 no-bg bg-transparent d-flex align-items-center px-0 justify-content-between border-bottom flex-wrap">
-                            <h3 class="fw-bold mb-0"> Proveedores Evaluaciones</h3>
-                            <div class="col-auto d-flex w-sm-100">
-                                <button type="button" data-bs-toggle="modal" data-bs-target="#modal-add"
-                                    class="btn btn-outline-secondary">
-                                    Nuevo</button>
+    <style>
+        .tree {
+            min-height: 20px;
+            padding: 19px;
+            margin-bottom: 20px;
+            background-color: #fbfbfb;
 
-                            </div>
-                        </div>
-                    </div> <!-- Row end  -->
-                    <div class="row clearfix g-3">
-                        <div class="col-sm-12">
-                            <div class="mb-3">
-                                <div class="card-body">
-                                    <table id="myProjectTable" class="table table-hover align-middle mb-0"
-                                        style="width:100%">
-                                        <thead>
-                                            <tr>
+            /*  border: 1px solid #999;*/
+            -webkit-border-radius: 4px;
+            -moz-border-radius: 4px;
+            border-radius: 4px;
+            -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.05);
+            -moz-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.05);
+            box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.05);
 
-                                                <th align="center">Id</th>
-                                                <th align="center">Proveedor</th>
-                                                <th align="center">Periodos</th>
-                                                <th align="center">Fecha Evaluacion</th>
-                                                <th align="center"> Edicion / Reporte</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            @foreach ($evaluacion as $obj)
-                                                <tr>
-                                                    <td>{{ $obj->id }}</td>
-                                                    <td>{{ $obj->proveedor ? $obj->proveedor->nombre : '' }}</td>
-                                                    <td>{{ $obj->periodo_evaluacion }}</td>
-                                                    <td> {{ date('d/m/Y', strtotime( $obj->fecha_evalua)) }} </td>
-                                                    <td>
-                                                        <div class="btn-group" role="group" aria-label="Basic outlined example">
-                                                            <a href="{{url('infraestructura/evaluaciones')}}/{{$obj->id}}/edit" class="list-group-item list-group-item-action border-0 " >
+        }
+
+        .tree li {
+            list-style-type: none;
+            margin: 20;
+            padding: 10px 5px 0 55px;
+            position: relative;
+            min-width: 400px;
+        }
+
+        .tree li::before,
+        .tree li::after {
+            content: '';
+            left: 30px;
+            position: absolute;
+            right: auto
+        }
+
+        .tree li::before {
+            border-left: 1px solid #999;
+            bottom: 50px;
+            height: 100%;
+            top: 0;
+            width: 1px
+        }
+
+        .tree li::after {
+            border-top: 1px solid #999;
+            height: 20px;
+            top: 25px;
+            width: 25px
+        }
+
+        .tree li span {
+            -moz-border-radius: 5px;
+            -webkit-border-radius: 5px;
+            border: 2px solid #999;
+            border-radius: 5px;
+            display: inline-block;
+            padding: 3px 8px;
+            text-decoration: none;
+            min-width: 400px;
+        }
+
+        .tree li.parent_li>span {
+            cursor: pointer
+        }
+
+        .tree>ul>li::before,
+        .tree>ul>li::after {
+            border: 0
+        }
+
+        .tree li:last-child::before {
+            height: 30px
+        }
+
+        .tree li.parent_li>span:hover,
+        .tree li.parent_li>span:hover+ul li span {
+            background: rgb(197, 183, 223);
+            border: 2px solid #94a0b4;
+            color: #000
+        }
+    </style>
+
+    <script>
+        $(document).ready(function() {
+            $('.tree li:has(ul)').addClass('parent_li').find(' > span').attr('title', 'Collapse this branch');
+            $('.tree li.parent_li > span').on('click', function(e) {
+                var children = $(this).parent('li.parent_li').find(' > ul > li');
+                if (children.is(":visible")) {
+                    children.hide('fast');
+                    $(this).attr('title', 'Expand this branch').find(' > i').addClass('icon-plus-sign')
+                        .removeClass('icon-minus-sign');
+                } else {
+                    children.show('fast');
+                    $(this).attr('title', 'Collapse this branch').find(' > i').addClass('icon-minus-sign')
+                        .removeClass('icon-plus-sign');
+                }
+                e.stopPropagation();
+            });
+
+            // Expande todos los elementos al cargar la página
+            $('.tree li.parent_li > span').click();
+        });
+    </script>
+
+    <!-- Row end  -->
+
+    <div class="tree well card">
+
+        <div class="border-0">
+            <header class="flex mb-5 items-center border-b border-slate-100 dark:border-slate-700 pb-5 -mx-6 px-6">
+
+
+                <div
+                    class="card-header py-3 no-bg bg-transparent d-flex align-items-center px-0 justify-content-between border-bottom flex-wrap">
+                    <h3 class="fw-bold mb-0"> Proveedores Evaluaciones</h3>
+                    <div class="col-auto d-flex w-sm-100">
+                        <button type="button" data-bs-toggle="modal" data-bs-target="#modal-add"
+                            class="btn btn-primary float-right">
+                            Nuevo</button>
+
+                    </div>
+                </div>
+
+            </header>
+
+            @php($i = 1)
+            @foreach ($PeriodosEvaluacion as $periodos)
+                <div class="accordion" id="accordionExample">
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="headingOne">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                data-bs-target="#collapseOne{{$i}}" aria-expanded="true" aria-controls="collapseOne">
+                                Periodo : {{ $periodos->periodo_evaluacion }}
+                                @foreach ($evaluacionesPorPeriodo as $evalperiodos)
+                                    @if ($evalperiodos->periodo_evaluacion == $periodos->periodo_evaluacion)
+                                        Cantidad Evaluados : {{ $evalperiodos->evaluaciones }}/
+                                        {{ $cantidadProveedores }}
+                                    @endif
+                                @endforeach
+                            </button>
+                        </h2>
+
+                        <div id="collapseOne{{$i}}" class="accordion-collapse collapse" aria-labelledby="headingOne"
+                            data-bs-parent="#accordionExample">
+                            <div class="accordion-body">
+
+                                <table   class="table table-hover align-middle mb-0"
+                                style="width:100%">
+                                    <thead>
+                                        <tr  align="center">
+                                            <th align="center"> Proveedor  </th>
+                                            <th align="center"> Puntuacion  </th>
+                                            <th align="center"> Criterios  </th>
+                                            <th align="center"> Evaluacion  </th>
+                                            <th align="center"> Reporte </th>
+
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+
+                                        @foreach ($evaluacion as $obj)
+                                        <tr>
+                                            @if ($obj->periodo_evaluacion == $periodos->periodo_evaluacion)
+                                                <div id="{{ $periodos->periodo_evaluacion }}"
+                                                    class="accordion-collapse collapse" aria-labelledby="headingThree"
+                                                    data-bs-parent="#accordionExample">
+                                                    <div class="accordion-body">
+                                                        <td align="center">
+                                                            {{ $obj->proveedor->nombre }}</td>
+
+                                                            <td align="center">
+                                                                {{  intval($obj->puntos)}}</td>
+                                                        <td align="center">
+
+                                                            <a href="{{ url('infraestructura/evaluaciones') }}/{{ $obj->id }}/edit"
+                                                                class="list-group-item list-group-item-action border-0 ">
                                                                 <button type="button" class="btn btn-outline-secondary"><i
-                                                                        class="icofont-edit text-success  btn-lg" ></i></button>
+                                                                        class="icofont-edit text-success  btn-lg"></i></button>
                                                             </a>
 
-                                                            <a href="{{ url('infraestructura/evaluaciones') }}/{{ $obj->id }}" target="_blank"
+                                                        </td>
+                                                        <td align="center">
+
+                                                            <a href="{{ url('infraestructura/evaluaciones/edit_evaluacion') }}/{{ $obj->id}}"   class="list-group-item list-group-item-action border-0 ">
+                                                                <button type="button" class="btn btn-outline-secondary"><i
+                                                                        class="icofont-edit text-success  btn-lg"></i></button>
+                                                            </a>
+
+                                                        </td>
+
+                                                        <td align="center">
+                                                            <a href="{{ url('infraestructura/evaluaciones') }}/{{ $obj->id }}"
+                                                                target="_blank"
                                                                 class="list-group-item list-group-item-action border-0 ">
                                                                 <button type="button" class="btn btn-outline-secondary"><i
                                                                         class="icofont-printer text-success btn-lg"></i></button>
                                                             </a>
+                                                        </td>
+                                                    </div>
+                                                </div>
+                                            @endif
+                                            </tr>
 
-                                                        </div>
-                                                    </td>
-                                                </tr>
-                                            @endforeach
+                                        @endforeach
+                                    </tbody>
+                                </table>
 
-                                        </tbody>
-                                    </table>
-
-                                </div>
                             </div>
                         </div>
-                    </div><!-- Row End -->
-                </div>
-            </div>
+                    </div>
+                    @php ($i++)
+            @endforeach
             @include('infraestructura.evaluaciones.modal_create_evaluacion')
-        </div>
-        <!-- Jquery Page Js -->
-        <script src="{{ asset('assets/bundles/libscripts.bundle.js') }}"></script>
-        <script src="{{ asset('assets/bundles/dataTables.bundle.js') }}"></script>
-        <script src="{{ asset('js/template.js') }}"></script>
 
-        <script>
-            // project data table
-            $(document).ready(function() {
-                $('#myProjectTable')
-                    .addClass('nowrap')
-                    .dataTable({
-                        responsive: true,
-                        columnDefs: [{
-                            targets: [-1, -3],
-                            className: 'dt-body-right'
-                        }]
+
+
+            <script src="{{ asset('assets/bundles/libscripts.bundle.js') }}"></script>
+            <script src="{{ asset('assets/bundles/dataTables.bundle.js') }}"></script>
+            <script src="{{ asset('js/template.js') }}"></script>
+            <script>
+                // project data table
+                $(document).ready(function() {
+                    $('#myProjectTable')
+                        .addClass('nowrap')
+                        .dataTable({
+                            responsive: true,
+                            columnDefs: [{
+                                targets: [-1, -3],
+                                className: 'dt-body-right'
+                            }]
+                        });
+                    $('.deleterow').on('click', function() {
+                        var tablename = $(this).closest('table').DataTable();
+                        tablename
+                            .row($(this)
+                                .parents('tr'))
+                            .remove()
+                            .draw();
+
                     });
-                $('.deleterow').on('click', function() {
-                    var tablename = $(this).closest('table').DataTable();
-                    tablename
-                        .row($(this)
-                            .parents('tr'))
-                        .remove()
-                        .draw();
-
                 });
-            });
-        </script>
+            </script>
 
-    @endsection
+        @endsection
