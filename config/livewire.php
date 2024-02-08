@@ -55,7 +55,7 @@ return [
     */
 
     //'asset_url' => 'http://localhost:81/pg/public',
-    'asset_url' => 'http://localhost/proyectos/public',
+    'asset_url' => 'http://localhost/pg/public',
 
     /*
     |--------------------------------------------------------------------------
