@@ -126,8 +126,10 @@ Route::post('project/send_data_requirement','project\ProjectController@send_data
 Route::resource('project','project\ProjectController');
 
 Route::resource('infraestructura/proveedores', 'infraestructura\ProveedoresController');
+Route::get('infraestructura/evaluaciones/edit_evaluacion/{id}','infraestructura\EvalProveedoresController@edit_evaluacion');
+Route::post('infraestructura/evaluaciones/modificar_evaluacion/{id}','infraestructura\EvalProveedoresController@modificar_evaluacion');
 Route::post('infraestructura/evaluaciones/updateData/{id}/{criterio}', 'infraestructura\EvalProveedoresController@updateData');
-Route::post('infraestructura/evaluaciones/CrearItem/{id}/{criterio}/{idvealuacion}', 'infraestructura\EvalProveedoresController@CrearItem');
+Route::get('infraestructura/evaluaciones/guardar_mensaje/{id}','infraestructura\EvalProveedoresController@guardar_mensaje');
 Route::resource('infraestructura/evaluaciones', 'infraestructura\EvalProveedoresController');
 #actividades finalizadas
 Route::get('get_actividades_finalizadas/{id}', [HomeController::class, 'get_actividades_finalizadas']);

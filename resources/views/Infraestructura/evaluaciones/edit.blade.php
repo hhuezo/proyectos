@@ -16,7 +16,7 @@
                         <div class="border-0 mb-4">
                             <div
                                 class="card-header py-3 no-bg bg-transparent d-flex align-items-center px-0 justify-content-between border-bottom flex-wrap">
-                                <h4 class="fw-bold mb-0">Nueva evaluacion</h4>
+                                <h4 class="fw-bold mb-0">Evaluacion</h4>
                                 <div class="col-auto d-flex w-sm-100">
                                     <a href="{{ url('infraestructura/evaluaciones') }}">
                                         {{-- data-bs-toggle="modal" data-bs-target="#tickadd" --}}
@@ -40,23 +40,22 @@
                         @csrf
                         @method('PUT')
                         <div class="card-body">
-                            <div class="row g-3">
-                                <div class="col-md-6">
-                                    <div class="form-group row">
-                                        <label class="form-label col-md-3" align="right"><strong>Proveedor:   {{$evaluacion->proveedor->nombre}} </strong></label>
-                                        <div class="col-9">
-
-
-                                        </div>
-                                    </div>
+                            <div class="row g-12">
+                                <div class="col-md-4">
+                                    <label class="form-label col-md-8" align="left"><strong>Proveedor:
+                                            {{ $evaluacion->proveedor->nombre }} </strong></label>
+                                    <label class="form-label col-md-8"
+                                        align="left"><strong>Notificado:{{ $evaluacion->notificado }} </strong></label>
+                                    <label>Notificado (S/N) </label>
+                                    <select name="notificado" id="notificado">
+                                        <option>S</option>
+                                        <option>N</option>
+                                    </select>
                                 </div>
-                                <div class="col-md-6">
-                                    <div class="form-group row">
-                                        <label class="form-label col-md-3" align="right"><strong>Periodo:   {{$evaluacion->periodo_evaluacion}}   </strong></label>
-                                        <div class="col-9">
+                                <div class="col-md-8">
+                                    <label class="form-label col-md-8" align="right"><strong>Periodo:
+                                            {{ $evaluacion->periodo_evaluacion }} </strong></label>
 
-                                        </div>
-                                    </div>
                                 </div>
                             </div>
                             &nbsp;
@@ -65,21 +64,17 @@
 
 
                             <div class="row g-3">
-                                <table class="table" border="1">
+                                <table class="table">
                                     <thead>
                                         <tr>
-
                                             <th scope="col" border="1">cumplimiento</th>
                                             <th scope="col" border="1">caracteristicas</th>
                                             <th scope="col" border="1">criterios</th>
-                                            <th scope="col" border="1">Modificar</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         @foreach ($evaluacion->detalles as $detalle)
                                             <tr border="1">
-                                                <th scope="row"> <input type="text" name="detalle_id" id="detalle_id"
-                                                        value="{{ $detalle->id }}" required class="form-control"> </th>
                                                 <th scope="row">
                                                     {{ $detalle->cumplimiento_caracteristica->cumplimiento->nombre }}</th>
                                                 <th scope="row">
@@ -88,7 +83,8 @@
                                                     <select name="criterios_id" id="criterio" class="form-select"
                                                         onchange="updateData({{ $detalle->id }},this.value)">
                                                         @foreach ($detalle->cumplimiento_caracteristica->caracteristica->criterios as $criterio)
-                                                            <option value="{{ $criterio->id }}" {{$criterio->id == $detalle->criterio_caracteristica_id ? 'selected':''}}>
+                                                            <option value="{{ $criterio->id }}"
+                                                                {{ $criterio->id == $detalle->criterio_caracteristica_id ? 'selected' : '' }}>
                                                                 {{ $criterio->nombre }}
                                                             </option>
                                                         @endforeach
@@ -113,7 +109,10 @@
                                 <div class="form-group row">
                                     <label class="form-label col-md-3" align="right"></label>
                                     <div class="col-12" align="right">
-                                        <button type="submit" class="btn btn-primary float-right">Aceptar</button>
+
+                                        <a
+                                            href="{{ url('infraestructura/evaluaciones/guardar_mensaje') }}/{{ $evaluacion->id }}">
+                                            <button type="submit" class="btn btn-primary float-right">Aceptar</button></a>
                                     </div>
                                 </div>
                             </div>
@@ -146,12 +145,12 @@
 
         function updateData(id, criterio) {
             $.ajax({
-                url: "{{ url('infraestructura/evaluaciones/updateData') }}/" + id+ "/"+ criterio,
+                url: "{{ url('infraestructura/evaluaciones/updateData') }}/" + id + "/" + criterio,
                 type: 'POST',
                 data: {
                     _token: '{{ csrf_token() }}',
                     id: id,
-                    criterio:criterio,
+                    criterio: criterio,
                 },
                 success: function(data) {
 
