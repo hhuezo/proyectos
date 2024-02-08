@@ -106,10 +106,10 @@
             <tr class="center-text">
                 <td class="titulo">{{ intval($data_calificacion->calificacion) }}</td>
                 <td class="titulo">
-                    @if ($califica_obtenida->aceptado == 'S')
-                        SI
-                    @else
+                    @if (intval($data_calificacion->calificacion) < 70)
                         NO
+                    @else
+                        SI
                     @endif
 
                 </td>
@@ -186,7 +186,9 @@
             <td width="13%">FECHA:</td>
             <td width="33%">{{ date('d/m/Y', strtotime($evaluacion->fecha_revisado)) }}</td>
             <td width="7%">FECHA:</td>
-            <td width="19%">{{ date('d/m/Y', strtotime($evaluacion->fecha_aprobado)) }}</td>
+            <td width="19%"> @if ($evaluacion->fecha_aprobado != NULL)
+             {{ date('d/m/Y', strtotime($evaluacion->fecha_aprobado)) }}  @endif</td>
+
         </tr>
     </table>
 

@@ -53,7 +53,7 @@
                                                 <div class="form-group">
                                                     <label class="form-label"><strong>Nombre</strong></label>
                                                     <input type="text" class="form-control" required name="nombre"
-                                                        id="nombre" value={{ $evaluacion->proveedor->nombre }}>
+                                                        id="nombre" value="{{ $evaluacion->proveedor->nombre }}">
                                                 </div>
 
 
@@ -76,18 +76,18 @@
 
                                             <div class="form-group">
                                                 <label class="form-label"><strong>Fecha Aprobado </strong></label>
-                                                <input type="date" class="form-control" required name="fecha_aprobado"
-                                                    id="fecha_aprobado" value={{ $evaluacion->fecha_aprobado }}>
+                                                <input type="date" class="form-control"   name="fecha_aprobado"
+                                                    id="fecha_aprobado" value={{  $evaluacion->fecha_aprobado }}>
                                             </div>
 
                                             <div class="form-group">
                                                 <label class="form-label"><strong>Nombre Aprobado</strong></label>
-                                                <input type="text" class="form-control" required name="nombre_aprobado"
-                                                    id="nombre_aprobado" value={{  $evaluacion->nombre_aprobado }}>
+                                                <input type="text" class="form-control"   name="nombre_aprobado"
+                                                    id="nombre_aprobado" value="{{  $evaluacion->nombre_aprobado }}">
                                             </div>
                                             <div class="form-group">
                                                 <label><strong>Notificado (S/N) </strong> </label>
-                                                <select name="notificado" value={{ $evaluacion->notificado }}
+                                                <select name="notificado" value="{{ $evaluacion->notificado }}"
                                                     class="form-control">
                                                     <option>S</option>
                                                     <option>N</option>
@@ -102,30 +102,30 @@
                                             <div class="form-group">
                                                 <label class="form-label"><strong>Nombre Elaborado</strong></label>
                                                 <input type="text" class="form-control" required name="nombre_elaborado"
-                                                    id="nombre_elaborado" value={{ $evaluacion->nombre_elaborado }}>
+                                                    id="nombre_elaborado" value="{{ $evaluacion->nombre_elaborado }}">
                                             </div>
                                             <div class="form-group">
                                                 <label class="form-label"><strong>Cargo Elaborado</strong></label>
                                                 <input type="text" class="form-control" required name="cargo_elaborado"
-                                                    id="cargo_elaborado" value={{ $evaluacion->cargo_elaborado }}>
+                                                    id="cargo_elaborado" value="{{ $evaluacion->cargo_elaborado }}">
                                             </div>
 
                                             <div class="form-group">
                                                 <label class="form-label"><strong>Nombre Revisado</strong></label>
                                                 <input type="text" class="form-control" required name="nombre_revisado"
-                                                    id="nombre_revisado" value={{ $evaluacion->nombre_revisado }}>
+                                                    id="nombre_revisado" value="{{ $evaluacion->nombre_revisado }}">
                                             </div>
 
                                             <div class="form-group">
                                                 <label class="form-label"><strong>Cargo Revisado</strong></label>
                                                 <input type="text" class="form-control" required name="cargo_revisado"
-                                                    id="cargo_revisado" value={{ $evaluacion->cargo_revisado }}>
+                                                    id="cargo_revisado" value="{{ $evaluacion->cargo_revisado }}">
                                             </div>
 
                                             <div class="form-group">
                                                 <label class="form-label"><strong>Observaciones</strong></label>
                                                 <input type="text" class="form-control" required name="observaciones"
-                                                    id="observaciones" value={{ $evaluacion->observaciones }}>
+                                                    id="observaciones" value="{{ $evaluacion->observaciones }}">
                                             </div>
 
                                             <div>&nbsp;</div>

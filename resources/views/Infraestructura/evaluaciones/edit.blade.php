@@ -112,7 +112,7 @@
 
                                         <a
                                             href="{{ url('infraestructura/evaluaciones/guardar_mensaje') }}/{{ $evaluacion->id }}">
-                                            <button type="submit" class="btn btn-primary float-right">Aceptar</button></a>
+                                            <button type="button" class="btn btn-primary float-right">Aceptar</button></a>
                                     </div>
                                 </div>
                             </div>

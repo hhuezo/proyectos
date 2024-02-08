@@ -154,12 +154,7 @@ class EvalProveedoresController extends Controller
 
 
         $evaluacion = EvaluacionProveedor::findOrfail($id);
-        /* if ($califica_obtenida->aceptado == 'S') {
-            $evaluacion->resultado_id = 1;
-        }
-        if ($califica_obtenida->aceptado == 'N') {
-            $evaluacion->resultado_id = 0;
-        }*/
+
         $evaluacion->puntos = $data_calificacion->calificacion;
         $evaluacion->resultado_id = $califica_obtenida->id;
 
@@ -217,7 +212,7 @@ class EvalProveedoresController extends Controller
 
         $evaluacion = EvaluacionProveedor::Findorfail($id);
         $proveedores = Proveedores::get();
-        return view('infraestructura.evaluaciones.modificar_eval', compact('evaluacion','proveedores'));
+        return view('infraestructura.evaluaciones.modificar_eval', compact('evaluacion', 'proveedores'));
     }
     public function modificar_evaluacion(Request $request, $id)
     {
@@ -245,6 +240,7 @@ class EvalProveedoresController extends Controller
     public function  guardar_mensaje($id)
     {
 
+
         $evaluacion = EvaluacionProveedor::findOrfail($id);
         $rango_evaluacion = EvaluacionPuntaje::get();
         $resultado = DB::table('evaluacion_proveedores as a')
@@ -256,7 +252,7 @@ class EvalProveedoresController extends Controller
             ->select('a.id', 'c.nombre as cumplimiento', 'ca.nombre as caracteristica', 'cc.ponderacion', 'crca.nombre as criterio', 'crca.calificacion')
             ->where('a.id', '=', $id)
             ->get();
-        //dd($result);
+      //  dd($resultado);
 
         $data_calificacion = DB::table(DB::raw("(SELECT c.nombre as cumplimiento, ca.nombre as caracteristica, cc.ponderacion, crca.nombre as criterio, crca.calificacion,
     (CASE
@@ -277,6 +273,7 @@ class EvalProveedoresController extends Controller
             ->where('limite_inferior', '<=', $data_calificacion->calificacion)
             ->where('limite_superior', '>=', $data_calificacion->calificacion)
             ->first();
+
 
 
         $evaluacion = EvaluacionProveedor::findOrfail($id);
