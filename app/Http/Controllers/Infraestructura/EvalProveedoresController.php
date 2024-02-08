@@ -71,6 +71,7 @@ class EvalProveedoresController extends Controller
         $Evaluacion->observaciones  =  $request->observaciones;
         $Evaluacion->notificado = 'S';
         //$Evaluacion->notificado =  $request->notificado;
+        $Evaluacion->nombre_aprobado =  $request->nombre_aprobado;
         $Evaluacion->fecha_aprobado  =  $request->fecha_aprobado;
         $Evaluacion->fecha_revisado  =  $request->fecha_revisado;
         $Evaluacion->save();

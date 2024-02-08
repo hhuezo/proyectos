@@ -42,19 +42,19 @@
 <body>
 
     <table width="100%" border="1" cellspacing="0" cellpadding="0">
-        <tr >
+        <tr>
             <td colspan="2" rowspan="3">
                 <center><img src="{{ public_path('img/sertracen.png') }}" width="185" height="40" /></center>
             </td>
-            <td colspan="3" rowspan="3" ><span class="titulo">
+            <td colspan="3" rowspan="3"><span class="titulo">
                     <center>EVALUACION DE PROVEEDORES</center>
                 </span></td>
             <td colspan="2"><span class="titulo">Código: {{ $evaluacion->codigo }}</span></td>
         </tr>
-        <tr  >
+        <tr>
             <td colspan="2"><span class="titulo">Versión:</span></td>
         </tr>
-        <tr >
+        <tr>
             <td colspan="2"><span class="titulo">Registro:</span></td>
         </tr>
         <tr>
@@ -63,7 +63,8 @@
         </tr>
         <tr>
             <td colspan="2"><span class="titulo">FECHA:</span></td>
-            <td width="22%"><span class="titulo">{{ date('d/m/Y', strtotime($evaluacion->fecha_evalua)) }}</span></td>
+            <td width="22%"><span class="titulo">{{ date('d/m/Y', strtotime($evaluacion->fecha_evalua)) }}</span>
+            </td>
             <td colspan="4"><span class="titulo">PERIODO DE EVALUACIÓN: {{ $evaluacion->periodo_evaluacion }}</span>
             </td>
         </tr>
@@ -72,7 +73,7 @@
                 característica de cumplimiento.</td>
         </tr>
         <tr class="center-text">
-            <td colspan="2" ><span class="titulo">CARACTERÍSTICAS</span></td>
+            <td colspan="2"><span class="titulo">CARACTERÍSTICAS</span></td>
             <td colspan="4"><span class="titulo">CRITERIOS</span></td>
             <td width="7%"><span class="titulo">CALIFICACION</span></td>
         </tr>
@@ -101,24 +102,24 @@
                 <td width="34%" align="center" class="text-blue center-text">CATEGORIA</td>
             </tr>
         </thead>
-      <tbody>
+        <tbody>
             <tr class="center-text">
                 <td class="titulo">{{ intval($data_calificacion->calificacion) }}</td>
                 <td class="titulo">
-                @if ( $califica_obtenida->aceptado =='S')
-                    SI
-                @else
-                    NO
-                @endif
+                    @if ($califica_obtenida->aceptado == 'S')
+                        SI
+                    @else
+                        NO
+                    @endif
 
-               </td>
+                </td>
                 <td class="titulo">{{ $califica_obtenida->categoria }}</td>
             </tr>
 
         </tbody>
     </table>
     <br />
-   <table border=1 width="100%" cellspacing="0" cellpadding="0">
+    <table border=1 width="100%" cellspacing="0" cellpadding="0">
 
         <tr>
 
@@ -128,7 +129,7 @@
 
 
 
-     <tr>
+        <tr>
             <td align="center"><span>100 - 90</span></td>
             <td align="center"><span>Confiable</span></td>
             <td><span>Confiable, cumple ampliamente los requisitos para asegurar la calidad de los productos. Preferirlo
@@ -170,22 +171,22 @@
             <td colspan="2">{{ $evaluacion->nombre_aprobado }}</td>
         </tr>
         <tr class="center-text">
-            <td colspan="2" >CARGO</td>
+            <td colspan="2">CARGO</td>
             <td colspan="2">CARGO</td>
             <td colspan="2">CARGO</td>
         </tr>
         <tr>
             <td colspan="2" class="center-text"> {{ $evaluacion->cargo_elaborado }}</td>
             <td colspan="2" class="center-text"> {{ $evaluacion->cargo_revisado }}</td>
-            <td colspan="2"  class="center-text"> {{ $evaluacion->cargo_aprobado }};</td>
+            <td colspan="2" class="center-text">{{ $evaluacion->cargo_aprobado }}</td>
         </tr>
         <tr>
             <td width="14%">FECHA:</td>
-            <td width="14%">{{ date('d/m/Y', strtotime($evaluacion->fecha_elaborado)) }}  </td>
+            <td width="14%">{{ date('d/m/Y', strtotime($evaluacion->fecha_elaborado)) }} </td>
             <td width="13%">FECHA:</td>
-            <td width="33%">{{  date('d/m/Y', strtotime($evaluacion->fecha_revisado))}}</td>
+            <td width="33%">{{ date('d/m/Y', strtotime($evaluacion->fecha_revisado)) }}</td>
             <td width="7%">FECHA:</td>
-            <td width="19%">{{  date('d/m/Y', strtotime($evaluacion->fecha_aprobado))}}</td>
+            <td width="19%">{{ date('d/m/Y', strtotime($evaluacion->fecha_aprobado)) }}</td>
         </tr>
     </table>
 
