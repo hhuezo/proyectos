@@ -82,6 +82,7 @@
                                     href="{{ url('prioridad') }}"><span>Prioridades</span></a></li>
                             <li><a class="ms-link {{ Request::segment(3) == 'index' ? 'active' : '' }}"
                                     href="{{ url('catalogo/propietario') }}"><span>Propietario</span></a></li>
+                                    
 
                         </ul>
                     </li>
@@ -304,9 +305,9 @@
                         id="project-Components22">
                         <li><a class="ms-link {{ Request::segment(3) == 'index' ? 'active' : '' }}"
                                 href="{{ url('infraestructura/evaluaciones') }}"><span>Evaluaciones Proveedores</span></a></li>
-
-                    </ul>
+                    </ul>                   
                 </li>
+                
                 @endcan
 
                 <?php

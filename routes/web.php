@@ -128,6 +128,7 @@ Route::post('infraestructura/evaluaciones/modificar_evaluacion/{id}','infraestru
 Route::post('infraestructura/evaluaciones/updateData/{id}/{criterio}', 'infraestructura\EvalProveedoresController@updateData');
 Route::get('infraestructura/evaluaciones/guardar_mensaje/{id}','infraestructura\EvalProveedoresController@guardar_mensaje');
 Route::resource('infraestructura/evaluaciones', 'infraestructura\EvalProveedoresController');
+Route::resource('infraestructura/vacaciones', 'infraestructura\CalendarioVacacioncontroller');
 #actividades finalizadas
 Route::get('get_actividades_finalizadas/{id}', [HomeController::class, 'get_actividades_finalizadas']);
 Route::post('usuario/perfil', 'produccion\UsuarioController@update_perfil');
