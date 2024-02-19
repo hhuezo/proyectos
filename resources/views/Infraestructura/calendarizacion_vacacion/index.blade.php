@@ -115,16 +115,19 @@
             <header class="flex mb-5 items-center border-b border-slate-100 dark:border-slate-700 pb-5 -mx-6 px-6">
 
 
-                <div
-                    class="card-header py-3 no-bg bg-transparent d-flex align-items-center px-0 justify-content-between border-bottom flex-wrap">
-                    <h3 class="fw-bold mb-0"> vacaciones administradores</h3>
-                    <div class="col-auto d-flex w-sm-100">
-                        <button type="button" data-bs-toggle="modal" data-bs-target="#modal-add"
-                            class="btn btn-primary float-right">
-                            Nuevo</button>
-
+                <div class="border-0 mb-4">
+                    <div
+                        class="card-header py-3 no-bg bg-transparent d-flex align-items-center px-0 justify-content-between border-bottom flex-wrap">
+                        <h4 class="fw-bold mb-0">Programacion de Vacacion</h4>
+                        <div class="col-auto d-flex w-sm-100">
+                            <a href="{{ url('infraestructura/vacaciones/create') }}">
+                                {{-- data-bs-toggle="modal" data-bs-target="#tickadd" --}}
+                                <button type="button" class="btn btn-dark btn-set-task w-sm-100">Nuevo</button>
+                            </a>
+                        </div>
                     </div>
-                </div>
+                </div>  <!-- Row end  -->
+
 
             </header>
 
@@ -147,12 +150,14 @@
                                 style="width:100%">
                                     <thead>
                                         <tr  align="center">
-                                            <th align="center"> periodo  </th>
-                                            <th align="center"> cargo  </th>
-                                            <th align="center"> fecha inicio   </th>
-                                            <th align="center">fecha final    </th>
-                                            <th align="center">Observacion    </th>
-                                            <th align="center"> opciones </th>
+                                            <th align="center"> Nombre  </th>
+                                            <th align="center"> Cargo  </th>
+                                            <th align="center"> area  </th>
+                                            <th align="center"> Fecha inicio   </th>
+                                            <th align="center">Fecha final    </th>                                          
+                                            <th align="center"> Modificar </th>
+                                            <th align="center"> eliminar </th>
+                                            <th align="center"> Imprimir </th>
 
                                         </tr>
                                     </thead>
@@ -160,16 +165,21 @@
 
                                         @foreach ($calendario as $obj)
                                         <tr>
-                                            @if ($obj->periodo_evaluacion)
-                                                <div id="{{ $obj->periodo_evaluacion }}"
+                               <div id="{{ $obj->periodo_evaluacion }}"
                                                     class="accordion-collapse collapse" aria-labelledby="headingThree"
                                                     data-bs-parent="#accordionExample">
                                                     <div class="accordion-body">
                                                         <td align="center">
-                                                            {{ $obj->fecha_incio }}</td>
+                                                            {{ $obj->user_vacacion->name }}</td>
+                                                            <td align="center">
+                                                                {{ $obj->cargo }}</td>
+                                                                <td align="center">
+                                                                    {{ $obj->area }}</td>
+                                                        <td align="center">
+                                                            {{ $obj->fecha_inicio }}</td>
 
                                                             <td align="center">
-                                                                {{  intval($obj->fecha_fin)}}</td>
+                                                                {{ ($obj->fecha_fin)}}</td>
                                                         <td align="center">
 
                                                             <a href="{{ url('infraestructura/vacaciones') }}/{{ $obj->id }}/edit"
@@ -180,12 +190,10 @@
 
                                                         </td>
                                                         <td align="center">
-
-                                                            <a href="{{ url('infraestructura/vacaciones') }}/{{ $obj->id}}"   class="list-group-item list-group-item-action border-0 ">
-                                                                <button type="button" class="btn btn-outline-secondary"><i
-                                                                        class="icofont-edit text-success  btn-lg"></i></button>
-                                                            </a>
-
+                                                            <button type="button" data-bs-toggle="modal"
+                                                            data-bs-target="#modal-delete-{{ $obj->id }}"
+                                                            class="btn btn-danger"><i
+                                                                class="icofont-ui-delete  btn-lg"></i></button>
                                                         </td>
 
                                                         <td align="center">
@@ -198,9 +206,9 @@
                                                         </td>
                                                     </div>
                                                 </div>
-                                            @endif
+                                          
                                             </tr>
-
+                                            @include('infraestructura.calendarizacion_vacacion.modal')
                                         @endforeach
                                     </tbody>
                                 </table>

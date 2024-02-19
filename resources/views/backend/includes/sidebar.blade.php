@@ -239,8 +239,14 @@
                             href="{{ url('calendarizacion') }}">
                             <i class="icofont-notepad"></i><span>Calendarización de mantenimientos</span></a>
                     </li>
+                  
+                    <li class="collapsed"><a class="ms-link {{ Request::segment(2) == 'index' ? 'active' : '' }}"
+                            href="{{ url('infraestructura/vacaciones') }}"> 
+                            <i class="icofont-notepad"></i><span>Vacaciones Gestion</span></a>
+
+                </li>
                     <li class="collapsed">
-                        <a class="m-link {{ Request::segment(2) == 'project' ? 'active' : '' }}"
+                        <a class="ms-link {{ Request::segment(2) == 'index' ? 'active' : '' }}"
                             href="{{ url('inventario_despliegues') }}">
                             <i class="icofont-notepad"></i><span>Inventario despliegues</span></a>
                     </li>
@@ -306,6 +312,7 @@
                         <li><a class="ms-link {{ Request::segment(3) == 'index' ? 'active' : '' }}"
                                 href="{{ url('infraestructura/evaluaciones') }}"><span>Evaluaciones Proveedores</span></a></li>
                     </ul>                   
+                     
                 </li>
                 
                 @endcan

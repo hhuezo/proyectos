@@ -2,6 +2,7 @@
 
 namespace App\infraestructura;
 
+use App\User;
 use Illuminate\Database\Eloquent\Model;
 
 class CalendarioVacacion extends Model
@@ -22,6 +23,14 @@ class CalendarioVacacion extends Model
 'fecha_inicio',
 'fecha_final',
 'observaciones',
+'estado',
     ];
+    public function user_vacacion()
+    {
+        return $this->belongsTo(User::class,'id');
+    }
     protected $guarded = [];
+
+     
+
 }
