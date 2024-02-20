@@ -11,7 +11,7 @@ class VmMantenimiento extends Model
     public $timestamps=false;
     protected $table = 'vw_mantenimiento_xsuc';
     protected $fillable = [
-        'fecha', 'sucursal', 'area', 'categoria', 'estado', 'nombre_tecnico', 'total'
+        'fecha_inicio', 'sucursal', 'area', 'categoria', 'estado', 'nombre_tecnico', 'total','tipo_mantenimiento'
     ];
 
     protected $guarded =[];

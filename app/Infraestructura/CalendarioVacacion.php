@@ -27,6 +27,7 @@ class CalendarioVacacion extends Model
     ];
     public function user_vacacion()
     {
+      
         return $this->belongsTo(User::class,'id');
     }
     protected $guarded = [];

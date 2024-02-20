@@ -19,7 +19,8 @@ class CalendarioVacacioncontroller extends Controller
     {
         
         $calendario= CalendarioVacacion::where('estado','=','A')->get();
-        return view('infraestructura.calendarizacion_vacacion.index', compact('calendario'));
+        $user=User::get();
+        return view('infraestructura.calendarizacion_vacacion.index', compact('calendario','user'));
        
     }
 
@@ -30,7 +31,7 @@ class CalendarioVacacioncontroller extends Controller
      */
     public function create()
     {
-         $personal=User::get();
+        $personal=User::get();
         return view('infraestructura.calendarizacion_vacacion.create',compact('personal'));
     }
 
@@ -54,8 +55,8 @@ class CalendarioVacacioncontroller extends Controller
 
         $request->validate([
             'personal_id' => 'required',
-            'cargo' => 'required',
-            'correo' => 'required',
+            'cargo' => 'required',   
+            'area' => 'required',           
             'fecha_inicio' => 'required',
             'fecha_fin' => 'required',
         ], $messages);
@@ -66,6 +67,7 @@ class CalendarioVacacioncontroller extends Controller
         $vacaciones->personal_id = $request->get('personal_id');
         $vacaciones->cargo = $request->get('cargo');
         $vacaciones->area = $request->get('area');
+        $vacaciones->periodo = $request->get('periodo');
         $vacaciones->fecha_inicio = $request->get('fecha_inicio');
         $vacaciones->fecha_fin = $request->get('fecha_fin');
         $vacaciones->estado = 'A';        
@@ -85,7 +87,29 @@ class CalendarioVacacioncontroller extends Controller
      */
     public function show($id)
     {
-        //
+      //  $calendario= CalendarioVacacion::get();
+       // $user=User::get();
+        //return view('infraestructura.calendarizacion_vacacion.show',compact( 'calendario','user')); 
+        
+      //  $pdf = PDF::loadView('infraestructura.evaluaciones.show', compact('resultado', 'evaluacion', 'data_calificacion', 'califica_obtenida', 'rango_evaluacion'));
+
+        //$pdf->setPaper('A4', 'portrait');
+        //return $pdf->stream('test_pdf.pdf');
+
+    }
+
+
+    public function reporte()
+    {
+        $calendario= CalendarioVacacion::get();
+        $user=User::get();
+        return view('infraestructura.calendarizacion_vacacion.show',compact( 'calendario','user')); 
+        
+      //  $pdf = PDF::loadView('infraestructura.evaluaciones.show', compact('resultado', 'evaluacion', 'data_calificacion', 'califica_obtenida', 'rango_evaluacion'));
+
+        //$pdf->setPaper('A4', 'portrait');
+        //return $pdf->stream('test_pdf.pdf');
+
     }
 
     /**
@@ -98,7 +122,8 @@ class CalendarioVacacioncontroller extends Controller
     {
         
         $calendario= CalendarioVacacion::findorfail($id);
-        return view('infraestructura.calendarizacion_vacacion.edit',compact('calendario'));
+        $user=User::get();
+        return view('infraestructura.calendarizacion_vacacion.edit',compact('calendario','user'));
     }
 
     /**
@@ -111,7 +136,7 @@ class CalendarioVacacioncontroller extends Controller
     public function update(Request $request, $id)
     {
         $messages = [
-            'personal_id.required' => 'ingresar la persona',
+           
             'cargo.required' => 'ingresar el cargo',
             'area.required' => 'ingresar el area',
             'fecha_inicio.required' => 'ingresar fecha de inicio',
@@ -121,9 +146,9 @@ class CalendarioVacacioncontroller extends Controller
 
 
         $request->validate([
-            'personal_id' => 'required',
+           
             'cargo' => 'required',
-            'correo' => 'required',
+            'area' => 'required',
             'fecha_inicio' => 'required',
             'fecha_fin' => 'required',
         ], $messages);
@@ -131,9 +156,10 @@ class CalendarioVacacioncontroller extends Controller
 
         $time = Carbon::now('America/El_Salvador');
         $vacaciones =  CalendarioVacacion::findorfail($id);
-        $vacaciones->personal_id = $request->get('personal_id');
+        //$vacaciones->personal_id = $request->get('personal_id');
         $vacaciones->cargo = $request->get('cargo');
         $vacaciones->area = $request->get('area');
+        $vacaciones->periodo = $request->get('periodo');
         $vacaciones->fecha_inicio = $request->get('fecha_inicio');
         $vacaciones->fecha_fin = $request->get('fecha_fin');
         //$vacaciones->estado = 'A';        

@@ -126,60 +126,70 @@
                             </a>
                         </div>
                     </div>
-                </div>  <!-- Row end  -->
-
+                </div> <!-- Row end  -->
+             
+                <a href="{{ url('infraestructura/vacaciones/reporte') }}"                    
+                    class="list-group-item list-group-item-action border-0 ">
+                    <button type="button" class="btn btn-outline-secondary"><i
+                            class="icofont-printer text-success btn-lg"></i>Generar Reporte Vacacional</button>
+                </a>
+             
 
             </header>
 
             @php($i = 1)
             @foreach ($calendario as $calendariovacacion)
-                <div class="accordion" id="accordionExample">
-                    <div class="accordion-item">
+                <div class="accordion" id="accordionExample"{{ $calendariovacacion->periodo }}>
+                   <div class="accordion-item"> 
                         <h2 class="accordion-header" id="headingOne">
                             <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-                                data-bs-target="#collapseOne{{$i}}" aria-expanded="true" aria-controls="collapseOne">
-                                Periodo : {{ $calendariovacacion->periodo }}                                
+                                data-bs-target="#collapseOne{{ $i }}" aria-expanded="true"
+                                aria-controls="collapseOne">
+                                Periodo : {{ $calendariovacacion->periodo }}
                             </button>
                         </h2>
 
-                        <div id="collapseOne{{$i}}" class="accordion-collapse collapse" aria-labelledby="headingOne"
-                            data-bs-parent="#accordionExample">
+                     <div id="collapseOne{{ $i }}" class="accordion-collapse collapse"
+                            aria-labelledby="headingOne" data-bs-parent="#accordionExample">
                             <div class="accordion-body">
 
-                                <table   class="table table-hover align-middle mb-0"
-                                style="width:100%">
+                                <table class="table table-hover align-middle mb-0" style="width:100%">
                                     <thead>
-                                        <tr  align="center">
-                                            <th align="center"> Nombre  </th>
-                                            <th align="center"> Cargo  </th>
-                                            <th align="center"> area  </th>
-                                            <th align="center"> Fecha inicio   </th>
-                                            <th align="center">Fecha final    </th>                                          
+                                        <tr align="center">
+                                            <th align="center"> Nombre </th>
+                                            <th align="center"> Cargo </th>
+                                            <th align="center"> area </th>
+                                            <th align="center"> Fecha inicio </th>
+                                            <th align="center">Fecha final </th>
                                             <th align="center"> Modificar </th>
-                                            <th align="center"> eliminar </th>
-                                            <th align="center"> Imprimir </th>
-
+                                            <th align="center"> Eliminar </th>
+                                            
                                         </tr>
                                     </thead>
                                     <tbody>
 
                                         @foreach ($calendario as $obj)
-                                        <tr>
-                               <div id="{{ $obj->periodo_evaluacion }}"
-                                                    class="accordion-collapse collapse" aria-labelledby="headingThree"
-                                                    data-bs-parent="#accordionExample">
+                                            <tr>
+                                                <div id="{{ $obj->periodo_evaluacion }}"
+                                                    class="accordion-collapse collapse {{ $i }}"
+                                                    aria-labelledby="headingThree" data-bs-parent="#accordionExample">
                                                     <div class="accordion-body">
                                                         <td align="center">
-                                                            {{ $obj->user_vacacion->name }}</td>
-                                                            <td align="center">
-                                                                {{ $obj->cargo }}</td>
-                                                                <td align="center">
-                                                                    {{ $obj->area }}</td>
+                                                            @foreach ($user as $usuarios)
+                                                                @if ($obj->personal_id == $usuarios->id)
+                                                                    {{ $usuarios->name }}
+                                                                @endif
+                                                            @endforeach
+                                                        </td>
+                                                        <td align="center">
+                                                            {{ $obj->cargo }}</td>
+                                                        <td align="center">
+                                                            {{ $obj->area }}</td>
                                                         <td align="center">
                                                             {{ $obj->fecha_inicio }}</td>
 
-                                                            <td align="center">
-                                                                {{ ($obj->fecha_fin)}}</td>
+                                                        <td align="center">
+                                                            {{ $obj->fecha_fin }}</td>
                                                         <td align="center">
 
                                                             <a href="{{ url('infraestructura/vacaciones') }}/{{ $obj->id }}/edit"
@@ -191,22 +201,16 @@
                                                         </td>
                                                         <td align="center">
                                                             <button type="button" data-bs-toggle="modal"
-                                                            data-bs-target="#modal-delete-{{ $obj->id }}"
-                                                            class="btn btn-danger"><i
-                                                                class="icofont-ui-delete  btn-lg"></i></button>
+                                                                data-bs-target="#modal-delete-{{ $obj->id }}"
+                                                                class="btn btn-danger"><i
+                                                                    class="icofont-ui-delete  btn-lg"></i></button>
                                                         </td>
 
-                                                        <td align="center">
-                                                            <a href="{{ url('infraestructura/vacaciones') }}/{{ $obj->id }}"
-                                                                target="_blank"
-                                                                class="list-group-item list-group-item-action border-0 ">
-                                                                <button type="button" class="btn btn-outline-secondary"><i
-                                                                        class="icofont-printer text-success btn-lg"></i></button>
-                                                            </a>
-                                                        </td>
+                                                         
+                                                          
                                                     </div>
                                                 </div>
-                                          
+
                                             </tr>
                                             @include('infraestructura.calendarizacion_vacacion.modal')
                                         @endforeach
@@ -216,9 +220,10 @@
                             </div>
                         </div>
                     </div>
-                    @php ($i++)
+                    
+                    @php($i++)
             @endforeach
-           {{--@include('infraestructura.evaluaciones.modal_create_evaluacion')--}} 
+            {{-- @include('infraestructura.evaluaciones.modal_create_evaluacion') --}}
 
 
 

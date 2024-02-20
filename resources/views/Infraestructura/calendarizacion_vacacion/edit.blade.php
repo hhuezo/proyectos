@@ -16,7 +16,7 @@
                         <div class="border-0 mb-4">
                             <div
                                 class="card-header py-3 no-bg bg-transparent d-flex align-items-center px-0 justify-content-between border-bottom flex-wrap">
-                                <h4 class="fw-bold mb-0"> Modificar vacaciones </h4>
+                                <h4 class="fw-bold mb-0"> Modificar Vacaciones </h4>
                                 <div class="col-auto d-flex w-sm-100">
                                     <a href="{{ url('infraestructura/vacaciones') }}">
                                         {{-- data-bs-toggle="modal" data-bs-target="#tickadd" --}}
@@ -45,17 +45,17 @@
                                         <div class="form-group row">
                                             <label class="form-label col-md-3"
                                                 align="right"><strong>Nombre</strong></label>
-                                            <div class="col-6">
-                                                <input type="text" name="persona_id" id="persona_id"
-                                                    value={{ $calendario->user_vacacion->name }} required
-                                                    class="form-control">
+                                            <div class="col-6">                                               
+                                                @foreach ($user as $usuarios)
+                                                @if ($calendario->personal_id == $usuarios->id)
+                                                <input type="text" name="personal_id" id="personal_id"
+                                                value={{ $usuarios->name }} required class="form-control"> 
+                                                @endif
+                                            @endforeach
                                             </div>
                                         </div>
                                     </div>
-
-
-
-
+                              
 
                                     <div class="col-md-12">
                                         <div class="form-group row">
