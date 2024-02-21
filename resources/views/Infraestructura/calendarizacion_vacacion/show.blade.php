@@ -38,49 +38,9 @@
                         @endif
                         <div class="card-body">
                             <form id="basic-form" method="POST" action="{{ url('infraestructura/vacaciones') }}">
+                             
                                 @csrf
-                                <div class="row g-3">
-                                
-                           
-
-                              
-                                    <div class="col-md-12">
-                                        <div class="form-group row">
-                                            <label class="form-label col-md-3"
-                                                align="right"><strong>Periodo</strong></label>
-                                            <div class="col-6">
-                                                <select name="periodo" id='periodo' class="form-control" required>
-                                                    @for ($i = date('Y'); $i >= 2018; $i--)
-                                                        <option value="{{ $i }}">{{ $i }}</option>
-                                                    @endfor
-                                                </select>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-12">
-                                        <div class="form-group row">
-                                            <label class="form-label col-md-3"
-                                                align="right"><strong>Mes</strong></label>
-                                            <div class="col-6">
-                                                <select name="mes" id='mes' class="form-control" required>
-                                                    @for ($m =1; $m < 13; $m++)
-                                                        <option value="{{ $m }}">{{ $m }}</option>
-                                                    @endfor
-                                                </select>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="row g-3">
-                                        <div class="col-md-12">
-                                            <div class="form-group row">
-                                                <label class="form-label col-md-3" align="right"></label>
-                                                <div class="col-6" align="right">
-                                                    <button type="button"
-                                                        class="btn btn-primary float-right">Aceptar</button>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
+                                <div class="row g-3">                                    
 
                                     <table class="table table-hover align-middle mb-0" style="width:100%">
                                         <thead>
@@ -113,9 +73,7 @@
     
                                                             <td align="center">
                                                                 {{ $obj->fecha_fin }}</td>
-                                                           
-                                                            
-    
+                                                             
                                                              
                                                               
                                                        

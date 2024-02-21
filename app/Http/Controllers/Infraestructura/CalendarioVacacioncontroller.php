@@ -7,7 +7,8 @@ use App\infraestructura\CalendarioVacacion;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 use Illuminate\Foundation\Auth\User;
-
+use Illuminate\Support\Facades\DB;
+use PDF;
 class CalendarioVacacioncontroller extends Controller
 {
     /**
@@ -20,7 +21,9 @@ class CalendarioVacacioncontroller extends Controller
         
         $calendario= CalendarioVacacion::where('estado','=','A')->get();
         $user=User::get();
-        return view('infraestructura.calendarizacion_vacacion.index', compact('calendario','user'));
+        $periodo = CalendarioVacacion::distinct('periodo')->pluck('periodo');
+      //   dd($periodo);
+        return view('infraestructura.calendarizacion_vacacion.index', compact('calendario','user','periodo'));
        
     }
 
@@ -87,6 +90,7 @@ class CalendarioVacacioncontroller extends Controller
      */
     public function show($id)
     {
+        
       //  $calendario= CalendarioVacacion::get();
        // $user=User::get();
         //return view('infraestructura.calendarizacion_vacacion.show',compact( 'calendario','user')); 
@@ -99,16 +103,22 @@ class CalendarioVacacioncontroller extends Controller
     }
 
 
-    public function reporte()
-    {
-        $calendario= CalendarioVacacion::get();
+    public function reporte(Request $request)
+    {       
+       // dd($request->fecha_inicio,  $request->fecha_fin  );
         $user=User::get();
-        return view('infraestructura.calendarizacion_vacacion.show',compact( 'calendario','user')); 
+        $inicio= $request->fecha_inicio;
+        $fin= $request->fecha_fin;
+        
+        $calendario= CalendarioVacacion::where ('fecha_inicio','>=',$inicio)->where('fecha_fin','<=',$fin)->get();
+       
+         return view('infraestructura.calendarizacion_vacacion.show',compact( 'calendario','user')); 
+        //$pdf = PDF::loadView('infraestructura.calendarizacion_vacacion.show',compact( 'calendario','user'));
         
       //  $pdf = PDF::loadView('infraestructura.evaluaciones.show', compact('resultado', 'evaluacion', 'data_calificacion', 'califica_obtenida', 'rango_evaluacion'));
 
-        //$pdf->setPaper('A4', 'portrait');
-        //return $pdf->stream('test_pdf.pdf');
+       // $pdf->setPaper('A4', 'portrait');
+       // return $pdf->stream('test_pdf.pdf');
 
     }
 
