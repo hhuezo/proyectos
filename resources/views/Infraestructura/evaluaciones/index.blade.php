@@ -117,7 +117,7 @@
 
                 <div
                     class="card-header py-3 no-bg bg-transparent d-flex align-items-center px-0 justify-content-between border-bottom flex-wrap">
-                    <h3 class="fw-bold mb-0"> Proveedores Evaluaciones</h3>
+                    <h3 class="fw-bold mb-0"> Proveedores Evaluaciones</h3>  
                     <div class="col-auto d-flex w-sm-100">
                         <button type="button" data-bs-toggle="modal" data-bs-target="#modal-add"
                             class="btn btn-primary float-right">
@@ -125,7 +125,13 @@
 
                     </div>
                 </div>
-
+                <div class="col-auto d-flex w-sm-100">
+                    <a href="{{ url('infraestructura/evaluaciones/reporte')}}/{{date("Y")}}/{{date("m")}}">
+                        {{-- data-bs-toggle="modal" data-bs-target="#tickadd" --}}
+                        <button type="button" class="btn btn-dark btn-set-task w-sm-100">Grafico</button>
+                    </a>
+                </div>
+                
             </header>
 
             @php($i = 1)

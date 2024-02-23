@@ -1,7 +1,7 @@
 <div class="modal fade" id="reporte_vacacion" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-md modal-dialog-scrollable">
         <form id="basic-form" method="POST" action="{{ url('infraestructura/vacaciones/reporte') }}">            
-            @csrf
+            @csrf            
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title  fw-bold" id="leaveaddLabel">Mostrar Reporte Vacaciones</h5>

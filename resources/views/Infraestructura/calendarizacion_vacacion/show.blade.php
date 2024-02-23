@@ -38,7 +38,7 @@
                         @endif
                         <div class="card-body">
                             <form id="basic-form" method="POST" action="{{ url('infraestructura/vacaciones') }}">
-                             
+                             @method('PUT')
                                 @csrf
                                 <div class="row g-3">                                    
 
@@ -69,10 +69,10 @@
                                                             <td align="center">
                                                                 {{ $obj->area }}</td>
                                                             <td align="center">
-                                                                {{ $obj->fecha_inicio }}</td>
+                                                                {{ date('d/m/Y', strtotime($obj->fecha_inicio)) }}</td>
     
                                                             <td align="center">
-                                                                {{ $obj->fecha_fin }}</td>
+                                                                {{date('d/m/Y', strtotime( $obj->fecha_fin)) }}</td>
                                                              
                                                              
                                                               

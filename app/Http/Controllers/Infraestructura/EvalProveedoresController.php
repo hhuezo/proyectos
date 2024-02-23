@@ -10,6 +10,10 @@ use App\infraestructura\EvaluacionDetalle;
 use App\infraestructura\EvaluacionProveedor;
 use App\infraestructura\EvaluacionPuntaje;
 use App\infraestructura\Proveedores;
+use App\iso\Grafica;
+use App\snipeit\VmFrecuenciaMantenimiento;
+use App\snipeit\VmMantenimiento;
+use Carbon\Carbon;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -91,10 +95,197 @@ class EvalProveedoresController extends Controller
 
 
 
-        // dd("");
+       
+    }
+
+    public function reporte($year, $month)
+    {
+ 
+        $meses = array(
+            '01' => 'Enero', '02' => 'Febrero', '03' => 'Marzo', '04' => 'Abril', '05' => 'Mayo', '06' => 'Junio',
+            '07' => 'Julio', '08' => 'Agosto', '09' => 'Septiembre', '10' => 'Octubre', '11' => 'Noviembre', '12' => 'Diciembre'
+        );
+
+        $rango_evaluacion = EvaluacionPuntaje::get();
+        //$resultados = EvaluacionProveedor::select('c.nombre', 'a.puntos', 'b.categoria')        ->join('proveedores as c', 'a.proveedor_id', '=', 'c.id')        ->join('evaluacion_puntaje as b', 'a.resultado_id', '=', 'b.id')        ->where('a.periodo_evaluacion', '<=', $year)        ->get();
+
+        $resultados = DB::select("SELECT  c.nombre,a.puntos  FROM proyectos.evaluacion_proveedores a ,proyectos.evaluacion_puntaje b,proyectos.proveedores c
+        where a.periodo_evaluacion<=".$year." and a.proveedor_id=c.id
+        and b.id=a.resultado_id");
+
+
+       // $resultados = EvaluacionProveedor::select('periodo_evaluacion', 'proveedor_id', 'puntos')
+       // ->where('periodo_evaluacion', '<=', $year)        ->get();
+    
+
+
+
+
+        $resultados_sucursal = VmMantenimiento::selectRaw("sucursal, sum(case when year(fecha_inicio) = $year and month(fecha_inicio) = $month and estado = 'PENDIENTE' then total else 0 end) as pendiente,
+            sum(case when year(fecha_inicio) = $year and month(fecha_inicio) = $month and estado = 'REALIZADO' then total else 0 end) as realizado")
+            ->whereYear('fecha_inicio', '=', $year)
+            ->whereMonth('fecha_inicio', '=', $month)
+            ->whereIn('tipo_mantenimiento', ['Maintenance', 'Mantenimiento'])
+            ->groupBy('sucursal')
+            ->get();
+
+        $resultados_correctivos = VmMantenimiento::selectRaw("nombre_tecnico, sum(case when year(fecha_inicio) = $year and month(fecha_inicio) = $month and estado = 'PENDIENTE' then total else 0 end) as pendiente,
+            sum(case when year(fecha_inicio) = $year and month(fecha_inicio) = $month and estado = 'REALIZADO' then total else 0 end) as realizado")
+            ->whereYear('fecha_inicio', '=', $year)
+            ->whereMonth('fecha_inicio', '=', $month)
+            ->whereNotIn('tipo_mantenimiento', ['Maintenance', 'Mantenimiento'])
+            ->groupBy('nombre_tecnico')
+            ->get();
+
+        $resultados_sucursal_correctivos = VmMantenimiento::selectRaw("sucursal, sum(case when year(fecha_inicio) = $year and month(fecha_inicio) = $month and estado = 'PENDIENTE' then total else 0 end) as pendiente,
+            sum(case when year(fecha_inicio) = $year and month(fecha_inicio) = $month and estado = 'REALIZADO' then total else 0 end) as realizado")
+            ->whereYear('fecha_inicio', '=', $year)
+            ->whereMonth('fecha_inicio', '=', $month)
+            ->whereNotIn('tipo_mantenimiento', ['Maintenance', 'Mantenimiento'])
+            ->groupBy('sucursal')
+            ->get();
+
+
+        $frecuencia_mtto = VmFrecuenciaMantenimiento::get();
+        $mtto_activos = $frecuencia_mtto->pluck('nombre_activo')->unique();
+        $mtto_sucursales = $frecuencia_mtto->pluck('sucursal')->unique();
+        $mtto_areas = $frecuencia_mtto->pluck('area')->unique();
+
+
+
+
+        $dispositivos_suc = DB::table('estadisticas_dispositivos_suc as s')
+            ->join('bancos as b', 's.ed_soc_codigo', '=', 'b.cod_sucursal')
+            ->select(DB::raw('SUBSTRING(s.ed_soc_codigo, 1, 3) as banco'), 'b.descripcion as sucursal', 's.eds_serial_impresora as serial', 's.eds_cantidad_restante as restante')
+            ->where('s.eds_id', '=', function ($query) {
+                $query->select(DB::raw('max(i.eds_id)'))
+                    ->from('estadisticas_dispositivos_suc as i')
+                    ->whereRaw('s.eds_id = i.eds_id');
+            })
+            ->orderBy('s.eds_cantidad_restante', 'asc')
+            ->get();
+
+
+        $disp_sucursales = $dispositivos_suc->pluck('sucursal')->unique();
+        $disp_bancos = $dispositivos_suc->pluck('banco')->unique();
+
+
+        $twoWeeksAgo = Carbon::now()->subWeeks(2)->toDateString();
+        $uniqueProduccion = DB::table('vw_produccion_impresoras')
+            ->select('sucursal', 'serial')
+            ->where('fecha', '>', $twoWeeksAgo)
+            ->distinct()
+            ->get();
+
+
+
+        //graficas dinamicas
+        $graficas = Grafica::where('unidades_id',6)->get();
+
+        $tipoGrafica = ["","column","pie"];
+
+        foreach ($graficas as $data) {
+
+            //$data = Grafica::findOrFail(1);
+            $jsonData  = $data->valor;
+            $grafica = json_decode($jsonData, true);
+
+
+            $encabezados = [];
+
+
+            // Iterar sobre las columnas B a Z
+            foreach (range('B', 'Z') as $letra) {
+
+                try {
+                    $encabezado = $grafica["0-$letra"];
+                } catch (Exception $e) {
+                }
+
+
+
+                // Verificar si el encabezado no es nulo antes de agregarlo al array
+                if ($encabezado !== null) {
+                    $encabezados[] = $encabezado;
+                }
+            }
+
+            $data_grafico = [];
+
+
+            // Iterar sobre las filas desde la 1
+            for ($fila = 1; $fila <= 24; $fila++) {
+                // Obtener el nombre de la fila actual
+
+                try {
+                    $nombreFila = $grafica["$fila-A"];
+                } catch (Exception $e) {
+                }
+
+                // Continuar solo si el nombre de la fila no es nulo
+                if ($nombreFila !== null) {
+                    // Inicializar un arreglo para la fila actual
+                    $filaActual = ["name" => $nombreFila, "data" => []];
+
+                    // Iterar sobre las columnas B a Z
+                    foreach (range('B', 'Z') as $letra) {
+
+                        try {
+                            // Obtener el valor de la celda actual
+                            $valor = $grafica["$fila-$letra"];
+                        } catch (Exception $e) {
+                        }
+
+                        // Agregar el valor al arreglo de la fila actual si no es nulo
+                        if ($valor !== null) {
+                            $filaActual["data"][] = $valor + 0;
+                        }
+                    }
+
+                    // Agregar la fila al arreglo principal
+                    $data_grafico[] = $filaActual;
+                }
+            }
+
+            $data->data_grafico =  $data_grafico;
+            $data->encabezado =  $encabezados;
+            $data->tipo_grafico =  $tipoGrafica[$data->tipo_grafica_id];
+        }
+
+
+
+
+
+        return view('infraestructura.evaluaciones.grafica_evaluacion', compact(
+            'meses',
+            'resultados',
+            'resultados_sucursal',
+                        'year',
+            'month',
+            'resultados_correctivos',
+            'resultados_sucursal_correctivos',
+            'frecuencia_mtto',
+            'mtto_activos',
+            'mtto_sucursales',
+            'mtto_areas',
+            'disp_sucursales',
+            'disp_bancos',
+            'uniqueProduccion',
+            'graficas',
+            'rango_evaluacion'
+        ));
     }
 
 
+    public function grafico()
+    {
+       // dd('llegue a graficos');
+        //$proveedores = Proveedores::get();
+        $year=2024;
+        $month=1;
+        return view('infraestructura/evaluaciones/grafica_evaluacion',compact('year','month'));
+
+    }
 
     public function create_eval(Request $request)
     {

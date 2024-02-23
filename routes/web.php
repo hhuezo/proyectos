@@ -127,8 +127,11 @@ Route::get('infraestructura/evaluaciones/edit_evaluacion/{id}','infraestructura\
 Route::post('infraestructura/evaluaciones/modificar_evaluacion/{id}','infraestructura\EvalProveedoresController@modificar_evaluacion');
 Route::post('infraestructura/evaluaciones/updateData/{id}/{criterio}', 'infraestructura\EvalProveedoresController@updateData');
 Route::get('infraestructura/evaluaciones/guardar_mensaje/{id}','infraestructura\EvalProveedoresController@guardar_mensaje');
+//Route::get('infraestructura/evaluaciones/graficos', 'infraestructura\EvalProveedoresController@grafico');
+Route::get('infraestructura/evaluaciones/reporte/{axo}/{month}','infraestructura\EvalProveedoresController@reporte')->name('reporte');;
 Route::resource('infraestructura/evaluaciones', 'infraestructura\EvalProveedoresController');
-Route::post('infraestructura/vacaciones/reporte','infraestructura\CalendarioVacacioncontroller@reporte');
+
+Route::post('infraestructura/vacaciones/reporte', 'infraestructura\CalendarioVacacioncontroller@reporte');
 Route::resource('infraestructura/vacaciones', 'infraestructura\CalendarioVacacioncontroller');
 
 #actividades finalizadas
