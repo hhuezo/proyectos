@@ -61,24 +61,24 @@
 
 
     <figure>
-     
-        
-            <div class="border-0 mb-4">
-                <div
-                    class="card-header py-3 no-bg bg-transparent d-flex align-items-center px-0 justify-content-between border-bottom flex-wrap">
-                    <h4 class="fw-bold mb-0">Evaluacion Proveedores</h4>
-                    <div class="col-auto d-flex w-sm-100">
-                        <a href="{{ url('infraestructura/evaluaciones') }}">
-                            {{-- data-bs-toggle="modal" data-bs-target="#tickadd" --}}
-                            <button type="button" class="btn btn-dark btn-set-task w-sm-100"><i
-                                    class="icofont-arrow-left me-2 fs-6"></i></button>
-                        </a>
-                    </div>
-                </div>
-            </div> <!-- Row end  -->
 
-           
-         
+
+        <div class="border-0 mb-4">
+            <div
+                class="card-header py-3 no-bg bg-transparent d-flex align-items-center px-0 justify-content-between border-bottom flex-wrap">
+                <h4 class="fw-bold mb-0">Evaluacion Proveedores</h4>
+                <div class="col-auto d-flex w-sm-100">
+                    <a href="{{ url('infraestructura/evaluaciones') }}">
+                        {{-- data-bs-toggle="modal" data-bs-target="#tickadd" --}}
+                        <button type="button" class="btn btn-dark btn-set-task w-sm-100"><i
+                                class="icofont-arrow-left me-2 fs-6"></i></button>
+                    </a>
+                </div>
+            </div>
+        </div> <!-- Row end  -->
+
+
+
         <div class="row col-12">
             <div class="col-6 card" style="max-height: 600px; overflow-y: auto;">
                 <label class="form-label" align="left"><strong>Periodo</strong></label>
@@ -97,14 +97,14 @@
                         </option>
                     @endforeach
                 </select>
-               
+
             </div>
-           
+
         </div>
 
 
 
-        
+
 
 
         <br>
@@ -113,39 +113,41 @@
         <div class="row col-12">
             <div class="col-9 card" style="max-height: 600px; overflow-y: auto;">
                 <div id="container"></div>
+                <div></div>
+                <div id="container2"></div>
             </div>
             <div class="col-3 card">
-                <br>   Grafica de Notas</br>
+                <br> Grafica de Notas</br>
                 <table id="datatable" class="table">
                     <thead>
                         <tr>
                             <th>proveedor</th>
                             <th>nota</th>
-
-
                         </tr>
                     </thead>
                     <tbody>
-
                         @foreach ($resultados as $resultado)
                             <tr>
-                                <th>{{ $resultado->nombre }}</th>
+
+                                <td>{{ $resultado->nombre }}</td>
                                 <td>{{ $resultado->puntos }}</td>
-
-
+                             
                             </tr>
                         @endforeach
                     </tbody>
                 </table>
+              
 
-              <br> Rango de calificacion</br>
-                <table id="datatable" class="table">
+
+                <br> Rango de calificacion</br>
+                <table id="datatable3" class="table">
                     <thead>
                         <tr>
                             <th>Categoria</th>
                             <th>Aceptado</th>
                             <th>Limite Inferior</th>
                             <th>Limite Superior</th>
+                         
 
 
                         </tr>
@@ -154,23 +156,23 @@
 
                         @foreach ($rango_evaluacion as $rangos)
                             <tr>
-                                <th>{{ $rangos->categoria }}</th>
-                                <td>{{ $rangos->aceptado }}</td>
-                                <td>{{ $rangos->limite_inferior }}</td>
-                                <td>{{ $rangos->limite_superior }}</td>
+                                <th>{{ $rangos->nombre }}</th>
+                                <th>{{ $rangos->categoria }}</th>  
+                                <th>{{ $rangos->limite_inferior }}</th>        
+                                <th>{{ $rangos->limite_superior }}</th>                                                               
 
                             </tr>
                         @endforeach
                     </tbody>
                 </table>
-                
+
 
 
             </div>
         </div>
-        <div>&nbsp;</div>
- 
- 
+
+
+
 
 
 
@@ -219,28 +221,31 @@
             }
         });
 
-        function get_mantenimientos() {
-
-            var mtto_sucursales = document.getElementById('mtto_sucursales').value;
-            var mtto_areas = document.getElementById('mtto_areas').value;
-            var mtto_activos = document.getElementById('mtto_activos').value;
-
-
-            $.ajax({
-                url: "{{ url('/home/soporte_mantenimientos') }}/" + mtto_sucursales + "/" + mtto_areas + "/" +
-                    mtto_activos,
-                method: 'GET',
-                success: function(data) {
-                    //console.log(data);
-                    $('#container_mantenimientos').html(data);
-                },
-                error: function(error) {
-                    console.error('Error en la solicitud:', error);
+        Highcharts.chart('container2', {
+            data: {
+                table: 'datatable3'
+            },
+            chart: {
+                type: 'line'
+            },
+            title: {
+                text: 'Calificacion'
+            },
+            subtitle: {
+                text:
+                    //'Source: <a href="https://www.ssb.no/en/statbank/table/04231" target="_blank">SSB</a>'
+                    ''
+            },
+            xAxis: {
+                type: 'categoria'
+            },
+            yAxis: {
+                allowDecimals: false,
+                title: {
+                    text: 'Puntaje'
                 }
-            });
-
-
-        }
+            }
+        });
     </script>
 
     <script>
@@ -288,57 +293,6 @@
 
 
 
-
-
-
-
-            Highcharts.chart('container' + graficas[i].id, {
-                chart: {
-                    //type: 'column'
-                    type: graficas[i].tipo_grafico
-                },
-                title: {
-                    text: graficas[i].titulo,
-                    align: 'left'
-                },
-                subtitle: {
-                    text: '',
-                    align: 'left'
-                },
-                xAxis: {
-                    categories: graficas[i].encabezado,
-                    crosshair: true,
-                    accessibility: {
-                        description: 'Countries'
-                    }
-                },
-                yAxis: {
-                    min: 0,
-                    title: {
-                        text: graficas[i].descripcion
-                    },
-                    plotLines: graficas[i].linea_estandar > 0 ? [{
-                        color: 'red', // Color de la línea
-                        dashStyle: 'solid', // Estilo de la línea (puedes cambiarlo según tus preferencias)
-                        value: graficas[i].linea_estandar, // Valor del máximo permitido
-                        width: 2, // Grosor de la línea
-                        label: {
-                            text: 'Línea estándar establecida', // Etiqueta asociada a la línea
-                            align: 'right',
-                            x: -10
-                        }
-                    }] : undefined
-
-                },
-                tooltip: {
-                    valueSuffix: ''
-
-                },
-                plotOptions: plotOptions,
-
-
-                series: graficas[i].data_grafico
-            });
         }
     </script>
     <script>

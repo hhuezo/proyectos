@@ -106,10 +106,12 @@ class EvalProveedoresController extends Controller
             '07' => 'Julio', '08' => 'Agosto', '09' => 'Septiembre', '10' => 'Octubre', '11' => 'Noviembre', '12' => 'Diciembre'
         );
 
-        $rango_evaluacion = EvaluacionPuntaje::get();
+        $rango_evaluacion = DB::select("SELECT distinct c.nombre,b.categoria,b.limite_inferior,b.limite_superior  FROM proyectos.evaluacion_proveedores a ,proyectos.evaluacion_puntaje b,proyectos.proveedores c
+        where a.periodo_evaluacion<=".$year." and a.proveedor_id=c.id
+        and b.id=a.resultado_id");
         //$resultados = EvaluacionProveedor::select('c.nombre', 'a.puntos', 'b.categoria')        ->join('proveedores as c', 'a.proveedor_id', '=', 'c.id')        ->join('evaluacion_puntaje as b', 'a.resultado_id', '=', 'b.id')        ->where('a.periodo_evaluacion', '<=', $year)        ->get();
 
-        $resultados = DB::select("SELECT  c.nombre,a.puntos  FROM proyectos.evaluacion_proveedores a ,proyectos.evaluacion_puntaje b,proyectos.proveedores c
+        $resultados = DB::select("SELECT  c.nombre,a.puntos,b.categoria  FROM proyectos.evaluacion_proveedores a ,proyectos.evaluacion_puntaje b,proyectos.proveedores c
         where a.periodo_evaluacion<=".$year." and a.proveedor_id=c.id
         and b.id=a.resultado_id");
 
@@ -118,66 +120,16 @@ class EvalProveedoresController extends Controller
        // ->where('periodo_evaluacion', '<=', $year)        ->get();
     
 
+       $resultados_sucursal =  DB::select("SELECT  c.nombre,a.puntos,b.categoria  FROM proyectos.evaluacion_proveedores a ,proyectos.evaluacion_puntaje b,proyectos.proveedores c
+       where a.periodo_evaluacion<=".$year." and a.proveedor_id=c.id
+       and b.id=a.resultado_id");
 
 
-
-        $resultados_sucursal = VmMantenimiento::selectRaw("sucursal, sum(case when year(fecha_inicio) = $year and month(fecha_inicio) = $month and estado = 'PENDIENTE' then total else 0 end) as pendiente,
-            sum(case when year(fecha_inicio) = $year and month(fecha_inicio) = $month and estado = 'REALIZADO' then total else 0 end) as realizado")
-            ->whereYear('fecha_inicio', '=', $year)
-            ->whereMonth('fecha_inicio', '=', $month)
-            ->whereIn('tipo_mantenimiento', ['Maintenance', 'Mantenimiento'])
-            ->groupBy('sucursal')
-            ->get();
-
-        $resultados_correctivos = VmMantenimiento::selectRaw("nombre_tecnico, sum(case when year(fecha_inicio) = $year and month(fecha_inicio) = $month and estado = 'PENDIENTE' then total else 0 end) as pendiente,
-            sum(case when year(fecha_inicio) = $year and month(fecha_inicio) = $month and estado = 'REALIZADO' then total else 0 end) as realizado")
-            ->whereYear('fecha_inicio', '=', $year)
-            ->whereMonth('fecha_inicio', '=', $month)
-            ->whereNotIn('tipo_mantenimiento', ['Maintenance', 'Mantenimiento'])
-            ->groupBy('nombre_tecnico')
-            ->get();
-
-        $resultados_sucursal_correctivos = VmMantenimiento::selectRaw("sucursal, sum(case when year(fecha_inicio) = $year and month(fecha_inicio) = $month and estado = 'PENDIENTE' then total else 0 end) as pendiente,
-            sum(case when year(fecha_inicio) = $year and month(fecha_inicio) = $month and estado = 'REALIZADO' then total else 0 end) as realizado")
-            ->whereYear('fecha_inicio', '=', $year)
-            ->whereMonth('fecha_inicio', '=', $month)
-            ->whereNotIn('tipo_mantenimiento', ['Maintenance', 'Mantenimiento'])
-            ->groupBy('sucursal')
-            ->get();
-
-
-        $frecuencia_mtto = VmFrecuenciaMantenimiento::get();
-        $mtto_activos = $frecuencia_mtto->pluck('nombre_activo')->unique();
-        $mtto_sucursales = $frecuencia_mtto->pluck('sucursal')->unique();
-        $mtto_areas = $frecuencia_mtto->pluck('area')->unique();
-
-
-
-
-        $dispositivos_suc = DB::table('estadisticas_dispositivos_suc as s')
-            ->join('bancos as b', 's.ed_soc_codigo', '=', 'b.cod_sucursal')
-            ->select(DB::raw('SUBSTRING(s.ed_soc_codigo, 1, 3) as banco'), 'b.descripcion as sucursal', 's.eds_serial_impresora as serial', 's.eds_cantidad_restante as restante')
-            ->where('s.eds_id', '=', function ($query) {
-                $query->select(DB::raw('max(i.eds_id)'))
-                    ->from('estadisticas_dispositivos_suc as i')
-                    ->whereRaw('s.eds_id = i.eds_id');
-            })
-            ->orderBy('s.eds_cantidad_restante', 'asc')
-            ->get();
-
-
-        $disp_sucursales = $dispositivos_suc->pluck('sucursal')->unique();
-        $disp_bancos = $dispositivos_suc->pluck('banco')->unique();
+   
 
 
         $twoWeeksAgo = Carbon::now()->subWeeks(2)->toDateString();
-        $uniqueProduccion = DB::table('vw_produccion_impresoras')
-            ->select('sucursal', 'serial')
-            ->where('fecha', '>', $twoWeeksAgo)
-            ->distinct()
-            ->get();
-
-
+      
 
         //graficas dinamicas
         $graficas = Grafica::where('unidades_id',6)->get();
@@ -262,15 +214,8 @@ class EvalProveedoresController extends Controller
             'resultados_sucursal',
                         'year',
             'month',
-            'resultados_correctivos',
-            'resultados_sucursal_correctivos',
-            'frecuencia_mtto',
-            'mtto_activos',
-            'mtto_sucursales',
-            'mtto_areas',
-            'disp_sucursales',
-            'disp_bancos',
-            'uniqueProduccion',
+             
+          
             'graficas',
             'rango_evaluacion'
         ));
