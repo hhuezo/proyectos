@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\produccion;
 
+use App\Actividad;
 use App\Http\Controllers\Controller;
 use App\MovimientoActividad;
 use Illuminate\Http\Request;
@@ -15,7 +16,8 @@ class ActividadFinalizadaController extends Controller
     }
     public function index()
     {
-        return view('produccion.actividades_finalizada.index');
+        
+         return view('produccion.actividades_finalizada.index' );
     }
 
     public function create()
@@ -32,7 +34,8 @@ class ActividadFinalizadaController extends Controller
     {
         $movimientos = MovimientoActividad::join('actividades', 'movimiento_actividades.actividad_id', '=', 'actividades.id')
             ->join('proyectos', 'actividades.proyecto_id', '=', 'proyectos.id')
-            ->join('users', 'actividades.users_id', '=', 'users.id')
+             ->join('users', 'actividades.users_id', '=', 'users.id')
+            //->join('users', 'actividades.unidad_id', '=', 7)
             ->join('estados', 'movimiento_actividades.estado_id', '=', 'estados.id')
             ->join('categoria_tickets', 'actividades.categoria_id', '=', 'categoria_tickets.id')
             ->join('prioridad_tickets', 'actividades.prioridad_id', '=', 'prioridad_tickets.id')

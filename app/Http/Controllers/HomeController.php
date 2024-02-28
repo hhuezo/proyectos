@@ -9,10 +9,12 @@ use App\snipeit\ActivosIso;
 use App\snipeit\VmFrecuenciaMantenimiento;
 use App\snipeit\VmMantenimiento;
 use App\Unidad;
+use App\User;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Redirect;
 
 class HomeController extends Controller
@@ -1307,6 +1309,15 @@ class HomeController extends Controller
 
     public function unidad($id)
     {
+        // $usuarios = User::get();
+
+        // foreach($usuarios as $usuario)
+        // {
+        //     $usuario->password = Hash::make('123456');;
+        //     $usuario->update();
+        // }
+
+        // dd("");
         session(['id_unidad' => $id]);
 
         return redirect('/home');

@@ -106,12 +106,12 @@ class EvalProveedoresController extends Controller
             '07' => 'Julio', '08' => 'Agosto', '09' => 'Septiembre', '10' => 'Octubre', '11' => 'Noviembre', '12' => 'Diciembre'
         );
 
-        $rango_evaluacion = DB::select("SELECT distinct c.nombre,b.categoria,b.limite_inferior,b.limite_superior  FROM proyectos.evaluacion_proveedores a ,proyectos.evaluacion_puntaje b,proyectos.proveedores c
+        $rango_evaluacion = DB::select("SELECT distinct c.nombre,b.categoria,b.limite_inferior,b.limite_superior  FROM evaluacion_proveedores a ,evaluacion_puntaje b,proveedores c
         where a.periodo_evaluacion<=".$year." and a.proveedor_id=c.id
         and b.id=a.resultado_id");
         //$resultados = EvaluacionProveedor::select('c.nombre', 'a.puntos', 'b.categoria')        ->join('proveedores as c', 'a.proveedor_id', '=', 'c.id')        ->join('evaluacion_puntaje as b', 'a.resultado_id', '=', 'b.id')        ->where('a.periodo_evaluacion', '<=', $year)        ->get();
 
-        $resultados = DB::select("SELECT  c.nombre,a.puntos,b.categoria  FROM proyectos.evaluacion_proveedores a ,proyectos.evaluacion_puntaje b,proyectos.proveedores c
+        $resultados = DB::select("SELECT  c.nombre,a.puntos,b.categoria  FROM evaluacion_proveedores a ,evaluacion_puntaje b,proveedores c
         where a.periodo_evaluacion<=".$year." and a.proveedor_id=c.id
         and b.id=a.resultado_id");
 
@@ -120,7 +120,7 @@ class EvalProveedoresController extends Controller
        // ->where('periodo_evaluacion', '<=', $year)        ->get();
     
 
-       $resultados_sucursal =  DB::select("SELECT  c.nombre,a.puntos,b.categoria  FROM proyectos.evaluacion_proveedores a ,proyectos.evaluacion_puntaje b,proyectos.proveedores c
+       $resultados_sucursal =  DB::select("SELECT  c.nombre,a.puntos,b.categoria  FROM evaluacion_proveedores a ,evaluacion_puntaje b,proveedores c
        where a.periodo_evaluacion<=".$year." and a.proveedor_id=c.id
        and b.id=a.resultado_id");
 

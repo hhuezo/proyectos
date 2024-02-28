@@ -41,7 +41,8 @@ class ActividadController extends Controller
         $actividades = MovimientoActividad::join('actividades', 'actividades.Id', '=', 'movimiento_actividades.actividad_id')
             ->whereBetween('movimiento_actividades.fecha', [$now->format('Y-m-d 00:00:00'), $now->format('Y-m-d 23:00:00')])
             ->where('movimiento_actividades.tiempo_minutos', '>', 0)
-            ->where('actividades.users_id', '=', auth()->user()->id)
+           // ->where('actividades.users_id', '=', auth()->user()->id)
+           ->where('actividades.unidad', '=', auth()->user()->unidad)
             ->get();
 
         return view('produccion.actividades.actividades_tiempo', ["actividades" => $actividades, 'fecha' => $fecha]);

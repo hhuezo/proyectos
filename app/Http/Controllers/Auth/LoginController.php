@@ -57,7 +57,6 @@ class LoginController extends Controller
 
     public function showLoginForm(Req $request)
     {
-
         $email = $request->input('email');
         $password = $request->input('password');
 

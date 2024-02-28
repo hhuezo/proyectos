@@ -73,6 +73,7 @@ class CalendarioVacacioncontroller extends Controller
         $vacaciones->periodo = $request->get('periodo');
         $vacaciones->fecha_inicio = $request->get('fecha_inicio');
         $vacaciones->fecha_fin = $request->get('fecha_fin');
+        $vacaciones->observaciones = $request->get('observaciones');
         $vacaciones->estado = 'A';        
         $vacaciones->save();
         alert()->success(' se ha agregado la vacacion correctamente');
@@ -172,6 +173,7 @@ class CalendarioVacacioncontroller extends Controller
         $vacaciones->periodo = $request->get('periodo');
         $vacaciones->fecha_inicio = $request->get('fecha_inicio');
         $vacaciones->fecha_fin = $request->get('fecha_fin');
+        $vacaciones->observaciones = $request->get('observaciones');
         //$vacaciones->estado = 'A';        
         $vacaciones->update();
         alert()->success(' se ha modificado la vacacion correctamente');

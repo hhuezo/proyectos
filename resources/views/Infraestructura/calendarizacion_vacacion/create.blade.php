@@ -112,7 +112,7 @@
                                                 <label class="form-label col-md-3"
                                                     align="right"><strong>Observacion</strong></label>
                                                 <div class="col-6">
-                                                    <input type="text" name="observacion" id="observacion" required
+                                                    <input type="text" name="observaciones" id="observaciones" required
                                                         class="form-control">
                                                 </div>
                                             </div>
