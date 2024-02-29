@@ -3,16 +3,41 @@
 namespace App\Http\Livewire;
 
 use App\Actividad;
+use App\Proyecto;
 use Livewire\Component;
+use Carbon\Carbon;
+use DateTime;
+use Illuminate\Foundation\Auth\User;
 
 class ActividadesFinalizada extends Component
 {
-    public $busqueda;
+    public $busqueda, $proyectos,$fechainicio,$fechafin,$usuario, $unidad,$usuarios;
+
+
+    public function mount(){
+        
+        $fecha_actual = Carbon::now('America/El_Salvador');
+        $fecha_temp = Carbon::now('America/El_Salvador');
+        $fecha_anterior =  $fecha_temp->addMonth(-1);     
+        $this->fechainicio=   $fecha_anterior->format('Y-m-d') ;
+        $this->fechafin=  $fecha_actual->format('Y-m-d') ;
+
+        $this->unidad=  auth()->user()->unidad_id ;
+        $this->proyectos = Proyecto::get();
+
+      
+       // $listuser=User::where("unidad_id","=",$this->unidad)->get();
+       
+        $this->usuarios= User::where("unidad_id","=",$this->unidad)->get();
+       
+ 
+    }
+
+    
     public function render()
-    {
-        $unidad=  auth()->user()->unidad_id ;
-        //$rol=auth()->user()->hasRole;
-        if(auth()->user()->hasRole('Administrador')){
+    {     
+        
+        if(auth()->user()->hasRole('Administrador unidad')){
             $actividades =  Actividad::join('proyectos', 'actividades.proyecto_id', '=', 'proyectos.id')
             ->join('users', 'actividades.users_id', '=', 'users.id')
             ->join('estados', 'actividades.estado_id', '=', 'estados.id')
@@ -36,8 +61,11 @@ class ActividadesFinalizada extends Component
                 \DB::raw('(select sum(m.tiempo_minutos) from movimiento_actividades m where m.actividad_id =  actividades.id) as minutos')
             )
             ->where('actividades.estado_id', '=', 4)
-           ->where('actividades.unidad_id', '=', $unidad)
+           ->where('actividades.unidad_id', '=', $this->unidad)
+           ->where('actividades.fecha_liberacion', '>=', date_create_from_format('Y-m-d',$this->fechainicio))
+           ->where('actividades.fecha_liberacion', '<=', date_create_from_format('Y-m-d',$this->fechafin))
            ->where('actividades.descripcion', 'like', '%' . $this->busqueda . '%')
+           ->where('users.user_name', 'like', '%' . $this->usuario. '%')
            ->orderBy('actividades.id', 'desc')->get();
         }else{
 
@@ -65,6 +93,8 @@ class ActividadesFinalizada extends Component
             )
             ->where('actividades.estado_id', '=', 4)
            ->where('actividades.users_id', '=', auth()->user()->id)
+           ->where('actividades.fecha_liberacion', '>=', date_create_from_format('Y-m-d',$this->fechainicio))
+           ->where('actividades.fecha_liberacion', '<=', date_create_from_format('Y-m-d',$this->fechafin))  
            ->where('actividades.descripcion', 'like', '%' . $this->busqueda . '%')
            ->orderBy('actividades.id', 'desc')->get();
 

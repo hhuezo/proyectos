@@ -5,6 +5,7 @@ namespace App\Http\Controllers\produccion;
 use App\Actividad;
 use App\Http\Controllers\Controller;
 use App\MovimientoActividad;
+use App\Proyecto;
 use Illuminate\Http\Request;
 
 class ActividadFinalizadaController extends Controller
@@ -16,8 +17,8 @@ class ActividadFinalizadaController extends Controller
     }
     public function index()
     {
-        
-         return view('produccion.actividades_finalizada.index' );
+        $proyectos=Proyecto::get();
+         return view('produccion.actividades_finalizada.index',compact('proyectos') );
     }
 
     public function create()
@@ -62,12 +63,18 @@ class ActividadFinalizadaController extends Controller
 
     public function edit($id)
     {
-        //
+       
+
     }
 
     public function update(Request $request, $id)
     {
-        //
+       $actividad=Actividad::findOrFail($id);
+       $actividad->proyecto_id=$request->proyecto_id;
+       $actividad->update();
+       alert()->success('El Modificado Correctamente');
+       return back();    
+
     }
 
     public function destroy($id)
