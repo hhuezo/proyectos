@@ -16,26 +16,30 @@
                         <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12" style="text-align: left;">
                             <h5 class="fw-bold mb-0">
                                 Actividades finalizadas<br>
-                               
-                                
+
+
                             </h5>
 
                         </div>
                         <div class="col-lg-5 col-md-5 col-sm-12 col-xs-12">
+                            @if (auth()->user()->hasPermissionTo('ver finalizadas'))
+                                <select name="usuario" id="usuario" class="form-control" wire:model="usuario">
+                                    @foreach ($usuarios as $obj)
+                                        @if ($obj->estado = 'A')
+                                            <option value="{{ $obj->user_name }}">{{ $obj->user_name }}
+                                            </option>
+                                        @endif
+                                    @endforeach
+                                </select>
+                                &nbsp;
+                            @endif
                             <input type="text" class="form-control" placeholder="Buscar" wire:model="busqueda">
-                            &nbsp;                         
-                            
-                            <select name="usuario" id="usuario" class="form-control" wire:model="usuario">
-                                @foreach ($usuarios as $obj)
-                                <option value="{{ $obj->user_name }}">{{ $obj->user_name }}
-                                </option>                                 
-                                @endforeach
-                            </select>
+
 
                             &nbsp;
-                            <input type="date" class="form-control"   wire:model="fechainicio"     >
+                            <input type="date" class="form-control" wire:model="fechainicio">
                             &nbsp;
-                            <input type="date" class="form-control"   wire:model="fechafin"   >
+                            <input type="date" class="form-control" wire:model="fechafin">
                         </div>
 
                         <div class="col-lg-1 col-md-1 col-sm-12 col-xs-12" style="text-align: left">
@@ -92,56 +96,15 @@
                                 <td style="text-align: center"> {{ $actividad->minutos }}</td>
                                 <td align="center">
                                     <button type="button" data-bs-toggle="modal"
-                                        data-bs-target="#modal-modif-{{ $actividad->id }}"><i
+                                        wire:click="edit({{ $actividad->id }})" data-bs-target="#modal_proyectos"><i
                                             class="icofont-edit"></i></button>
-                                </td>
-                                <td>
+                                            &nbsp;&nbsp;&nbsp;
                                     <a href="{{ url('actividades_finalizadas') }}/{{ $actividad->id }}"> <i
                                             class="icofont-search-2 fa-2x"></i></a>
 
                                 </td>
 
                             </tr>
-                            <div class="modal fade" id="modal-modif-{{ $actividad->id }}" tabindex="-1"
-                                aria-hidden="true" wire:ignore.self>
-                                <div class="modal-dialog modal-dialog-centered modal-md modal-dialog-scrollable">
-                                    <form method="POST"
-                                        action="{{ route('actividades_finalizadas.update', $actividad->id) }}">
-                                        @method('PUT')
-                                        @csrf
-                                        <div class="modal-content">
-                                            <div class="modal-header">
-                                                <h5 class="modal-title  fw-bold" id="leaveaddLabel">
-                                                    Modificar el proyecto en la Actividad Seleccionada
-                                                </h5>
-                                                <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                                    aria-label="Close"></button>
-                                            </div>
-                                            <div class="modal-body">
-                                                <p>
-                                                    Seleccionar el Proyecto
-                                                <div class="input-area relative">
-                                                    <label for="largeInput" class="form-label">Proyectos</label>
-                                                    <select class="form-control" name="proyecto_id" id="proyecto_id">
-                                                        @foreach ($proyectos as $obj)
-                                                            @if ($obj->id == $actividad->proyecto_id)
-                                                                <option value="{{ $obj->id }}" selected>
-                                                                    {{ $obj->nombre }}</option>
-                                                            @else
-                                                                <option value="{{ $obj->id }}">
-                                                                    {{ $obj->nombre }}</option>
-                                                            @endif
-                                                        @endforeach
-                                                    </select>
-                                                </div>
-                                                <div class="modal-footer">
-                                                    {{-- <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Done</button> --}}
-                                                    <button type="submit" class="btn btn-primary">Aceptar</button>
-                                                </div>
-                                            </div>
-                                    </form>
-                                </div>
-                            </div>
                         @endforeach
 
                     </tbody>
@@ -150,12 +113,59 @@
 
 
         </div>
+        <div id="modal_proyectos" wire:ignore.self class="modal fade" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-lg modal-dialog-scrollable">
+                <div class="modal-content">
+                    <div class="modal-header col">
+                        <h5 class="modal-title  fw-bold" id="createprojectlLabel"> Modificar el
+                            proyecto en la Actividad Seleccionada</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
 
+                    <div class="modal-body row">
+
+                        <div class="card">
+                            <div class="modal-body">
+                                <p>
+                                    Seleccionar el Proyecto
+                                <div class="input-area relative">
+                                    <label for="largeInput" class="form-label">Proyectos</label>
+                                    <select class="form-control" wire:model="id_proyecto">
+                                        @foreach ($proyectos as $obj)
+                                            <option value="{{ $obj->id }}" selected>
+                                                {{ $obj->nombre }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary"
+                                        data-bs-dismiss="modal">Cancelar</button>
+                                    <button class="btn btn-primary" wire:click="update()">Guardar</button>
+                                </div>
+                            </div>
+
+
+
+
+
+                        </div>
+
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
 
 
 
     </div>
     <script src="{{ asset('assets/jquery.min.js') }}"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        window.addEventListener('close-modal', (e) => {
+            $('#modal_proyectos').modal('hide')
+        });
+    </script>
 
 </div>
