@@ -118,7 +118,7 @@
                 <div class="border-0 mb-4">
                     <div
                         class="card-header py-3 no-bg bg-transparent d-flex align-items-center px-0 justify-content-between border-bottom flex-wrap">
-                        <h4 class="fw-bold mb-0">Programacion de Vacacion</h4>
+                        <h4 class="fw-bold mb-0">Programación de Vacaciones</h4>
                         <div class="col-auto d-flex w-sm-100">
                             <a href="{{ url('infraestructura/vacaciones/create') }}">
                                 {{-- data-bs-toggle="modal" data-bs-target="#tickadd" --}}
@@ -198,18 +198,17 @@
                                                                 {{ $obj->fecha_fin }}</td>
                                                             <td align="center">
 
-                                                                <a href="{{ url('infraestructura/vacaciones') }}/{{ $obj->id }}/edit"
-                                                                    class="list-group-item list-group-item-action border-0 ">
+                                                                <a href="{{ url('infraestructura/vacaciones') }}/{{ $obj->id }}/edit" >
                                                                     <button type="button"
-                                                                        class="btn btn-outline-secondary"><i
-                                                                            class="icofont-edit text-success  btn-lg"></i></button>
+                                                                        class="btn btn-dark btn-set-task w-sm-100"><i
+                                                                            class="icofont-edit  btn-lg"></i></button>
                                                                 </a>
 
                                                             </td>
                                                             <td align="center">
                                                                 <button type="button" data-bs-toggle="modal"
                                                                     data-bs-target="#modal-delete-{{ $obj->id }}"
-                                                                    class="btn btn-danger"><i
+                                                                    class="btn btn-dark btn-set-task w-sm-100"><i
                                                                         class="icofont-ui-delete  btn-lg"></i></button>
                                                             </td>
 

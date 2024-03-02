@@ -184,17 +184,20 @@
                                                         <td align="center">
 
                                                             <a href="{{ url('infraestructura/evaluaciones') }}/{{ $obj->id }}/edit"
-                                                                class="list-group-item list-group-item-action border-0 ">
-                                                                <button type="button" class="btn btn-outline-secondary"><i
-                                                                        class="icofont-edit text-success  btn-lg"></i></button>
+                                                                class="btn btn-dark btn-set-task w-sm-100">
+                                                                <button type="button"
+                                                                class="btn btn-dark btn-set-task w-sm-100"><i
+                                                                    class="icofont-edit  btn-lg"></i></button>
                                                             </a>
 
                                                         </td>
                                                         <td align="center">
 
-                                                            <a href="{{ url('infraestructura/evaluaciones/edit_evaluacion') }}/{{ $obj->id}}"   class="list-group-item list-group-item-action border-0 ">
-                                                                <button type="button" class="btn btn-outline-secondary"><i
-                                                                        class="icofont-edit text-success  btn-lg"></i></button>
+                                                            <a href="{{ url('infraestructura/evaluaciones/edit_evaluacion') }}/{{ $obj->id}}" 
+                                                                  class="btn btn-dark btn-set-task w-sm-100">
+                                                                  <button type="button"
+                                                                  class="btn btn-dark btn-set-task w-sm-100"><i
+                                                                      class="icofont-pencil  btn-lg"></i></button>
                                                             </a>
 
                                                         </td>
@@ -202,9 +205,9 @@
                                                         <td align="center">
                                                             <a href="{{ url('infraestructura/evaluaciones') }}/{{ $obj->id }}"
                                                                 target="_blank"
-                                                                class="list-group-item list-group-item-action border-0 ">
-                                                                <button type="button" class="btn btn-outline-secondary"><i
-                                                                        class="icofont-printer text-success btn-lg"></i></button>
+                                                                class="btn btn-dark btn-set-task w-sm-100">
+                                                                <button type="button" class="btn btn-dark btn-set-task w-sm-100"><i
+                                                                        class="icofont-printer btn-lg"></i></button>
                                                             </a>
                                                         </td>
                                                     </div>

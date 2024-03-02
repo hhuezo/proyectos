@@ -46,11 +46,11 @@
                                             {{ $evaluacion->proveedor->nombre }} </strong></label>
                                     <label class="form-label col-md-8"
                                         align="left"><strong>Notificado:{{ $evaluacion->notificado }} </strong></label>
-                                    <label>Notificado (S/N) </label>
+                                   {{-- <label>Notificado (S/N) </label>
                                     <select name="notificado" id="notificado">
                                         <option>S</option>
                                         <option>N</option>
-                                    </select>
+                                    </select>--}}
                                 </div>
                                 <div class="col-md-8">
                                     <label class="form-label col-md-8" align="right"><strong>Periodo:

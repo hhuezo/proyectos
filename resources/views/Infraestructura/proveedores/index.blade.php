@@ -54,12 +54,12 @@
                                                             <a
                                                                 href="{{ url('infraestructura/proveedores') }}/{{ $obj->id }}/edit">
                                                                 {{-- data-bs-toggle="modal" data-bs-target="#edittickit" --}}
-                                                                <button type="button" class="btn btn-outline-secondary"><i
+                                                                <button type="button" class="btn btn-dark btn-set-task w-sm-100"><i
                                                                         class="icofont-edit text-success btn-lg"></i></button>
                                                             </a>
                                                             <button type="button" data-bs-toggle="modal"
                                                                 data-bs-target="#modal-delete-{{ $obj->id }}"
-                                                                class="btn btn-outline-secondary"><i
+                                                                class="btn btn-dark btn-set-task w-sm-100"><i
                                                                     class="icofont-ui-delete text-danger btn-lg"></i></button>
                                                         </div>
                                                     </td>
